@@ -28,6 +28,16 @@ html,body{
   html,body{width:100vw;height:100vh;min-height:100vh;overflow:hidden;}
   #wrap{transform:scale(min(calc((100vw - 8px) / 900),calc((100vh - 8px) / 600)));}
 }
+/* On mobile, browser chrome (address/tool bars) makes the visible area shorter
+   than 100vh, so the stage scaled past the screen and the start button fell off
+   the bottom. dvh/dvw track the actually-visible viewport, so the whole frame
+   always fits. Kept vh above as a fallback for browsers without dvh support. */
+@supports (height:100dvh){
+  @media (max-width:920px),(max-height:620px){
+    html,body{height:100dvh;min-height:100dvh;}
+    #wrap{transform:scale(min(calc((100dvw - 8px) / 900),calc((100dvh - 8px) / 600)));}
+  }
+}
 #stage{
   width:100%; height:100%;
   border-radius:14px;
