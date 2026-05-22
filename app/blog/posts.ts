@@ -300,7 +300,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "The inference-based model of OCD (IBA), developed by Kieron O'Connor and Frederick Aardema, proposes that OCD is rooted in a specific kind of reasoning error: inferential confusion. In inferential confusion, the person treats imagined possibilities as if they were perceptual realities. The felt conclusion — \"I might have contaminated something,\" \"I might hurt someone,\" \"I might not have locked the door\" — is generated not by observable evidence, but by a narrative the mind constructs.",
+        text: "The inference-based model of OCD (I-CBT), developed by Kieron O'Connor and Frederick Aardema, proposes that OCD is rooted in a specific kind of reasoning error: inferential confusion. In inferential confusion, the person treats imagined possibilities as if they were perceptual realities. The felt conclusion — \"I might have contaminated something,\" \"I might hurt someone,\" \"I might not have locked the door\" — is generated not by observable evidence, but by a narrative the mind constructs.",
       },
       {
         type: "paragraph",
@@ -348,7 +348,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "Treatment approaches that address only content — challenging the logic of the feared thought — often miss this. The problem isn't primarily that the thought is logically flawed. The problem is that the imagination has temporarily overwhelmed the capacity to distinguish what is sensed from what is constructed. Effective treatment, whether through ERP, IBA, or their integration, works in part by helping the person re-establish that distinction — to locate themselves in observable reality, in what the senses actually report, rather than in the narrative the mind has generated.",
+        text: "Treatment approaches that address only content — challenging the logic of the feared thought — often miss this. The problem isn't primarily that the thought is logically flawed. The problem is that the imagination has temporarily overwhelmed the capacity to distinguish what is sensed from what is constructed. Effective treatment, whether through ERP, I-CBT, or their integration, works in part by helping the person re-establish that distinction — to locate themselves in observable reality, in what the senses actually report, rather than in the narrative the mind has generated.",
       },
       {
         type: "paragraph",
