@@ -39,11 +39,11 @@ const PROVIDERS: Provider[] = [
     image: "/Melinda Mahler.png",
   },
   {
-    name: "Network Provider",
-    role: "Clinician",
+    name: "Patrick",
+    role: "Network Provider",
     specialty: "Psychotherapy",
-    href: "#",
-    image: "/placeholder-user.jpg",
+    href: "https://patricktherapy.com/",
+    image: "/Patrick3-1024x1024.jpg",
   },
   {
     name: "Network Provider",
