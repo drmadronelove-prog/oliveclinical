@@ -1,6 +1,7 @@
 "use client"
 
 import { DeepWorkPlanner } from "@/components/tools/deep-work-planner"
+import { ActMatrix } from "@/components/tools/act-matrix"
 import { AdhdChecklist } from "@/components/assessments/adhd-checklist"
 import { FeatureCardGrid, type FeatureCard } from "@/components/feature-card-grid"
 
@@ -14,6 +15,16 @@ const CARDS: FeatureCard[] = [
     modalSubtitle:
       "Long-term goals, weekly goals, and values + activities. Saved locally.",
     content: <DeepWorkPlanner />,
+  },
+  {
+    kind: "modal",
+    title: "ACT Matrix",
+    category: "Acceptance & Commitment Therapy",
+    footerLabel: "Open worksheet",
+    modalTitle: "ACT Matrix",
+    modalSubtitle:
+      "Map what pulls you away from what matters — and what moves you toward it. Saved locally.",
+    content: <ActMatrix />,
   },
   {
     kind: "modal",
