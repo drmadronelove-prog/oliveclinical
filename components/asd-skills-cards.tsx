@@ -3,9 +3,19 @@
 import { DysregulationLog } from "@/components/tools/dysregulation-log"
 import { MeltdownWorksheet } from "@/components/tools/meltdown-worksheet"
 import { AQ50 } from "@/components/assessments/aq50"
+import { DBTEmotionRegulation } from "@/components/tools/dbt-emotion-regulation"
 import { FeatureCardGrid, type FeatureCard } from "@/components/feature-card-grid"
 
 const CARDS: FeatureCard[] = [
+  {
+    kind: "modal",
+    title: "ABC PLEASE Worksheet",
+    category: "DBT · Emotion Regulation",
+    footerLabel: "Open worksheet",
+    modalTitle: "ABC PLEASE Worksheet",
+    modalSubtitle: "Reduce emotional vulnerability by taking care of the basics. Saved locally.",
+    content: <DBTEmotionRegulation />,
+  },
   {
     kind: "modal",
     title: "Dysregulation Log",
