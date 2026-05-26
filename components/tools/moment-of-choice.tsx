@@ -1,23 +1,23 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 type NodeId = "trigger" | "sense_data" | "senses_trusted" | "proportionate_response" | "imagination" | "sense_dismissed" | "obsession" | "hypervigilance" | "compulsion"
 
 const NODES: Record<NodeId, { id: NodeId; label: string; sublabel?: string; question: string; side: string; color: "green" | "red" | "gray" }> = {
   trigger: {
     id: "trigger", label: "Trigger",
-    question: "What triggered you, and what feared version of yourself did it connect to?",
+    question: "What is triggering you, and what feared version of yourself does it connect to?",
     side: "center", color: "gray",
   },
   sense_data: {
     id: "sense_data", label: "Sense data", sublabel: "What is actually here right now?",
-    question: "What were you actually noticing in the moment through your senses?",
+    question: "What are you actually noticing in this moment through your senses?",
     side: "left", color: "green",
   },
   senses_trusted: {
     id: "senses_trusted", label: "Senses trusted", sublabel: "Evidence from this moment guides action",
-    question: "What do your senses tell you was actually true in that situation?",
+    question: "What do your senses tell you is actually true in this situation?",
     side: "left", color: "green",
   },
   proportionate_response: {
@@ -27,12 +27,12 @@ const NODES: Record<NodeId, { id: NodeId; label: string; sublabel?: string; ques
   },
   imagination: {
     id: "imagination", label: "Imagination takes over", sublabel: "What could be happening?",
-    question: 'What was the "what if" story your mind is creating?',
+    question: 'What is the "what if" story your mind is creating?',
     side: "right", color: "red",
   },
   sense_dismissed: {
     id: "sense_dismissed", label: "Sense data dismissed", sublabel: "Own perception treated as unreliable",
-    question: "What sense data do you notice that you've pushed aside or do not trust?",
+    question: "What sense data are you pushing aside or not trusting?",
     side: "right", color: "red",
   },
   obsession: {
@@ -42,7 +42,7 @@ const NODES: Record<NodeId, { id: NodeId; label: string; sublabel?: string; ques
   },
   hypervigilance: {
     id: "hypervigilance", label: "Hypervigilance", sublabel: "Scanning for proof of feared self",
-    question: "What were you scanning for, and what would finding it mean?",
+    question: "What are you scanning for, and what would finding it mean?",
     side: "right", color: "red",
   },
   compulsion: {
@@ -64,6 +64,55 @@ const COLORS = {
 function storSave<T>(k: string, v: T) { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
 function storLoad<T>(k: string, fb: T): T {
   try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb } catch { return fb }
+}
+
+// ── Clickable info label with popover tooltip ─────────────────────────────────
+function InfoLabel({ label, tooltip, textColor, bgColor }: { label: string; tooltip: string; textColor: string; bgColor: string }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function handle(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener("mousedown", handle)
+    return () => document.removeEventListener("mousedown", handle)
+  }, [open])
+
+  return (
+    <div ref={ref} style={{ position: "relative", display: "inline-block" }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          fontSize: 12, fontWeight: 500, color: textColor,
+          background: bgColor, borderRadius: 6, padding: "4px 10px",
+          border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4,
+        }}
+      >
+        {label}
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.7 }}>
+          <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
+          <text x="8" y="12" textAnchor="middle" fontSize="10" fill="currentColor" fontWeight="700">i</text>
+        </svg>
+      </button>
+      {open && (
+        <div style={{
+          position: "absolute", top: "calc(100% + 6px)", left: "50%", transform: "translateX(-50%)",
+          background: "#fff", border: "1px solid #ddd", borderRadius: 8, padding: "10px 12px",
+          fontSize: 12, color: "#444", lineHeight: 1.5, zIndex: 20,
+          boxShadow: "0 4px 16px rgba(0,0,0,0.12)", width: 230, textAlign: "left",
+        }}>
+          {tooltip}
+          <div style={{
+            position: "absolute", top: -5, left: "50%", transform: "translateX(-50%)",
+            width: 8, height: 8, background: "#fff", border: "1px solid #ddd",
+            borderBottom: "none", borderRight: "none", rotate: "45deg",
+          }} />
+        </div>
+      )}
+    </div>
+  )
 }
 
 function NodePill({ node, onClick, hasAnswer }: { node: typeof NODES[NodeId]; onClick: (id: NodeId) => void; hasAnswer: boolean }) {
@@ -162,6 +211,44 @@ function Modal({ node, answer, onChange, onClose }: {
   )
 }
 
+// ── Answer summary section shown below diagram when a side is complete ─────────
+function AnswerSummary({ answers }: { answers: Record<string, string> }) {
+  const leftDone = ORDER_LEFT.every(id => answers[id]?.trim())
+  const rightDone = ORDER_RIGHT.every(id => answers[id]?.trim())
+  if (!leftDone && !rightDone) return null
+
+  return (
+    <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 16 }}>
+      {leftDone && (
+        <div style={{ background: "#EAF3DE", border: "1px solid #3B6D11", borderRadius: 10, padding: "14px 16px" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#3B6D11", marginBottom: 10 }}>
+            Sense-based reasoning — your answers
+          </div>
+          {ORDER_LEFT.map(id => (
+            <div key={id} style={{ marginBottom: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#27500A", marginBottom: 2 }}>{NODES[id].label}</div>
+              <div style={{ fontSize: 13, color: "#1a1a1a", lineHeight: 1.5, whiteSpace: "pre-wrap" }}>{answers[id]}</div>
+            </div>
+          ))}
+        </div>
+      )}
+      {rightDone && (
+        <div style={{ background: "#E6F1FB", border: "2px solid #185FA5", borderRadius: 10, padding: "14px 16px" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#A32D2D", marginBottom: 10 }}>
+            What-if reasoning (OCD bubble) — your answers
+          </div>
+          {ORDER_RIGHT.map(id => (
+            <div key={id} style={{ marginBottom: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#791F1F", marginBottom: 2 }}>{NODES[id].label}</div>
+              <div style={{ fontSize: 13, color: "#1a1a1a", lineHeight: 1.5, whiteSpace: "pre-wrap" }}>{answers[id]}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Print row helper ──────────────────────────────────────────────────────────
 function PrintRow({ label, question, answer, color }: { label: string; question: string; answer: string; color: "green" | "red" | "gray" }) {
   const c = COLORS[color]
@@ -242,14 +329,6 @@ export function MomentOfChoice() {
           </p>
         </div>
 
-        <div style={{
-          background: "#EAF3DE", border: "1px solid #97C459", borderRadius: 8,
-          padding: "8px 12px", fontSize: 11, color: "#27500A", lineHeight: 1.5,
-          marginBottom: 16, textAlign: "center",
-        }}>
-          <strong>Sense data</strong> = what you are hearing, seeing, touching, tasting, and smelling right now
-        </div>
-
         <div style={{ maxWidth: 300, margin: "0 auto" }}>
           <NodePill node={NODES.trigger} onClick={setActiveNode} hasAnswer={!!answers.trigger?.trim()} />
         </div>
@@ -259,10 +338,13 @@ export function MomentOfChoice() {
         <div style={{ display: "flex", gap: 16 }}>
           {/* Left: sense-based reasoning */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{
-              fontSize: 12, fontWeight: 500, color: "#27500A",
-              background: "#EAF3DE", borderRadius: 6, padding: "4px 10px", marginBottom: 6,
-            }}>Sense-based reasoning</div>
+            <InfoLabel
+              label="Sense-based reasoning"
+              tooltip="Sense data = what you are hearing, seeing, touching, tasting, and smelling right now"
+              textColor="#27500A"
+              bgColor="#EAF3DE"
+            />
+            <div style={{ height: 6 }} />
             {ORDER_LEFT.map((id, i) => (
               <div key={id} style={{ width: "100%" }}>
                 <NodePill node={NODES[id]} onClick={setActiveNode} hasAnswer={!!answers[id]?.trim()} />
@@ -275,10 +357,13 @@ export function MomentOfChoice() {
 
           {/* Right: what-if reasoning inside OCD bubble */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{
-              fontSize: 12, fontWeight: 500, color: "#791F1F",
-              background: "#FCEBEB", borderRadius: 6, padding: "4px 10px", marginBottom: 6,
-            }}>What-if reasoning</div>
+            <InfoLabel
+              label="What-if reasoning"
+              tooltip="What-if reasoning = reasoning based on facts, rules, hearsay, personal experiences, possibility and imagination"
+              textColor="#791F1F"
+              bgColor="#FCEBEB"
+            />
+            <div style={{ height: 6 }} />
 
             <div style={{
               border: "2px solid #185FA5", borderRadius: 20,
@@ -313,10 +398,13 @@ export function MomentOfChoice() {
           </div>
         </div>
 
+        {/* ── Answers below diagram ── */}
+        <AnswerSummary answers={answers} />
+
         {hasAnyAnswers && (
           <div style={{ textAlign: "center", marginTop: 16 }}>
             <button
-              onClick={() => setAnswers({})}
+              onClick={() => { setAnswers({}); storSave("moc-answers", {}) }}
               style={{ fontSize: 12, color: "#999", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
             >
               Clear all
@@ -339,11 +427,9 @@ export function MomentOfChoice() {
           </div>
         </div>
 
-        {/* Trigger */}
         <PrintRow label="Trigger" question={NODES.trigger.question} answer={answers.trigger || ""} color="gray" />
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 10 }}>
-          {/* Left: sense-based */}
           <div>
             <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#3B6D11", marginBottom: 8, borderBottom: "2px solid #3B6D11", paddingBottom: 3 }}>
               Sense-based reasoning
@@ -352,8 +438,6 @@ export function MomentOfChoice() {
               <PrintRow key={id} label={NODES[id].label} question={NODES[id].question} answer={answers[id] || ""} color="green" />
             ))}
           </div>
-
-          {/* Right: what-if / OCD bubble */}
           <div style={{ border: "2px solid #185FA5", borderRadius: 8, padding: "10px 12px", background: "#E6F1FB" }}>
             <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#A32D2D", marginBottom: 8, borderBottom: "2px solid #A32D2D", paddingBottom: 3 }}>
               What-if reasoning · OCD bubble
