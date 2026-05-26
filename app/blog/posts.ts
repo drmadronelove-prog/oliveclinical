@@ -1380,8 +1380,6 @@ export const posts: BlogPost[] = [
       },
     ],
   },
-]
-
   {
     slug: "watching-charlie-unravel",
     title: "Watching Charlie Unravel: \"The Drama\" as a Portrait of Relationship OCD",
