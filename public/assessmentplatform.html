@@ -6,7 +6,7 @@
 <title>Clinical Assessment Suite</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 :root {
   /* Neumorphism palette — soft monochrome surface */
@@ -116,60 +116,54 @@ body::before{display:none;}
 
 /* ── Header — dark grey-blue bar ─────────────────── */
 .lq-header{
-  position:sticky;top:16px;z-index:40;
-  background:#3A4A5C;
+  position:sticky;top:0;z-index:40;
+  background:#FAFAF8;
   border:none;
-  border-radius:var(--radius);
-  box-shadow:var(--neu-out);
-  margin:16px 16px 0;
+  border-bottom:1px solid rgba(11,37,69,0.10);
+  border-radius:0;
+  box-shadow:none;
+  margin:0;
 }
 .lq-header-inner{
-  max-width:1240px;margin:0 auto;
-  padding:18px 28px;
+  max-width:1400px;margin:0 auto;
+  padding:16px 28px;
   display:flex;align-items:center;gap:20px;
 }
 .lq-brand{display:inline-flex;align-items:flex-end;gap:0;line-height:1;flex:1;}
 .lq-wordmark-o{
-  width:clamp(28px,3.2vw,38px);
-  height:clamp(28px,3.2vw,38px);
-  color:#E8ECEF;
+  width:36px;
+  height:36px;
   flex-shrink:0;
-  margin-right:2px;
   display:block;
 }
 .lq-wordmark-rest{
-  font-family:var(--font-display);
-  font-size:clamp(24px,3vw,32px);
-  font-weight:700;
+  font-family:'Fraunces','Georgia',serif;
+  font-size:28px;
+  font-weight:400;
   letter-spacing:-0.02em;
-  color:#F1F2F5;
-  text-transform:lowercase;
+  color:#1E2938;
+  white-space:nowrap;
+  line-height:1;
 }
 .lq-tagline{
-  font-family:var(--font-display);
-  font-size:clamp(24px,3vw,32px);
-  font-weight:400;
-  font-style:normal;
-  letter-spacing:-0.01em;
-  color:rgba(241,242,245,0.65);
-  padding-left:0.4em;
+  display:none;
 }
 .lq-tagline::after{content:'';}
 .lq-active-client{
   font-family:var(--font-mono);
   font-size:13px;
   letter-spacing:0.04em;
-  color:rgba(241,242,245,0.85);
+  color:rgba(30,41,56,0.75);
   padding:8px 16px;
   border-radius:50px;
-  background:rgba(241,242,245,0.08);
-  border:1px solid rgba(241,242,245,0.12);
+  background:rgba(30,41,56,0.05);
+  border:1px solid rgba(30,41,56,0.12);
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
   max-width:320px;
 }
-.lq-active-client.empty{color:rgba(241,242,245,0.45);font-style:italic;}
+.lq-active-client.empty{color:rgba(30,41,56,0.40);font-style:italic;}
 
 /* ── Floating control cluster — neumorphic pill ── */
 .lq-float-controls{
@@ -1127,11 +1121,11 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 <header class="lq-header">
   <div class="lq-header-inner">
     <div class="lq-brand">
-      <svg class="lq-wordmark-o" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="o">
-        <path d="M32 6 C16 6, 8 17, 8 32 C8 47, 16 58, 32 58" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
-        <path d="M32 6 C48 6, 56 17, 56 32 C56 47, 48 58, 32 58" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
-        <circle cx="40" cy="22" r="4.5" fill="#D4AF37"/>
-      </svg><span class="lq-wordmark-rest">live</span><span class="lq-tagline">Clinical</span>
+      <svg class="lq-wordmark-o" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M 100 30 C 138 30, 166 60, 166 100 C 166 140, 138 170, 100 170 C 62 170, 34 140, 34 100 C 34 60, 62 30, 100 30 Z M 108 46 C 120.15 46, 130 55.85, 130 68 C 130 80.15, 120.15 90, 108 90 C 95.85 90, 86 80.15, 86 68 C 86 55.85, 95.85 46, 108 46 Z" fill="#1E2938" fill-rule="evenodd"/>
+      </svg>
+      <span style="display:inline-block;width:1.5px;height:30px;background:#cba558;flex-shrink:0;margin:0 8px;"></span>
+      <span class="lq-wordmark-rest">Olive Clinical</span>
     </div>
     <div class="lq-active-client" id="lqActiveClient">No client selected</div>
   </div>
