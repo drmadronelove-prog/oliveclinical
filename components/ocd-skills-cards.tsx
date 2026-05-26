@@ -2,9 +2,19 @@
 
 import { ICBTTrueSelfWorksheet } from "@/components/tools/icbt-true-self-worksheet"
 import { ICQEV } from "@/components/assessments/icqev"
+import { MomentOfChoice } from "@/components/tools/moment-of-choice"
 import { FeatureCardGrid, type FeatureCard } from "@/components/feature-card-grid"
 
 const CARDS: FeatureCard[] = [
+  {
+    kind: "modal",
+    title: "OCD Moment of Choice",
+    category: "I-CBT · Inference-Based",
+    footerLabel: "Open worksheet",
+    modalTitle: "OCD Moment of Choice",
+    modalSubtitle: "Map your trigger through sense-based vs. what-if reasoning. Saved locally.",
+    content: <MomentOfChoice />,
+  },
   {
     kind: "modal",
     title: "True Self Worksheet",
