@@ -59,6 +59,13 @@ const CARDS: FeatureCard[] = [
     footerLabel: "Read essay",
     href: "/blog/when-imagination-becomes-evidence",
   },
+  {
+    kind: "link",
+    title: "\"The Drama\" & Relationship OCD",
+    category: "Blog · Film & Clinical Psychology",
+    footerLabel: "Read essay",
+    href: "/blog/watching-charlie-unravel",
+  },
 ]
 
 export function OCDSkillsCards() {

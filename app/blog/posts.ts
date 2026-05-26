@@ -1382,6 +1382,190 @@ export const posts: BlogPost[] = [
   },
 ]
 
+  {
+    slug: "watching-charlie-unravel",
+    title: "Watching Charlie Unravel: \"The Drama\" as a Portrait of Relationship OCD",
+    subtitle: "Most films that try to depict OCD show someone washing their hands. Kristoffer Borgli's film does something rarer — and renders, with uncomfortable accuracy, the closed loop of relationship-themed OCD.",
+    author: "Madrone Love",
+    credential: "PsyD",
+    category: "Film & Clinical Psychology",
+    date: "2026",
+    blocks: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "Most films that try to depict obsessive-compulsive disorder show us someone who cannot stop washing their hands or straightening the books on a shelf. Kristoffer Borgli's \"The Drama\" does something different and much rarer. It shows us a man whose mind closes around a single piece of disturbing information about the woman he loves, and then it stays with him, scene after scene, while that information eats through every memory, every plan, every ordinary moment of their life together. What we are watching, whether or not the film knows to call it that, is one of the most accurate portraits of relationship-themed OCD I have seen on screen.",
+      },
+      {
+        type: "callout",
+        heading: "A note before we begin",
+        text: "This piece discusses the plot of \"The Drama\" in some detail, including the central revelation around which the second half of the film turns.",
+      },
+      { type: "heading", text: "The setup, and the moment the door opens" },
+      {
+        type: "paragraph",
+        text: "Robert Pattinson plays Charlie, a museum curator engaged to Emma, an editor played by Zendaya. They live the kind of bright, art-filled, frictionless Boston life that the film deliberately frames as almost too clean. Manohla Dargis in The New York Times described it as \"aspirationally bespoke,\" \"as frictionless as any in a Nancy Meyers romantic entanglement,\" and noted that \"all that perfection turns out to be an elaborate ruse.\" Borgli sets up the romantic-comedy beats with intention. The meet-cute, the loving wedding speech rehearsal, the foursome dinner with their best friends. And then, during a tipsy game about the worst thing anyone has ever done, Emma reveals something. The specifics are less important than what happens next. The door to a particular kind of knowledge has opened, and Charlie cannot get it closed again.",
+      },
+      {
+        type: "paragraph",
+        text: "From that moment, the film stops being a love story and becomes something more clinical. The narrative balance tips, Emma recedes, and the camera, the writing, and the whole emotional weight of the film follow Charlie into the closed room of his own mind. The reviewer Matthew Liedke noticed something specific about what we are watching: that Charlie's experience \"is very reminiscent of a person going through a major obsessive-compulsive episode,\" and that, speaking as someone with OCD himself, Charlie's inability to put aside his concern \"is done remarkably well, even in some of the more over the top scenes.\"",
+      },
+      {
+        type: "paragraph",
+        text: "That is precisely the diagnosis I want to sit with here. Because Charlie does not have OCD in some loose metaphorical way. The cycle his mind enters has a name, a literature, and a clinical signature, and Borgli renders it with uncomfortable accuracy.",
+      },
+      { type: "heading", text: "What relationship OCD actually is" },
+      {
+        type: "paragraph",
+        text: "Relationship OCD, often shortened to ROCD, is a presentation of obsessive-compulsive disorder in which the obsessive content centers on a romantic relationship. Guy Doron and colleagues, who have done the foundational research on this, describe two overlapping forms. The first, relationship-centered ROCD, fixates on the \"rightness\" of the relationship and on one's feelings toward the partner. Am I really in love? Is this really the one? The second, partner-focused ROCD, fixates on the perceived flaws of the partner themselves. Is something wrong with them? Are they good enough? Are they who I thought they were?",
+      },
+      {
+        type: "paragraph",
+        text: "What makes ROCD a form of OCD, rather than just ordinary doubt, is the structure of the suffering. There is an intrusive thought or image that the person experiences as unwanted and distressing. There is a felt urgency to resolve it. There is a compulsive behavior, often mental, designed to make the distress go away. And there is the cruel feature of all OCD, which is that the compulsion provides only momentary relief before the doubt returns, often stronger than before.",
+      },
+      {
+        type: "paragraph",
+        text: "The Doron group has shown in repeated studies that ROCD is genuinely disabling. The level of interference in functioning, the distress, and the resistance to compulsions in people with ROCD are comparable to those seen in other forms of OCD. This is not jealousy, not insecurity, not a personality flaw. It is OCD that has found a target in the most intimate territory available.",
+      },
+      {
+        type: "pull-quote",
+        text: "What looks from the outside like Charlie failing to \"get over it\" is, on the inside, the same trap any OCD sufferer knows. The more he searches for certainty, the further certainty recedes.",
+      },
+      { type: "heading", text: "The obsession: a single piece of information that will not metabolize" },
+      {
+        type: "paragraph",
+        text: "For Charlie, the obsessive content lands the moment Emma speaks. Suddenly he has a new fact about her, and the fact does not fit. It contradicts the version of her he has built his life around. In the language of OCD, his mind has just been handed an intolerable piece of uncertainty, and his nervous system treats it the way an OCD nervous system treats any intrusive thought. As a threat. As something that must be resolved immediately or something terrible will happen.",
+      },
+      {
+        type: "paragraph",
+        text: "The therapist Leon Garber, writing in Psychology Today about the film, named this with real precision. OCD, he wrote, \"latches onto facts and extends them, logically stretching them to the farthest end of human suffering.\" What Emma told Charlie is one fact. What Charlie's mind does with it over the following days is something else entirely. He extends it. He stretches it. He follows it into corners of imagined catastrophe that the original fact never logically required.",
+      },
+      {
+        type: "paragraph",
+        text: "This is the engine of OCD. Not the original thought, but what the mind does with the original thought when it cannot let it pass.",
+      },
+      { type: "heading", text: "The compulsions: questioning, checking, mental review" },
+      {
+        type: "paragraph",
+        text: "Once the obsession has taken hold, Charlie's compulsions begin. They are not the cinematic compulsions of hand-washing or counting. They are the quieter, more covert, more characteristically ROCD compulsions, and the film shows them with patience.",
+      },
+      {
+        type: "paragraph",
+        text: "He interrogates Emma. Garber describes it in his Psychology Today piece: \"For days on end, he relentlessly grills her. He returns to her history, her mindset, and, again, attempts to locate a trauma to explain her decisions.\" This is reassurance-seeking, one of the central compulsions in ROCD, and it has a particular tragic structure. Each answer gives Charlie a brief moment of relief, after which the doubt regenerates and another answer is required. Doron and his colleagues have documented this pattern across hundreds of cases. The seeking does not satisfy. It feeds.",
+      },
+      {
+        type: "paragraph",
+        text: "He mentally reviews their relationship, searching for evidence. Charlie's fears, Garber writes, \"taint his memories of their relationship and preclude him from forming new ones.\" This is mental checking, another classic ROCD compulsion. The person scans their memory, looking for proof that the relationship is real, that the partner is who they thought, that their feelings are right. The scanning itself becomes the problem. It cannot end, because the criteria for \"enough proof\" can never be met.",
+      },
+      {
+        type: "paragraph",
+        text: "He attempts to control the environment, even disposing of a harmless object for fear of triggering Emma, as Garber observed. This is the magical-thinking edge of OCD bleeding into the relational fixation. If I can just remove the right object, I can manage the threat.",
+      },
+      {
+        type: "paragraph",
+        text: "And he engages in what Garber calls a common OCD defense: self-sabotage. When control becomes impossible, the obsessive mind sometimes tries to escape the source of its anxiety entirely, even if the source is the very thing the person loves most.",
+      },
+      {
+        type: "callout",
+        heading: "The ROCD cycle, as Charlie lives it",
+        text: "A doubt arises (\"what if she is not who I thought?\"). It feels intolerable. He attempts to resolve it through questioning, checking, reviewing, or seeking reassurance. He feels a brief relief. The doubt returns, often with a new wrinkle. The cycle repeats. Each rotation costs more and reduces his capacity to live in the actual present moment with the actual person in front of him.",
+      },
+      { type: "heading", text: "The feared self, and why this content stuck" },
+      {
+        type: "paragraph",
+        text: "One of the most useful frameworks I bring into the room with ROCD clients comes from Frederick Aardema and Kieron O'Connor's inference-based work on OCD. They describe what they call the feared self, the version of yourself you most do not want to be, and they have shown that OCD content tends to organize around it. The intrusive thought is rarely random. It tends to whisper precisely the thing that would mean you are the person you most fear being.",
+      },
+      {
+        type: "paragraph",
+        text: "For Charlie, the new information about Emma threatens something at the level of identity. Garber noticed this. He observed that Charlie \"seeks out a comfortable, almost utopian, marriage,\" and that he \"perceives Emma as an almost childlike figure\" who lets him \"escape the burdens and seriousness of the world.\" If Emma is not pure in the way Charlie needed her to be, then Charlie is not the person he constructed himself to be either. The man with the perfect life, the man who chose well, the man who could be safe inside love. The feared self underneath is something like: a man who was wrong, who is alone, who cannot tell the truth from a lie.",
+      },
+      {
+        type: "paragraph",
+        text: "This is why he cannot simply let the information pass. The information is not just about Emma. It is about him. The compulsions are not really aimed at understanding her. They are aimed at restoring his own felt sense of who he is.",
+      },
+      { type: "heading", text: "Why audiences with OCD are recognizing themselves" },
+      {
+        type: "paragraph",
+        text: "The reddit threads and discussion forums about \"The Drama\" have included a notable thread of viewers with OCD reporting that the film was triggering in a very specific way. Not because the content was graphic, but because the cognitive process of the central character was so recognizable. Watching Charlie chase certainty he can never reach, watching him interrogate the same questions in slightly different forms, watching him push the woman he loves further away in the very act of trying to make himself safe with her, was, for many viewers with OCD, like watching their own worst weeks on screen.",
+      },
+      {
+        type: "paragraph",
+        text: "Liedke, writing his review from his own experience of OCD, made the same observation. The film \"manages to acknowledge Charlie's feelings,\" he wrote, \"in that there's some foundation to his fears, but it still successfully shows him becoming mentally off kilter.\" That phrase, \"off kilter,\" is exactly right. OCD does not look like delusion. It looks like a person whose reasoning is perfectly coherent within a closed loop that cannot widen to admit any new information. Charlie is not psychotic. He is not even, technically, irrational. He is locked inside a particular relationship to uncertainty, and he cannot get out.",
+      },
+      { type: "heading", text: "What the film lets us see that most films do not" },
+      {
+        type: "paragraph",
+        text: "Most depictions of OCD on screen miss what is most painful about the condition, which is not the compulsion itself but the felt experience of the obsession. The conviction that something terrible is true. The inability to trust your own mind to settle. The way certainty starts to feel like a survival need.",
+      },
+      {
+        type: "paragraph",
+        text: "\"The Drama\" gets close to this. We watch Charlie inside his rumination. We watch him try to think his way out. We watch the failed attempts at relief. We watch the cost accumulate in his body, his face, the increasing distance between him and Emma. And, crucially, we watch what Garber identified as one of the central traps of ROCD specifically: Emma \"is stuck playing the role of fixer, feverishly attempting to answer all of his questions while reassuring him that, while she can't exactly say why, she's a better, or at least different, person. But, she just stokes the flames of fixation, the more you give it, the more it requires.\"",
+      },
+      {
+        type: "paragraph",
+        text: "And here is what makes \"The Drama\" such an important portrait, beyond what most films attempt. Charlie's OCD is so insidious that it almost completely unravels him and upends a relationship that, only days before, was the center of his life. He becomes someone almost unrecognizable to Emma, to his friends, and to himself. Without language for what is happening, without tools to interrupt the cycle, without any framework that would let him name an OCD attack as an OCD attack, he is nearly destroyed by it. This is what makes the film clinically valuable. It moves the cultural narrative of OCD past the familiar shorthand of locked doors and handwashing, and into the territory where OCD actually does its worst work: disabling a person's ability to trust themselves, to trust the people they love, and to lead the life they actually want, all under the constant threat that the obsession will burn down the thing most precious to them.",
+      },
+      {
+        type: "pull-quote",
+        text: "The cruelty of OCD in love is that the compulsion designed to protect the relationship is the very thing eroding it.",
+      },
+      { type: "heading", text: "What I want people watching this film to know" },
+      {
+        type: "paragraph",
+        text: "If you watched \"The Drama\" and felt something more than discomfort, if you felt seen, if you felt a kind of cold recognition, I want you to know a few things.",
+      },
+      {
+        type: "paragraph",
+        text: "First, what Charlie is doing has a name. It is not weakness, not paranoia, not a sign that your love is broken. It is a clinical phenomenon with a real literature behind it and real, effective treatments.",
+      },
+      {
+        type: "paragraph",
+        text: "Second, the trap he is in is escapable. The work of ROCD treatment is not to resolve the doubt by finally getting enough information about the partner. The doubt cannot be resolved that way. It is to change your relationship to the doubt itself, to learn that uncertainty in love is not a verdict, that intrusive thoughts are not evidence, and that the compulsion you have built to manage the fear is the thing keeping you stuck.",
+      },
+      {
+        type: "paragraph",
+        text: "Third, the partner is not the project. One of the things I find most painful about \"The Drama\" is how Emma recedes as Charlie's distress takes over. This is what happens in real ROCD too. The actual partner, the actual relationship, becomes background scenery for the obsessive process. Treatment, in part, is the slow work of bringing the actual person back into focus.",
+      },
+      { type: "heading", text: "The film's uncomfortable gift" },
+      {
+        type: "paragraph",
+        text: "I do not think \"The Drama\" is a movie about OCD in the sense that Borgli set out to make one. As several reviewers noted, the film is also more interested in tweaking the audience than in really sitting with its characters' interior lives.",
+      },
+      {
+        type: "paragraph",
+        text: "But the film accidentally, or perhaps not so accidentally, renders one of the more clinically faithful portraits of ROCD I have encountered in popular cinema. It shows the obsession arriving. It shows the compulsion forming. It shows the partner being drafted into the ritual. It shows the relationship hollowing out around the process. And it shows, with a kind of dread accuracy, what it looks like when a mind that cannot tolerate uncertainty turns the full force of that intolerance on the person it loves.",
+      },
+      {
+        type: "paragraph",
+        text: "For anyone who has lived inside that loop, the film may be hard to watch. But there is something clarifying in seeing the pattern from the outside, in a darkened room, performed by a stranger on a screen. The pattern is not you. It is a thing you have been doing, often for years, often without language for it. And things with names can be worked with.",
+      },
+      {
+        type: "paragraph",
+        text: "That, at least, is what I want my clients to take from watching Charlie unravel. Not shame. Not the verdict that something is wrong with them. But the beginning of a different conversation, in which the obsessive process can be seen, named, and slowly disengaged, while the actual love, the actual partner, the actual present moment can be allowed back into the room.",
+      },
+      { type: "heading", text: "References" },
+      {
+        type: "list",
+        items: [
+          "Dargis, M. (2026, April 2). \"The Drama\" review: Her secret is his crisis. The New York Times.",
+          "Liedke, M. (2026, April 4). Review: \"The Drama\" presents spectacular relationship chaos. Matthew Liedke on Film.",
+          "Garber, L. (2026, April 14). The drama of obsessive-compulsive disorder. Psychology Today. https://www.psychologytoday.com/us/blog/perfectionism/202604/the-drama-of-obsessive-compulsive-disorder",
+          "Doron, G., Derby, D. S., & Szepsenwol, O. (2014). Relationship obsessive compulsive disorder (ROCD): A conceptual framework. Journal of Obsessive-Compulsive and Related Disorders, 3(2), 169–180.",
+          "Doron, G., Derby, D., Szepsenwol, O., Nahaloni, E., & Moulding, R. (2016). Relationship obsessive-compulsive disorder: Interference, symptoms, and maladaptive beliefs. Frontiers in Psychiatry, 7(58).",
+          "Doron, G., Derby, D. S., Szepsenwol, O., & Talmor, D. (2012). Flaws and all: Exploring partner-focused obsessive-compulsive symptoms. Journal of Obsessive-Compulsive and Related Disorders, 1(4), 234–243.",
+          "Aardema, F., & O'Connor, K. (2007). The menace within: Obsessions and the self. Journal of Cognitive Psychotherapy, 21(3), 182–197.",
+          "r/OCD: \"New A24 film The Drama is incredibly triggering.\" Reddit. https://www.reddit.com/r/OCD/comments/1seadrc/new_a24_film_the_drama_is_incredibly_triggering/",
+          "International OCD Foundation. Relationship OCD overview. https://iocdf.org/expert-opinions/relationship-ocd/",
+        ],
+      },
+      {
+        type: "footer-note",
+        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
+      },
+    ],
+  },
+]
+
 export function getPostBySlug(slug: string): BlogPost | undefined {
   return posts.find((p) => p.slug === slug)
 }
