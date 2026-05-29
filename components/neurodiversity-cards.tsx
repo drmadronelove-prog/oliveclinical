@@ -52,6 +52,13 @@ export function NeurodiversityCards({
         "Which cognitive mechanisms are present across each condition. Hover to highlight, click to select.",
       content: <MechanismMatrix />,
     },
+    {
+      kind: "link",
+      title: "Neurodivergent Romantic Relationships",
+      category: "Relationships · Presentation",
+      footerLabel: "View slides",
+      href: "https://www.beautiful.ai/player/-OnJpRkdzWpk0n0mEq0T/Neurodivergent-Romantic-Relationships",
+    },
   ]
 
   return (
