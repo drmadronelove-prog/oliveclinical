@@ -4,6 +4,7 @@ import { BreathingBubble } from "@/components/breathing-bubble"
 import { DeepWorkPlanner } from "@/components/tools/deep-work-planner"
 import { ActMatrix } from "@/components/tools/act-matrix"
 import { EisenhowerMatrix } from "@/components/tools/eisenhower-matrix"
+import { DecisionalBalance } from "@/components/tools/decisional-balance"
 import { MomentOfChoice } from "@/components/tools/moment-of-choice"
 import { ICBTTrueSelfWorksheet } from "@/components/tools/icbt-true-self-worksheet"
 import { OCDMonsters } from "@/components/tools/ocd-monsters"
@@ -96,6 +97,15 @@ const MINDFULNESS: FeatureCard[] = [
 // ── Executive Functioning ─────────────────────────────────────────────────────
 
 const EXECUTIVE: FeatureCard[] = [
+  {
+    kind: "modal",
+    title: "Decisional Balance Matrix",
+    category: "Motivational Interviewing",
+    footerLabel: "Open worksheet",
+    modalTitle: "Decisional Balance Matrix",
+    modalSubtitle: "See the full picture of what you're weighing — benefits and costs of changing and staying the same.",
+    content: <DecisionalBalance />,
+  },
   {
     kind: "modal",
     title: "Eisenhower Matrix",
