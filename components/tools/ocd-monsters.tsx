@@ -79,7 +79,7 @@ function Polaroid({
           : "0 4px 16px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08)",
         border: "1px solid rgba(0,0,0,0.08)",
         transition: "box-shadow 0.25s ease",
-        width: isExpanded ? "min(1600px, 92vw)" : "100%",
+        width: isExpanded ? "min(1600px, 88vw, 78vh)" : "100%",
         maxWidth: isExpanded ? undefined : 400,
       }}>
         <div style={{
