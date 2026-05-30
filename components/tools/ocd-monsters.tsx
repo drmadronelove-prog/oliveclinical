@@ -63,7 +63,7 @@ function MonsterFrame({ monster }: { monster: typeof MONSTERS[number] }) {
           : "0 4px 16px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08)",
         border: "1px solid rgba(0,0,0,0.08)",
         transition: "box-shadow 0.25s ease",
-        maxWidth: 200,
+        maxWidth: 400,
         width: "100%",
       }}>
         {/* Image area */}
@@ -133,8 +133,8 @@ export function OCDMonsters() {
       <div style={{
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: "40px 32px",
-        padding: "20px 24px 32px",
+        gap: "48px 40px",
+        padding: "20px 8px 32px",
       }}>
         {MONSTERS.map(monster => (
           <MonsterFrame key={monster.id} monster={monster} />
