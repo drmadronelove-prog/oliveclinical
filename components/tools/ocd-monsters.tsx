@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 
 const MONSTERS = [
   {
@@ -37,36 +38,50 @@ const MONSTERS = [
   },
 ]
 
-function MonsterFrame({ monster }: { monster: typeof MONSTERS[number] }) {
+function Polaroid({
+  monster,
+  size,
+  onClick,
+}: {
+  monster: typeof MONSTERS[number]
+  size: "normal" | "expanded"
+  onClick?: () => void
+}) {
   const [hovered, setHovered] = useState(false)
   const [imgError, setImgError] = useState(false)
+  const isExpanded = size === "expanded"
 
   return (
     <div
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={() => !isExpanded && setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={onClick}
       style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        transform: hovered ? "rotate(0deg) translateY(-10px) scale(1.04)" : `rotate(${monster.rotate}) translateY(0px) scale(1)`,
+        transform: isExpanded
+          ? "rotate(0deg)"
+          : hovered
+          ? "rotate(0deg) translateY(-10px) scale(1.04)"
+          : `rotate(${monster.rotate}) translateY(0px) scale(1)`,
         transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
-        cursor: "default",
+        cursor: isExpanded ? "zoom-out" : "zoom-in",
       }}
     >
-      {/* Polaroid frame */}
       <div style={{
         background: "#fff",
-        padding: "10px 10px 32px 10px",
-        boxShadow: hovered
+        padding: isExpanded ? "16px 16px 52px 16px" : "10px 10px 32px 10px",
+        boxShadow: isExpanded
+          ? "0 32px 80px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.18)"
+          : hovered
           ? "0 20px 40px rgba(0,0,0,0.22), 0 4px 10px rgba(0,0,0,0.14)"
           : "0 4px 16px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08)",
         border: "1px solid rgba(0,0,0,0.08)",
         transition: "box-shadow 0.25s ease",
-        maxWidth: 400,
-        width: "100%",
+        width: isExpanded ? "min(1600px, 92vw)" : "100%",
+        maxWidth: isExpanded ? undefined : 400,
       }}>
-        {/* Image area */}
         <div style={{
           width: "100%",
           aspectRatio: "1 / 1",
@@ -86,11 +101,7 @@ function MonsterFrame({ monster }: { monster: typeof MONSTERS[number] }) {
               style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
           ) : (
-            /* Placeholder when image not yet uploaded */
-            <div style={{
-              display: "flex", flexDirection: "column", alignItems: "center",
-              justifyContent: "center", gap: 8, padding: 16,
-            }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, padding: 16 }}>
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
                 <circle cx="24" cy="24" r="20" fill={monster.accent} opacity="0.15" />
                 <text x="24" y="31" textAnchor="middle" fontSize="22" fill={monster.accent}>👾</text>
@@ -102,12 +113,14 @@ function MonsterFrame({ monster }: { monster: typeof MONSTERS[number] }) {
           )}
         </div>
 
-        {/* Monster name in polaroid caption area */}
         <div style={{
-          paddingTop: 10, textAlign: "center",
+          paddingTop: isExpanded ? 14 : 10,
+          textAlign: "center",
           fontFamily: "var(--font-display, Georgia, serif)",
-          fontSize: 15, fontWeight: 400,
-          color: "#1a1a1a", letterSpacing: "-0.01em",
+          fontSize: isExpanded ? 22 : 15,
+          fontWeight: 400,
+          color: "#1a1a1a",
+          letterSpacing: "-0.01em",
           lineHeight: 1.2,
         }}>
           {monster.name}
@@ -117,7 +130,36 @@ function MonsterFrame({ monster }: { monster: typeof MONSTERS[number] }) {
   )
 }
 
+function LightboxPortal({ monster, onClose }: { monster: typeof MONSTERS[number]; onClose: () => void }) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+  if (!mounted) return null
+
+  return createPortal(
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 9999,
+        background: "rgba(0,0,0,0.72)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24,
+        animation: "moc-fade-in 0.18s ease",
+      }}
+    >
+      <style>{`@keyframes moc-fade-in { from { opacity: 0 } to { opacity: 1 } }`}</style>
+      <div style={{ animation: "moc-pop-in 0.22s cubic-bezier(0.34,1.56,0.64,1)" }}>
+        <style>{`@keyframes moc-pop-in { from { transform: scale(0.82) } to { transform: scale(1) } }`}</style>
+        <Polaroid monster={monster} size="expanded" onClick={onClose} />
+      </div>
+    </div>,
+    document.body
+  )
+}
+
 export function OCDMonsters() {
+  const [expanded, setExpanded] = useState<string | null>(null)
+  const expandedMonster = MONSTERS.find(m => m.id === expanded) ?? null
+
   return (
     <div style={{ padding: "4px 0 12px", maxWidth: 580, margin: "0 auto" }}>
       <p style={{
@@ -137,9 +179,18 @@ export function OCDMonsters() {
         padding: "20px 8px 32px",
       }}>
         {MONSTERS.map(monster => (
-          <MonsterFrame key={monster.id} monster={monster} />
+          <Polaroid
+            key={monster.id}
+            monster={monster}
+            size="normal"
+            onClick={() => setExpanded(monster.id)}
+          />
         ))}
       </div>
+
+      {expandedMonster && (
+        <LightboxPortal monster={expandedMonster} onClose={() => setExpanded(null)} />
+      )}
     </div>
   )
 }
