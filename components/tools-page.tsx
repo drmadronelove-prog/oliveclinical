@@ -215,7 +215,7 @@ export function ToolsPageContent() {
         cards={EXECUTIVE}
       />
       <Section
-        title="Cognitive (CBT)"
+        title="Cognitive Behavioral Therapy (CBT)"
         subtitle="Inference-based reasoning, reality testing, and OCD-specific cognitive tools."
         cards={COGNITIVE}
       />
