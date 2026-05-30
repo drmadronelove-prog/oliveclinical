@@ -17,7 +17,7 @@ const CARD_DEFS: { title: string; href: string }[] = [
   { title: "ASD Skills",         href: "/asd-skills"     },
   { title: "ADHD Skills",        href: "/adhd-skills"    },
   { title: "OCD Skills",         href: "/ocd-skills"     },
-  { title: "Tools",              href: "/tools"          },
+  { title: "Therapeutic Tools",  href: "/tools"          },
   { title: "Brain Games",        href: "/brain-games"    },
   { title: "Blog",               href: "/blog"           },
 ]
