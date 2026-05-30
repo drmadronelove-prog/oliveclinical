@@ -3,9 +3,19 @@
 import { ICBTTrueSelfWorksheet } from "@/components/tools/icbt-true-self-worksheet"
 import { ICQEV } from "@/components/assessments/icqev"
 import { MomentOfChoice } from "@/components/tools/moment-of-choice"
+import { OCDMonsters } from "@/components/tools/ocd-monsters"
 import { FeatureCardGrid, type FeatureCard } from "@/components/feature-card-grid"
 
 const CARDS: FeatureCard[] = [
+  {
+    kind: "modal",
+    title: "OCD Monsters",
+    category: "OCD · Psychoeducation",
+    footerLabel: "Meet the monsters",
+    modalTitle: "OCD Monsters",
+    modalSubtitle: "The what-ifs, oh-nos, it's possibles, and the mights — essential to get to know in OCD treatment.",
+    content: <OCDMonsters />,
+  },
   {
     kind: "modal",
     title: "OCD Moment of Choice",
