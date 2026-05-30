@@ -89,6 +89,15 @@ const MINDFULNESS: FeatureCard[] = [
       </div>
     ),
   },
+  {
+    kind: "modal",
+    title: "ACT Matrix",
+    category: "Acceptance & Commitment Therapy",
+    footerLabel: "Open worksheet",
+    modalTitle: "ACT Matrix",
+    modalSubtitle: "Map what pulls you away from what matters — and what moves you toward it. Saved locally.",
+    content: <ActMatrix />,
+  },
   { kind: "link", title: "Audiodharma", category: "Free dharma archive", footerLabel: "Visit", href: "https://www.audiodharma.org" },
   { kind: "link", title: "Insight Meditation Center", category: "IMC · Redwood City, CA", footerLabel: "Visit", href: "https://www.insightmeditationcenter.org" },
   { kind: "link", title: "Spirit Rock", category: "Spirit Rock · Woodacre, CA", footerLabel: "Visit", href: "https://www.spiritrock.org" },
@@ -123,15 +132,6 @@ const EXECUTIVE: FeatureCard[] = [
     modalTitle: "Deep Work Planner",
     modalSubtitle: "Long-term goals, weekly goals, and values + activities. Saved locally.",
     content: <DeepWorkPlanner />,
-  },
-  {
-    kind: "modal",
-    title: "ACT Matrix",
-    category: "Acceptance & Commitment Therapy",
-    footerLabel: "Open worksheet",
-    modalTitle: "ACT Matrix",
-    modalSubtitle: "Map what pulls you away from what matters — and what moves you toward it. Saved locally.",
-    content: <ActMatrix />,
   },
 ]
 
@@ -210,7 +210,7 @@ export function ToolsPageContent() {
         cards={MINDFULNESS}
       />
       <Section
-        title="Executive Functioning"
+        title="Planning and Decision Making"
         subtitle="Task prioritization, long-term goal-setting, and values-based planning for ADHD and beyond."
         cards={EXECUTIVE}
       />
