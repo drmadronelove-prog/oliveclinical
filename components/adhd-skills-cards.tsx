@@ -3,9 +3,19 @@
 import { DeepWorkPlanner } from "@/components/tools/deep-work-planner"
 import { ActMatrix } from "@/components/tools/act-matrix"
 import { AdhdChecklist } from "@/components/assessments/adhd-checklist"
+import { EisenhowerMatrix } from "@/components/tools/eisenhower-matrix"
 import { FeatureCardGrid, type FeatureCard } from "@/components/feature-card-grid"
 
 const CARDS: FeatureCard[] = [
+  {
+    kind: "modal",
+    title: "Eisenhower Matrix",
+    category: "ADHD · Task Management",
+    footerLabel: "Open planner",
+    modalTitle: "Eisenhower Matrix",
+    modalSubtitle: "Brain dump, sort by urgency and importance, export to Google Tasks.",
+    content: <EisenhowerMatrix />,
+  },
   {
     kind: "modal",
     title: "Deep Work Planner",

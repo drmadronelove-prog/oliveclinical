@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eisenhower Matrix — Olive Clinical</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  background-color: #F4F6F8;
+  color: #2C2A26;
+  line-height: 1.85;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrapper {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 40px 80px;
+}
+
+.category {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7A8896;
+  margin-bottom: 24px;
+  display: block;
+}
+
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 5vw, 46px);
+  font-weight: 500;
+  line-height: 1.15;
+  color: #1E1C18;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+.lede {
+  font-size: 18px;
+  font-weight: 400;
+  color: #5A5248;
+  line-height: 1.75;
+  margin-bottom: 52px;
+  padding-bottom: 52px;
+  border-bottom: 1px solid #D4DAE2;
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.step-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #D4DAE2;
+  background: #fff;
+  color: #7A8896;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.step-pill.active {
+  background: #3A4A5C;
+  color: #fff;
+  border-color: #3A4A5C;
+}
+
+.step-pill.done {
+  background: #E6EBF0;
+  color: #3A4A5C;
+  border-color: #D4DAE2;
+}
+
+.step-div {
+  flex: 1;
+  height: 1px;
+  background: #D4DAE2;
+  margin: 0 8px;
+}
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+.panel-header { margin-bottom: 1.5rem; }
+
+.panel-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: #1E1C18;
+  margin-bottom: 8px;
+}
+
+.panel-header p {
+  font-size: 15px;
+  color: #5A5870;
+  line-height: 1.7;
+}
+
+textarea.dump-area {
+  width: 100%;
+  min-height: 160px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #D4DAE2;
+  background: #fff;
+  color: #2C2A26;
+  resize: vertical;
+  line-height: 1.8;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+textarea.dump-area:focus {
+  border-color: #8FA0B5;
+}
+
+.dump-hint {
+  font-size: 13px;
+  color: #7A8896;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+.tip-box {
+  background: #fff;
+  border: 1px solid #D4DAE2;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.tip-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tip-head-icon {
+  width: 28px;
+  height: 28px;
+  background: #E6EBF0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tip-head-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke: #3A4A5C;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tip-head span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2C2A26;
+}
+
+.tip-body p {
+  font-size: 14px;
+  color: #5A5870;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.tip-example {
+  background: #F4F6F8;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.tip-example-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7A8896;
+  margin-bottom: 8px;
+}
+
+.tip-bad {
+  font-size: 13px;
+  color: #993C1D;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tip-good {
+  font-size: 13px;
+  color: #2A5C3A;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dump-tags-wrap {
+  margin-bottom: 1.5rem;
+}
+
+.dump-tags-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7A8896;
+  margin-bottom: 10px;
+}
+
+.dump-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dtag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 13px;
+  background: #fff;
+  border: 1px solid #D4DAE2;
+  color: #2C2A26;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+}
+
+.dtag:hover { border-color: #8FA0B5; }
+.dtag.sel { outline: 2px solid #3A4A5C; outline-offset: 1px; }
+.dtag.assigned { opacity: 0.4; text-decoration: line-through; cursor: default; }
+
+.axis-labels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.ax {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7A8896;
+  padding: 0 4px;
+}
+
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.quadrant {
+  background: #fff;
+  border: 1px solid #D4DAE2;
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: border-color 0.12s;
+}
+
+.quadrant:hover { border-color: #8FA0B5; }
+
+.q-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E8ECF0;
+}
+
+.q-ico {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.q-ico svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.q-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1E1C18;
+  margin: 0 0 2px;
+}
+
+.q-sub {
+  font-size: 11px;
+  color: #7A8896;
+  margin: 0;
+}
+
+.q1 { border-top: 2px solid #D85A30; }
+.q1 .q-ico { background: #FAECE7; }
+.q1 .q-ico svg { stroke: #993C1D; }
+
+.q2 { border-top: 2px solid #378ADD; }
+.q2 .q-ico { background: #E6EBF5; }
+.q2 .q-ico svg { stroke: #185FA5; }
+
+.q3 { border-top: 2px solid #EF9F27; }
+.q3 .q-ico { background: #FDF3E3; }
+.q3 .q-ico svg { stroke: #854F0B; }
+
+.q4 { border-top: 2px solid #888780; }
+.q4 .q-ico { background: #F1EFE8; }
+.q4 .q-ico svg { stroke: #5F5E5A; }
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px;
+  flex: 1;
+}
+
+.task-row { margin-bottom: 5px; }
+
+.task-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.task-main input[type="text"] {
+  flex: 1;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  padding: 5px 8px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid #D4DAE2;
+  background: #F4F6F8;
+  color: #2C2A26;
+  outline: none;
+  transition: border-color 0.12s;
+}
+
+.task-main input[type="text"]:focus { border-color: #8FA0B5; background: #fff; }
+
+.task-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #7A8896;
+  padding: 4px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-btn:hover { color: #3A4A5C; background: #E6EBF0; }
+.task-btn.danger:hover { color: #993C1D; background: #FAECE7; }
+
+.task-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.move-menu { position: relative; display: inline-flex; }
+
+.move-dropdown {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 4px);
+  background: #fff;
+  border: 1px solid #D4DAE2;
+  border-radius: 8px;
+  z-index: 100;
+  min-width: 170px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.move-dropdown.open { display: block; }
+
+.move-opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: #2C2A26;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.move-opt:hover { background: #F4F6F8; }
+
+.subtasks {
+  padding-left: 22px;
+  margin-top: 4px;
+  border-left: 2px solid #E6EBF0;
+}
+
+.subtask-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.subtask-row input[type="text"] {
+  flex: 1;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  padding: 4px 8px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid #D4DAE2;
+  background: #F4F6F8;
+  color: #2C2A26;
+  outline: none;
+}
+
+.subtask-row input[type="text"]:focus { border-color: #8FA0B5; background: #fff; }
+
+.add-sub-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #7A8896;
+  padding: 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 2px;
+}
+
+.add-sub-btn:hover { color: #3A4A5C; }
+.add-sub-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.add-task-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #7A8896;
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.add-task-btn:hover { color: #3A4A5C; }
+.add-task-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.summary-card {
+  background: #fff;
+  border: 1px solid #D4DAE2;
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.summary-card-label {
+  font-size: 12px;
+  color: #7A8896;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.summary-card-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 500;
+  color: #1E1C18;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.summary-card-unit {
+  font-size: 12px;
+  color: #7A8896;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+  text-decoration: none;
+}
+
+.btn svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btn-primary {
+  background: #3A4A5C;
+  color: #fff;
+  border: 1px solid #3A4A5C;
+}
+
+.btn-primary:hover { background: #2A3848; border-color: #2A3848; }
+
+.btn-secondary {
+  background: #fff;
+  color: #3A4A5C;
+  border: 1px solid #D4DAE2;
+}
+
+.btn-secondary:hover { background: #F4F6F8; }
+
+.btn-ghost {
+  background: none;
+  color: #7A8896;
+  border: 1px solid #D4DAE2;
+}
+
+.btn-ghost:hover { background: #F4F6F8; color: #3A4A5C; }
+
+.toast {
+  display: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #EAF3DE;
+  color: #2A5C1A;
+  border: 1px solid #C0DD97;
+  margin-top: 10px;
+}
+
+.inst-box {
+  background: #fff;
+  border: 1px solid #D4DAE2;
+  border-radius: 10px;
+  padding: 1.1rem 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.inst-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.inst-head span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2C2A26;
+}
+
+.tog-ico {
+  margin-left: auto;
+  color: #7A8896;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.tog-ico svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.inst-body { display: none; margin-top: 1rem; }
+.inst-body.open { display: block; }
+
+.inst-step {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 12px;
+  align-items: flex-start;
+}
+
+.inst-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #E6EBF0;
+  color: #3A4A5C;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.inst-text {
+  font-size: 13px;
+  color: #5A5870;
+  line-height: 1.65;
+}
+
+.inst-text strong {
+  font-weight: 500;
+  color: #2C2A26;
+}
+
+.inst-divider {
+  height: 1px;
+  background: #E8ECF0;
+  margin: 12px 0;
+}
+
+.inst-note {
+  font-size: 12px;
+  color: #7A8896;
+  line-height: 1.65;
+}
+
+@media (max-width: 600px) {
+  .wrapper { padding: 24px 16px 60px; }
+  .matrix-grid { grid-template-columns: 1fr; }
+  .axis-labels { grid-template-columns: 1fr; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .step-pill { padding: 6px 10px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <span class="category">ADHD Tools &amp; Resources</span>
+
+  <h1>Eisenhower Matrix</h1>
+
+  <p class="lede">A three-step tool for getting everything out of your head, sorting what actually matters, and exporting your tasks straight to Google Tasks.</p>
+
+  <div class="step-indicator">
+    <div class="step-pill active" id="pill-1" onclick="goTo(1)">
+      <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M9.5 2a2.5 2.5 0 0 1 5 0"/><path d="M9 13h6"/><path d="M9 17h6"/><rect x="6" y="6" width="12" height="15" rx="2"/></svg>
+      brain dump
+    </div>
+    <div class="step-div"></div>
+    <div class="step-pill" id="pill-2" onclick="goTo(2)">
+      <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      categorize
+    </div>
+    <div class="step-div"></div>
+    <div class="step-pill" id="pill-3" onclick="goTo(3)">
+      <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      export
+    </div>
+  </div>
+
+  <div class="panel active" id="panel-1">
+    <div class="panel-header">
+      <h2>Step 1: brain dump</h2>
+      <p>Write down everything on your mind — tasks, worries, errands, things you keep forgetting. Don't filter or judge. One item per line.</p>
+    </div>
+
+    <textarea class="dump-area" id="dump-ta" placeholder="pay rent&#10;email Dr. Kim back&#10;finish session notes&#10;pick up prescription&#10;call mom&#10;update website bio&#10;..."></textarea>
+    <p class="dump-hint">No order required. No format required. Just write until your head feels emptier.</p>
+
+    <div class="tip-box">
+      <div class="tip-head">
+        <div class="tip-head-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7 7 7 0 0 1-4 6.32V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.68A7 7 0 0 1 5 9a7 7 0 0 1 7-7z"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+        </div>
+        <span>Break tasks into their smallest real steps</span>
+      </div>
+      <div class="tip-body">
+        <p>Vague tasks like "Amazon return" never get done because your brain doesn't know where to start. List each physical step separately — or use the subtask feature in step two to break them down there.</p>
+        <div class="tip-example">
+          <div class="tip-example-label">example</div>
+          <div class="tip-bad">
+            <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;flex-shrink:0;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Amazon return
+          </div>
+          <div class="tip-good">
+            <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
+            place return request on Amazon
+          </div>
+          <div class="tip-good">
+            <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
+            print return code
+          </div>
+          <div class="tip-good">
+            <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
+            take package to Amazon drop box
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem;">
+      <button class="btn btn-primary" onclick="goToStep2()">
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        done — now categorize
+      </button>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-2">
+    <div class="panel-header">
+      <h2>Step 2: sort your tasks</h2>
+      <p>Click a task to select it, then click a quadrant to place it. Use the move icon to re-categorize, and the subtask icon to break a task into steps.</p>
+    </div>
+
+    <div id="dump-wrap" style="display:none;margin-bottom:1.5rem;">
+      <div class="dump-tags-label">your tasks — select one, then click a quadrant</div>
+      <div class="dump-tags" id="dump-tags"></div>
+    </div>
+
+    <div class="axis-labels">
+      <div class="ax">urgent + important</div>
+      <div class="ax">not urgent + important</div>
+    </div>
+
+    <div class="matrix-grid">
+      <div class="quadrant q1" id="q-q1" onclick="assignSel('q1')">
+        <div class="q-head">
+          <div class="q-ico">
+            <svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+          </div>
+          <div><p class="q-title">Do first</p><p class="q-sub">Handle today</p></div>
+        </div>
+        <ul class="task-list" id="list-q1"></ul>
+        <button class="add-task-btn" onclick="event.stopPropagation();addTask('q1','')">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          add task
+        </button>
+      </div>
+
+      <div class="quadrant q2" id="q-q2" onclick="assignSel('q2')">
+        <div class="q-head">
+          <div class="q-ico">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div><p class="q-title">Schedule</p><p class="q-sub">Plan and protect time</p></div>
+        </div>
+        <ul class="task-list" id="list-q2"></ul>
+        <button class="add-task-btn" onclick="event.stopPropagation();addTask('q2','')">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          add task
+        </button>
+      </div>
+
+      <div class="quadrant q3" id="q-q3" onclick="assignSel('q3')">
+        <div class="q-head">
+          <div class="q-ico">
+            <svg viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><path d="M21 3L9 15"/><path d="M10 3H3v18h18v-7"/></svg>
+          </div>
+          <div><p class="q-title">Delegate</p><p class="q-sub">Urgent, not your work</p></div>
+        </div>
+        <ul class="task-list" id="list-q3"></ul>
+        <button class="add-task-btn" onclick="event.stopPropagation();addTask('q3','')">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          add task
+        </button>
+      </div>
+
+      <div class="quadrant q4" id="q-q4" onclick="assignSel('q4')">
+        <div class="q-head">
+          <div class="q-ico">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </div>
+          <div><p class="q-title">Eliminate</p><p class="q-sub">Let it go</p></div>
+        </div>
+        <ul class="task-list" id="list-q4"></ul>
+        <button class="add-task-btn" onclick="event.stopPropagation();addTask('q4','')">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          add task
+        </button>
+      </div>
+    </div>
+
+    <div class="axis-labels" style="margin-top:-8px;margin-bottom:1.5rem;">
+      <div class="ax">urgent + not important</div>
+      <div class="ax">not urgent + not important</div>
+    </div>
+
+    <button class="btn btn-primary" onclick="goTo(3)">
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      done — export tasks
+    </button>
+  </div>
+
+  <div class="panel" id="panel-3">
+    <div class="panel-header">
+      <h2>Step 3: export</h2>
+      <p>Export your sorted tasks to Google Tasks, or download as a CSV to print or save.</p>
+    </div>
+
+    <div id="summary" class="summary-grid"></div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="exportGT()">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        export to Google Tasks
+      </button>
+      <button class="btn btn-secondary" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        download CSV
+      </button>
+      <button class="btn btn-ghost" onclick="goTo(2)">
+        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        back to matrix
+      </button>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <div class="inst-box">
+      <div class="inst-head" onclick="toggleInst()">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#7A8896;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>How to import into Google Tasks</span>
+        <div class="tog-ico" id="tog-ico">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="inst-body" id="inst-body">
+        <div class="inst-step">
+          <div class="inst-num">1</div>
+          <div class="inst-text">Click <strong>export to Google Tasks</strong> above. A file called <strong>eisenhower-tasks.csv</strong> will download to your device.</div>
+        </div>
+        <div class="inst-step">
+          <div class="inst-num">2</div>
+          <div class="inst-text">Open <strong>Google Tasks</strong> in your browser or the Gmail sidebar. Click the <strong>three-dot menu (⋮)</strong> in the top right corner of the Tasks panel.</div>
+        </div>
+        <div class="inst-step">
+          <div class="inst-num">3</div>
+          <div class="inst-text">Select <strong>Import tasks</strong>, then choose the CSV file you just downloaded.</div>
+        </div>
+        <div class="inst-step">
+          <div class="inst-num">4</div>
+          <div class="inst-text">Your tasks will appear in Google Tasks with their quadrant label in the notes field. Subtasks are exported as individual items with their parent task noted.</div>
+        </div>
+        <div class="inst-divider"></div>
+        <p class="inst-note">Import is available on desktop browsers only — the Google Tasks mobile app does not support CSV import. Tasks will appear in your default list and can be reorganized once imported.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const QL = {
+  q1: 'Do first (urgent + important)',
+  q2: 'Schedule (not urgent + important)',
+  q3: 'Delegate (urgent + not important)',
+  q4: 'Eliminate (not urgent + not important)'
+};
+const QN = { q1: 'Do first', q2: 'Schedule', q3: 'Delegate', q4: 'Eliminate' };
+let selTag = null;
+
+function goTo(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('panel-'+i).classList.toggle('active', i===n);
+    const p = document.getElementById('pill-'+i);
+    p.classList.remove('active','done');
+    if (i===n) p.classList.add('active');
+    else if (i<n) p.classList.add('done');
+  });
+  if (n===3) buildSummary();
+}
+
+function goToStep2() {
+  const raw = document.getElementById('dump-ta').value.trim();
+  if (raw) {
+    const items = raw.split('\n').map(s=>s.trim()).filter(s=>s.length>0);
+    const c = document.getElementById('dump-tags');
+    c.innerHTML = '';
+    items.forEach(item => {
+      const t = document.createElement('div');
+      t.className = 'dtag';
+      t.textContent = item;
+      t.dataset.task = item;
+      t.onclick = () => selDtag(t);
+      c.appendChild(t);
+    });
+    document.getElementById('dump-wrap').style.display = items.length ? 'block' : 'none';
+  }
+  goTo(2);
+}
+
+function selDtag(t) {
+  if (t.classList.contains('assigned')) return;
+  if (selTag) selTag.classList.remove('sel');
+  selTag = t;
+  t.classList.add('sel');
+}
+
+function assignSel(qid) {
+  if (!selTag || selTag.classList.contains('assigned')) return;
+  addTask(qid, selTag.dataset.task);
+  selTag.classList.add('assigned');
+  selTag.classList.remove('sel');
+  selTag = null;
+}
+
+function makeTaskRow(qid, val, existingSubs) {
+  const row = document.createElement('li');
+  row.className = 'task-row';
+  row.dataset.qid = qid;
+
+  const main = document.createElement('div');
+  main.className = 'task-main';
+
+  const inp = document.createElement('input');
+  inp.type = 'text'; inp.value = val; inp.placeholder = 'task...';
+  inp.setAttribute('aria-label', 'task name');
+  inp.onclick = e => e.stopPropagation();
+
+  const subBtn = document.createElement('button');
+  subBtn.className = 'task-btn'; subBtn.title = 'break into steps';
+  subBtn.setAttribute('aria-label', 'add subtasks');
+  subBtn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>';
+
+  const mm = document.createElement('div');
+  mm.className = 'move-menu';
+
+  const moveBtn = document.createElement('button');
+  moveBtn.className = 'task-btn'; moveBtn.title = 'move to another quadrant';
+  moveBtn.setAttribute('aria-label', 'move task');
+  moveBtn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>';
+
+  const drop = document.createElement('div');
+  drop.className = 'move-dropdown';
+  Object.entries(QN).forEach(([tqid, tname]) => {
+    if (tqid === qid) return;
+    const opt = document.createElement('button');
+    opt.className = 'move-opt';
+    opt.textContent = '→ ' + tname;
+    opt.onclick = e => { e.stopPropagation(); moveTask(row, qid, tqid); drop.classList.remove('open'); };
+    drop.appendChild(opt);
+  });
+
+  moveBtn.onclick = e => { e.stopPropagation(); const wasOpen = drop.classList.contains('open'); document.querySelectorAll('.move-dropdown.open').forEach(d=>d.classList.remove('open')); if (!wasOpen) drop.classList.add('open'); };
+  mm.appendChild(moveBtn); mm.appendChild(drop);
+
+  const delBtn = document.createElement('button');
+  delBtn.className = 'task-btn danger'; delBtn.title = 'remove';
+  delBtn.setAttribute('aria-label', 'remove task');
+  delBtn.innerHTML = '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  delBtn.onclick = e => { e.stopPropagation(); row.remove(); };
+
+  main.appendChild(inp); main.appendChild(subBtn); main.appendChild(mm); main.appendChild(delBtn);
+
+  const sw = document.createElement('div');
+  sw.className = 'subtasks';
+  sw.style.display = 'none';
+
+  (existingSubs || []).forEach(sv => {
+    sw.appendChild(makeSubRow(sw, sv));
+    sw.style.display = 'block';
+  });
+
+  const addSubBtn = document.createElement('button');
+  addSubBtn.className = 'add-sub-btn';
+  addSubBtn.innerHTML = '<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> add step';
+  addSubBtn.onclick = e => { e.stopPropagation(); sw.appendChild(makeSubRow(sw, '')); sw.style.display = 'block'; sw.lastChild.previousSibling.querySelector('input').focus(); };
+  sw.appendChild(addSubBtn);
+
+  subBtn.onclick = e => { e.stopPropagation(); const open = sw.style.display !== 'none'; sw.style.display = open ? 'none' : 'block'; if (!open && sw.querySelectorAll('.subtask-row').length === 0) addSubBtn.click(); };
+
+  row.appendChild(main); row.appendChild(sw);
+  return row;
+}
+
+function makeSubRow(wrap, val) {
+  const sr = document.createElement('div');
+  sr.className = 'subtask-row';
+  const si = document.createElement('input');
+  si.type = 'text'; si.value = val; si.placeholder = 'step...';
+  si.setAttribute('aria-label', 'subtask');
+  si.onclick = e => e.stopPropagation();
+  const sd = document.createElement('button');
+  sd.className = 'task-btn danger';
+  sd.innerHTML = '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  sd.setAttribute('aria-label', 'remove step');
+  sd.onclick = e => { e.stopPropagation(); sr.remove(); };
+  sr.appendChild(si); sr.appendChild(sd);
+  return sr;
+}
+
+function addTask(qid, val) {
+  const list = document.getElementById('list-'+qid);
+  const row = makeTaskRow(qid, val, []);
+  list.appendChild(row);
+  if (!val) row.querySelector('.task-main input').focus();
+}
+
+function moveTask(row, fromQ, toQ) {
+  const val = row.querySelector('.task-main input').value;
+  const subs = Array.from(row.querySelectorAll('.subtask-row input')).map(i=>i.value.trim()).filter(v=>v);
+  row.remove();
+  const newRow = makeTaskRow(toQ, val, subs);
+  document.getElementById('list-'+toQ).appendChild(newRow);
+}
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.move-dropdown.open').forEach(d => d.classList.remove('open'));
+});
+
+function getTasks(qid) {
+  return Array.from(document.querySelectorAll('#list-'+qid+' .task-row')).map(r => ({
+    title: r.querySelector('.task-main input').value.trim(),
+    subtasks: Array.from(r.querySelectorAll('.subtask-row input')).map(i=>i.value.trim()).filter(v=>v)
+  })).filter(t => t.title);
+}
+
+function buildSummary() {
+  const g = document.getElementById('summary');
+  g.innerHTML = '';
+  Object.entries(QL).forEach(([qid, label]) => {
+    const n = getTasks(qid).length;
+    const card = document.createElement('div');
+    card.className = 'summary-card';
+    card.innerHTML = '<div class="summary-card-label">'+esc(label)+'</div><div class="summary-card-num">'+n+'</div><div class="summary-card-unit">task'+(n!==1?'s':'')+'</div>';
+    g.appendChild(card);
+  });
+}
+
+function showToast(m) {
+  const t = document.getElementById('toast');
+  t.textContent = m; t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3500);
+}
+
+function exportGT() {
+  const lines = ['title,notes,due'];
+  Object.entries(QL).forEach(([qid, label]) => {
+    getTasks(qid).forEach(({title, subtasks}) => {
+      lines.push('"'+title.replace(/"/g,'""')+'","'+label+'",""');
+      subtasks.forEach(sub => lines.push('"'+sub.replace(/"/g,'""')+'","Step for: '+title.replace(/"/g,'""')+'",""'));
+    });
+  });
+  if (lines.length === 1) { showToast('Add some tasks first.'); return; }
+  dl(lines.join('\n'), 'eisenhower-tasks.csv');
+  showToast('Downloaded — open Google Tasks → ⋮ → Import tasks.');
+}
+
+function exportCSV() {
+  const lines = ['quadrant,task,step'];
+  Object.entries(QL).forEach(([qid, label]) => {
+    getTasks(qid).forEach(({title, subtasks}) => {
+      lines.push('"'+label+'","'+title.replace(/"/g,'""')+'",""');
+      subtasks.forEach(sub => lines.push('"'+label+'","'+title.replace(/"/g,'""')+'","'+sub.replace(/"/g,'""')+'"'));
+    });
+  });
+  if (lines.length === 1) { showToast('Add some tasks first.'); return; }
+  dl(lines.join('\n'), 'eisenhower-matrix.csv');
+  showToast('CSV downloaded.');
+}
+
+function dl(content, filename) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], {type:'text/csv'}));
+  a.download = filename; a.click();
+}
+
+function toggleInst() {
+  const b = document.getElementById('inst-body');
+  const i = document.getElementById('tog-ico');
+  const open = b.classList.toggle('open');
+  i.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
