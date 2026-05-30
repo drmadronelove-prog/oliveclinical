@@ -17,37 +17,38 @@ function Section({
   title,
   subtitle,
   cards,
+  color,
 }: {
   title: string
   subtitle: string
   cards: FeatureCard[]
+  color: string
 }) {
   return (
     <section style={{ marginTop: 52 }}>
       <div style={{ marginBottom: 20 }}>
-        <h2
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(20px, 2.8vw, 26px)",
-            fontWeight: 500,
-            color: "var(--ink)",
-            letterSpacing: "-0.018em",
-            lineHeight: 1.2,
-            marginBottom: 6,
-          }}
-        >
-          {title}
-        </h2>
-        <p style={{ fontSize: 13, color: "var(--ink-muted, #666)", lineHeight: 1.55, margin: 0 }}>
-          {subtitle}
-        </p>
-        <div
-          style={{
-            height: 1,
-            background: "rgba(11,37,69,0.10)",
-            marginTop: 12,
-          }}
-        />
+        <div style={{ display: "flex", alignItems: "stretch", gap: 14, marginBottom: 8 }}>
+          <div style={{ width: 4, borderRadius: 2, background: color, flexShrink: 0 }} />
+          <div>
+            <h2
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(20px, 2.8vw, 26px)",
+                fontWeight: 500,
+                color: "var(--ink)",
+                letterSpacing: "-0.018em",
+                lineHeight: 1.2,
+                marginBottom: 5,
+              }}
+            >
+              {title}
+            </h2>
+            <p style={{ fontSize: 13, color: "var(--ink-muted, #666)", lineHeight: 1.55, margin: 0 }}>
+              {subtitle}
+            </p>
+          </div>
+        </div>
+        <div style={{ height: 1, background: color, opacity: 0.22, marginTop: 10 }} />
       </div>
       <FeatureCardGrid cards={cards} modalSize="wide" />
     </section>
@@ -208,21 +209,25 @@ export function ToolsPageContent() {
         title="Mindfulness"
         subtitle="Breathing practices, guided meditation, and contemplative tools for present-moment awareness."
         cards={MINDFULNESS}
+        color="#9fb3b0"
       />
       <Section
         title="Planning and Decision Making"
         subtitle="Task prioritization, long-term goal-setting, and values-based planning for ADHD and beyond."
         cards={EXECUTIVE}
+        color="#5b6e88"
       />
       <Section
         title="Cognitive Behavioral Therapy (CBT)"
         subtitle="Inference-based reasoning, reality testing, and OCD-specific cognitive tools."
         cards={COGNITIVE}
+        color="#7a4f6e"
       />
       <Section
         title="Emotion Regulation"
         subtitle="DBT skills, dysregulation tracking, and body-based awareness for managing intense emotions."
         cards={EMOTION}
+        color="#b88894"
       />
     </div>
   )
