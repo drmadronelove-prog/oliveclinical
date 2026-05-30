@@ -6,7 +6,6 @@ import { ActMatrix } from "@/components/tools/act-matrix"
 import { EisenhowerMatrix } from "@/components/tools/eisenhower-matrix"
 import { MomentOfChoice } from "@/components/tools/moment-of-choice"
 import { ICBTTrueSelfWorksheet } from "@/components/tools/icbt-true-self-worksheet"
-import { ICQEV } from "@/components/assessments/icqev"
 import { OCDMonsters } from "@/components/tools/ocd-monsters"
 import { DBTEmotionRegulation } from "@/components/tools/dbt-emotion-regulation"
 import { DysregulationLog } from "@/components/tools/dysregulation-log"
@@ -89,8 +88,6 @@ const MINDFULNESS: FeatureCard[] = [
       </div>
     ),
   },
-  { kind: "link", title: "Thought, Emotion, or Sensation?", category: "ACT · Defusion", footerLabel: "Play", href: "/games/thought-emotion-sensation.html" },
-  { kind: "link", title: "What Do I Do With This?", category: "ACT · Mindfulness", footerLabel: "Play", href: "/games/mindfulness-game.html" },
   { kind: "link", title: "Audiodharma", category: "Free dharma archive", footerLabel: "Visit", href: "https://www.audiodharma.org" },
   { kind: "link", title: "Insight Meditation Center", category: "IMC · Redwood City, CA", footerLabel: "Visit", href: "https://www.insightmeditationcenter.org" },
   { kind: "link", title: "Spirit Rock", category: "Spirit Rock · Woodacre, CA", footerLabel: "Visit", href: "https://www.spiritrock.org" },
@@ -151,15 +148,6 @@ const COGNITIVE: FeatureCard[] = [
   },
   {
     kind: "modal",
-    title: "ICQ-EV",
-    category: "Inferential Confusion Questionnaire",
-    footerLabel: "Take questionnaire",
-    modalTitle: "ICQ-EV: Inferential Confusion Questionnaire (Expanded Version)",
-    modalSubtitle: "30-item measure of inferential confusion · Aardema et al., 2010.",
-    content: <ICQEV />,
-  },
-  {
-    kind: "modal",
     title: "OCD Monsters",
     category: "OCD · Psychoeducation",
     footerLabel: "Meet the monsters",
@@ -167,9 +155,6 @@ const COGNITIVE: FeatureCard[] = [
     modalSubtitle: "The what-ifs, oh-nos, it's possibles, and the mights — essential to get to know in OCD treatment.",
     content: <OCDMonsters />,
   },
-  { kind: "link", title: "Incoming Game", category: "I-CBT · Thought Catching", footerLabel: "Play", href: "/games/moment-one-incoming.html" },
-  { kind: "link", title: "Am I a Monster? Game", category: "OCD · Narrative Work", footerLabel: "Play", href: "/games/am-i-a-monster.html" },
-  { kind: "link", title: "Real News or Fake News?", category: "I-CBT · Reality Testing", footerLabel: "Play", href: "/games/fake-news.html" },
 ]
 
 // ── Emotion Regulation ────────────────────────────────────────────────────────
@@ -202,7 +187,6 @@ const EMOTION: FeatureCard[] = [
     modalSubtitle: "A personal tracking workbook. Saved locally.",
     content: <MeltdownWorksheet />,
   },
-  { kind: "link", title: "Regulation Station Game", category: "Neurodivergent · Dysregulation", footerLabel: "Play", href: "/games/regulation-station.html" },
 ]
 
 // ── Page ──────────────────────────────────────────────────────────────────────
