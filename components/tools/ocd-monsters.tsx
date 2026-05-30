@@ -6,15 +6,15 @@ const MONSTERS = [
   {
     id: "whatifs",
     name: "The What-Ifs",
-    src: "/monsters/whatifs.jpg",
+    src: "/whatifs.png",
     accent: "#B45309",
     bg: "#FEF3C7",
     rotate: "-2deg",
   },
   {
-    id: "itsposssibles",
+    id: "itspossibles",
     name: "The It's Possibles",
-    src: "/monsters/itsposssibles.jpg",
+    src: "/itspossibles.png",
     accent: "#0369A1",
     bg: "#E0F2FE",
     rotate: "1.5deg",
@@ -22,7 +22,7 @@ const MONSTERS = [
   {
     id: "ohnos",
     name: "The Oh Nos",
-    src: "/monsters/ohnos.jpg",
+    src: "/ohnos.png",
     accent: "#9B1C1C",
     bg: "#FEE2E2",
     rotate: "-1deg",
@@ -30,7 +30,7 @@ const MONSTERS = [
   {
     id: "mights",
     name: "The Mights",
-    src: "/monsters/mights.jpg",
+    src: "/mights.png",
     accent: "#5B21B6",
     bg: "#EDE9FE",
     rotate: "2deg",
