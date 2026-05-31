@@ -25,7 +25,14 @@ function Section({
   color: string
 }) {
   return (
-    <section style={{ marginTop: 52 }}>
+    <section style={{
+      marginTop: 52,
+      background: `${color}12`,
+      borderRadius: 12,
+      padding: "24px 20px 28px",
+      marginLeft: -20,
+      marginRight: -20,
+    }}>
       <div style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", alignItems: "stretch", gap: 14, marginBottom: 8 }}>
           <div style={{ width: 4, borderRadius: 2, background: color, flexShrink: 0 }} />
