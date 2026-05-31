@@ -11,8 +11,8 @@ const PAPER_BG = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
 const PALETTE_BORDERS = ["#8c9bb0", "#9fb3b0", "#5b6e88", "#7a4f6e", "#b88894", "#c4877e", "#c5a572"]
 
 const CARD_DEFS: { title: string; href: string }[] = [
-  { title: "Neurodiversity",     href: "/neurodiversity" },
-  { title: "Assessment",         href: "/tests"          },
+  { title: "Neurodiverse Relationships", href: "/neurodiverse-relationships" },
+  { title: "Neuroinclusive Assessments", href: "/tests"          },
   { title: "Psychotherapy",      href: "/psychotherapy"  },
   { title: "ASD Skills",         href: "/asd-skills"     },
   { title: "ADHD Skills",        href: "/adhd-skills"    },
