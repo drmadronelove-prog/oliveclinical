@@ -17,7 +17,7 @@ const CARDS: FeatureCard[] = [
   },
   {
     kind: "link",
-    title: "Watching Charlie Unravel",
+    title: "\"The Drama\" as a Portrait of Relationship OCD",
     category: "Film & Relationship OCD",
     footerLabel: "Read",
     href: "/blog/watching-charlie-unravel",
