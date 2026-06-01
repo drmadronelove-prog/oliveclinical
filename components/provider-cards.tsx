@@ -25,11 +25,11 @@ const PROVIDERS: Provider[] = [
     image: "/dr-love.jpg",
   },
   {
-    name: "Jasmin Canfield, LCSW",
+    name: "Patrick Ford, LMFT",
     role: "Network Provider",
     specialty: "Psychotherapy",
-    href: "https://healingwithintention.org/",
-    image: "/jasmin canfield.png",
+    href: "https://patricktherapy.com/",
+    image: "/Patrick3-1024x1024.jpg",
   },
   {
     name: "Melinda Mahler, LPCC",
@@ -39,11 +39,11 @@ const PROVIDERS: Provider[] = [
     image: "/Melinda Mahler.png",
   },
   {
-    name: "Patrick Ford, LMFT",
+    name: "Jasmin Canfield, LCSW",
     role: "Network Provider",
     specialty: "Psychotherapy",
-    href: "https://patricktherapy.com/",
-    image: "/Patrick3-1024x1024.jpg",
+    href: "https://healingwithintention.org/",
+    image: "/jasmin canfield.png",
   },
   {
     name: "Network Provider",
@@ -61,16 +61,50 @@ const PROVIDERS: Provider[] = [
   },
 ]
 
+const PSYCHIATRY_REFERRALS = [
+  { name: "Mindpath Health", href: "https://www.mindpath.com/" },
+  { name: "Psychiatric Alternatives", href: "https://psychiatricalternatives.com/" },
+]
+
 export function ProviderCards() {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-5xl mx-auto">
-      {PROVIDERS.map((p, i) => (
-        <ProviderCard
-          key={i}
-          provider={p}
-          borderColor={PALETTE_BORDERS[i % PALETTE_BORDERS.length]}
-        />
-      ))}
+    <div className="w-full max-w-5xl mx-auto flex flex-col gap-12">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+        {PROVIDERS.map((p, i) => (
+          <ProviderCard
+            key={i}
+            provider={p}
+            borderColor={PALETTE_BORDERS[i % PALETTE_BORDERS.length]}
+          />
+        ))}
+      </div>
+
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
+          <div style={{ width: 4, borderRadius: 2, background: "#9fb3b0", flexShrink: 0, alignSelf: "stretch" }} />
+          <div>
+            <h2 style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(18px, 2.4vw, 22px)",
+              fontWeight: 500,
+              color: "var(--ink)",
+              letterSpacing: "-0.018em",
+              lineHeight: 1.2,
+              marginBottom: 4,
+            }}>
+              Psychiatry Referrals
+            </h2>
+            <p style={{ fontSize: 13, color: "rgba(11,37,69,0.55)", margin: 0, fontFamily: "var(--font-body)" }}>
+              Medication management and psychiatric evaluation.
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 md:gap-6 md:max-w-[66%]">
+          {PSYCHIATRY_REFERRALS.map((r, i) => (
+            <ReferralCard key={r.name} referral={r} borderColor={PALETTE_BORDERS[(i + 2) % PALETTE_BORDERS.length]} />
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
@@ -198,5 +232,76 @@ function ProviderCard({
     </a>
   ) : (
     <a href={provider.href}>{card}</a>
+  )
+}
+
+function ReferralCard({
+  referral,
+  borderColor,
+}: {
+  referral: { name: string; href: string }
+  borderColor: string
+}) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <a href={referral.href} target="_blank" rel="noopener noreferrer">
+      <motion.div
+        animate={{ y: hovered ? -5 : 0, scale: hovered ? 1.03 : 1 }}
+        transition={{ type: "spring", stiffness: 260, damping: 18 }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          aspectRatio: "17 / 10",
+          backgroundColor: "rgba(251, 248, 243, 0.94)",
+          backgroundImage: `${PAPER_BG}, linear-gradient(160deg, ${borderColor}22 0%, ${borderColor}10 100%)`,
+          backgroundSize: "200px 200px, cover",
+          border: `1.5px solid ${borderColor}`,
+          borderRadius: "12px",
+          boxShadow: hovered
+            ? `0 14px 32px rgba(11,37,69,0.18), 0 0 0 1px ${borderColor}55`
+            : `0 3px 10px rgba(11,37,69,0.08), 0 1px 3px rgba(11,37,69,0.05)`,
+          cursor: "pointer",
+          position: "relative",
+          overflow: "hidden",
+          transition: "box-shadow 0.2s ease",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "16px 20px",
+        }}
+      >
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(160deg, rgba(255,255,255,0.35) 0%, transparent 55%)",
+          borderRadius: "11px",
+          pointerEvents: "none",
+        }} />
+        <div style={{ position: "relative", textAlign: "center" }}>
+          <p style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(0.85rem, 1.6vw, 1.05rem)",
+            fontWeight: 500,
+            color: "var(--ink)",
+            lineHeight: 1.2,
+            letterSpacing: "-0.012em",
+            margin: 0,
+          }}>
+            {referral.name}
+          </p>
+          <p style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.6rem",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: borderColor,
+            opacity: 0.85,
+            marginTop: 6,
+          }}>
+            Psychiatry · Visit site
+          </p>
+        </div>
+      </motion.div>
+    </a>
   )
 }
