@@ -93,6 +93,13 @@ const CARDS: FeatureCard[] = [
     footerLabel: "Read essay",
     href: "/blog/ocd-knowledge-gap",
   },
+  {
+    kind: "link",
+    title: "OTC Supplements in OCD Treatment",
+    category: "IOCDF · Psychoeducation",
+    footerLabel: "Read",
+    href: "https://iocdf.org/expert-opinions/over-the-counter-supplements-in-the-treatment-of-ocd/",
+  },
 ]
 
 export function OCDSkillsCards() {
