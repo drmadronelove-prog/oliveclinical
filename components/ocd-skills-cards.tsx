@@ -86,6 +86,13 @@ const CARDS: FeatureCard[] = [
     footerLabel: "Read essay",
     href: "/blog/watching-charlie-unravel",
   },
+  {
+    kind: "link",
+    title: "What If Your OCD Is Feeding on a Knowledge Gap?",
+    category: "Blog · OCD & Clinical Insight",
+    footerLabel: "Read essay",
+    href: "/blog/ocd-knowledge-gap",
+  },
 ]
 
 export function OCDSkillsCards() {

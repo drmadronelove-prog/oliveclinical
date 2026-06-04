@@ -1562,6 +1562,169 @@ export const posts: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: "ocd-knowledge-gap",
+    title: "What If Your OCD Is Feeding on a Knowledge Gap?",
+    subtitle: "OCD is most commonly described as a disorder of intolerance to uncertainty. But there is a third lens that matters clinically: OCD as a disorder that feeds, at least in part, on genuine missing information.",
+    author: "Madrone Love",
+    credential: "PsyD",
+    category: "OCD & Clinical Insight",
+    date: "2026",
+    blocks: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "OCD is most commonly described as an anxiety disorder, or more precisely, a disorder of intolerance to uncertainty. Both framings are accurate and useful. But there is a third lens I have found increasingly important in clinical work: OCD as a disorder that feeds, at least in part, on genuine missing information. On the places where a person simply does not know how a process works — and uncertainty, in the absence of knowledge, becomes the medium in which obsessive content grows.",
+      },
+      { type: "heading", text: "The disorder that needs a gap" },
+      {
+        type: "paragraph",
+        text: "Obsessive-compulsive disorder requires uncertainty to operate. The obsessive cycle begins with an intrusive thought that cannot be definitively resolved, moves through compulsive attempts to resolve it, achieves temporary relief, and then resets — usually with the doubt regenerated stronger than before. The uncertainty is not incidental to OCD. It is the condition of possibility for the whole cycle.",
+      },
+      {
+        type: "paragraph",
+        text: "What I have come to notice in clinical practice is that this uncertainty is not always generated entirely by the disorder itself. Sometimes it is being borrowed from a real gap — a domain of life that the person genuinely does not understand, that was never explained to them, that they have no accurate framework for. The OCD moves into that gap the way water moves into a low place. It fills the absence. It provides answers. It provides a structure, even if the structure is organized around threat.",
+      },
+      {
+        type: "paragraph",
+        text: "For many people, what looks like OCD is at least partly OCD feeding on ignorance. And ignorance, unlike the feared self, has a direct remedy.",
+      },
+      {
+        type: "pull-quote",
+        text: "OCD needs uncertainty to operate. When that uncertainty is partly made of missing information, the missing information is worth addressing directly.",
+      },
+      { type: "heading", text: "The reasoning disorder and the knowledge gap" },
+      {
+        type: "paragraph",
+        text: "Frederick Aardema and Kieron O'Connor's inference-based model of OCD offers a framework that is helpful here. Their central argument is that OCD is primarily a reasoning disorder — the core problem is not anxiety but a collapse of the boundary between present reality and imagined possibility. The person treats what might be true as if it is true. They cross from direct sensory experience into narrative, and the narrative becomes the thing they respond to.",
+      },
+      {
+        type: "paragraph",
+        text: "What makes this collapse so available in certain domains is that the person has no reliable framework for evaluating what is actually likely, what is actually happening, what the evidence actually means. In the absence of accurate knowledge about how a process works, the mind cannot easily distinguish between a reasonable concern and an obsessive elaboration. Everything feels equally plausible. The OCD exploits that equivalence ruthlessly.",
+      },
+      {
+        type: "paragraph",
+        text: "Consider what happens when a person with contamination OCD has no accurate working model of how pathogens are actually transmitted. They do not know which surfaces genuinely pose risk and which do not, what exposure levels are actually dangerous, how the body's immune system actually manages ordinary contact with the environment. In that vacuum, the OCD can generate any scenario it likes and the person has no reliable ground to stand on. The uncertainty is not only psychological. It is factual.",
+      },
+      {
+        type: "paragraph",
+        text: "Or consider a person with relationship-themed OCD who has no framework for how healthy romantic relationships actually develop — what the stages are, what uncertainty is normal at what point, what the signs of genuine interest look like versus what the mind can confabulate when afraid. Without that framework, every ambiguous moment becomes raw material. The OCD can fill it with threat because the person has no competing knowledge to offer.",
+      },
+      { type: "heading", text: "Where knowledge gaps tend to cluster" },
+      {
+        type: "paragraph",
+        text: "In my clinical experience, the domains most likely to contain genuine knowledge gaps that OCD can exploit tend to share certain features. They involve processes that unfold gradually over time, where the relevant information is not available in a single moment of inspection. They involve domains where knowledge is typically transmitted implicitly, through modeling and observation, rather than taught explicitly. And they tend to be domains where a person's particular developmental history left them with less exposure than average.",
+      },
+      {
+        type: "callout",
+        heading: "Contamination and illness",
+        text: "Many people with contamination OCD have significant gaps in their understanding of how infection actually works — what makes a surface genuinely risky, how transmission actually occurs, what the body's immune response actually does. Accurate psychoeducation about microbiology and immune function is not a replacement for OCD treatment, but it can meaningfully reduce the territory the obsessive mind has to work with.",
+      },
+      {
+        type: "callout",
+        heading: "Harm OCD and the relationship between thoughts and actions",
+        text: "The feared self in harm OCD says: you thought this, therefore you might do it. Accurate information about the actual relationship between intrusive thoughts and behavior — that intrusive thoughts are normal, universal, and not predictive of action in people without psychopathic traits — does not resolve the OCD, but it closes a real factual gap that the obsession has been using as a foothold.",
+      },
+      {
+        type: "callout",
+        heading: "Relationship OCD and how relationships actually develop",
+        text: "People with ROCD often have genuinely incomplete mental models of how romantic relationships work — what normal uncertainty looks like at different stages, how attraction deepens into love over time, what repair and friction actually contribute to trust, how the nervous system builds security through accumulated experience. When those frameworks are absent, every ambiguous moment in an early relationship is genuinely uninterpretable. The OCD does not have to manufacture the uncertainty. The uncertainty is real.",
+      },
+      {
+        type: "callout",
+        heading: "Scrupulosity and moral or religious frameworks",
+        text: "Scrupulosity OCD often exploits genuine theological or ethical confusion — places where the person does not actually understand the tradition they are trying to follow, or has absorbed distorted versions of it. Accurate education from a trusted religious or ethical authority can sometimes close gaps that the OCD has been inhabiting for years.",
+      },
+      {
+        type: "callout",
+        heading: "Health anxiety and OCD",
+        text: "Without accurate knowledge of how symptoms actually present in the conditions they fear, people with health-themed OCD cannot evaluate their own bodily sensations against a reliable baseline. Every sensation becomes evidence, because they have no framework for what is actually significant and what is ordinary variation in a human body.",
+      },
+      { type: "heading", text: "The instruction manual problem" },
+      {
+        type: "paragraph",
+        text: "There is a particular version of this pattern I see frequently in neurodivergent adults, and it deserves its own naming. Neurodivergent people — and this is especially true for people with ADHD, who tend to learn through interest and direct experience rather than passive absorption — often arrive at adulthood without the implicit knowledge that neurotypical people accumulated through osmosis. The things that most people seem to \"just know\" were never transmitted, or were transmitted in ways that did not register.",
+      },
+      {
+        type: "paragraph",
+        text: "Neurotypical social learning relies heavily on observation, modeling, and ambient cultural transmission. A child watches how their parents navigate conflict and repair. They watch how couples talk to each other, how attraction and tenderness look in practice, how people handle the ordinary friction of shared life. They absorb thousands of hours of implicit data about how processes work before they ever encounter those processes themselves.",
+      },
+      {
+        type: "paragraph",
+        text: "A neurodivergent person who did not have access to those models — because of family structure, because of how their attention works, because of how they were raised, because the implicit learning simply did not take — arrives at the same situations without that baseline. They are navigating without a map that their peers received without knowing they received it.",
+      },
+      {
+        type: "paragraph",
+        text: "When OCD is also present, this is particularly consequential. The knowledge gap and the disorder compound each other. The OCD generates threat in the uncertain territory; the uncertain territory is larger than it should be because the person lacks the framework that would otherwise bound it; the anxiety grows; the compulsions intensify; and all of this feels like evidence of the disorder's severity when some of it is actually evidence of missing information that could, in principle, simply be supplied.",
+      },
+      {
+        type: "pull-quote",
+        text: "The anxiety was not irrational. It was the entirely reasonable response of a person trying to navigate something genuinely complex without a map.",
+      },
+      { type: "heading", text: "What this means for treatment" },
+      {
+        type: "paragraph",
+        text: "I want to be careful here about what I am and am not claiming. I am not suggesting that OCD is simply a knowledge problem, or that education alone is an adequate treatment for OCD. It is not. The feared self, the inferential confusion, the habituated compulsive cycle — these require clinical intervention. ERP and I-CBT are evidence-based for good reason and that evidence does not evaporate because some of the uncertainty driving the cycle is also factual.",
+      },
+      {
+        type: "paragraph",
+        text: "What I am suggesting is that accurate information about the domain the OCD has colonized is a meaningful adjunct to treatment — and that in some cases it has been underused. There are at least three reasons it matters.",
+      },
+      {
+        type: "paragraph",
+        text: "First, it reduces the raw material the obsessive process has to work with. OCD is an intolerance of uncertainty disorder. When accurate information closes real gaps in a person's understanding, it reduces genuine uncertainty, which reduces the foothold the OCD has. This is not the same as compulsive reassurance-seeking, which the person performs in response to the obsession. It is acquiring knowledge about a domain before, or alongside, the clinical work — building the accurate framework that should have been there to begin with.",
+      },
+      {
+        type: "paragraph",
+        text: "Second, it helps the person distinguish between the OCD narrative and reality. A central task in inference-based work is helping the person recognize when they have crossed from present reality into imagined possibility. That crossing is much harder to identify when the person does not have a reliable model of how reality actually works in the relevant domain. Accurate knowledge gives them ground to return to.",
+      },
+      {
+        type: "paragraph",
+        text: "Third, it addresses shame. Many people with OCD carry significant shame around the content of their obsessions, and around what they perceive as a failure of reason or character. Understanding that the obsession has been partly feeding on a genuine knowledge gap — that some of what has felt like a broken mind is actually a mind working reasonably in the absence of adequate information — can be meaningfully relieving. They were not failing to think correctly. They were thinking in a vacuum, and the vacuum was not their fault.",
+      },
+      { type: "heading", text: "The practical question" },
+      {
+        type: "paragraph",
+        text: "If you have OCD, or work with people who do, the question worth asking is: what does this person actually not know about the domain their OCD has colonized? Not what are they irrationally afraid of — that is the OCD question. But what accurate information about how this process works is genuinely absent from their mental model?",
+      },
+      {
+        type: "paragraph",
+        text: "Sometimes the answer is nothing significant. The person has accurate knowledge and the OCD is generating threat through pure inferential distortion. In those cases the clinical work is straightforwardly about the reasoning process and the compulsive cycle.",
+      },
+      {
+        type: "paragraph",
+        text: "But sometimes the answer reveals a real gap. The person with contamination fears who genuinely does not understand how immune systems work. The person with relationship OCD who has never been given a framework for how love and trust actually build over time. The person with health anxiety who does not know what symptoms actually warrant concern and what the ordinary variation of a human body actually looks like.",
+      },
+      {
+        type: "paragraph",
+        text: "In those cases, the clinical work and the psychoeducational work belong together. Close the knowledge gap and you close some of the territory the OCD has been using. The obsessive mind loses one of the places it has been living.",
+      },
+      {
+        type: "paragraph",
+        text: "Go out into the world and get the information. Find the instruction manual for the process that has been opaque to you. Not as a compulsion designed to neutralize the anxiety, but as the deliberate acquisition of knowledge that should have been available to you all along. The uncertainty that OCD feeds on is sometimes real, and real uncertainty sometimes has a real remedy.",
+      },
+      {
+        type: "paragraph",
+        text: "Understanding how a process actually works will not cure OCD. But it can make the territory the OCD inhabits smaller. And smaller territory, for an obsessive mind, is not nothing. It is the beginning of having somewhere safe to stand.",
+      },
+      { type: "heading", text: "References" },
+      {
+        type: "list",
+        items: [
+          "Aardema, F., & O'Connor, K. (2007). The menace within: Obsessions and the self. Journal of Cognitive Psychotherapy, 21(3), 182–197.",
+          "O'Connor, K., & Aardema, F. (2012). Clinician's Handbook for Obsessive Compulsive Disorder: Inference-Based Therapy. Wiley-Blackwell.",
+          "Doron, G., Derby, D. S., & Szepsenwol, O. (2014). Relationship obsessive compulsive disorder (ROCD): A conceptual framework. Journal of Obsessive-Compulsive and Related Disorders, 3(2), 169–180.",
+          "Salkovskis, P. M. (1985). Obsessional-compulsive problems: A cognitive-behavioural analysis. Behaviour Research and Therapy, 23(5), 571–583.",
+          "Rachman, S. (1997). A cognitive theory of obsessions. Behaviour Research and Therapy, 35(9), 793–802.",
+          "Clark, D. A. (2004). Cognitive-Behavioral Therapy for OCD. Guilford Press.",
+        ],
+      },
+      {
+        type: "footer-note",
+        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
+      },
+    ],
+  },
 ]
 
 
