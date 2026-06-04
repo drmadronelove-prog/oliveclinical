@@ -66,6 +66,10 @@ const PSYCHIATRY_REFERRALS = [
   { name: "Psychiatric Alternatives", href: "https://psychiatricalternatives.com/" },
 ]
 
+const PSYCHIATRY_RESOURCES = [
+  { name: "Over-the-Counter Supplements in the Treatment of OCD", href: "https://iocdf.org/expert-opinions/over-the-counter-supplements-in-the-treatment-of-ocd/" },
+]
+
 export function ProviderCards() {
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col gap-12">
@@ -102,6 +106,27 @@ export function ProviderCards() {
         <div className="grid grid-cols-2 gap-4 md:gap-6 md:max-w-[66%]">
           {PSYCHIATRY_REFERRALS.map((r, i) => (
             <ReferralCard key={r.name} referral={r} borderColor={PALETTE_BORDERS[(i + 2) % PALETTE_BORDERS.length]} />
+          ))}
+        </div>
+        <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+          {PSYCHIATRY_RESOURCES.map((r) => (
+            <a
+              key={r.name}
+              href={r.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: 14,
+                color: "#5b6e88",
+                fontFamily: "var(--font-body)",
+                lineHeight: 1.5,
+                textDecoration: "underline",
+                textUnderlineOffset: 3,
+                opacity: 0.85,
+              }}
+            >
+              {r.name}
+            </a>
           ))}
         </div>
       </div>
