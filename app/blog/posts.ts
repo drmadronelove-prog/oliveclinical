@@ -179,7 +179,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
+        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
       },
     ],
   },
@@ -370,7 +370,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
+        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
       },
     ],
   },
@@ -454,7 +454,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "footer-note",
-        text: "Madrone Love, PsyD, is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and Director of the Sati Center for Buddhist Studies.",
+        text: "Madrone Love, PsyD, is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and Director of the Sati Center for Buddhist Studies.",
       },
     ],
   },
@@ -757,7 +757,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
+        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
       },
     ],
   },
@@ -909,7 +909,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
+        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
       },
     ],
   },
@@ -1558,7 +1558,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
+        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
       },
     ],
   },
@@ -1721,7 +1721,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
+        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
       },
     ],
   },
@@ -1882,7 +1882,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899) is a licensed clinical psychologist in California specializing in neurodivergent adults, OCD, and complex trauma. She practices in Oakland/Berkeley and Hayes Valley, San Francisco, and hosts the Multiracial Mental Health podcast.",
+        text: "Dr. Madrone Love, PsyD (PSY35899) is a licensed clinical psychologist in California specializing in neurodivergent adults, OCD, and complex trauma. She practices at Olive Clinical, 541 Athol, Oakland CA 94606, and hosts the Multiracial Mental Health podcast.",
       },
     ],
   },

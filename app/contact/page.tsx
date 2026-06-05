@@ -3,15 +3,15 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Contact — Olive Clinical",
-  description: "Get in touch with Olive Clinical. In-person therapy in San Francisco and Berkeley, CA. Telehealth throughout California.",
+  description: "Get in touch with Olive Clinical. In-person therapy in Oakland and Berkeley, CA. Telehealth throughout California.",
 }
 
 const locations = [
   {
-    name: "San Francisco",
-    detail: "Hayes Valley",
-    address: "110 Gough Street, Suite 203B",
-    city: "San Francisco, CA 94102",
+    name: "Oakland",
+    detail: "Olive Clinical",
+    address: "541 Athol",
+    city: "Oakland, CA 94606",
   },
   {
     name: "Berkeley",

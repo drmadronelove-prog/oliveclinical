@@ -16,7 +16,7 @@ export function SiteFooter() {
       }}
     >
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <p>Hayes Valley, San Francisco &amp; Berkeley, CA</p>
+        <p>Oakland &amp; Berkeley, CA</p>
         <div className="flex flex-wrap gap-x-5 gap-y-1">
           <a
             href="tel:+14159152183"
