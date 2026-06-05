@@ -1725,6 +1725,167 @@ export const posts: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: "couples-therapy-access-needs",
+    title: "What Couples Therapy Reveals About Access Needs, Accommodation, and Consent",
+    subtitle: "What Shay and Maeve from Couples Therapy Season 5 reveal about neurodivergent relationships, parentification, and where considerate accommodation ends and ethical responsibility begins.",
+    author: "Madrone Love",
+    credential: "PsyD",
+    category: "Relationships & Neurodivergence",
+    date: "2026",
+    blocks: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "If you have been watching Season 5 of Couples Therapy on Paramount+, you already know who Shay Neary is. She is a trans plus-size model who sat in Dr. Orna Guralnik's office this season alongside her then-partner, who went by Clinton during filming and has since come out as Maeve. Maeve is autistic and has ADHD, diagnosed in their 30s. The couple, who are also interracial, have since split, but clips from their sessions went viral on TikTok multiple times over.",
+      },
+      {
+        type: "paragraph",
+        text: "Worth naming briefly: this is a queer, interracial, neurodiverse couple navigating complex terrain. Those identities shape their respective histories and what each person brings to the room. But the dynamics I want to focus on here are not specific to queerness or race. They are dynamics I see in my office all the time, in couples of every configuration, whenever one partner is neurodivergent and the other is not. What Shay and Maeve made visible is something that usually stays hidden behind closed doors: the slow, grinding question of where access needs and considerate accommodation end and ethical responsibility begins.",
+      },
+      { type: "heading", text: "The Diagnosis Does Not Erase What Happened" },
+      {
+        type: "paragraph",
+        text: "One of the most widely discussed moments of the season is the scene where Shay confronts Maeve about using her credit card without consent. Shay had given Maeve access to the card to buy a larger bed for them. Maeve also purchased a television and video games. When Shay raised this in session, Maeve had a meltdown.",
+      },
+      {
+        type: "paragraph",
+        text: "The internet split. Half the comments defended Maeve on the grounds of autism and executive dysfunction. The other half called it a betrayal. What I want to say clearly, as a clinician who works with neurodivergent adults every day, is this: using someone's financial resources without their consent is a boundary violation. Full stop. Neurotype does not change that.",
+      },
+      {
+        type: "paragraph",
+        text: "The goal is not to pile on Maeve. Late diagnosis of autism and ADHD in adulthood means someone has spent decades developing compensatory patterns, often without any real understanding of how their nervous system affects their decision-making, their sense of time, their ability to anticipate consequences for others. Impulse control is genuinely impaired in ADHD. Executive function genuinely breaks down under stress. These are real, documented, neurological realities.",
+      },
+      {
+        type: "paragraph",
+        text: "And yet, charging someone's credit card without asking is an ethical violation. Understanding why something happened is not the same as it being acceptable. Explanation locates behavior; it does not license it. One of the most important things a neurodivergent person can do in a relationship, and one of the hardest, is to develop the capacity to connect their neurological reality to its impact on others, and then to take responsibility for that impact, even when it is incongruent with their intent.",
+      },
+      {
+        type: "paragraph",
+        text: "What makes this complicated is that the developmental work required to do that is often significantly behind in adults who received a late diagnosis. If you spent your whole life being told you were difficult, scattered, or selfish without anyone understanding that your brain processes the world differently, you likely did not receive the relational scaffolding that supports mature accountability. You may be 35 and doing emotional work that most people did at 17. That is not an excuse. It is a context. The work still has to happen.",
+      },
+      { type: "heading", text: "The Parentification Problem" },
+      {
+        type: "paragraph",
+        text: "Here is the dynamic that I found most clinically significant in watching Shay and Maeve: the slow accumulation of labor on one side of the relationship.",
+      },
+      {
+        type: "paragraph",
+        text: "Shay, at various points in the season, articulates something many partners of neurodivergent people will recognize immediately. She does not want to be Maeve's only source of support. She does not want to be the person who manages the logistics, holds the emotional container, anticipates the needs, and repairs the ruptures, all while also being the person who is supposed to be getting something back from the relationship.",
+      },
+      {
+        type: "paragraph",
+        text: "This is the parentification trap, and it is one of the most common and least discussed dynamics in neurodiverse couples.",
+      },
+      {
+        type: "paragraph",
+        text: "The neurodivergent partner often has genuine, significant access needs. They may need more processing time, more explicit communication, more help with executive tasks, more patience during dysregulation. These are real needs, not preferences. And yet needs are not the same as demands, and access is not the same as entitlement. When one partner's access needs consistently require the other partner to do more, manage more, absorb more, and initiate more, the relationship tips from partnership into a caretaking arrangement. The neurotypical-presenting partner stops being a romantic equal and becomes a parent figure. This is not good for either person.",
+      },
+      {
+        type: "paragraph",
+        text: "It tends to breed resentment in the partner doing the caregiving, even when they genuinely love the person and believe in the relationship. It also tends to arrest the development of the neurodivergent partner, who never gets the chance to build their own capacity because their partner is always there to fill the gap. The relationship becomes a buffer that feels like support but functions like a ceiling.",
+      },
+      {
+        type: "paragraph",
+        text: "What Shay named, with real precision, is that she needed Maeve to develop their own supports, their own regulation strategies, their own scaffolding, rather than defaulting to Shay as the primary resource. That is not a rejection of Maeve's access needs. It is a refusal to be hollowed out by them.",
+      },
+      { type: "heading", text: "Clear Agreements as an Act of Love" },
+      {
+        type: "paragraph",
+        text: "One of the things that makes neurodiverse couples particularly vulnerable to the parentification dynamic is the absence of explicit agreements. Neurotypical relationship culture relies heavily on implicit social norms: of course you ask before spending someone's money; of course you tell your partner when you are overwhelmed rather than disappearing; of course you do not disclose intimate details to strangers online without consent. These \"of courses\" do not land the same way for every nervous system.",
+      },
+      {
+        type: "paragraph",
+        text: "This is not unique to autism. But it is amplified by it.",
+      },
+      {
+        type: "paragraph",
+        text: "What this means practically is that neurodiverse couples often need to make explicit what other couples can leave implicit. This is not a diminishment of the relationship. It is an adaptation. A shared financial agreement that specifies who can spend what, without prior conversation, is not bureaucratic. It is protective. It gives both people clarity and gives the autistic partner a concrete structure to work within rather than a diffuse social expectation they may not be able to read accurately.",
+      },
+      {
+        type: "paragraph",
+        text: "The same logic applies to emotional access. If Maeve tends to go silent when overwhelmed, a prior agreement about what that means, and what Shay is and is not responsible for during those moments, transforms a recurring rupture into a navigable event. Without that agreement, Shay is left interpreting silence through her own history, and Maeve is left in dysregulation without a map.",
+      },
+      {
+        type: "paragraph",
+        text: "These agreements only work, though, if both partners are genuinely held to them. The autistic partner does not get a pass on violating agreements because the agreements were hard to remember or in conflict with an impulse. The neurodiverse relationship still requires ethical behavior from both people. The structure accommodates the neurology; it does not override the ethics.",
+      },
+      { type: "heading", text: "Emotional Development Is Not Optional" },
+      {
+        type: "paragraph",
+        text: "What I see in Shay and Maeve, and what I think the online discourse largely missed, is a gap in emotional developmental maturity that is not simply attributable to autism.",
+      },
+      {
+        type: "paragraph",
+        text: "Autism affects social processing, sensory regulation, executive function, and communication. It does not, in itself, determine someone's capacity to take responsibility, to repair ruptures, to show genuine curiosity about a partner's inner life, or to sustain effort toward someone else's wellbeing over time. Those capacities are developmental, built through experience, modeling, and, often, through therapeutic work.",
+      },
+      {
+        type: "paragraph",
+        text: "A late-diagnosed autistic adult may be behind on some of this development for reasons that are real and non-volitional. But the gap does not close on its own. It closes through intentional work. Individual therapy, skills-based work around emotional regulation, practice with accountability and repair — these are not optional add-ons for the neurodivergent partner in a relationship. They are requirements if the relationship is going to be sustainable.",
+      },
+      {
+        type: "paragraph",
+        text: "Maeve's meltdown in the therapy session was not fabricated or strategic. Meltdowns are autonomic. They are not chosen. But the behavior that precipitated the rupture, using Shay's financial resources without consent, required a different kind of response than dysregulation. It required accountability. And accountability, genuine accountability that does not collapse into shame spiraling or defensive justification, is a developmental achievement.",
+      },
+      {
+        type: "paragraph",
+        text: "For neurodivergent adults whose developmental process was arrested by years of misdiagnosis, masking, or relational chaos, that achievement is not out of reach. But it requires scaffolding. DBT skills, particularly distress tolerance, interpersonal effectiveness, and emotion regulation, were designed precisely for people who did not acquire these capacities through ordinary developmental channels. Mindfulness practice supports this work by building the moment-to-moment awareness needed to notice an impulse before acting on it, and to locate internal experience without being swept away by it. These are not soft suggestions. In my clinical experience, they are often the difference between a neurodivergent person who can sustain a healthy relationship and one who cannot.",
+      },
+      {
+        type: "paragraph",
+        text: "Shay, for her part, showed something in that room that is also worth naming: the capacity to hold her own limits. To say this does not work for me without eviscerating the person she was saying it to. That is emotional maturity. It does not make her the flawless partner. It makes her the partner who had done more of the developmental work.",
+      },
+      {
+        type: "pull-quote",
+        text: "This gap — between two people at different stages of emotional development — is often what quietly kills neurodiverse relationships. Not the autism. Not the disability. The asymmetry in the ability to repair.",
+      },
+      { type: "heading", text: "What Orna Does Right" },
+      {
+        type: "paragraph",
+        text: "Dr. Guralnik is one of the more skilled couples therapists working publicly, and her approach with Shay and Maeve reflects something I try to do in my own practice: hold both people accountable to what they are capable of, rather than calibrating expectations uniformly across different developmental realities.",
+      },
+      {
+        type: "paragraph",
+        text: "She does not let the session become a referendum on Maeve's diagnosis. She also does not use the diagnosis as a reason to stop expecting growth. When the show depicts her seeking outside consultation on Maeve's case, that is clinically sound. Couples work with a neurodivergent partner requires specific knowledge, and a therapist who works without that knowledge tends, even with good intentions, to center the neurotypical partner's framework as the default measure of what is reasonable.",
+      },
+      {
+        type: "paragraph",
+        text: "A 2024 conference paper from Fairfield University on autism and couples therapy noted that one of the primary obstacles neurodiverse couples face is that their therapists are not trained to understand the distinct relational dynamics at play, and that generic communication frameworks tend to fail these couples precisely because they assume both partners process social information the same way.",
+      },
+      {
+        type: "paragraph",
+        text: "What Orna models is something more precise than generic communication coaching. She tries to help both people locate themselves accurately: what is this person's capacity right now, what is getting in the way, and what would it take to close the gap?",
+      },
+      { type: "heading", text: "The Outcome Is Still an Outcome" },
+      {
+        type: "paragraph",
+        text: "The couple split after filming. That is not a failure of the therapy, and it is not evidence that the relationship was simply wrong from the start. Sometimes the most honest result of good couples work is clarity about incompatibility. That still counts as healing.",
+      },
+      {
+        type: "paragraph",
+        text: "Shay's public response after the viral clips spread is worth noting. When viewers began mocking Maeve for being autistic, Shay posted a video calling for it to stop. \"Holding Maeve accountable for their actions, that is fine with me,\" she said. \"Where I do not agree and will not ever fully agree is making fun of them for being autistic.\"",
+      },
+      {
+        type: "paragraph",
+        text: "That is the separation worth making, and it is harder than it sounds. Accountability and contempt are not the same thing. A person can have violated your trust and still deserve to move through the world without being mocked for their neurology. Holding both of those things at once requires real emotional development. Shay demonstrated it publicly, after the relationship ended, about the person who had hurt her. That is not nothing.",
+      },
+      { type: "heading", text: "Sources and References" },
+      {
+        type: "list",
+        items: [
+          "Couples Therapy, Season 5. Paramount+ with Showtime. Premiered May 15, 2026.",
+          "\"Trans Couples Therapy Star Shay Neary Says She's in a 'Much Better Place' Now.\" Yahoo Entertainment, May 2026.",
+          "\"Couples Therapy Season 5 Is Back to Expose Everyone's Emotional Baggage.\" The TV Cave, May 2026.",
+          "\"Stream It or Skip It: Couples Therapy Season 5.\" MSN Entertainment, May 2026.",
+          "Walsh, M., & Parker, C. \"Autism and Couples Therapy: A Solution-Focused Approach.\" Presented at NEAFAST. Fairfield University School of Education and Human Development, 2024.",
+        ],
+      },
+      {
+        type: "footer-note",
+        text: "Dr. Madrone Love, PsyD (PSY35899) is a licensed clinical psychologist in California specializing in neurodivergent adults, OCD, and complex trauma. She practices in Oakland/Berkeley and Hayes Valley, San Francisco, and hosts the Multiracial Mental Health podcast.",
+      },
+    ],
+  },
 ]
 
 

@@ -24,6 +24,13 @@ const CARDS: FeatureCard[] = [
   },
   {
     kind: "link",
+    title: "What Couples Therapy Reveals About Access Needs",
+    category: "Neurodiverse Relationships · Accountability",
+    footerLabel: "Read",
+    href: "/blog/couples-therapy-access-needs",
+  },
+  {
+    kind: "link",
     title: "Neurodivergent Romantic Relationships",
     category: "Relationships · Presentation",
     footerLabel: "View slides",
