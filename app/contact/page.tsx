@@ -3,10 +3,16 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Contact — Olive Clinical",
-  description: "Get in touch with Olive Clinical. In-person therapy in Oakland and Berkeley, CA. Telehealth throughout California.",
+  description: "Get in touch with Olive Clinical. In-person therapy in San Francisco, Oakland, and Berkeley, CA. Telehealth throughout California.",
 }
 
 const locations = [
+  {
+    name: "San Francisco",
+    detail: "Olive Clinical",
+    address: "110 Gough",
+    city: "San Francisco, CA 94102",
+  },
   {
     name: "Oakland",
     detail: "Olive Clinical",
@@ -89,7 +95,7 @@ export default function ContactPage() {
           <h2 className="text-2xl text-foreground mb-6" style={sectionHeading}>
             Locations
           </h2>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-4 gap-4">
             {locations.map((loc) => (
               <div
                 key={loc.name}
