@@ -46,7 +46,7 @@ const PROVIDERS: Provider[] = [
     image: "/jasmin canfield.png",
   },
   {
-    name: "Karianne Stephan, LMFT",
+    name: "Kerianne Stephan, LMFT",
     role: "Network Provider",
     specialty: "Psychotherapy",
     href: "https://keriannestephanmft.com",
