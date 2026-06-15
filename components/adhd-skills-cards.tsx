@@ -8,6 +8,13 @@ import { FeatureCardGrid, type FeatureCard } from "@/components/feature-card-gri
 
 const CARDS: FeatureCard[] = [
   {
+    kind: "link",
+    title: "ADHD Part 1+2: Alie Ward & Russell Barkley",
+    category: "Podcast · Ologies",
+    footerLabel: "Listen",
+    href: "https://www.alieward.com/ologies/adhd",
+  },
+  {
     kind: "modal",
     title: "Eisenhower Matrix",
     category: "ADHD · Task Management",
@@ -79,13 +86,6 @@ const CARDS: FeatureCard[] = [
     category: "Blog · Neurodivergence",
     footerLabel: "Read essay",
     href: "/blog/windows-of-interest",
-  },
-  {
-    kind: "link",
-    title: "ADHD Part 1+2: Alie Ward & Russell Barkley",
-    category: "Podcast · Ologies",
-    footerLabel: "Listen",
-    href: "https://www.alieward.com/ologies/adhd",
   },
 ]
 
