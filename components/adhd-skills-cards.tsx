@@ -82,8 +82,8 @@ const CARDS: FeatureCard[] = [
   },
   {
     kind: "link",
-    title: "Ologies: ADHD Part 1 + 2",
-    category: "Podcast · Alie Ward",
+    title: "ADHD Part 1+2: Alie Ward & Russell Barkley",
+    category: "Podcast · Ologies",
     footerLabel: "Listen",
     href: "https://www.alieward.com/ologies/adhd",
   },
