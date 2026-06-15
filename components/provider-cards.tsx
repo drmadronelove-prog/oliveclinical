@@ -64,6 +64,7 @@ const PROVIDERS: Provider[] = [
 const PSYCHIATRY_REFERRALS = [
   { name: "Mindpath Health", href: "https://www.mindpath.com/" },
   { name: "Psychiatric Alternatives", href: "https://psychiatricalternatives.com/" },
+  { name: "Kaiser Oakland Psychiatry", href: "https://healthy.kaiserpermanente.org/northern-california/facilities/oakland-medical-center-100344/departments/behavioral-mental-health-dlp-103793" },
 ]
 
 const PSYCHIATRY_RESOURCES = [
