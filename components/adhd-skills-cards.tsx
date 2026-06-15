@@ -80,6 +80,13 @@ const CARDS: FeatureCard[] = [
     footerLabel: "Read essay",
     href: "/blog/windows-of-interest",
   },
+  {
+    kind: "link",
+    title: "Ologies: ADHD Part 1 + 2",
+    category: "Podcast · Alie Ward",
+    footerLabel: "Listen",
+    href: "https://www.alieward.com/ologies/adhd",
+  },
 ]
 
 export function ADHDSkillsCards() {
