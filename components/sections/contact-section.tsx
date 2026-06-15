@@ -106,7 +106,7 @@ export function ContactSection() {
                 <div>
                   <p className="text-sm text-muted-foreground">Locations</p>
                   <p className="text-foreground font-medium">
-                    Oakland &bull; Berkeley &bull; Telehealth
+                    San Francisco &bull; Oakland &bull; Berkeley &bull; Telehealth
                   </p>
                 </div>
               </div>
