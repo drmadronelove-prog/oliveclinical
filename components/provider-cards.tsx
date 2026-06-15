@@ -104,7 +104,7 @@ export function ProviderCards() {
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4 md:gap-6 md:max-w-[66%]">
+        <div className="grid grid-cols-3 gap-4 md:gap-6">
           {PSYCHIATRY_REFERRALS.map((r, i) => (
             <ReferralCard key={r.name} referral={r} borderColor={PALETTE_BORDERS[(i + 2) % PALETTE_BORDERS.length]} />
           ))}
@@ -205,7 +205,7 @@ function ProviderCard({
             alt={provider.name}
             fill
             sizes="(max-width: 768px) 60vw, 220px"
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: "cover", objectPosition: provider.image === "/LH7_3279.jpg" ? "center 15%" : "center center" }}
           />
         </div>
 
