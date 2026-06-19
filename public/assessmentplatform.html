@@ -1686,10 +1686,22 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 
   function smAddFiles(fileList){
     Array.from(fileList).filter(function(f){return f.type==='application/pdf';}).forEach(function(f){
-      smFiles.push({id:Date.now()+'-'+Math.random(),name:f.name,url:URL.createObjectURL(f),size:f.size});
+      var entry={id:Date.now()+'-'+Math.random(),name:f.name,url:URL.createObjectURL(f),size:f.size,b64:null};
+      smFiles.push(entry);
+      var reader=new FileReader();
+      reader.onload=function(e){
+        var arr=new Uint8Array(e.target.result);
+        var bin='';for(var i=0;i<arr.length;i++)bin+=String.fromCharCode(arr[i]);
+        entry.b64=btoa(bin);
+        smRender();
+      };
+      reader.readAsArrayBuffer(f);
     });
     smRender();
   }
+
+  // Expose smFiles so generateReport can access them
+  window.smGetFiles=function(){return smFiles;};
 
   function smFmtBytes(b){
     if(b<1024)return b+' B';
@@ -1705,9 +1717,12 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
     smFiles.forEach(function(f){
       var row=document.createElement('div');
       row.className='sm-file-row'+(smViewingId===f.id?' sm-active':'');
+      var readyBadge=f.b64
+        ?'<span style="font-size:10px;background:#d1fae5;color:#065f46;border-radius:4px;padding:1px 6px;font-weight:600;margin-left:6px;">ready</span>'
+        :'<span style="font-size:10px;background:#fef3c7;color:#92400e;border-radius:4px;padding:1px 6px;font-weight:600;margin-left:6px;">loading…</span>';
       row.innerHTML='<span style="font-size:20px;flex-shrink:0;">📄</span>'
         +'<div style="flex:1;min-width:0;">'
-        +'<p style="margin:0 0 2px;font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+f.name+'</p>'
+        +'<p style="margin:0 0 2px;font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+f.name+readyBadge+'</p>'
         +'<p style="margin:0;font-size:11px;color:var(--ink-muted,#888);">'+smFmtBytes(f.size)+'</p>'
         +'</div>'
         +'<button class="sm-btn" onclick="smToggleView(\''+f.id+'\')" style="border:1px solid #688E93;background:'+(smViewingId===f.id?'#688E93':'transparent')+';color:'+(smViewingId===f.id?'#fff':'#688E93')+';">'+(smViewingId===f.id?'Hide':'View')+'</button>'
@@ -4449,6 +4464,10 @@ function buildMsg(){
     if(val)msg+=`\nM.I.N.I. — ${s.label}:\n${val}\n`;
   });
 
+  const attachedPDFs=(window.smGetFiles?window.smGetFiles():[]).filter(f=>f.b64);
+  if(attachedPDFs.length){
+    msg+=`\nSUBMITTED MEASURES (${attachedPDFs.length} PDF${attachedPDFs.length>1?'s':''}): The client's completed measure forms are attached as PDF documents. Read each PDF carefully. Extract every score, subscale, item response, and notation. Integrate this data into the appropriate report sections — do not summarize or omit any scores. Reference each measure by its full name.\n`;
+  }
   msg+=`\nGenerate the complete report. Mark insufficient sections with [clinician to complete].`;
   return msg;
 }
@@ -4467,10 +4486,28 @@ async function generateReport(){
   document.getElementById('loadingIndicator').classList.add('active');
   document.getElementById('reportOutput').classList.remove('active');
   try{
+    // Build content array — prepend any submitted measure PDFs as document blocks
+    const submittedPDFs=(window.smGetFiles?window.smGetFiles():[]).filter(f=>f.b64);
+    const content=[];
+    submittedPDFs.forEach(function(f){
+      content.push({
+        type:'document',
+        source:{type:'base64',media_type:'application/pdf',data:f.b64},
+        title:f.name,
+        context:'Submitted measure PDF — extract all scores, subscale scores, item responses, and clinician notes verbatim and integrate them into the report.'
+      });
+    });
+    // Text prompt always last
+    let textPrompt=buildMsg();
+    if(submittedPDFs.length){
+      textPrompt+='\n\nSUBMITTED MEASURE PDFs: '+submittedPDFs.length+' PDF(s) attached above ('+submittedPDFs.map(f=>f.name).join(', ')+'). Extract all scores and integrate them into the relevant report sections.';
+    }
+    content.push({type:'text',text:textPrompt});
+
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:localStorage.getItem('ntc_model')||'claude-sonnet-4-5',max_tokens:8192,system:SYS,messages:[{role:'user',content:buildMsg()}]})
+      body:JSON.stringify({model:localStorage.getItem('ntc_model')||'claude-sonnet-4-5',max_tokens:8192,system:SYS,messages:[{role:'user',content:content}]})
     });
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||'API error: '+res.status);}
     const data=await res.json();
