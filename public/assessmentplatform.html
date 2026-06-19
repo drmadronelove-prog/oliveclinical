@@ -1587,26 +1587,165 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 </div>
 
 <div class="tab-pane" id="tab-measures">
-  <div class="section">
-    <div class="section-label">Screening Tools</div>
-    <div class="card">
-      <div class="field">
-        <label>Select Measures</label>
-        <div class="ms-select" id="screeningMultiselect">
-          <button type="button" class="ms-trigger" onclick="toggleMsMenu('screeningMultiselect')">
-            <span class="ms-trigger-label" id="screeningMsLabel">Choose one or more measures…</span>
-            <span class="ms-chevron">▾</span>
-          </button>
-          <div class="ms-menu" id="screeningMsMenu"></div>
+  <!-- Sub-tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid var(--border,#e2e8f0);">
+    <button id="msub-screening" onclick="switchMeasuresSubTab('screening')" style="padding:8px 16px;font-size:13px;font-weight:600;border:none;border-bottom:2px solid var(--primary,#688E93);background:none;cursor:pointer;color:var(--primary,#688E93);font-family:var(--font-body);margin-bottom:-1px;">Screening Tools</button>
+    <button id="msub-submitted" onclick="switchMeasuresSubTab('submitted')" style="padding:8px 16px;font-size:13px;font-weight:600;border:none;border-bottom:2px solid transparent;background:none;cursor:pointer;color:var(--ink-muted,#888);font-family:var(--font-body);margin-bottom:-1px;">Submitted Measures</button>
+  </div>
+
+  <!-- Screening Tools sub-tab -->
+  <div id="msub-pane-screening">
+    <div class="section">
+      <div class="section-label">Screening Tools</div>
+      <div class="card">
+        <div class="field">
+          <label>Select Measures</label>
+          <div class="ms-select" id="screeningMultiselect">
+            <button type="button" class="ms-trigger" onclick="toggleMsMenu('screeningMultiselect')">
+              <span class="ms-trigger-label" id="screeningMsLabel">Choose one or more measures…</span>
+              <span class="ms-chevron">▾</span>
+            </button>
+            <div class="ms-menu" id="screeningMsMenu"></div>
+          </div>
+          <div class="hint">Pick one or more measures to administer. Items are registered in <code>SCREENING_MEASURES</code>; measures shown without items still render their metadata so the form is ready to populate.</div>
         </div>
-        <div class="hint">Pick one or more measures to administer. Items are registered in <code>SCREENING_MEASURES</code>; measures shown without items still render their metadata so the form is ready to populate.</div>
+      </div>
+      <div class="intake-accordion" id="screeningContainer">
+        <div class="intake-accordion-empty" id="screeningEmpty">No measures selected. Use the dropdown above to choose one or more.</div>
       </div>
     </div>
-    <div class="intake-accordion" id="screeningContainer">
-      <div class="intake-accordion-empty" id="screeningEmpty">No measures selected. Use the dropdown above to choose one or more.</div>
+  </div>
+
+  <!-- Submitted Measures sub-tab -->
+  <div id="msub-pane-submitted" style="display:none;">
+    <div class="section">
+      <div class="section-label">Submitted Measures</div>
+      <p style="font-size:13px;color:var(--ink-muted,#666);margin:0 0 20px;">Upload PDFs of measures submitted by clients. Files are stored in this browser session only.</p>
+
+      <!-- Drop zone -->
+      <div id="sm-dropzone"
+        ondragover="event.preventDefault();document.getElementById('sm-dropzone').classList.add('sm-drag')"
+        ondragleave="document.getElementById('sm-dropzone').classList.remove('sm-drag')"
+        ondrop="smHandleDrop(event)"
+        onclick="document.getElementById('sm-file-input').click()"
+        style="border:2px dashed #ccc;border-radius:10px;padding:36px 24px;text-align:center;cursor:pointer;margin-bottom:24px;transition:border-color .15s,background .15s;">
+        <input id="sm-file-input" type="file" accept="application/pdf" multiple style="display:none" onchange="smHandleInput(this)">
+        <div style="font-size:32px;margin-bottom:10px;">📄</div>
+        <p style="font-size:14px;font-weight:600;margin:0 0 4px;color:var(--ink);">Drop PDFs here, or click to browse</p>
+        <p style="font-size:12px;color:var(--ink-muted,#888);margin:0;">Select multiple files at once · PDF only</p>
+      </div>
+
+      <!-- File list -->
+      <div id="sm-file-list"></div>
+      <p id="sm-empty-msg" style="text-align:center;font-size:13px;color:#aaa;">No measures uploaded yet.</p>
+
+      <!-- Inline viewer -->
+      <div id="sm-viewer" style="display:none;margin-top:24px;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <span id="sm-viewer-name" style="font-size:13px;font-weight:600;color:var(--ink);"></span>
+          <button onclick="smCloseViewer()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#666;line-height:1;padding:2px 4px;">×</button>
+        </div>
+        <iframe id="sm-viewer-frame" src="" style="width:100%;height:600px;border:none;display:block;"></iframe>
+      </div>
     </div>
   </div>
 </div>
+
+<style>
+#sm-dropzone.sm-drag{border-color:#688E93;background:#688E9308;}
+.sm-file-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:8px;background:#fff;}
+.sm-file-row.sm-active{background:#f0f7f8;}
+.sm-btn{font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:600;font-family:var(--font-body);}
+</style>
+
+<script>
+(function(){
+  var smFiles=[];
+  var smViewingId=null;
+
+  window.switchMeasuresSubTab=function(tab){
+    var tabs=['screening','submitted'];
+    tabs.forEach(function(t){
+      document.getElementById('msub-pane-'+t).style.display=t===tab?'':'none';
+      var btn=document.getElementById('msub-'+t);
+      btn.style.borderBottomColor=t===tab?'var(--primary,#688E93)':'transparent';
+      btn.style.color=t===tab?'var(--primary,#688E93)':'var(--ink-muted,#888)';
+    });
+  };
+
+  window.smHandleDrop=function(e){
+    e.preventDefault();
+    document.getElementById('sm-dropzone').classList.remove('sm-drag');
+    smAddFiles(e.dataTransfer.files);
+  };
+
+  window.smHandleInput=function(input){
+    smAddFiles(input.files);
+    input.value='';
+  };
+
+  function smAddFiles(fileList){
+    Array.from(fileList).filter(function(f){return f.type==='application/pdf';}).forEach(function(f){
+      smFiles.push({id:Date.now()+'-'+Math.random(),name:f.name,url:URL.createObjectURL(f),size:f.size});
+    });
+    smRender();
+  }
+
+  function smFmtBytes(b){
+    if(b<1024)return b+' B';
+    if(b<1048576)return (b/1024).toFixed(1)+' KB';
+    return (b/1048576).toFixed(1)+' MB';
+  }
+
+  function smRender(){
+    var list=document.getElementById('sm-file-list');
+    var empty=document.getElementById('sm-empty-msg');
+    empty.style.display=smFiles.length?'none':'';
+    list.innerHTML='';
+    smFiles.forEach(function(f){
+      var row=document.createElement('div');
+      row.className='sm-file-row'+(smViewingId===f.id?' sm-active':'');
+      row.innerHTML='<span style="font-size:20px;flex-shrink:0;">📄</span>'
+        +'<div style="flex:1;min-width:0;">'
+        +'<p style="margin:0 0 2px;font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+f.name+'</p>'
+        +'<p style="margin:0;font-size:11px;color:var(--ink-muted,#888);">'+smFmtBytes(f.size)+'</p>'
+        +'</div>'
+        +'<button class="sm-btn" onclick="smToggleView(\''+f.id+'\')" style="border:1px solid #688E93;background:'+(smViewingId===f.id?'#688E93':'transparent')+';color:'+(smViewingId===f.id?'#fff':'#688E93')+';">'+(smViewingId===f.id?'Hide':'View')+'</button>'
+        +'<a href="'+f.url+'" download="'+f.name+'" class="sm-btn" style="border:1px solid #e2e8f0;background:transparent;color:#555;text-decoration:none;">Download</a>'
+        +'<button class="sm-btn" onclick="smRemove(\''+f.id+'\')" style="border:1px solid #fecaca;background:transparent;color:#dc2626;">✕</button>';
+      list.appendChild(row);
+    });
+  }
+
+  window.smToggleView=function(id){
+    var f=smFiles.find(function(x){return x.id===id;});
+    if(!f)return;
+    if(smViewingId===id){smCloseViewer();}
+    else{
+      smViewingId=id;
+      document.getElementById('sm-viewer').style.display='';
+      document.getElementById('sm-viewer-name').textContent=f.name;
+      document.getElementById('sm-viewer-frame').src=f.url;
+      smRender();
+    }
+  };
+
+  window.smCloseViewer=function(){
+    smViewingId=null;
+    document.getElementById('sm-viewer').style.display='none';
+    document.getElementById('sm-viewer-frame').src='';
+    smRender();
+  };
+
+  window.smRemove=function(id){
+    var f=smFiles.find(function(x){return x.id===id;});
+    if(f){URL.revokeObjectURL(f.url);}
+    if(smViewingId===id)smCloseViewer();
+    smFiles=smFiles.filter(function(x){return x.id!==id;});
+    smRender();
+  };
+})();
+</script>
 
 <div class="tab-pane" id="tab-diagnostic">
   <div class="section">
