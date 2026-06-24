@@ -4,9 +4,19 @@ import { ICBTTrueSelfWorksheet } from "@/components/tools/icbt-true-self-workshe
 import { ICQEV } from "@/components/assessments/icqev"
 import { MomentOfChoice } from "@/components/tools/moment-of-choice"
 import { OCDMonsters } from "@/components/tools/ocd-monsters"
+import { OCDTreatmentGoal } from "@/components/tools/ocd-treatment-goal"
 import { FeatureCardGrid, type FeatureCard } from "@/components/feature-card-grid"
 
 const CARDS: FeatureCard[] = [
+  {
+    kind: "modal",
+    title: "One Goal of OCD Treatment",
+    category: "OCD · Psychoeducation",
+    footerLabel: "Learn more",
+    modalTitle: "One Goal of OCD Treatment",
+    modalSubtitle: "Moving from over-reliance on possibility and obsessional doubt to awareness and trust of the senses.",
+    content: <OCDTreatmentGoal />,
+  },
   {
     kind: "modal",
     title: "OCD Monsters",
