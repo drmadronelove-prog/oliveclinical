@@ -21,7 +21,7 @@ export function OCDTreatmentGoal() {
       }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <img
-            src="/ChatGPT Image Jun 24, 2026, 09_43_51 AM.png"
+            src="/ChatGPT Image Jun 24, 2026, 09_43_55 AM.png"
             alt="Over-reliance on possibility and obsessional doubt"
             style={{ width: "100%", borderRadius: 10, display: "block" }}
           />
@@ -38,7 +38,7 @@ export function OCDTreatmentGoal() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <img
-            src="/ChatGPT Image Jun 24, 2026, 09_43_55 AM.png"
+            src="/ChatGPT Image Jun 24, 2026, 09_43_51 AM.png"
             alt="Awareness and trust of the senses"
             style={{ width: "100%", borderRadius: 10, display: "block" }}
           />
