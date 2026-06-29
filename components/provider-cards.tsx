@@ -53,11 +53,11 @@ const PROVIDERS: Provider[] = [
     image: "/LH7_3279.jpg",
   },
   {
-    name: "Network Provider",
-    role: "Clinician",
+    name: "Ari Neubauer, LMFT",
+    role: "Network Provider",
     specialty: "Psychotherapy",
-    href: "#",
-    image: "/placeholder-user.jpg",
+    href: "https://www.psychologytoday.com/us/therapists/ari-neubauer-couples-families-lgbtq-oakland-ca/1368972",
+    image: "/Picture.png",
   },
 ]
 
