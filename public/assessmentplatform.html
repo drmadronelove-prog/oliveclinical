@@ -1090,26 +1090,33 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 }
 
 /* ── Buildout Todo List tab ─────────────────────── */
-.bt-intro{font-size:14px;color:var(--ink-soft);line-height:1.65;margin-bottom:10px;}
+.bt-intro{font-size:14px;color:var(--ink-soft);line-height:1.65;margin-bottom:16px;}
 .bt-intro strong{color:var(--ink);}
-.bt-note{font-size:13px;color:var(--ink-muted);line-height:1.6;margin-bottom:14px;}
-.bt-ol{list-style:decimal;padding-left:24px;display:flex;flex-direction:column;gap:16px;margin:0;}
-.bt-ol li{padding-left:4px;}
-.bt-ol li::marker{font-weight:700;color:var(--primary);font-family:var(--font-mono);}
-.bt-item-label{display:flex;align-items:flex-start;gap:10px;cursor:pointer;}
-.bt-item-label input[type="checkbox"]{margin-top:4px;width:16px;height:16px;flex-shrink:0;accent-color:var(--primary);}
-.bt-item-title{font-weight:700;color:var(--ink);}
-.bt-item-body{display:block;font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin-top:4px;}
-.bt-item-body em{color:var(--ink-muted);font-style:italic;}
-.bt-url{display:inline-block;font-family:var(--font-mono);font-size:12px;background:var(--surface-sunken);padding:2px 7px;border-radius:6px;word-break:break-all;box-shadow:var(--neu-in-sm);margin:2px 0;}
-.bt-warn{margin-top:16px;padding:14px 16px;border-radius:var(--radius-sm);background:rgba(254,153,0,0.09);border-left:3px solid var(--warning);font-size:13px;color:var(--ink-soft);line-height:1.6;}
-.bt-warn strong{color:var(--warning);}
-.bt-danger{margin-top:16px;padding:14px 16px;border-radius:var(--radius-sm);background:rgba(255,33,87,0.07);border-left:3px solid var(--danger);font-size:13px;color:var(--ink-soft);line-height:1.6;}
-.bt-danger strong{color:var(--danger);}
-.bt-check-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;}
-.bt-check-list li{font-size:14px;}
-.bt-glossary{font-size:13px;color:var(--ink-soft);line-height:1.7;}
-.bt-glossary strong{color:var(--ink);}
+.bt-progress-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.bt-progress-wrap{flex:1;min-width:200px;}
+.bt-progress-track{height:6px;background:var(--surface-sunken);border-radius:3px;overflow:hidden;box-shadow:var(--neu-in-sm);margin-bottom:6px;}
+.bt-progress-fill{height:100%;background:var(--primary);border-radius:3px;transition:width 0.4s ease;width:0%;}
+.bt-progress-label{font-family:var(--font-mono);font-size:11px;color:var(--ink-muted);letter-spacing:0.03em;}
+.bt-section-sub{font-size:11.5px;color:var(--ink-muted);font-style:italic;margin-top:2px;font-weight:400;}
+.bt-group-label{font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--primary);margin:16px 0 8px;font-family:var(--font-mono);font-weight:700;display:flex;align-items:center;gap:10px;}
+.bt-group-label::after{content:'';flex:1;height:1px;background:var(--surface-sunken);}
+.bt-group-label:first-child{margin-top:0;}
+.bt-item-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;cursor:pointer;}
+.bt-item-row input[type="checkbox"]{margin-top:3px;width:15px;height:15px;flex-shrink:0;accent-color:var(--primary);cursor:pointer;}
+.bt-item-row.done .bt-item-text{color:var(--ink-muted);text-decoration:line-through;}
+.bt-item-text{font-size:14px;color:var(--ink-soft);line-height:1.55;flex:1;}
+.bt-tags{display:inline-flex;flex-wrap:wrap;gap:4px;margin-left:8px;vertical-align:middle;}
+.bt-tag{font-size:9.5px;padding:2px 8px;border-radius:50px;font-family:var(--font-mono);letter-spacing:0.03em;white-space:nowrap;font-weight:700;box-shadow:var(--neu-out-xs);}
+.bt-tag-legal{color:#1A56DB;background:rgba(26,86,219,0.08);}
+.bt-tag-hipaa{color:#92400E;background:rgba(146,64,14,0.08);}
+.bt-tag-finance{color:#065F46;background:rgba(6,95,70,0.08);}
+.bt-tag-hiring{color:#5B21B6;background:rgba(91,33,182,0.08);}
+.bt-tag-tech{color:#1E40AF;background:rgba(30,64,175,0.08);}
+.bt-tag-urgent{color:var(--danger);background:rgba(255,33,87,0.08);}
+.bt-tag-aws{color:#B45309;background:rgba(180,83,9,0.08);}
+.bt-tag-dev{color:#1E40AF;background:rgba(30,64,175,0.08);}
+.bt-tag-you{color:var(--success);background:rgba(0,166,61,0.08);}
+.bt-item-note{font-size:12.5px;color:var(--ink-muted);font-style:italic;line-height:1.5;padding:0 0 8px 25px;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/docx@9.6.1/build/index.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -1186,251 +1193,39 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 <main class="content-main">
 
 <div class="tab-pane" id="tab-buildout">
+
   <div class="section">
     <div class="section-label">Buildout Todo List</div>
     <div class="card">
-      <p class="bt-intro"><strong>What this is:</strong> a chronological, plain-language checklist that takes the Loquat Center Assessment Platform from "nothing built yet" to a live system you can run and maintain — without needing a professional developer. Work through the items in order, check each one off as you finish it, and don't skip ahead. If a term is unfamiliar, look it up in the glossary below — every tool and technical word used later is explained here first.</p>
-      <p class="bt-note">Your checkmarks are saved automatically in this browser, so you can close this tab and come back to it later. This checklist is a working plan, not a legal or compliance document — some vendor pricing, plan names, and BAA requirements change over time, so always confirm current details directly with each vendor before you rely on them.</p>
+      <p class="bt-intro"><strong>What this is:</strong> a practice-wide setup checklist covering everything needed to legally open, credential, staff, and technically launch Olive Clinical — organized into nine sections below. Check items off as you complete them; your progress is saved automatically in this browser.</p>
+      <div class="bt-progress-row">
+        <div class="bt-progress-wrap">
+          <div class="bt-progress-track"><div class="bt-progress-fill" id="btPbar"></div></div>
+          <div class="bt-progress-label" id="btPlabel">0 of 0 complete</div>
+        </div>
+        <button class="btn-cancel" onclick="resetBuildoutChecklist()">Reset all</button>
+      </div>
     </div>
+    <div id="btChecklist"></div>
   </div>
 
   <div class="section">
-    <div class="section-label">Glossary — Read This First</div>
-    <div class="card bt-glossary">
-      <p><strong>HIPAA</strong> — the federal law that requires anyone handling patient health information ("PHI") to keep it private and secure, and to have specific legal agreements and safeguards in place.</p>
-      <p><strong>BAA (Business Associate Agreement)</strong> — a legally required contract between you and any company ("vendor") whose service will touch client health information. It legally obligates them to protect that data the way HIPAA requires. You must have a signed BAA with a vendor <em>before</em> any real client data ever touches their system.</p>
-      <p><strong>Vendor</strong> — a company that sells you a tool or service (e.g., Vercel, Clerk, Supabase, Anthropic are all vendors of this platform).</p>
-      <p><strong>API / API key</strong> — an API is how two pieces of software talk to each other automatically. An API key is a long secret code (like a password) that proves your app is allowed to use a vendor's service. Never share an API key publicly, paste it into an email, or put it directly into code that goes onto GitHub.</p>
-      <p><strong>Repository ("repo")</strong> — a project folder for code, stored on GitHub, that keeps a complete history of every change ever made to it. Think of it like a Google Drive folder for code, with a built-in "undo history" for every file.</p>
-      <p><strong>Git</strong> — the underlying system that tracks every change to your code and lets you "save a snapshot" (called a <strong>commit</strong>) and send it to GitHub (called a <strong>push</strong>). Claude Code runs these commands for you when you ask in plain English.</p>
-      <p><strong>Terminal / Command Line</strong> — a plain black-and-white (or dark) text window on your computer where you type instructions instead of clicking icons. On a Mac, open it via Applications → Utilities → Terminal. On Windows, search for "Command Prompt" or "PowerShell" in the Start menu. This is where you'll run Claude Code.</p>
-      <p><strong>Environment variable / <span class="bt-url">.env.local</span> file</strong> — a private settings file (not stored on GitHub) that holds secret keys and passwords your app needs to run. Claude Code will create and manage this file for you.</p>
-      <p><strong>Deploy / Deployment</strong> — the process of publishing your latest code changes so they appear on the live, public website.</p>
-      <p><strong>Row Level Security (RLS)</strong> — a database safety rule that makes sure each clinician can only ever see their own clients' records, never anyone else's.</p>
-      <p><strong>Audit log</strong> — an automatic, tamper-resistant record of who did what and when inside the system (who viewed a record, who generated a report, etc.) — required for HIPAA accountability.</p>
-    </div>
-  </div>
-
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_p0')">
-      <div class="measure-header-left"><span class="measure-abbr">Phase 0</span><span class="measure-name">Accounts, Tools &amp; Legal Agreements — Do This Before Any Code Exists</span></div>
-      <span class="chevron" id="cv_bt_p0">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_p0">
-      <p class="bt-note">Everything in this phase can be done from a web browser and does not require any coding. Budget several weeks for this phase, since some BAAs require back-and-forth with vendor sales teams.</p>
-      <ol class="bt-ol">
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_1"><span><span class="bt-item-title">Set up a password manager.</span><span class="bt-item-body">You are about to create a dozen accounts with passwords and secret keys. Use a password manager (a secure app that stores and auto-fills passwords) such as 1Password (<span class="bt-url">https://1password.com</span>) or Bitwarden (<span class="bt-url">https://bitwarden.com</span>). Sign up, install the browser extension, and save every login and API key you create from this point forward.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_2"><span><span class="bt-item-title">Create a GitHub account.</span><span class="bt-item-body">GitHub is the website where your project's code will live, with a complete history of every change. Go to <span class="bt-url">https://github.com/signup</span>, enter your email, create a password, choose a username, and verify your email address.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_3"><span><span class="bt-item-title">Create the private repository.</span><span class="bt-item-body">Go to <span class="bt-url">https://github.com/new</span>. For "Repository name" type <span class="bt-url">loquat-assessments</span>. Under "Visibility" click <strong>Private</strong> (this is important — it keeps your code hidden from the public). Check the box "Add a README file." Click the green "Create repository" button.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_4"><span><span class="bt-item-title">Install Node.js on your computer.</span><span class="bt-item-body">Node.js is a free program your computer needs installed so that Claude Code, and the website's code, can actually run. Go to <span class="bt-url">https://nodejs.org</span>, click the button labeled "LTS" (the stable, recommended version), download the installer for your computer (Mac or Windows), open the downloaded file, and click "Next" through the installer using the default options, then "Install" and "Finish." To confirm it worked, open your Terminal (see glossary above), type <span class="bt-url">node -v</span> and press Enter — you should see a version number like <span class="bt-url">v22.11.0</span>.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_5"><span><span class="bt-item-title">Install Claude Code.</span><span class="bt-item-body">Claude Code is an AI tool made by Anthropic that runs in your Terminal and writes, edits, and manages your code based on plain-English instructions you type. Open Terminal, type <span class="bt-url">npm install -g @anthropic-ai/claude-code</span> and press Enter. Wait for it to finish. See the full "Using Claude Code" section further down this page for how to open and use it day to day.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_6"><span><span class="bt-item-title">Create your Claude Project.</span><span class="bt-item-body">A Claude Project is a dedicated workspace inside Claude.ai that remembers your project's context so you don't have to re-explain it every conversation. Set this up now, before Phase 1 — see the full "Setting Up Your Claude Project" section further down this page for exact steps and what to upload.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_7"><span><span class="bt-item-title">Set up Anthropic Enterprise with a signed BAA and zero data retention.</span><span class="bt-item-body">Anthropic is the company that makes Claude, the AI that will power your assessment reports. Go to <span class="bt-url">https://www.anthropic.com/contact-sales</span> and submit the contact form, stating clearly that you are a healthcare provider and need (1) a signed Business Associate Agreement and (2) zero data retention terms for API usage. A sales representative will follow up by email to arrange a contract. Consider having a lawyer review it before signing. Once signed, Anthropic will issue you an API key — store it only in your password manager, never in code or email.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_8"><span><span class="bt-item-title">Set up Vercel Pro with a signed BAA.</span><span class="bt-item-body">Vercel is the hosting service — think of it as the landlord that makes your website live on the internet. Go to <span class="bt-url">https://vercel.com/signup</span> and click "Continue with GitHub" to sign up using the account from step 2. Once logged in, click your account avatar (top right) → "Settings" → "Billing," and upgrade to the <strong>Pro</strong> plan. Then contact Vercel sales at <span class="bt-url">https://vercel.com/contact/sales</span> and explicitly request a HIPAA Business Associate Agreement — confirm which billing tier is actually required, since vendors sometimes require a higher "Enterprise" tier for a BAA even if Pro is enough to run the site.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_9"><span><span class="bt-item-title">Set up Clerk Pro with a signed BAA.</span><span class="bt-item-body">Clerk is the "front desk" software that handles logins — checking that someone typing a username and password really is who they say they are. Go to <span class="bt-url">https://clerk.com</span>, sign up, and in the dashboard go to "Billing" to upgrade to the <strong>Pro</strong> plan. Then contact Clerk support/sales and explicitly request a HIPAA BAA — again, confirm the exact plan tier required, since this can change.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_10"><span><span class="bt-item-title">Set up Supabase (HIPAA tier) with a signed BAA.</span><span class="bt-item-body">Supabase is the database — the secure digital filing cabinet where all client records, assessment answers, and reports actually get stored. Go to <span class="bt-url">https://supabase.com</span>, sign up, and create a new "Organization." Supabase requires being on their "Team" plan (or higher) and signing a HIPAA addendum before you can use it for real client data. Go to <span class="bt-url">https://supabase.com/contact</span> (or the compliance/HIPAA request option in your dashboard) and explicitly request the BAA. Wait for written confirmation the BAA is signed before any real client data is ever entered.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_11"><span><span class="bt-item-title">Confirm you control the loquatcenter.com domain.</span><span class="bt-item-body">The assessment platform will live at <span class="bt-url">loquatcenter.com/assessments</span> — a section of your existing website's domain, not a new domain purchase. Confirm you can log into wherever loquatcenter.com is currently registered/managed, since you'll need to point the <span class="bt-url">/assessments</span> path to Vercel in Phase 1.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p0_12"><span><span class="bt-item-title">Double-check every BAA is fully signed before moving on.</span><span class="bt-item-body">Do not enter any real client name, health information, or clinical data anywhere in this system until all four BAAs (Anthropic, Vercel, Clerk, Supabase) are signed and confirmed in writing. Use fake/dummy data for all testing until then.</span></span></label></li>
-      </ol>
-    </div>
-  </div>
-
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_p1')">
-      <div class="measure-header-left"><span class="measure-abbr">Phase 1</span><span class="measure-name">Basic App Structure &amp; Login System</span></div>
-      <span class="chevron" id="cv_bt_p1">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_p1">
-      <ol class="bt-ol">
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p1_1"><span><span class="bt-item-title">Create a project folder on your computer and download the repo into it.</span><span class="bt-item-body">In Terminal, navigate to where you keep documents (e.g., type <span class="bt-url">cd Documents</span>) then type <span class="bt-url">git clone https://github.com/YOUR-USERNAME/loquat-assessments.git</span> (replace YOUR-USERNAME with your actual GitHub username), press Enter, then type <span class="bt-url">cd loquat-assessments</span>.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p1_2"><span><span class="bt-item-title">Open Claude Code inside that folder.</span><span class="bt-item-body">While still inside that folder in Terminal, type <span class="bt-url">claude</span> and press Enter. The first time, it will ask you to log in through a browser link — click it and sign in with your Claude.ai account.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p1_3"><span><span class="bt-item-title">Ask your Claude Project to write the Phase 1 build instructions, then paste them into Claude Code.</span><span class="bt-item-body">In your Claude Project chat (see section below), describe that you're ready for Phase 1 and ask for a detailed, step-by-step prompt for Claude Code to scaffold a Next.js web application with Clerk for login. Copy that response and paste it into the Claude Code terminal window, then press Enter.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p1_4"><span><span class="bt-item-title">Get your Clerk API keys and add them to the project's private settings file.</span><span class="bt-item-body">In the Clerk dashboard, go to "API Keys." Copy the "Publishable key" and "Secret key." Tell Claude Code you have these keys and paste them when it asks — it will store them in the <span class="bt-url">.env.local</span> file, which never gets uploaded to GitHub.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p1_5"><span><span class="bt-item-title">Preview the site on your own computer.</span><span class="bt-item-body">Ask Claude Code to run the app, or type <span class="bt-url">npm run dev</span> yourself, then open a web browser to <span class="bt-url">http://localhost:3000</span>. Confirm a login screen appears and that you can create a test account.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p1_6"><span><span class="bt-item-title">Save and upload the work to GitHub.</span><span class="bt-item-body">You can simply tell Claude Code in plain English: "please save this work and push it to GitHub." It will run the git commands for you.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p1_7"><span><span class="bt-item-title">Import the project into Vercel.</span><span class="bt-item-body">Go to your Vercel dashboard (<span class="bt-url">https://vercel.com/dashboard</span>), click "Add New" → "Project," and select the <span class="bt-url">loquat-assessments</span> repository from GitHub. Click "Deploy."</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p1_8"><span><span class="bt-item-title">Add your secret keys to Vercel so the live site can use them.</span><span class="bt-item-body">In the Vercel project, go to "Settings" → "Environment Variables" and add the same Clerk keys from step 4 (and later, Supabase and Anthropic keys as you get to those phases). These are never visible to site visitors.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p1_9"><span><span class="bt-item-title">Connect the domain path loquatcenter.com/assessments.</span><span class="bt-item-body">In the Vercel project, go to "Settings" → "Domains" and follow the prompts to connect the <span class="bt-url">/assessments</span> path on loquatcenter.com to this project. Vercel will show you exactly which DNS records to add wherever loquatcenter.com is currently managed.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p1_10"><span><span class="bt-item-title">Test the live login on the real web address.</span><span class="bt-item-body">Visit <span class="bt-url">https://loquatcenter.com/assessments</span> in a browser and confirm you can create an account and log in on the live site, not just on your own computer.</span></span></label></li>
-      </ol>
-    </div>
-  </div>
-
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_p2')">
-      <div class="measure-header-left"><span class="measure-abbr">Phase 2</span><span class="measure-name">Database &amp; Admin Dashboard</span></div>
-      <span class="chevron" id="cv_bt_p2">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_p2">
-      <ol class="bt-ol">
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p2_1"><span><span class="bt-item-title">Create a new Supabase project.</span><span class="bt-item-body">In your Supabase dashboard, click "New Project," give it a name like "loquat-assessments," choose a region close to your clients, and set a strong database password.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p2_2"><span><span class="bt-item-title">Save the database password immediately.</span><span class="bt-item-body">Store it in your password manager the moment it's created — Supabase will not show it to you again.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p2_3"><span><span class="bt-item-title">Copy the Supabase connection keys into your project and into Vercel.</span><span class="bt-item-body">In Supabase, go to "Project Settings" → "API" and copy the URL and keys shown. Give them to Claude Code to add to <span class="bt-url">.env.local</span>, and also add them in Vercel under "Settings" → "Environment Variables" as you did in Phase 1.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p2_4"><span><span class="bt-item-title">Ask Claude Code to design and create the database tables.</span><span class="bt-item-body">Describe what needs to be stored (clients, assessments, reports, users, and an audit log) and ask Claude Code to create the matching tables in Supabase. Use your Claude Project first to think through exactly what fields each table needs.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p2_5"><span><span class="bt-item-title">Turn on Row Level Security.</span><span class="bt-item-body">Ask Claude Code explicitly: "please enable Row Level Security on every table so each clinician can only see their own clients' data." This is a critical HIPAA safeguard — do not skip it.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p2_6"><span><span class="bt-item-title">Ask Claude Code to build the admin dashboard.</span><span class="bt-item-body">This is the screen where you'll see a list of clients and be able to add or edit them.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p2_7"><span><span class="bt-item-title">Test by creating one fake client record.</span><span class="bt-item-body">Use a made-up name like "Test Testerson" — never real client information at this stage. Confirm you can create, view, and edit the record.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p2_8"><span><span class="bt-item-title">Save, push, and confirm it works on the live site.</span><span class="bt-item-body">Ask Claude Code to commit and push the work, then check <span class="bt-url">https://loquatcenter.com/assessments</span> to confirm the dashboard appears there too.</span></span></label></li>
-      </ol>
-    </div>
-  </div>
-
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_p3')">
-      <div class="measure-header-left"><span class="measure-abbr">Phase 3</span><span class="measure-name">Assessment Tool &amp; AI Report Generation</span></div>
-      <span class="chevron" id="cv_bt_p3">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_p3">
-      <ol class="bt-ol">
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p3_1"><span><span class="bt-item-title">Decide which assessment measures to build first.</span><span class="bt-item-body">Use your Claude Project to list out the questionnaires and structured interviews you want the platform to support first, in priority order.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p3_2"><span><span class="bt-item-title">Ask Claude Code to build the assessment intake form screen.</span><span class="bt-item-body">This is where you or a client will fill in answers to the questionnaires you prioritized in step 1.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p3_3"><span><span class="bt-item-title">Add your Anthropic Enterprise API key to the environment variables.</span><span class="bt-item-body">Use the key from your signed-BAA Anthropic Enterprise account (Phase 0), never a personal API key. Add it to <span class="bt-url">.env.local</span> and to Vercel's Environment Variables, the same way you did for Clerk and Supabase.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p3_4"><span><span class="bt-item-title">Ask Claude Code to build the AI report-generation feature.</span><span class="bt-item-body">This feature sends the assessment answers to Claude through the API and gets back a draft written clinical report.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p3_5"><span><span class="bt-item-title">Test it thoroughly with fake data only.</span><span class="bt-item-body">Fill out a test assessment with made-up answers and confirm a reasonable draft report is generated.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p3_6"><span><span class="bt-item-title">Add a mandatory clinician-review step before any report is considered final.</span><span class="bt-item-body">Ask Claude Code to make sure the AI's draft report always opens in an editable review screen that requires your explicit approval before it can be saved, printed, or sent — never allow auto-sending of unreviewed AI output.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p3_7"><span><span class="bt-item-title">Save, push, and test on the live site with a fake client.</span><span class="bt-item-body">Repeat the full assessment-to-report flow on <span class="bt-url">https://loquatcenter.com/assessments</span> before moving on.</span></span></label></li>
-      </ol>
-    </div>
-  </div>
-
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_p4')">
-      <div class="measure-header-left"><span class="measure-abbr">Phase 4</span><span class="measure-name">Owner Dashboard &amp; Audit Log</span></div>
-      <span class="chevron" id="cv_bt_p4">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_p4">
-      <ol class="bt-ol">
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p4_1"><span><span class="bt-item-title">Ask Claude Code to build an owner-only dashboard.</span><span class="bt-item-body">This is a private screen only you can see, showing overall usage, number of clients, and system health.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p4_2"><span><span class="bt-item-title">Ask Claude Code to add audit logging to every sensitive action.</span><span class="bt-item-body">Every login, record view, report generation, edit, and deletion should be automatically recorded with who did it and when — this is required for HIPAA accountability (see glossary above).</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p4_3"><span><span class="bt-item-title">Test the audit log.</span><span class="bt-item-body">Perform a few actions yourself (log in, view the test client, generate a report) and confirm each one shows up correctly in the audit log.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p4_4"><span><span class="bt-item-title">(Optional) Set up email alerts for unusual activity.</span><span class="bt-item-body">Ask Claude Code if it can notify you by email of things like repeated failed logins.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p4_5"><span><span class="bt-item-title">Save, push, and confirm it works on the live site.</span></span></label></li>
-      </ol>
-    </div>
-  </div>
-
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_p5')">
-      <div class="measure-header-left"><span class="measure-abbr">Phase 5</span><span class="measure-name">Superbill &amp; Accommodation Letter Features</span></div>
-      <span class="chevron" id="cv_bt_p5">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_p5">
-      <ol class="bt-ol">
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p5_1"><span><span class="bt-item-title">Ask Claude Code to build the superbill generator.</span><span class="bt-item-body">A superbill is an itemized receipt with billing codes that clients submit to their insurance for reimbursement. It should pull the relevant details automatically from the client and session records already in the system.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p5_2"><span><span class="bt-item-title">Ask Claude Code to build the accommodation letter generator.</span><span class="bt-item-body">This should draft a letter based on the assessment results, which you then review, edit, and sign before it goes anywhere — same review rule as the clinical reports in Phase 3.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p5_3"><span><span class="bt-item-title">Test both features end-to-end with fake data, including the PDF download.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p5_4"><span><span class="bt-item-title">Do a full read-through of the entire platform.</span><span class="bt-item-body">Click through every tab and feature yourself, as if you were a brand-new user, and note anything confusing or broken for Claude Code to fix.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p5_5"><span><span class="bt-item-title">Get a HIPAA security risk assessment done before go-live.</span><span class="bt-item-body">A signed BAA is not the same as full HIPAA compliance. Have a qualified HIPAA compliance consultant review the finished system, or at minimum work through the free Security Risk Assessment Tool from the HHS Office for Civil Rights at <span class="bt-url">https://www.healthit.gov/topic/privacy-security-and-hipaa/security-risk-assessment-tool</span>.</span></span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_p5_6"><span><span class="bt-item-title">Go live with real client data.</span><span class="bt-item-body">Only after every item above is checked off and every BAA is confirmed signed, begin using real client information.</span></span></label></li>
-      </ol>
-    </div>
-  </div>
-
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_cproj')">
-      <div class="measure-header-left"><span class="measure-abbr">Setup</span><span class="measure-name">Setting Up Your Claude Project</span></div>
-      <span class="chevron" id="cv_bt_cproj">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_cproj">
-      <p class="bt-note">A Claude Project is a feature inside Claude.ai (the regular Claude website/app, different from Claude Code) that gives Claude a persistent memory of your project's context, so you don't have to re-explain everything every time you start a new chat.</p>
-      <ol class="bt-ol">
-        <li><span class="bt-item-title">Log in and open Projects.</span><span class="bt-item-body">Go to <span class="bt-url">https://claude.ai</span>, log in, and click "Projects" in the left sidebar.</span></li>
-        <li><span class="bt-item-title">Create the project.</span><span class="bt-item-body">Click "Create project," and name it "Loquat Center Assessment Platform."</span></li>
-        <li><span class="bt-item-title">Fill in the project's custom instructions.</span><span class="bt-item-body">Open "Project knowledge" / "Instructions" and paste a description covering: who you are (a licensed clinical psychologist with no technical background), what the platform is and does, the five build phases, the vendor stack (Next.js app on Vercel, Clerk for login, Supabase for the database, Anthropic Claude for AI reports), the domain (loquatcenter.com/assessments), the GitHub repo name (loquat-assessments), and an explicit instruction to Claude: "explain every technical concept in plain language, and when I'm ready to build something, give me an exact, copy-pasteable prompt to hand to Claude Code."</span></li>
-        <li><span class="bt-item-title">Upload reference files.</span><span class="bt-item-body">Upload: (1) a saved copy of this Buildout Todo List, (2) copies of the signed BAAs once you have them (you can redact signatures if you're not comfortable uploading full contracts), (3) any notes on which assessment measures/questionnaires you want included, and (4) your practice's branding notes (colors, logo, tone) if you have them.</span></li>
-        <li><span class="bt-item-title">Use it once per phase.</span><span class="bt-item-body">Before starting each phase in this checklist, open a new chat inside this Project, tell Claude which phase you're starting, and ask it to write the exact step-by-step prompt to paste into Claude Code. Copy that prompt, then switch to your Terminal and paste it into Claude Code.</span></li>
-      </ol>
-      <div class="bt-note" style="margin-top:14px;"><strong>Remember:</strong> Claude Projects (the chat website) and Claude Code (the terminal tool) are different products built on the same underlying AI. Use the Project to think, plan, and get explanations; use Claude Code to actually write and run the code.</div>
-    </div>
-  </div>
-
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_ccode')">
-      <div class="measure-header-left"><span class="measure-abbr">Setup</span><span class="measure-name">Using Claude Code</span></div>
-      <span class="chevron" id="cv_bt_ccode">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_ccode">
-      <p class="bt-note">Claude Code is an AI tool that runs inside your Terminal and can read, write, edit, and run your project's code based on instructions you type in plain English.</p>
-      <ol class="bt-ol">
-        <li><span class="bt-item-title">Install it (one time).</span><span class="bt-item-body">Open Terminal and type <span class="bt-url">npm install -g @anthropic-ai/claude-code</span>, then press Enter.</span></li>
-        <li><span class="bt-item-title">Open it every time you want to work on the site.</span><span class="bt-item-body">Open Terminal, type <span class="bt-url">cd Documents/loquat-assessments</span> (adjust the path to wherever your folder actually is), press Enter, then type <span class="bt-url">claude</span> and press Enter.</span></li>
-        <li><span class="bt-item-title">Paste build prompts.</span><span class="bt-item-body">Copy text from your Claude Project chat, click into the Claude Code terminal window, paste (Mac: Cmd+V, Windows: Ctrl+V), and press Enter.</span></li>
-        <li><span class="bt-item-title">Read what it plans to do before approving.</span><span class="bt-item-body">Claude Code will often describe the files it wants to create or change and ask permission before doing anything (e.g., "Do you want to proceed?"). Read the plain-English summary; if it makes sense, approve it. If anything sounds destructive or confusing (like deleting a file you didn't expect), don't approve — ask it to explain first.</span></li>
-        <li><span class="bt-item-title">Preview your changes.</span><span class="bt-item-body">Type <span class="bt-url">npm run dev</span> and open <span class="bt-url">http://localhost:3000</span> in your browser to see the site running on your own computer before it goes live.</span></li>
-        <li><span class="bt-item-title">Save and publish your work.</span><span class="bt-item-body">Type in plain English: "please save this work and push it to GitHub." Claude Code will handle the git commands for you.</span></li>
-      </ol>
-      <div class="bt-warn"><strong>If something goes wrong:</strong>
-        <ul style="margin:8px 0 0 18px;">
-          <li>Copy the entire error message you see (even if it looks like gibberish) and paste it back to Claude Code, asking "what does this error mean and how do I fix it?"</li>
-          <li>If the site looks broken after a change, say "the last change broke it, please undo it" — Claude Code can revert to the last saved snapshot using git.</li>
-          <li>You can always ask Claude Code to "explain what this means in plain English" before approving anything you don't understand.</li>
-          <li>Avoid ever telling Claude Code to "force push," "delete the repository," or "skip verification" unless you fully understand and intend the consequences.</li>
-          <li>Keep an eye on usage costs in the Anthropic Console at <span class="bt-url">https://console.anthropic.com</span> under "Usage" or "Billing" — Claude Code usage is billed through your Anthropic account.</li>
-        </ul>
+    <div class="section-label">Platform Build — Process, Don't Store</div>
+    <div class="card" style="margin-bottom:6px;">
+      <p class="bt-intro" style="margin-bottom:10px;">This is a single-user, processing-only build. You log in, run an assessment, the report is generated by AWS Bedrock, it downloads to your own computer, and you upload it to Simple Practice. <strong>Nothing is stored on the platform.</strong> Because there is no stored data, most of the heavy HIPAA infrastructure (encrypted database, audit logs, retention systems) is not needed.</p>
+      <p class="bt-note" style="margin-bottom:0;">Simple Practice is your system of record. Once a report lands there, retention and long-term security are its responsibility, not this platform's.</p>
+      <div class="bt-progress-row" style="margin-top:14px;">
+        <div class="bt-progress-wrap">
+          <div class="bt-progress-track"><div class="bt-progress-fill" id="btBuildPbar"></div></div>
+          <div class="bt-progress-label" id="btBuildPlabel">0 of 0 complete</div>
+        </div>
+        <button class="btn-cancel" onclick="resetBuildChecklist()">Reset all</button>
       </div>
     </div>
+    <div class="bt-warn"><strong>Note:</strong> this "process, don't store" architecture is a different technical design than the "Olive Clinical platform" section above, which assumes a stored-data build with encrypted database, audit logs, and full accounts (Clerk/Supabase/Anthropic Enterprise). Decide which architecture you're actually building before treating both sections as active — they describe two different systems.</div>
+    <div id="btBuildChecklist"></div>
   </div>
 
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_maint')">
-      <div class="measure-header-left"><span class="measure-abbr">Ongoing</span><span class="measure-name">Maintaining The System After Launch</span></div>
-      <span class="chevron" id="cv_bt_maint">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_maint">
-      <ol class="bt-ol">
-        <li><span class="bt-item-title">Routine changes.</span><span class="bt-item-body">Wording tweaks, adding a new questionnaire, fixing a typo, or adjusting colors can all be done by opening Claude Code and describing the change in plain English — the exact same workflow you used to build the site.</span></li>
-        <li><span class="bt-item-title">Bigger changes.</span><span class="bt-item-body">For anything significant (a new feature, a change to how data is stored), think it through in your Claude Project first, then hand the resulting plan to Claude Code.</span></li>
-        <li><span class="bt-item-title">Keep software up to date.</span><span class="bt-item-body">Small pre-built pieces of code your app depends on ("dependencies" or "packages") occasionally need security updates. Periodically ask Claude Code: "please check for and safely update outdated dependencies," then test the site afterward.</span></li>
-        <li><span class="bt-item-title">Confirm backups.</span><span class="bt-item-body">Log into Supabase → "Database" → "Backups" to confirm automatic backups are running on your paid tier and note how long they're retained.</span></li>
-        <li><span class="bt-item-title">Monitor uptime.</span><span class="bt-item-body">Check the Vercel dashboard occasionally for failed deployments, or set up a free monitor like UptimeRobot (<span class="bt-url">https://uptimerobot.com</span>) to email you automatically if the site goes down.</span></li>
-        <li><span class="bt-item-title">Track contract and BAA renewal dates.</span><span class="bt-item-body">Put a calendar reminder a month before each annual contract or BAA renewal for Anthropic, Vercel, Clerk, and Supabase.</span></li>
-        <li><span class="bt-item-title">Know when to hire a professional.</span><span class="bt-item-body">For major new features, a suspected security incident, or anything involving a possible data breach, consult a professional developer or HIPAA security consultant rather than relying solely on AI tools.</span></li>
-      </ol>
-    </div>
-  </div>
-
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_warn')">
-      <div class="measure-header-left"><span class="measure-abbr">Read First</span><span class="measure-name">Honest Warnings — What Could Go Wrong</span></div>
-      <span class="chevron" id="cv_bt_warn">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_warn">
-      <div class="bt-danger"><strong>Never paste real client health information into Claude.ai chat, a Claude Project, or any tool that isn't covered by a signed BAA and zero data retention.</strong> Only the production system — going through the Enterprise Anthropic API with zero data retention — should ever touch real client data. Use only fake, made-up data for all testing, planning, and troubleshooting conversations.</div>
-      <ul style="margin:14px 0 0 18px;line-height:1.8;">
-        <li>AI coding tools can make mistakes, including in security-sensitive code. Always test thoroughly with fake data before trusting a feature with real information.</li>
-        <li>Vendor pricing, plan names, and which tier actually includes a BAA change over time. The tiers named in this checklist (Vercel Pro, Clerk Pro, Supabase Team/HIPAA) are current estimates, not guarantees — always confirm directly with each vendor's sales team before relying on them.</li>
-        <li>A signed BAA is necessary but not sufficient for HIPAA compliance. You, as the clinician running the practice, remain responsible for a written security risk assessment, staff training, breach-notification procedures, and access controls — see Phase 5, step 5.</li>
-        <li>Treat every API key and password like a house key. If one is ever exposed (posted publicly, accidentally committed to a public repository), go to that vendor's dashboard and rotate (replace) it immediately.</li>
-        <li>Keep the GitHub repository set to Private at all times — periodically confirm this in the repository's Settings tab, since accidentally switching it to public would expose your source code.</li>
-        <li>AI-generated clinical reports, superbills, and accommodation letters must always be reviewed, edited, and approved by you before being finalized or sent — never auto-send unreviewed AI output to a client or third party.</li>
-        <li>Downtime happens occasionally even with paid, professional hosting. A brief outage is normal and not typically cause for alarm — persistent or recurring outages are worth investigating with Vercel support.</li>
-        <li>Budget roughly (subject to change, confirm current pricing): Vercel Pro from about $20/month, Clerk Pro from about $25/month, Supabase's HIPAA-eligible tier several hundred dollars/month, and Anthropic Enterprise plus Claude Code usage billed based on actual use, often with a minimum monthly commitment for Enterprise/BAA terms.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="measure-card">
-    <div class="measure-header" onclick="tog('bt_month')">
-      <div class="measure-header-left"><span class="measure-abbr">Recurring</span><span class="measure-name">Monthly Maintenance Checklist</span></div>
-      <span class="chevron" id="cv_bt_month">▼</span>
-    </div>
-    <div class="measure-body" id="mb_bt_month">
-      <p class="bt-note">Repeat this list once a month, every month, once the platform is live. Checkmarks reset manually — just uncheck and recheck them each month, or keep a copy in your own notes.</p>
-      <ul class="bt-check-list">
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_1"><span>Log into Vercel and confirm the site is live with no failed deployments.</span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_2"><span>Log into Supabase and confirm the latest automatic backup completed successfully.</span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_3"><span>Log into Clerk and review the list of users for anything unexpected.</span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_4"><span>Log into the Anthropic Console and review usage and billing for anything unusual.</span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_5"><span>Review the platform's audit log for any unfamiliar or after-hours access.</span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_6"><span>Ask Claude Code to check for and safely apply any outdated-dependency security updates.</span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_7"><span>Confirm all four BAAs (Anthropic, Vercel, Clerk, Supabase) are still active and not close to expiring.</span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_8"><span>Test the login flow yourself as if you were a brand-new user.</span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_9"><span>Run through one full assessment-to-report cycle using fake data, start to finish.</span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_10"><span>Confirm your password manager is up to date with every current login and API key.</span></label></li>
-        <li><label class="bt-item-label"><input type="checkbox" class="bt-persist-check" id="bt_m_11"><span>Set aside time to review any new feature requests before starting work on them.</span></label></li>
-      </ul>
-    </div>
-  </div>
 </div>
 
 <div class="tab-pane active" id="tab-clinic">
@@ -5041,11 +4836,440 @@ function initGCal(){
   }catch{}
 }
 
-function initBuildoutChecklist(){
-  document.querySelectorAll('#tab-buildout .bt-persist-check').forEach(el=>{
-    try{ if(localStorage.getItem('ntc_'+el.id)==='1') el.checked=true; }catch{}
-    el.addEventListener('change',()=>{ try{localStorage.setItem('ntc_'+el.id, el.checked?'1':'0');}catch{} });
+// ================================================================
+// BUILDOUT TODO LIST — practice setup checklist
+// ================================================================
+const BT_TAGS={
+  legal:{label:"Legal",cls:"bt-tag-legal"},
+  hipaa:{label:"HIPAA",cls:"bt-tag-hipaa"},
+  finance:{label:"Finance",cls:"bt-tag-finance"},
+  hiring:{label:"Hiring",cls:"bt-tag-hiring"},
+  tech:{label:"Tech",cls:"bt-tag-tech"},
+  urgent:{label:"Urgent",cls:"bt-tag-urgent"}
+};
+
+const BUILDOUT_SECTIONS=[
+  { num:1, title:"Legal and business formation", sub:"Complete before seeing any clients", groups:[
+    { label:"Entity and registration", items:[
+      {t:'Meet with a California healthcare attorney — confirm LLC structure and assessment billing setup', tags:["legal","urgent"]},
+      {t:'File Articles of Organization for Olive Clinical LLC with California Secretary of State', tags:["legal"]},
+      {t:'Register "Olive Clinical" as a fictitious business name (DBA) with Alameda County', tags:["legal"]},
+      {t:'Obtain an EIN (Employer Identification Number) from the IRS at irs.gov', tags:["legal","finance"]},
+      {t:'Open a dedicated Olive Clinical business bank account', tags:["finance"]}
+    ]},
+    { label:"Insurance and agreements", items:[
+      {t:'Confirm malpractice insurance covers group practice, employees, and supervised postdocs', tags:["legal","urgent"]},
+      {t:'Draft employment agreement template for therapists and associates', tags:["legal"]},
+      {t:'Draft postdoctoral supervision agreement template', tags:["legal"]},
+      {t:'Draft client financial policy and fee agreement', tags:["legal"]}
+    ]}
+  ]},
+  { num:2, title:"HIPAA compliance", sub:"All BAAs must be signed before any real client data enters any system", groups:[
+    { label:"Written policies", items:[
+      {t:'Write HIPAA Privacy Policy for the practice', tags:["hipaa"]},
+      {t:'Write HIPAA Security Policy', tags:["hipaa"]},
+      {t:'Write Breach Notification Protocol', tags:["hipaa"]},
+      {t:'Create Notice of Privacy Practices document for clients', tags:["hipaa"]}
+    ]},
+    { label:"Vendor BAAs", items:[
+      {t:'Sign BAA with EHR vendor (SimplePractice, Jane App, or Therapy Brands)', tags:["hipaa","urgent"]},
+      {t:'Sign BAA with Vercel Pro', tags:["hipaa","tech"]},
+      {t:'Sign BAA with Supabase (HIPAA tier)', tags:["hipaa","tech"]},
+      {t:'Sign BAA with Clerk Pro', tags:["hipaa","tech"]},
+      {t:'Sign BAA with AWS (via AWS Artifact in the AWS Console)', tags:["hipaa","tech"]}
+    ]}
+  ]},
+  { num:3, title:"NPI and insurance credentialing", sub:"Allow 60 to 120 days per payer — start this early", groups:[
+    { label:"NPI", items:[
+      {t:'Apply for NPI Type 2 (group NPI) at nppes.cms.hhs.gov under Olive Clinical LLC', tags:["legal","finance"]}
+    ]},
+    { label:"Payer credentialing", items:[
+      {t:'Submit credentialing application: BCBS', tags:["finance"]},
+      {t:'Submit credentialing application: Aetna', tags:["finance"]},
+      {t:'Submit credentialing application: Cigna', tags:["finance"]},
+      {t:'Submit credentialing application: United / Optum', tags:["finance"]},
+      {t:'Submit credentialing application: Covered California plans', tags:["finance"]},
+      {t:"Confirm each payer's rules for billing postdoc sessions under Dr. Love's NPI", tags:["legal","finance"]}
+    ]}
+  ]},
+  { num:4, title:"EHR setup", sub:"Choose, contract, and configure before first client", groups:[
+    { label:null, items:[
+      {t:'Select a HIPAA-compliant EHR (SimplePractice, Jane App, or Therapy Brands)', tags:["tech","hipaa"]},
+      {t:'Sign BAA with chosen EHR', tags:["hipaa","urgent"]},
+      {t:'Set up intake forms in EHR', tags:["tech"]},
+      {t:'Set up billing and superbill templates', tags:["tech","finance"]},
+      {t:'Configure telehealth settings', tags:["tech"]}
+    ]}
+  ]},
+  { num:5, title:"Hiring — postdoctoral residents", sub:"Postdocs conduct all assessments under Dr. Love's supervision", groups:[
+    { label:"Before posting a job", items:[
+      {t:"Confirm California Board of Psychology (BOP) requirements for Dr. Love as postdoctoral supervisor", tags:["legal"]},
+      {t:'Confirm BOP registration process for postdoctoral employees', tags:["legal"]}
+    ]},
+    { label:"Hiring and onboarding", items:[
+      {t:'Write job listing for postdoctoral psychology resident (neurodivergent assessment specialty)', tags:["hiring"]},
+      {t:'Post listing on APPIC, Psychology Today, and local doctoral programs', tags:["hiring"]},
+      {t:'Complete hire and onboarding', tags:["hiring"]},
+      {t:"Register postdoc with California BOP as supervised postdoctoral employee under Dr. Love", tags:["legal","urgent"]},
+      {t:'Execute postdoctoral supervision agreement', tags:["legal"]}
+    ]}
+  ]},
+  { num:6, title:"Hiring — therapy staff", sub:"Licensed therapists and associates for the therapy side", groups:[
+    { label:null, items:[
+      {t:'Decide: hire a licensed therapist or pre-licensed associate first', tags:["hiring"]},
+      {t:'If hiring associate: confirm California BBS supervision requirements for that license type (AMFT, APCC, or ACSW)', tags:["legal"]},
+      {t:'If hiring associate: confirm who will provide BBS-required weekly supervision hours', tags:["legal"]},
+      {t:'Write and post job listing', tags:["hiring"]},
+      {t:'Complete hire, onboarding, and employment agreement', tags:["hiring","legal"]}
+    ]}
+  ]},
+  { num:7, title:"Olive Clinical platform", sub:"Build and test before first real assessment", groups:[
+    { label:"Build and BAAs", items:[
+      {t:'Complete Olive Clinical platform build (all phases)', tags:["tech"]},
+      {t:'Execute all BAAs before any real client data enters the platform', tags:["hipaa","urgent"]}
+    ]},
+    { label:"Testing (synthetic data only)", items:[
+      {t:'Test postdoc assessment workflow end-to-end with fake data', tags:["tech"]},
+      {t:'Test AI report generation and Word doc download', tags:["tech"]},
+      {t:'Confirm all files stored in private encrypted storage buckets', tags:["hipaa","tech"]},
+      {t:'Confirm audit log captures every action during test session', tags:["hipaa","tech"]},
+      {t:'Confirm AWS credentials do not appear in browser DevTools at any point', tags:["hipaa","tech"]},
+      {t:'Confirm no client names or dates of birth appear in any URL', tags:["hipaa","tech"]},
+      {t:'Confirm session auto-logs-out after 15 minutes of inactivity', tags:["hipaa","tech"]},
+      {t:'Launch platform for postdoc team', tags:["tech"]}
+    ]}
+  ]},
+  { num:8, title:"Research all assessment measures", sub:"Confirm licensing, copyright, and clinical appropriateness before using in evaluations", groups:[
+    { label:"Universal screening — used with all clients", items:[
+      {t:'SCL-90-R (Symptom Checklist-90-Revised) — Pearson licensed; confirm current licensing cost and administration requirements', tags:["legal","finance"]},
+      {t:'M.I.N.I. International Neuropsychiatric Interview — confirm version (6.0 vs 7.0.2), licensing terms, and training requirements for postdocs', tags:["legal"]},
+      {t:'PAI (Personality Assessment Inventory) — PAR licensed; confirm cost per use or annual licensing, scoring software, and whether postdocs are qualified to administer and interpret', tags:["legal","finance"]}
+    ]},
+    { label:"ADHD module", items:[
+      {t:'DIVA-5 (Diagnostic Interview for ADHD in Adults) — confirm free clinical use license and current version', tags:["legal"]},
+      {t:"ASRS v1.1 (Adult ADHD Self-Report Scale) — WHO-licensed; confirm free clinical use terms", tags:["legal"]},
+      {t:"CPT (Conners' Continuous Performance Test) — MHS licensed; confirm cost per administration, software requirements, and whether platform can integrate scores or requires separate scoring system", tags:["legal","finance","tech"]},
+      {t:'Collateral Informant Interview — ADHD (custom structured interview; no licensing needed)', tags:[]}
+    ]},
+    { label:"Autism Spectrum module", items:[
+      {t:'AQ-50 (Autism Spectrum Quotient) — Baron-Cohen et al.; confirm free research/clinical use terms', tags:["legal"]},
+      {t:'CAT-Q (Camouflaging Autistic Traits Questionnaire) — confirm free clinical use and current scoring norms', tags:["legal"]},
+      {t:'RAADS-R (Ritvo Autism Asperger Diagnostic Scale — Revised) — confirm licensing and scoring threshold (≥65)', tags:["legal"]},
+      {t:'SRS (Social Responsiveness Scale, SRS-2) — WPS licensed; confirm adult form availability, cost, and scoring software; note it is typically used as an observer/self-report adjunct', tags:["legal","finance"]},
+      {t:'MIGDAS-2 (Monteiro Interview Guidelines for Diagnosing Autism Spectrum Disorder) — confirm publisher (AAPC), licensing, and whether postdocs need specific training before administering', tags:["legal","hiring"]},
+      {t:'AQ-50 Collateral / Observer Report — same licensing as AQ-50; confirm applicability for observer use', tags:["legal"]},
+      {t:'Autism Spectrum Structured Clinical Interview — confirm it is a custom structured interview with no separate license', tags:[]},
+      {t:'Collateral Informant Interview — Autism (custom structured interview; no licensing needed)', tags:[]}
+    ]},
+    { label:"OCD module", items:[
+      {t:'OCI-R (Obsessive-Compulsive Inventory — Revised) — Foa et al.; confirm free clinical use', tags:["legal"]},
+      {t:'Y-BOCS (Yale-Brown Obsessive Compulsive Scale) — clinician-administered; confirm training requirements and free use terms', tags:["legal"]},
+      {t:'OCD Clinical Interview — confirm it is a custom structured interview with no separate license', tags:[]}
+    ]},
+    { label:"Generalized Anxiety module", items:[
+      {t:'GAD-7 (Generalized Anxiety Disorder Scale) — Spitzer et al.; confirm free use for clinical settings', tags:["legal"]},
+      {t:'PSWQ (Penn State Worry Questionnaire) — Meyer et al.; confirm licensing; note wording flag in platform', tags:["legal"]},
+      {t:'GAD Clinical Interview — confirm it is a custom structured interview with no separate license', tags:[]}
+    ]},
+    { label:"PTSD module", items:[
+      {t:'CAPS-5 (Clinician-Administered PTSD Scale for DSM-5) — National Center for PTSD; confirm free clinical use and required training', tags:["legal"]},
+      {t:'PCL-5 (PTSD Checklist for DSM-5) — National Center for PTSD; confirm free clinical use', tags:["legal"]},
+      {t:'Trauma Clinical Interview — confirm it is a custom structured interview with no separate license', tags:[]}
+    ]},
+    { label:"Next steps after research", items:[
+      {t:'Document licensing status, cost, and source for each measure in a reference sheet', tags:["legal"]},
+      {t:'Obtain any required training certifications before postdocs administer clinician-administered measures (CAPS-5, Y-BOCS, M.I.N.I., MIGDAS-2)', tags:["legal","hiring"]},
+      {t:'Confirm with attorney whether commercially licensed measures (SCL-90-R, PAI, CPT, SRS-2) require a separate vendor contract or just per-use purchase', tags:["legal","finance"]},
+      {t:'Decide whether CPT and PAI scores are entered manually into the platform or whether integration with scoring software is needed — flag for developer', tags:["tech"]}
+    ]}
+  ]},
+  { num:9, title:"Marketing and referrals", sub:"Build referral pipeline before caseload opens", groups:[
+    { label:null, items:[
+      {t:'Update oliveclinical.com with practice info, clinician bios, and intake form', tags:["finance"]},
+      {t:'Create Psychology Today profile for Dr. Love', tags:["finance"]},
+      {t:'Create Psychology Today group listing for Olive Clinical', tags:["finance"]},
+      {t:'Create Therapy Den and Inclusive Therapists listings', tags:["finance"]},
+      {t:'Create Psychology Today profiles for each employed clinician under the group', tags:["finance","hiring"]},
+      {t:'Send introduction emails to East Bay referral sources: primary care, psychiatry, disability offices', tags:["finance"]},
+      {t:'Set up intake inquiry form or email alias for new client requests', tags:["tech"]}
+    ]}
+  ]}
+];
+
+let BT_ALL_BOXES=[];
+
+function renderBuildoutChecklist(){
+  const container=document.getElementById('btChecklist');
+  if(!container)return;
+  container.innerHTML='';
+
+  BUILDOUT_SECTIONS.forEach(sec=>{
+    const mid='bt_s'+sec.num;
+    let itemCounter=0;
+    let bodyHTML='';
+    sec.groups.forEach(group=>{
+      if(group.label) bodyHTML+=`<div class="bt-group-label">${group.label}</div>`;
+      group.items.forEach(item=>{
+        itemCounter++;
+        const cid=`bt_s${sec.num}_${itemCounter}`;
+        let checked=false;
+        try{ checked=localStorage.getItem('ntc_'+cid)==='1'; }catch{}
+        const tagsHTML=item.tags.map(tg=>`<span class="bt-tag ${BT_TAGS[tg].cls}">${BT_TAGS[tg].label}</span>`).join('');
+        bodyHTML+=`<label class="bt-item-row${checked?' done':''}" id="row_${cid}">
+          <input type="checkbox" class="bt-persist-check" id="${cid}" ${checked?'checked':''}>
+          <span class="bt-item-text">${item.t}<span class="bt-tags">${tagsHTML}</span></span>
+        </label>`;
+      });
+    });
+    const total=itemCounter;
+    const cardHTML=`<div class="measure-card">
+      <div class="measure-header" onclick="tog('${mid}')">
+        <div class="measure-header-left">
+          <span class="measure-abbr" id="ban_${mid}">${sec.num}</span>
+          <div>
+            <span class="measure-name">${sec.title}</span>
+            <div class="bt-section-sub">${sec.sub}</div>
+          </div>
+        </div>
+        <span class="score-badge" id="sb_${mid}">0/${total}</span>
+        <span class="chevron" id="cv_${mid}">▼</span>
+      </div>
+      <div class="measure-body" id="mb_${mid}">${bodyHTML}</div>
+    </div>`;
+    container.insertAdjacentHTML('beforeend',cardHTML);
   });
+
+  BT_ALL_BOXES=[...document.querySelectorAll('#btChecklist .bt-persist-check')];
+  BT_ALL_BOXES.forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      try{ localStorage.setItem('ntc_'+cb.id, cb.checked?'1':'0'); }catch{}
+      const row=document.getElementById('row_'+cb.id);
+      if(row) row.classList.toggle('done',cb.checked);
+      updateBuildoutCounts();
+    });
+  });
+
+  // Auto-open the first not-yet-complete section
+  BUILDOUT_SECTIONS.some(sec=>{
+    const mid='bt_s'+sec.num;
+    const boxes=document.querySelectorAll(`#mb_${mid} .bt-persist-check`);
+    const done=[...boxes].filter(b=>b.checked).length;
+    if(done<boxes.length){
+      document.getElementById('mb_'+mid).classList.add('open');
+      document.getElementById('cv_'+mid).classList.add('open');
+      return true;
+    }
+    return false;
+  });
+
+  updateBuildoutCounts();
+}
+
+function updateBuildoutCounts(){
+  BUILDOUT_SECTIONS.forEach(sec=>{
+    const mid='bt_s'+sec.num;
+    const boxes=document.querySelectorAll(`#mb_${mid} .bt-persist-check`);
+    const done=[...boxes].filter(b=>b.checked).length;
+    const total=boxes.length;
+    const badge=document.getElementById('sb_'+mid);
+    const abbr=document.getElementById('ban_'+mid);
+    if(badge){ badge.textContent=`${done}/${total}`; badge.classList.toggle('complete',total>0&&done===total); }
+    if(abbr){ abbr.textContent=(total>0&&done===total)?'✓':sec.num; }
+  });
+  const total=BT_ALL_BOXES.length;
+  const done=BT_ALL_BOXES.filter(b=>b.checked).length;
+  const pct=total>0?(done/total*100):0;
+  const pbar=document.getElementById('btPbar');
+  const plabel=document.getElementById('btPlabel');
+  if(pbar) pbar.style.width=pct+'%';
+  if(plabel) plabel.textContent=`${done} of ${total} complete`;
+}
+
+function resetBuildoutChecklist(){
+  if(!confirm('Reset all progress on the Buildout Todo List? This will uncheck every item and cannot be undone.'))return;
+  BT_ALL_BOXES.forEach(cb=>{ try{ localStorage.removeItem('ntc_'+cb.id); }catch{} });
+  renderBuildoutChecklist();
+}
+
+// ================================================================
+// PLATFORM BUILD CHECKLIST — single-user, process-only architecture
+// ================================================================
+const BT_BUILD_TAGS={
+  aws:{label:"AWS",cls:"bt-tag-aws"},
+  legal:{label:"Legal",cls:"bt-tag-legal"},
+  dev:{label:"Dev",cls:"bt-tag-dev"},
+  you:{label:"You",cls:"bt-tag-you"},
+  crit:{label:"Critical",cls:"bt-tag-urgent"}
+};
+
+const BUILD_SECTIONS=[
+  { num:1, title:"AWS account and BAA", sub:"The one legal step you cannot skip. Free and self-service.", groups:[
+    { label:"Account and agreement", items:[
+      {t:'Create an AWS account at aws.amazon.com (a business of one qualifies)', tags:["aws","you"]},
+      {t:'In the AWS Console, open AWS Artifact and accept the AWS Business Associate Addendum (BAA)', tags:["aws","legal","crit"], note:"This is self-service. You accept it yourself in the console — no sales call, no minimum business size, no waiting. This single BAA covers Bedrock and every other AWS service on your account."},
+      {t:'In Account Settings, designate the account as a HIPAA account if prompted', tags:["aws","legal"]}
+    ]},
+    { label:"Bedrock model access", items:[
+      {t:'Open the AWS Bedrock console and go to Model access', tags:["aws"]},
+      {t:'Request access to the Claude model you want (e.g. Claude Sonnet). Approval is usually immediate', tags:["aws"]},
+      {t:'Confirm zero data retention applies to Bedrock inference (AWS does not store prompt/response content for training)', tags:["aws","crit"], note:"This is what makes 'process, don't store' true on AWS's side. The PHI passes through, generates your report, and is not retained by AWS."}
+    ]}
+  ]},
+  { num:2, title:"AWS credentials", sub:"The keys your platform uses to talk to Bedrock. Handle carefully.", groups:[
+    { label:null, items:[
+      {t:'Create an IAM user with permission to call Bedrock only (not full account access)', tags:["aws","dev"], note:"Least privilege: this user can invoke the model and nothing else. If the key ever leaks, the damage is limited."},
+      {t:'Generate an AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY for that IAM user', tags:["aws","you"]},
+      {t:"Note your AWS region (e.g. us-west-2) — you'll need it in the environment variables", tags:["aws","you"]},
+      {t:'Save all three values in a password manager (1Password, Bitwarden). Never put them in the code or in email', tags:["you","crit"]}
+    ]}
+  ]},
+  { num:3, title:"Hosting and login", sub:"Where the platform lives and how you sign in.", groups:[
+    { label:"Hosting (Vercel)", items:[
+      {t:'Deploy the platform to Vercel (the assessment platform is already hosted at oliveclinical.com/assessmentplatform)', tags:["dev"]},
+      {t:'Confirm HTTPS is active — the padlock shows in the browser. This encrypts data in transit', tags:["dev","crit"]}
+    ]},
+    { label:"Login (single user)", items:[
+      {t:'Add a simple login so the platform is not an open public page', tags:["dev"], note:"Single-user means one set of credentials — just you. No roles, no permission tiers, no user management. A basic authenticated gate is enough."},
+      {t:'Use a reputable auth provider (e.g. Clerk) or a single strong password gate', tags:["dev"]},
+      {t:'Set the session to log out automatically after inactivity', tags:["dev"]}
+    ]}
+  ]},
+  { num:4, title:"The Bedrock connection (server-side)", sub:"The most important technical piece for keeping PHI safe.", groups:[
+    { label:null, items:[
+      {t:'Build a server-side function (Vercel Function) that receives the assessment data and calls AWS Bedrock', tags:["dev","crit"], note:"The browser talks to your server; your server talks to AWS. This keeps your AWS keys off the user's screen entirely."},
+      {t:'Confirm AWS credentials live ONLY in the server environment, never in browser code', tags:["dev","crit"], note:"Open the browser DevTools Network tab during a report run. You should never see the AWS keys. If you can see them, stop — this is a compliance problem."},
+      {t:'Use the AWS SDK v3 to call Bedrock (not the direct Anthropic SDK)', tags:["dev"]},
+      {t:'Store AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_REGION as environment variables in Vercel settings', tags:["dev","you"]},
+      {t:'Confirm the platform sends data to Bedrock, gets the report back, and holds nothing afterward', tags:["dev","crit"]}
+    ]}
+  ]},
+  { num:5, title:"Report output — download only", sub:"The report goes to your computer, then to Simple Practice.", groups:[
+    { label:null, items:[
+      {t:'The finished report generates as a downloadable Word document', tags:["dev"]},
+      {t:'Confirm the report is NOT saved to any database, bucket, or server — download only', tags:["dev","crit"], note:"This is the core of the design. No stored reports means no encrypted database, no retention rules, no audit log to build."},
+      {t:'You download the report, review it, and upload it to Simple Practice', tags:["you"]},
+      {t:'Confirm the report file is removed from your Downloads folder after upload to Simple Practice', tags:["you"], note:"Simple Practice is now the record of truth. The local copy was only a stepping stone."}
+    ]}
+  ]},
+  { num:6, title:"Your computer (the human step)", sub:"The one piece that lives outside the code.", groups:[
+    { label:null, items:[
+      {t:'Turn on full-disk encryption: FileVault (Mac) or BitLocker (Windows)', tags:["you","crit"], note:"The report touches your hard drive, even briefly. Full-disk encryption means a lost or stolen laptop doesn't expose PHI."},
+      {t:'Set the screen to lock automatically and require a password', tags:["you"]},
+      {t:"Keep the computer's operating system and browser up to date", tags:["you"]},
+      {t:'Do not use shared or public computers to run assessments', tags:["you"]}
+    ]}
+  ]},
+  { num:7, title:"Test before real data", sub:"Prove the safeguards work using fake information only.", groups:[
+    { label:null, items:[
+      {t:'Run a full test assessment using a fake name and date of birth (e.g. Test Client, 01/01/1990)', tags:["you"]},
+      {t:'Confirm the report generates correctly from Bedrock', tags:["dev"]},
+      {t:'Confirm the Word document downloads and opens correctly', tags:["dev"]},
+      {t:'Confirm nothing was saved anywhere on the platform after the test', tags:["dev","crit"]},
+      {t:'Confirm AWS credentials never appeared in the browser during the whole run', tags:["dev","crit"]},
+      {t:'Only after all tests pass: begin using real assessment data', tags:["you","crit"]}
+    ]}
+  ]},
+  { num:8, title:"Keeping it single-user", sub:"A note to your future self.", groups:[
+    { label:null, items:[
+      {t:'Understand that adding staff access later means adding stored data, roles, and audit logs', tags:["legal"], note:"The moment you want to see a colleague's reports inside the platform, you are back to the full stored-data build. For oversight, use Simple Practice — where the reports actually live — not this tool."},
+      {t:'If you ever expand, revisit HIPAA architecture with a healthcare attorney before adding users', tags:["legal"]}
+    ]}
+  ]}
+];
+
+let BT_BUILD_ALL_BOXES=[];
+
+function renderBuildChecklist(){
+  const container=document.getElementById('btBuildChecklist');
+  if(!container)return;
+  container.innerHTML='';
+
+  BUILD_SECTIONS.forEach(sec=>{
+    const mid='bt_b'+sec.num;
+    let itemCounter=0;
+    let bodyHTML='';
+    sec.groups.forEach(group=>{
+      if(group.label) bodyHTML+=`<div class="bt-group-label">${group.label}</div>`;
+      group.items.forEach(item=>{
+        itemCounter++;
+        const cid=`bt_b${sec.num}_${itemCounter}`;
+        let checked=false;
+        try{ checked=localStorage.getItem('ntc_'+cid)==='1'; }catch{}
+        const tagsHTML=item.tags.map(tg=>`<span class="bt-tag ${BT_BUILD_TAGS[tg].cls}">${BT_BUILD_TAGS[tg].label}</span>`).join('');
+        bodyHTML+=`<label class="bt-item-row${checked?' done':''}" id="row_${cid}">
+          <input type="checkbox" class="bt-persist-check" id="${cid}" ${checked?'checked':''}>
+          <span class="bt-item-text">${item.t}<span class="bt-tags">${tagsHTML}</span></span>
+        </label>`;
+        if(item.note) bodyHTML+=`<div class="bt-item-note">${item.note}</div>`;
+      });
+    });
+    const total=itemCounter;
+    const cardHTML=`<div class="measure-card">
+      <div class="measure-header" onclick="tog('${mid}')">
+        <div class="measure-header-left">
+          <span class="measure-abbr" id="ban_${mid}">${sec.num}</span>
+          <div>
+            <span class="measure-name">${sec.title}</span>
+            <div class="bt-section-sub">${sec.sub}</div>
+          </div>
+        </div>
+        <span class="score-badge" id="sb_${mid}">0/${total}</span>
+        <span class="chevron" id="cv_${mid}">▼</span>
+      </div>
+      <div class="measure-body" id="mb_${mid}">${bodyHTML}</div>
+    </div>`;
+    container.insertAdjacentHTML('beforeend',cardHTML);
+  });
+
+  BT_BUILD_ALL_BOXES=[...document.querySelectorAll('#btBuildChecklist .bt-persist-check')];
+  BT_BUILD_ALL_BOXES.forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      try{ localStorage.setItem('ntc_'+cb.id, cb.checked?'1':'0'); }catch{}
+      const row=document.getElementById('row_'+cb.id);
+      if(row) row.classList.toggle('done',cb.checked);
+      updateBuildCounts();
+    });
+  });
+
+  BUILD_SECTIONS.some(sec=>{
+    const mid='bt_b'+sec.num;
+    const boxes=document.querySelectorAll(`#mb_${mid} .bt-persist-check`);
+    const done=[...boxes].filter(b=>b.checked).length;
+    if(done<boxes.length){
+      document.getElementById('mb_'+mid).classList.add('open');
+      document.getElementById('cv_'+mid).classList.add('open');
+      return true;
+    }
+    return false;
+  });
+
+  updateBuildCounts();
+}
+
+function updateBuildCounts(){
+  BUILD_SECTIONS.forEach(sec=>{
+    const mid='bt_b'+sec.num;
+    const boxes=document.querySelectorAll(`#mb_${mid} .bt-persist-check`);
+    const done=[...boxes].filter(b=>b.checked).length;
+    const total=boxes.length;
+    const badge=document.getElementById('sb_'+mid);
+    const abbr=document.getElementById('ban_'+mid);
+    if(badge){ badge.textContent=`${done}/${total}`; badge.classList.toggle('complete',total>0&&done===total); }
+    if(abbr){ abbr.textContent=(total>0&&done===total)?'✓':sec.num; }
+  });
+  const total=BT_BUILD_ALL_BOXES.length;
+  const done=BT_BUILD_ALL_BOXES.filter(b=>b.checked).length;
+  const pct=total>0?(done/total*100):0;
+  const pbar=document.getElementById('btBuildPbar');
+  const plabel=document.getElementById('btBuildPlabel');
+  if(pbar) pbar.style.width=pct+'%';
+  if(plabel) plabel.textContent=`${done} of ${total} complete`;
+}
+
+function resetBuildChecklist(){
+  if(!confirm('Reset all progress on the Platform Build Checklist? This will uncheck every item and cannot be undone.'))return;
+  BT_BUILD_ALL_BOXES.forEach(cb=>{ try{ localStorage.removeItem('ntc_'+cb.id); }catch{} });
+  renderBuildChecklist();
 }
 
 const CLINIC_FIELDS=['clinic_name','clinic_clinician','clinic_license','clinic_npi','clinic_phone','clinic_email','clinic_address','clinic_tax','clinic_website'];
@@ -5824,7 +6048,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   initIntakeForm();
   initClientInfo();
   initClinicInfo();
-  initBuildoutChecklist();
+  renderBuildoutChecklist();
+  renderBuildChecklist();
   initGCal();
   initGamesSkills();
   initTreatmentPlan();
