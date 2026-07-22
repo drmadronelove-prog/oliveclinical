@@ -2423,10 +2423,105 @@ Autism:{
     }
   },
   raadsr:{
-    name:"RAADS-R",abbr:"RAADS-R",type:"entry",primary:false,
-    note:"Enter total and subscale scores from separately administered RAADS-R. Threshold: ≥65 consistent with autism; ≥90 strongly consistent.",
+    name:"Ritvo Autism Asperger Diagnostic Scale — Revised (RAADS-R)",abbr:"RAADS-R",warn:true,primary:false,
+    note:"© Riva Ariella Ritvo, Ph.D. and Edward Ritvo, M.D., 2007 (Ritvo et al., 2011, J Autism Dev Disord 41:1076–1089). 80 items; 17 items (marked * below) are reverse-scored normative items per the official scoring key. Total range 0–240; ≥65 consistent with autism, ≥90 strongly consistent. Subscale breakdown (Social Relatedness /88, Language /28, Sensory-Motor /60, Circumscribed Interests /64) requires the original publication's item-to-subscale key and is entered separately below if computed via a validated scoring tool.",
+    instr:"Some life experiences and personality characteristics that may apply to you. For each statement, check the single column that best applies. There are no right or wrong answers.",
+    scale:{l:["True now and when I was young","True only now","True only when I was younger than 16","Never true"],v:[3,2,1,0]},
+    items:[
+      {q:"I am a sympathetic person.",d:"rev"},
+      {q:"I often use words and phrases from movies and television in conversations.",d:"std"},
+      {q:"I am often surprised when others tell me I have been rude.",d:"std"},
+      {q:"Sometimes I talk too loudly or too softly, and I am not aware of it.",d:"std"},
+      {q:"I often don't know how to act in social situations.",d:"std"},
+      {q:"I can \"put myself in other people's shoes.\"",d:"rev"},
+      {q:"I have a hard time figuring out what some phrases mean, like \"you are the apple of my eye.\"",d:"std"},
+      {q:"I only like to talk to people who share my special interests.",d:"std"},
+      {q:"I focus on details rather than the overall idea.",d:"std"},
+      {q:"I always notice how food feels in my mouth. This is more important to me than how it tastes.",d:"std"},
+      {q:"I miss my best friends or family when we are apart for a long time.",d:"rev"},
+      {q:"Sometimes I offend others by saying what I am thinking, even if I don't mean to.",d:"std"},
+      {q:"I only like to think and talk about a few things that interest me.",d:"std"},
+      {q:"I'd rather go out to eat in a restaurant by myself than with someone I know.",d:"std"},
+      {q:"I cannot imagine what it would be like to be someone else.",d:"std"},
+      {q:"I have been told that I am clumsy or uncoordinated.",d:"std"},
+      {q:"Others consider me odd or different.",d:"std"},
+      {q:"I understand when friends need to be comforted.",d:"rev"},
+      {q:"I am very sensitive to the way my clothes feel when I touch them. How they feel is more important to me than how they look.",d:"std"},
+      {q:"I like to copy the way certain people speak and act. It helps me appear more normal.",d:"std"},
+      {q:"It can be very intimidating for me to talk to more than one person at the same time.",d:"std"},
+      {q:"I have to \"act normal\" to please other people and make them like me.",d:"std"},
+      {q:"Meeting new people is usually easy for me.",d:"rev"},
+      {q:"I get highly confused when someone interrupts me when I am talking about something I am very interested in.",d:"std"},
+      {q:"It is difficult for me to understand how other people are feeling when we are talking.",d:"std"},
+      {q:"I like having a conversation with several people, for instance around a dinner table, at school or at work.",d:"rev"},
+      {q:"I take things too literally, so I often miss what people are trying to say.",d:"std"},
+      {q:"It is very difficult for me to understand when someone is embarrassed or jealous.",d:"std"},
+      {q:"Some ordinary textures that do not bother others feel very offensive when they touch my skin.",d:"std"},
+      {q:"I get extremely upset when the way I like to do things is suddenly changed.",d:"std"},
+      {q:"I have never wanted or needed to have what other people call an \"intimate relationship.\"",d:"std"},
+      {q:"It is difficult for me to start and stop a conversation. I need to keep going until I am finished.",d:"std"},
+      {q:"I speak with a normal rhythm.",d:"rev"},
+      {q:"The same sound, color or texture can suddenly change from very sensitive to very dull.",d:"std"},
+      {q:"The phrase \"I've got you under my skin\" makes me very uncomfortable.",d:"std"},
+      {q:"Sometimes the sound of a word or a high-pitched noise can be painful to my ears.",d:"std"},
+      {q:"I am an understanding type of person.",d:"rev"},
+      {q:"I do not connect with characters in movies and cannot feel what they feel.",d:"std"},
+      {q:"I cannot tell when someone is flirting with me.",d:"std"},
+      {q:"I can see in my mind in exact detail things that I am interested in.",d:"std"},
+      {q:"I keep lists of things that interest me, even when they have no practical use (for example sports statistics, train schedules, calendar dates, historical facts and dates).",d:"std"},
+      {q:"When I feel overwhelmed by my senses, I have to isolate myself to shut them down.",d:"std"},
+      {q:"I like to talk things over with my friends.",d:"rev"},
+      {q:"I cannot tell if someone is interested or bored with what I am saying.",d:"std"},
+      {q:"It can be very hard to read someone's face, hand and body movements when they are talking.",d:"std"},
+      {q:"The same thing (like clothes or temperatures) can feel very different to me at different times.",d:"std"},
+      {q:"I feel very comfortable with dating or being in social situations with others.",d:"rev"},
+      {q:"I try to be as helpful as I can when other people tell me their personal problems.",d:"rev"},
+      {q:"I have been told that I have an unusual voice (for example flat, monotone, childish, or high-pitched).",d:"std"},
+      {q:"Sometimes a thought or a subject gets stuck in my mind and I have to talk about it even if no one is interested.",d:"std"},
+      {q:"I do certain things with my hands over and over again (like flapping, twirling sticks or strings, waving things by my eyes).",d:"std"},
+      {q:"I have never been interested in what most of the people I know consider interesting.",d:"std"},
+      {q:"I am considered a compassionate type of person.",d:"rev"},
+      {q:"I get along with other people by following a set of specific rules that help me look normal.",d:"std"},
+      {q:"It is very difficult for me to work and function in groups.",d:"std"},
+      {q:"When I am talking to someone, it is hard to change the subject. If the other person does so, I can get very upset and confused.",d:"std"},
+      {q:"Sometimes I have to cover my ears to block out painful noises (like vacuum cleaners or people talking too much or too loudly).",d:"std"},
+      {q:"I can chat and make small talk with people.",d:"rev"},
+      {q:"Sometimes things that should feel painful are not (for instance when I hurt myself or burn my hand on a stove).",d:"std"},
+      {q:"When talking to someone, I have a hard time telling when it is my turn to talk or to listen.",d:"std"},
+      {q:"I am considered a loner by those who know me best.",d:"std"},
+      {q:"I usually speak in a normal tone.",d:"rev"},
+      {q:"I like things to be exactly the same day after day and even small changes in my routines upset me.",d:"std"},
+      {q:"How to make friends and socialize is a mystery to me.",d:"std"},
+      {q:"It calms me to spin around or to rock in a chair when I am feeling stressed.",d:"std"},
+      {q:"The phrase, \"He wears his heart on his sleeve,\" does not make sense to me.",d:"std"},
+      {q:"If I am in a place where there are many smells, textures to feel, noises or bright lights, I feel anxious or frightened.",d:"std"},
+      {q:"I can tell when someone says one thing but means something else.",d:"rev"},
+      {q:"I like to be by myself as much as I can.",d:"std"},
+      {q:"I keep my thoughts stacked in my memory like they are on filing cards, and I pick out the ones I need by looking through the stack and finding the right one (or another unique way).",d:"std"},
+      {q:"The same sound sometimes seems very loud or very soft, even though I know it has not changed.",d:"std"},
+      {q:"I enjoy spending time eating and talking with my family and friends.",d:"rev"},
+      {q:"I can't tolerate things I dislike (like smells, textures, sounds or colors).",d:"std"},
+      {q:"I don't like to be hugged or held.",d:"std"},
+      {q:"When I go somewhere, I have to follow a familiar route or I can get very confused and upset.",d:"std"},
+      {q:"It is difficult to figure out what other people expect of me.",d:"std"},
+      {q:"I like to have close friends.",d:"rev"},
+      {q:"People tell me that I give too much detail.",d:"std"},
+      {q:"I am often told that I ask embarrassing questions.",d:"std"},
+      {q:"I tend to point out other people's mistakes.",d:"std"}
+    ],
+    score(r){
+      let t=0;
+      this.items.forEach((item,i)=>{
+        if(r[i]===null)return;
+        t += item.d==='rev' ? (3-r[i]) : r[i];
+      });
+      return {"RAADS-R Total":t+"/240"+(t>=65?" ⚑ ≥65 (consistent with autism)":"")+(t>=90?" ⚑⚑ ≥90 strongly consistent":"")};
+    }
+  },
+  raadsrSubscales:{
+    name:"RAADS-R — Subscale Scores",abbr:"RAADS-R Subscales",type:"entry",primary:false,
+    note:"Optional. Enter subscale scores only if computed via a validated scoring tool using the original item-to-subscale key (Ritvo et al., 2011, Table 9) — not auto-derived from the item responses above.",
     fields:[
-      {id:"raadsTotal",l:"Total Score",h:"≥65 threshold, max 240"},
       {id:"raadsSocial",l:"Social Relatedness",h:"max 88"},
       {id:"raadsLang",l:"Language",h:"max 28"},
       {id:"raadsSens",l:"Sensory-Motor",h:"max 60"},
@@ -4301,7 +4396,6 @@ function renderReportModules(){
 
     if(mod==='Autism'){
       h+=`<div class="form-grid" style="margin-top:10px;">
-        <div class="field"><label>RAADS-R Total <span style="color:var(--text-muted);font-style:italic;font-size:10px;">≥65</span></label><input type="number" id="rpt_raadsTotal" min="0" max="240" placeholder="—"></div>
         <div class="field"><label>Social Relatedness</label><input type="number" id="rpt_raadsSocial" min="0" max="88" placeholder="—"></div>
         <div class="field"><label>Language</label><input type="number" id="rpt_raadsLang" min="0" max="28" placeholder="—"></div>
         <div class="field"><label>Sensory-Motor</label><input type="number" id="rpt_raadsSens" min="0" max="60" placeholder="—"></div>
@@ -4831,7 +4925,7 @@ function buildMsg(){
   // Legacy quick-entry fields on the Report Generator tab — checked first, falling back to the
   // matching Diagnostic Assessment entry field of the same measure.
   const RPT_FALLBACK={
-    Autism:{raadsTotal:'rpt_raadsTotal',raadsSocial:'rpt_raadsSocial',raadsLang:'rpt_raadsLang',raadsSens:'rpt_raadsSens'},
+    Autism:{raadsSocial:'rpt_raadsSocial',raadsLang:'rpt_raadsLang',raadsSens:'rpt_raadsSens'},
     ADHD:{caarsInatt:'rpt_caarsI',caarsHyper:'rpt_caarsH',caarsTotal:'rpt_caarsX',collateralInatt:'rpt_collat'}
   };
 
