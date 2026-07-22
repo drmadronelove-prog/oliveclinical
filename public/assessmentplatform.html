@@ -2358,7 +2358,7 @@ Autism:{
     ]
   },
   vineland3:{
-    name:"Vineland Adaptive Behavior Scales — Third Edition (Vineland-3)",abbr:"Vineland-3",type:"entry",primary:true,reporter:"optional",
+    name:"Vineland Adaptive Behavior Scales — Third Edition (Vineland-3)",abbr:"Vineland-3",type:"entry",primary:true,reporter:"other",
     note:"Pearson-licensed. Enter standard scores (M=100, SD=15) from the administered form (Comprehensive Interview, Domain-Level, or Rating Scale).",
     fields:[
       {id:"vinelandABC",l:"Adaptive Behavior Composite",h:"standard score, M=100/SD=15"},
@@ -2385,7 +2385,7 @@ Autism:{
     ]
   },
   catq:{
-    name:"Camouflaging Autistic Traits Questionnaire",abbr:"CAT-Q",warn:true,primary:false,reporter:"optional",
+    name:"Camouflaging Autistic Traits Questionnaire",abbr:"CAT-Q",warn:true,primary:true,reporter:"self",
     instr:"The following statements describe ways that people interact with others. Please indicate how much each statement applies to you.",
     scale:{l:["Strongly Disagree","2","3","4","5","6","Strongly Agree"],v:[1,2,3,4,5,6,7]},
     subs:{C:[0,2,4,6,11,18,19,20,24],A:[1,3,5,9,12,15,21],K:[7,8,10,13,14,16,17,22,23]},
@@ -2423,7 +2423,7 @@ Autism:{
     }
   },
   raadsr:{
-    name:"Ritvo Autism Asperger Diagnostic Scale — Revised (RAADS-R)",abbr:"RAADS-R",warn:true,primary:false,reporter:"optional",
+    name:"Ritvo Autism Asperger Diagnostic Scale — Revised (RAADS-R)",abbr:"RAADS-R",warn:true,primary:true,reporter:"self",
     note:"© Riva Ariella Ritvo, Ph.D. and Edward Ritvo, M.D., 2007 (Ritvo et al., 2011, J Autism Dev Disord 41:1076–1089). 80 items; 17 items (marked * below) are reverse-scored normative items per the official scoring key. Total range 0–240; ≥65 consistent with autism, ≥90 strongly consistent. Subscale breakdown (Social Relatedness /88, Language /28, Sensory-Motor /60, Circumscribed Interests /64) requires the original publication's item-to-subscale key and is entered separately below if computed via a validated scoring tool.",
     instr:"Some life experiences and personality characteristics that may apply to you. For each statement, check the single column that best applies. There are no right or wrong answers.",
     scale:{l:["True now and when I was young","True only now","True only when I was younger than 16","Never true"],v:[3,2,1,0]},
@@ -2529,44 +2529,12 @@ Autism:{
     ]
   },
   rmet:{
-    name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:false,reporter:"optional",
+    name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:true,reporter:"self",
     note:"Baron-Cohen et al. (2001), Autism Research Centre, University of Cambridge. The RMET's 36 items are copyrighted photographic stimuli (black-and-white photographs of the eye region, each with 4 forced-choice mental-state words) — the images themselves are the licensed test content and cannot be reproduced here. Administer the official stimulus set/booklet or licensed digital version separately, then enter the resulting score. Adult norms: general population mean ≈26/36; autistic-sample mean ≈21/36. No single validated clinical cutoff — interpret relative to population norms and convergent evidence.",
     fields:[
       {id:"rmetTotal",l:"Total Correct",h:"out of 36 (Revised Adult version)"},
       {id:"rmetVersion",l:"Version / Form Used",h:"e.g., Revised Adult 36-item, Child version"},
       {id:"rmetNotes",l:"Administration Notes",h:"e.g., practice item used, any items omitted"}
-    ]
-  },
-  collateralaq:{
-    name:"AQ-50 Collateral / Observer Report",abbr:"AQ-Collateral",type:"entry",primary:false,reporter:"optional",
-    note:"Enter total score from collateral AQ-50 completed by a trusted person who knows the client well. Optional but clinically valuable for high-masking presentations.",
-    fields:[
-      {id:"collateralAQTotal",l:"Collateral AQ-50 Total",h:"≥32 threshold, max 50"},
-      {id:"collateralSource",l:"Relationship to Client",h:"e.g., partner, parent, sibling"}
-    ]
-  },
-  autism_ci:{
-    name:"Autism Spectrum — Structured Clinical Interview",abbr:"ASD CI",type:"interview",reporter:"optional",
-    sections:[
-      {id:"A1",label:"Criterion A1 — Social-Emotional Reciprocity",ph:"Deficits in: back-and-forth conversation; sharing interests/emotions/affect; initiating or responding to social interactions.\n\nClient reported:\n\nObserved in session:\n\nHistorical examples:\n\nMasking/compensation noted:"},
-      {id:"A2",label:"Criterion A2 — Nonverbal Communication",ph:"Deficits in: eye contact; body language; facial expressions; understanding nonverbal cues; integrating verbal and nonverbal communication.\n\nClient reported:\n\nObserved in session:\n\nHistorical examples:"},
-      {id:"A3",label:"Criterion A3 — Developing and Maintaining Relationships",ph:"Difficulties: adjusting behavior to social context; imaginative play; making/keeping friends; interest in peers.\n\nClient reported:\n\nHistorical examples:\n\nCurrent social landscape:"},
-      {id:"B1",label:"Criterion B1 — Stereotyped/Repetitive Motor, Speech, or Object Use",ph:"Simple/complex motor stereotypies; echolalia; idiosyncratic phrases; lining up or flipping objects.\n\nPresent? Examples:"},
-      {id:"B2",label:"Criterion B2 — Insistence on Sameness / Routines / Ritualized Patterns",ph:"Extreme distress at small changes; difficulties with transitions; rigid thinking patterns; greeting rituals; same routes or foods.\n\nPresent? Examples:"},
-      {id:"B3",label:"Criterion B3 — Highly Restricted, Fixated Interests",ph:"Abnormal in intensity or focus; current and historical special interests; depth of engagement; identity-significance.\n\nPresent? Examples:"},
-      {id:"B4",label:"Criterion B4 — Hyper/Hyporeactivity to Sensory Input",ph:"Seeking or avoiding: sounds, textures, pain, temperature, light, smell, taste, vestibular, proprioceptive.\n\nSensory seeking behaviors:\nSensory avoiding behaviors:\nFunctional impact:"},
-      {id:"masking",label:"Masking History and Late Diagnosis Context",ph:"Age of first suspicion or self-identification:\nContexts where masking is most effortful:\nMasking fatigue / burnout episodes:\nHow diagnosis was missed previously:\nCultural or gender factors affecting presentation:\nExhaustion after social situations:"},
-      {id:"dev_hx",label:"Early Developmental History",ph:"Language milestones:\nMotor milestones:\nEarly play patterns:\nSchool adjustment and peer relationships:\nFriendship history:\nAny regression noted:\nFamily history of neurodivergence:"}
-    ]
-  },
-  collateral_autism:{
-    name:"Collateral Informant Interview — Autism",abbr:"Collateral",type:"interview",primary:false,reporter:"optional",
-    note:"Interview with person who knew client in childhood and/or observes current functioning. Particularly valuable for masking presentations where self-report may underrepresent autistic traits.",
-    sections:[
-      {id:"informant",label:"Informant Information",ph:"Name/relationship to client:\nHow long known:\nContext of observation:\nFrequency of contact:"},
-      {id:"childhood",label:"Childhood Observations",ph:"Social behavior and peer relationships in childhood:\nCommunication style:\nPlay patterns and interests:\nRigidity or routines observed:\nSensory behaviors:\nHow they differed from peers:\nTeacher or parent feedback at the time:"},
-      {id:"current",label:"Current Observations",ph:"Social communication style currently:\nBehaviors that stand out:\nHow they navigate social situations:\nRigidity or routines currently:\nSensory behaviors:\nImpact on daily functioning:"},
-      {id:"other",label:"Additional Observations",ph:""}
     ]
   }
 },
@@ -5463,10 +5431,7 @@ const BUILDOUT_SECTIONS=[
       {t:'Cambridge Behaviour Scale / Empathy Quotient (EQ) — Baron-Cohen & Wheelwright, Autism Research Centre; confirm free research/clinical use terms', tags:["legal"]},
       {t:'RMET (Reading the Mind in the Eyes Test, Revised) — Autism Research Centre; the 36 eye-region photographs are licensed stimuli and are NOT reproduced in-platform — confirm how the practice will source/administer the official stimulus set (booklet or licensed digital tool) and log results via score entry', tags:["legal","urgent"]},
       {t:'SRS (Social Responsiveness Scale, SRS-2) — WPS licensed; confirm adult form availability, cost, and scoring software; note it is typically used as an observer/self-report adjunct', tags:["legal","finance"]},
-      {t:'MIGDAS-2 (Monteiro Interview Guidelines for Diagnosing Autism Spectrum Disorder) — confirm publisher (AAPC), licensing, and whether postdocs need specific training before administering', tags:["legal","hiring"]},
-      {t:'AQ-50 Collateral / Observer Report — same licensing as AQ-50; confirm applicability for observer use', tags:["legal"]},
-      {t:'Autism Spectrum Structured Clinical Interview — confirm it is a custom structured interview with no separate license', tags:[]},
-      {t:'Collateral Informant Interview — Autism (custom structured interview; no licensing needed)', tags:[]}
+      {t:'MIGDAS-2 (Monteiro Interview Guidelines for Diagnosing Autism Spectrum Disorder) — confirm publisher (AAPC), licensing, and whether postdocs need specific training before administering', tags:["legal","hiring"]}
     ]},
     { label:"OCD module", items:[
       {t:'OCI-R (Obsessive-Compulsive Inventory — Revised) — Foa et al.; confirm free clinical use', tags:["legal"]},
