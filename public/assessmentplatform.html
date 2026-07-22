@@ -2242,13 +2242,90 @@ Autism:{
     }
   },
   eq:{
-    name:"Cambridge Behavior Scale (EQ)",abbr:"EQ",type:"entry",primary:true,
-    note:"Empathy Quotient (Baron-Cohen et al.), developed by the Autism Research Centre, University of Cambridge. Enter total and, if scored, subscale values from the separately administered EQ. General population mean ≈42; autistic mean ≈20 (0–80 range, lower scores associated with autism).",
+    name:"Cambridge Behaviour Scale (Empathy Quotient)",abbr:"EQ",warn:true,primary:true,
+    note:"Empathy Quotient (Baron-Cohen & Wheelwright, 2004; © MRC-SBC/SJW 1999), developed by the Autism Research Centre, University of Cambridge. 60 items — 40 scored, 20 unscored filler items included to reduce response bias. All 60 must be answered for the scale to be valid. General population mean ≈42; autistic-sample mean ≈20 (0–80 range; lower scores associated with autism).",
+    instr:"Please read each statement very carefully and rate how strongly you agree or disagree with it. There are no right or wrong answers, or trick questions. In order for the scale to be valid, you must answer every question.",
+    scale:{l:["Strongly Agree","Slightly Agree","Slightly Disagree","Strongly Disagree"],v:[1,2,3,4]},
+    items:[
+      {q:"I can easily tell if someone else wants to enter a conversation.",d:"pos"},
+      {q:"I prefer animals to humans.",d:"fil"},
+      {q:"I try to keep up with the current trends and fashions.",d:"fil"},
+      {q:"I find it difficult to explain to others things that I understand easily, when they don't understand it first time.",d:"neg"},
+      {q:"I dream most nights.",d:"fil"},
+      {q:"I really enjoy caring for other people.",d:"pos"},
+      {q:"I try to solve my own problems rather than discussing them with others.",d:"fil"},
+      {q:"I find it hard to know what to do in a social situation.",d:"neg"},
+      {q:"I am at my best first thing in the morning.",d:"fil"},
+      {q:"People often tell me that I went too far in driving my point home in a discussion.",d:"neg"},
+      {q:"It doesn't bother me too much if I am late meeting a friend.",d:"neg"},
+      {q:"Friendships and relationships are just too difficult, so I tend not to bother with them.",d:"neg"},
+      {q:"I would never break a law, no matter how minor.",d:"fil"},
+      {q:"I often find it difficult to judge if something is rude or polite.",d:"neg"},
+      {q:"In a conversation, I tend to focus on my own thoughts rather than on what my listener might be thinking.",d:"neg"},
+      {q:"I prefer practical jokes to verbal humour.",d:"fil"},
+      {q:"I live life for today rather than the future.",d:"fil"},
+      {q:"When I was a child, I enjoyed cutting up worms to see what would happen.",d:"neg"},
+      {q:"I can pick up quickly if someone says one thing but means another.",d:"pos"},
+      {q:"I tend to have very strong opinions about morality.",d:"fil"},
+      {q:"It is hard for me to see why some things upset people so much.",d:"neg"},
+      {q:"I find it easy to put myself in somebody else's shoes.",d:"pos"},
+      {q:"I think that good manners are the most important thing a parent can teach their child.",d:"fil"},
+      {q:"I like to do things on the spur of the moment.",d:"fil"},
+      {q:"I am good at predicting how someone will feel.",d:"pos"},
+      {q:"I am quick to spot when someone in a group is feeling awkward or uncomfortable.",d:"pos"},
+      {q:"If I say something that someone else is offended by, I think that that's their problem, not mine.",d:"neg"},
+      {q:"If anyone asked me if I liked their haircut, I would reply truthfully, even if I didn't like it.",d:"neg"},
+      {q:"I can't always see why someone should have felt offended by a remark.",d:"neg"},
+      {q:"People often tell me that I am very unpredictable.",d:"fil"},
+      {q:"I enjoy being the centre of attention at any social gathering.",d:"fil"},
+      {q:"Seeing people cry doesn't really upset me.",d:"neg"},
+      {q:"I enjoy having discussions about politics.",d:"fil"},
+      {q:"I am very blunt, which some people take to be rudeness, even though this is unintentional.",d:"neg"},
+      {q:"I don't tend to find social situations confusing.",d:"pos"},
+      {q:"Other people tell me I am good at understanding how they are feeling and what they are thinking.",d:"pos"},
+      {q:"When I talk to people, I tend to talk about their experiences rather than my own.",d:"pos"},
+      {q:"It upsets me to see an animal in pain.",d:"pos"},
+      {q:"I am able to make decisions without being influenced by people's feelings.",d:"neg"},
+      {q:"I can't relax until I have done everything I had planned to do that day.",d:"fil"},
+      {q:"I can easily tell if someone else is interested or bored with what I am saying.",d:"pos"},
+      {q:"I get upset if I see people suffering on news programmes.",d:"pos"},
+      {q:"Friends usually talk to me about their problems as they say that I am very understanding.",d:"pos"},
+      {q:"I can sense if I am intruding, even if the other person doesn't tell me.",d:"pos"},
+      {q:"I often start new hobbies but quickly become bored with them and move on to something else.",d:"fil"},
+      {q:"People sometimes tell me that I have gone too far with teasing.",d:"neg"},
+      {q:"I would be too nervous to go on a big rollercoaster.",d:"fil"},
+      {q:"Other people often say that I am insensitive, though I don't always see why.",d:"neg"},
+      {q:"If I see a stranger in a group, I think that it is up to them to make an effort to join in.",d:"neg"},
+      {q:"I usually stay emotionally detached when watching a film.",d:"neg"},
+      {q:"I like to be very organised in day to day life and often make lists of the chores I have to do.",d:"fil"},
+      {q:"I can tune into how someone else feels rapidly and intuitively.",d:"pos"},
+      {q:"I don't like to take risks.",d:"fil"},
+      {q:"I can easily work out what another person might want to talk about.",d:"pos"},
+      {q:"I can tell if someone is masking their true emotion.",d:"pos"},
+      {q:"Before making a decision I always weigh up the pros and cons.",d:"fil"},
+      {q:"I don't consciously work out the rules of social situations.",d:"pos"},
+      {q:"I am good at predicting what someone will do.",d:"pos"},
+      {q:"I tend to get emotionally involved with a friend's problems.",d:"pos"},
+      {q:"I can usually appreciate the other person's viewpoint, even if I don't agree with it.",d:"pos"}
+    ],
+    score(r){
+      let t=0,ans=0;
+      this.items.forEach((item,i)=>{
+        if(r[i]===null)return;
+        ans++;
+        if(item.d==='pos'){ if(r[i]===1)t+=2; else if(r[i]===2)t+=1; }
+        else if(item.d==='neg'){ if(r[i]===4)t+=2; else if(r[i]===3)t+=1; }
+      });
+      return {"EQ Total":t+"/80"+(t<=30?" ⚑ ≤30 (low; autism-consistent range)":"")};
+    }
+  },
+  eqSubscales:{
+    name:"Cambridge Behaviour Scale (EQ) — Factor Subscales",abbr:"EQ Subscales",type:"entry",primary:false,
+    note:"Optional. Lawrence et al. (2004) identified a 3-factor, 28-item solution within the EQ (Cognitive Empathy, Emotional Reactivity, Social Skills). Enter subscale scores only if computed via a validated scoring tool — not auto-derived from the item responses above.",
     fields:[
-      {id:"eqTotal",l:"EQ Total Score",h:"0–80 range; lower scores associated with autism (general population mean ~42)"},
-      {id:"eqCognitive",l:"Cognitive Empathy",h:"optional subscale, if scored"},
-      {id:"eqEmotional",l:"Emotional Reactivity",h:"optional subscale, if scored"},
-      {id:"eqSocialSkills",l:"Social Skills",h:"optional subscale, if scored"}
+      {id:"eqCognitive",l:"Cognitive Empathy",h:"optional subscale, if separately scored"},
+      {id:"eqEmotional",l:"Emotional Reactivity",h:"optional subscale, if separately scored"},
+      {id:"eqSocialSkills",l:"Social Skills",h:"optional subscale, if separately scored"}
     ]
   },
   srs2_self:{
@@ -2354,6 +2431,15 @@ Autism:{
       {id:"raadsLang",l:"Language",h:"max 28"},
       {id:"raadsSens",l:"Sensory-Motor",h:"max 60"},
       {id:"raadsCirc",l:"Circumscribed Interests",h:"max 64"}
+    ]
+  },
+  rmet:{
+    name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:false,
+    note:"Baron-Cohen et al. (2001), Autism Research Centre, University of Cambridge. The RMET's 36 items are copyrighted photographic stimuli (black-and-white photographs of the eye region, each with 4 forced-choice mental-state words) — the images themselves are the licensed test content and cannot be reproduced here. Administer the official stimulus set/booklet or licensed digital version separately, then enter the resulting score. Adult norms: general population mean ≈26/36; autistic-sample mean ≈21/36. No single validated clinical cutoff — interpret relative to population norms and convergent evidence.",
+    fields:[
+      {id:"rmetTotal",l:"Total Correct",h:"out of 36 (Revised Adult version)"},
+      {id:"rmetVersion",l:"Version / Form Used",h:"e.g., Revised Adult 36-item, Child version"},
+      {id:"rmetNotes",l:"Administration Notes",h:"e.g., practice item used, any items omitted"}
     ]
   },
   collateralaq:{
@@ -4054,7 +4140,11 @@ function buildEntryCard(mod,key,m){
       <div class="score-entry-box">
         <div class="score-entry-note">${m.note}</div>
         <div class="form-grid cols-3">`;
-  m.fields.forEach(f=>h+=`<div class="field"><label>${f.l}<br><span class="hint">${f.h}</span></label><input type="${f.id.includes('Source')||f.id.includes('source')?'text':'number'}" id="entry_${mod}_${f.id}" min="0" placeholder="—"></div>`);
+  const TEXT_FIELD_RE=/source|form|version|relationship|respondent|notes|summary/i;
+  m.fields.forEach(f=>{
+    const isText=TEXT_FIELD_RE.test(f.id);
+    h+=`<div class="field"><label>${f.l}<br><span class="hint">${f.h}</span></label><input type="${isText?'text':'number'}" id="entry_${mod}_${f.id}" ${isText?'':'min="0"'} placeholder="—"></div>`;
+  });
   h+=`</div></div></div></div>`;
   return h;
 }
@@ -4199,7 +4289,7 @@ function renderReportModules(){
 
     for(let key in M[mod]){
       const m=M[mod][key];
-      if(m.type==='entry'){h+=`<span class="sc-pill pending">RAADS-R: enter below</span>`;continue;}
+      if(m.type==='entry'){h+=`<span class="sc-pill pending">${m.abbr}: enter below</span>`;continue;}
       if(m.score&&responses[mod]&&responses[mod][key]){
         const sc=m.score(responses[mod][key]);
         for(let l in sc)h+=`<span class="sc-pill">${l}: ${sc[l]}</span>`;
@@ -4406,6 +4496,8 @@ CAARS T-scores: ≥65 clinically elevated (>1.5 SD); ≥70 markedly elevated (>2
 DIVA-5: Adult threshold ≥5 symptoms each domain; childhood onset evidence required.
 AQ-50: ≥32 consistent with autism; 26–31 borderline; mean in autistic samples ~35.
 RAADS-R: ≥65 consistent; ≥90 strongly consistent. Max 240.
+Cambridge Behaviour Scale / EQ: Max 80. No hard clinical cutoff; general population mean ~42, autistic-sample mean ~20. Scores ≤30 are in the autism-consistent low range — interpret alongside AQ-50/RAADS-R/CAT-Q, not in isolation.
+RMET (Reading the Mind in the Eyes, Revised): Max 36 correct. No single validated clinical cutoff; general population mean ~26/36, autistic-sample mean ~21/36. Lower scores indicate reduced ability to infer mental states from the eye region.
 CAT-Q: ≥100 high camouflaging. Compensation max 63, Assimilation max 49, Masking max 63.
 OCI-R: ≥21 clinical. Subscale cutoffs: Washing ≥4, Obsessing ≥8, Hoarding ≥7, Ordering ≥9, Checking ≥9, Neutralizing ≥5.
 Y-BOCS: 0–7 subclinical; 8–15 mild; 16–23 moderate; 24–31 severe; 32–40 extreme.
@@ -5255,6 +5347,8 @@ const BUILDOUT_SECTIONS=[
       {t:'AQ-50 (Autism Spectrum Quotient) — Baron-Cohen et al.; confirm free research/clinical use terms', tags:["legal"]},
       {t:'CAT-Q (Camouflaging Autistic Traits Questionnaire) — confirm free clinical use and current scoring norms', tags:["legal"]},
       {t:'RAADS-R (Ritvo Autism Asperger Diagnostic Scale — Revised) — confirm licensing and scoring threshold (≥65)', tags:["legal"]},
+      {t:'Cambridge Behaviour Scale / Empathy Quotient (EQ) — Baron-Cohen & Wheelwright, Autism Research Centre; confirm free research/clinical use terms', tags:["legal"]},
+      {t:'RMET (Reading the Mind in the Eyes Test, Revised) — Autism Research Centre; the 36 eye-region photographs are licensed stimuli and are NOT reproduced in-platform — confirm how the practice will source/administer the official stimulus set (booklet or licensed digital tool) and log results via score entry', tags:["legal","urgent"]},
       {t:'SRS (Social Responsiveness Scale, SRS-2) — WPS licensed; confirm adult form availability, cost, and scoring software; note it is typically used as an observer/self-report adjunct', tags:["legal","finance"]},
       {t:'MIGDAS-2 (Monteiro Interview Guidelines for Diagnosing Autism Spectrum Disorder) — confirm publisher (AAPC), licensing, and whether postdocs need specific training before administering', tags:["legal","hiring"]},
       {t:'AQ-50 Collateral / Observer Report — same licensing as AQ-50; confirm applicability for observer use', tags:["legal"]},
