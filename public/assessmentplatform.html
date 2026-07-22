@@ -2179,68 +2179,6 @@ ADHD:{
   }
 },
 Autism:{
-  aq:{
-    name:"Adult Autism Spectrum Quotient",abbr:"AQ-50",warn:true,primary:true,reporter:"self",
-    instr:"How strongly do you agree or disagree with each statement? There are no right or wrong answers.",
-    scale:{l:["Definitely Agree","Slightly Agree","Slightly Disagree","Definitely Disagree"],v:[1,2,3,4]},
-    items:[
-      {q:"I prefer to do things with others rather than on my own.",d:"dis"},
-      {q:"I prefer to do things the same way over and over again.",d:"agr"},
-      {q:"If I try to imagine something, I find it very easy to create a picture in my mind.",d:"dis"},
-      {q:"I frequently get so strongly absorbed in one thing that I lose sight of other things.",d:"agr"},
-      {q:"I often notice small sounds when others do not.",d:"agr"},
-      {q:"I usually notice car number plates or similar strings of information.",d:"agr"},
-      {q:"Other people frequently tell me that what I've said is impolite, even though I think it is polite.",d:"agr"},
-      {q:"When I'm reading a story, I can easily imagine what the characters might look like.",d:"dis"},
-      {q:"I am fascinated by dates.",d:"agr"},
-      {q:"In a social group, I can easily keep track of several different people's conversations.",d:"dis"},
-      {q:"I find social situations easy.",d:"dis"},
-      {q:"I tend to notice details that others do not.",d:"agr"},
-      {q:"I would rather go to a library than a party.",d:"agr"},
-      {q:"I find making up stories easy.",d:"dis"},
-      {q:"I find myself drawn more strongly to people than to things.",d:"dis"},
-      {q:"I tend to have very strong interests, which I get upset about if I can't pursue.",d:"agr"},
-      {q:"I enjoy social chit-chat.",d:"dis"},
-      {q:"When I talk, it isn't always easy for others to get a word in edgeways.",d:"agr"},
-      {q:"I am fascinated by numbers.",d:"agr"},
-      {q:"When I'm reading a story, I find it difficult to work out the characters' intentions or feelings.",d:"agr"},
-      {q:"I don't particularly enjoy reading fiction.",d:"agr"},
-      {q:"I find it hard to make new friends.",d:"agr"},
-      {q:"I notice patterns in things all the time.",d:"agr"},
-      {q:"I would rather go to the theatre than a museum.",d:"dis"},
-      {q:"It does not upset me if my daily routine is disturbed.",d:"dis"},
-      {q:"I frequently find that I don't know how to keep a conversation going.",d:"agr"},
-      {q:"I find it easy to 'read between the lines' when someone is talking to me.",d:"dis"},
-      {q:"I usually concentrate more on the whole picture, rather than the small details.",d:"dis"},
-      {q:"I am not very good at remembering phone numbers.",d:"dis"},
-      {q:"I don't usually notice small changes in a situation, or a person's appearance.",d:"dis"},
-      {q:"I know how to tell if someone listening to me is getting bored.",d:"dis"},
-      {q:"I find it easy to do more than one thing at once.",d:"dis"},
-      {q:"When I talk on the phone, I'm not sure when it's my turn to speak.",d:"agr"},
-      {q:"I enjoy doing things spontaneously.",d:"dis"},
-      {q:"I am often the last to understand the point of a joke.",d:"agr"},
-      {q:"I find it easy to work out what someone is thinking or feeling just by looking at their face.",d:"dis"},
-      {q:"If there is an interruption, I can switch back to what I was doing very quickly.",d:"dis"},
-      {q:"I am good at social chit-chat.",d:"dis"},
-      {q:"People often tell me that I keep going on and on about the same thing.",d:"agr"},
-      {q:"When I was young, I used to enjoy playing games involving pretending with other children.",d:"dis"},
-      {q:"I like to collect information about categories of things (e.g., types of car, types of bird, types of train, types of plant).",d:"agr"},
-      {q:"I find it difficult to imagine what it would be like to be someone else.",d:"agr"},
-      {q:"I like to plan any activities I participate in carefully.",d:"agr"},
-      {q:"I enjoy social occasions.",d:"dis"},
-      {q:"I find it difficult to work out people's intentions.",d:"agr"},
-      {q:"New situations make me anxious.",d:"agr"},
-      {q:"I enjoy meeting new people.",d:"dis"},
-      {q:"I am a good diplomat.",d:"dis"},
-      {q:"I am not very good at remembering people's date of birth.",d:"dis"},
-      {q:"I find it very easy to play games with children that involve pretending things.",d:"dis"}
-    ],
-    score(r){
-      let t=0;
-      this.items.forEach((item,i)=>{ if(r[i]===null)return; if(item.d==='agr'&&r[i]<=2)t++; if(item.d==='dis'&&r[i]>=3)t++; });
-      return {"AQ Total":t+"/50"+(t>=32?" ⚑ ≥32":"")};
-    }
-  },
   eq:{
     name:"Cambridge Behaviour Scale (Empathy Quotient)",abbr:"EQ",warn:true,primary:true,reporter:"self",
     note:"Empathy Quotient (Baron-Cohen & Wheelwright, 2004; © MRC-SBC/SJW 1999), developed by the Autism Research Centre, University of Cambridge. 60 items — 40 scored, 20 unscored filler items included to reduce response bias. All 60 must be answered for the scale to be valid. General population mean ≈42; autistic-sample mean ≈20 (0–80 range; lower scores associated with autism).",
@@ -2318,15 +2256,6 @@ Autism:{
       });
       return {"EQ Total":t+"/80"+(t<=30?" ⚑ ≤30 (low; autism-consistent range)":"")};
     }
-  },
-  eqSubscales:{
-    name:"Cambridge Behaviour Scale (EQ) — Factor Subscales",abbr:"EQ Subscales",type:"entry",primary:false,reporter:"optional",
-    note:"Optional. Lawrence et al. (2004) identified a 3-factor, 28-item solution within the EQ (Cognitive Empathy, Emotional Reactivity, Social Skills). Enter subscale scores only if computed via a validated scoring tool — not auto-derived from the item responses above.",
-    fields:[
-      {id:"eqCognitive",l:"Cognitive Empathy",h:"optional subscale, if separately scored"},
-      {id:"eqEmotional",l:"Emotional Reactivity",h:"optional subscale, if separately scored"},
-      {id:"eqSocialSkills",l:"Social Skills",h:"optional subscale, if separately scored"}
-    ]
   },
   srs2_self:{
     name:"Social Responsiveness Scale — Second Edition (SRS-2), Self-Report",abbr:"SRS-2 Self",type:"entry",primary:true,reporter:"self",
@@ -2517,16 +2446,6 @@ Autism:{
       });
       return {"RAADS-R Total":t+"/240"+(t>=65?" ⚑ ≥65 (consistent with autism)":"")+(t>=90?" ⚑⚑ ≥90 strongly consistent":"")};
     }
-  },
-  raadsrSubscales:{
-    name:"RAADS-R — Subscale Scores",abbr:"RAADS-R Subscales",type:"entry",primary:false,reporter:"optional",
-    note:"Optional. Enter subscale scores only if computed via a validated scoring tool using the original item-to-subscale key (Ritvo et al., 2011, Table 9) — not auto-derived from the item responses above.",
-    fields:[
-      {id:"raadsSocial",l:"Social Relatedness",h:"max 88"},
-      {id:"raadsLang",l:"Language",h:"max 28"},
-      {id:"raadsSens",l:"Sensory-Motor",h:"max 60"},
-      {id:"raadsCirc",l:"Circumscribed Interests",h:"max 64"}
-    ]
   },
   rmet:{
     name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:true,reporter:"self",
@@ -4381,13 +4300,6 @@ function renderReportModules(){
     }
     h+=`</div>`;
 
-    if(mod==='Autism'){
-      h+=`<div class="form-grid" style="margin-top:10px;">
-        <div class="field"><label>Social Relatedness</label><input type="number" id="rpt_raadsSocial" min="0" max="88" placeholder="—"></div>
-        <div class="field"><label>Language</label><input type="number" id="rpt_raadsLang" min="0" max="28" placeholder="—"></div>
-        <div class="field"><label>Sensory-Motor</label><input type="number" id="rpt_raadsSens" min="0" max="60" placeholder="—"></div>
-      </div>`;
-    }
     if(mod==='ADHD'){
       h+=`<div class="form-grid" style="margin-top:10px;">
         <div class="field"><label>CAARS Inattentive T-score</label><input type="number" id="rpt_caarsI" min="0" placeholder="—"></div>
@@ -4428,7 +4340,7 @@ For each measure administered:
 - State the obtained score and what it means clinically
 - Compare to threshold: is this score in the subclinical, borderline, elevated, or markedly elevated range?
 - Note any subscale patterns that have differential diagnostic significance
-- Flag convergence or divergence between measures (e.g., AQ-50 below threshold but RAADS-R elevated + high CAT-Q = masking hypothesis)
+- Flag convergence or divergence between measures (e.g., RAADS-R subclinical but high CAT-Q + low EQ = masking hypothesis)
 
 STEP 2 — CRITERION-BY-CRITERION ANALYSIS
 Work through every DSM-5 criterion for the diagnosis. For each criterion, state:
@@ -4575,9 +4487,8 @@ SCORING THRESHOLDS (for Step 1 interpretation):
 ASRS Part A: ≥4/6 positive (items 1–3: ≥Sometimes=2; items 4–6: ≥Often=3). Sensitivity ~68%, specificity ~99% for ADHD.
 CAARS T-scores: ≥65 clinically elevated (>1.5 SD); ≥70 markedly elevated (>2 SD).
 DIVA-5: Adult threshold ≥5 symptoms each domain; childhood onset evidence required.
-AQ-50: ≥32 consistent with autism; 26–31 borderline; mean in autistic samples ~35.
 RAADS-R: ≥65 consistent; ≥90 strongly consistent. Max 240.
-Cambridge Behaviour Scale / EQ: Max 80. No hard clinical cutoff; general population mean ~42, autistic-sample mean ~20. Scores ≤30 are in the autism-consistent low range — interpret alongside AQ-50/RAADS-R/CAT-Q, not in isolation.
+Cambridge Behaviour Scale / EQ: Max 80. No hard clinical cutoff; general population mean ~42, autistic-sample mean ~20. Scores ≤30 are in the autism-consistent low range — interpret alongside RAADS-R/CAT-Q, not in isolation.
 RMET (Reading the Mind in the Eyes, Revised): Max 36 correct. No single validated clinical cutoff; general population mean ~26/36, autistic-sample mean ~21/36. Lower scores indicate reduced ability to infer mental states from the eye region.
 CAT-Q: ≥100 high camouflaging. Compensation max 63, Assimilation max 49, Masking max 63.
 OCI-R: ≥21 clinical. Subscale cutoffs: Washing ≥4, Obsessing ≥8, Hoarding ≥7, Ordering ≥9, Checking ≥9, Neutralizing ≥5.
@@ -4756,7 +4667,7 @@ CURRENT EVALUATION PROCEDURES AND RESULTS
 Write each of the following as its own labeled subsection:
 Collateral / Consultation: summarize collateral reports from spouse, caregiver, therapist, teacher, provider, or other informant. State "No collateral information obtained" if none was gathered.
 Self-Report Measures: one line per self-report measure administered: "[Measure name]: Score [value], interpretation [clinical interpretation]."
-Other-Report Measures: same one-line format for other-report/collateral measures (e.g., SRS-2 Relative/Other Report, collateral AQ-50), plus a line noting reporter reliability/limitations.
+Other-Report Measures: same one-line format for other-report/collateral measures (e.g., SRS-2 Relative/Other Report, SCQ), plus a line noting reporter reliability/limitations.
 Adaptive Functioning: for Vineland-3 or any adaptive behavior measure administered, report the Adaptive Behavior Composite and each domain score (Communication, Daily Living Skills, Socialization, and any other domain/subdomain administered) as standard scores with interpretation.
 Personality / Emotional Functioning: for PAI or any personality/psychopathology measure administered, report the validity scale summary and clinical profile (elevated scales with T-scores and interpretation).
 
@@ -4912,7 +4823,6 @@ function buildMsg(){
   // Legacy quick-entry fields on the Report Generator tab — checked first, falling back to the
   // matching Diagnostic Assessment entry field of the same measure.
   const RPT_FALLBACK={
-    Autism:{raadsSocial:'rpt_raadsSocial',raadsLang:'rpt_raadsLang',raadsSens:'rpt_raadsSens'},
     ADHD:{caarsInatt:'rpt_caarsI',caarsHyper:'rpt_caarsH',caarsTotal:'rpt_caarsX',collateralInatt:'rpt_collat'}
   };
 
@@ -5425,7 +5335,6 @@ const BUILDOUT_SECTIONS=[
       {t:'Collateral Informant Interview — ADHD (custom structured interview; no licensing needed)', tags:[]}
     ]},
     { label:"Autism Spectrum module", items:[
-      {t:'AQ-50 (Autism Spectrum Quotient) — Baron-Cohen et al.; confirm free research/clinical use terms', tags:["legal"]},
       {t:'CAT-Q (Camouflaging Autistic Traits Questionnaire) — confirm free clinical use and current scoring norms', tags:["legal"]},
       {t:'RAADS-R (Ritvo Autism Asperger Diagnostic Scale — Revised) — confirm licensing and scoring threshold (≥65)', tags:["legal"]},
       {t:'Cambridge Behaviour Scale / Empathy Quotient (EQ) — Baron-Cohen & Wheelwright, Autism Research Centre; confirm free research/clinical use terms', tags:["legal"]},
