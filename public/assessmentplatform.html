@@ -423,11 +423,19 @@ body::before{display:none;}
 .measure-card{
   background:var(--surface);
   border:none;
+  border-left:6px solid transparent;
   border-radius:var(--radius);
   margin-bottom:16px;
   overflow:hidden;
   box-shadow:var(--neu-out-sm);
+  transition:border-color 0.25s ease, background 0.25s ease;
 }
+.measure-card.rc-red{border-left-color:#E53935;background:linear-gradient(90deg,rgba(229,57,53,0.10),var(--surface) 45%);}
+.measure-card.rc-orange{border-left-color:#FB8C00;background:linear-gradient(90deg,rgba(251,140,0,0.10),var(--surface) 45%);}
+.measure-card.rc-yellow{border-left-color:#FDD835;background:linear-gradient(90deg,rgba(253,216,53,0.16),var(--surface) 45%);}
+.measure-card.rc-green{border-left-color:#43A047;background:linear-gradient(90deg,rgba(67,160,71,0.10),var(--surface) 45%);}
+.measure-card.rc-blue{border-left-color:#1E88E5;background:linear-gradient(90deg,rgba(30,136,229,0.10),var(--surface) 45%);}
+.measure-card.rc-purple{border-left-color:#8E24AA;background:linear-gradient(90deg,rgba(142,36,170,0.10),var(--surface) 45%);}
 .measure-header{
   padding:16px 20px;
   background:transparent;
@@ -468,6 +476,20 @@ body::before{display:none;}
   transition:transform 0.2s;margin-left:8px;
 }
 .chevron.open{transform:rotate(180deg);}
+.dlup-controls{display:inline-flex;align-items:center;gap:4px;}
+.field-required{color:var(--danger);font-weight:700;}
+.btn-icon{
+  width:26px;height:26px;padding:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:8px;cursor:pointer;border:none;
+  background:var(--surface);color:var(--ink-muted);
+  box-shadow:var(--neu-out-xs);
+  transition:all 0.18s ease;
+}
+.btn-icon:hover{box-shadow:var(--neu-out-sm);color:var(--primary);}
+.btn-icon:active{box-shadow:var(--neu-in-sm);}
+.btn-icon:focus-visible{outline:2px solid var(--primary);outline-offset:2px;}
+.btn-icon svg{width:13px;height:13px;}
 .measure-body{padding:0 20px 20px;display:none;}
 .measure-body.open{display:block;}
 
@@ -1875,11 +1897,23 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
     <div class="card"><div class="field"><label>Behavioral Observations</label><div class="hint">Presentation, demeanor, rapport, affect, communication style, accommodations used</div><textarea class="tall" id="generalObservations"></textarea></div></div>
   </div>
   <div class="section">
+    <button class="btn-generate" id="downloadDataBtn" onclick="downloadAssessmentDataPDF()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v13m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+      Download Assessment Data (PDF)
+    </button>
+  </div>
+  <div class="section">
     <button class="btn-generate" id="generateBtn" onclick="generateReport()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
       Generate Report
     </button>
     <div class="error-msg" id="errorMsg"></div>
+  </div>
+  <div class="section">
+    <a class="btn-generate" href="https://www.openevidence.com/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
+      OpenEvidence
+    </a>
   </div>
   <div class="loading" id="loadingIndicator">
     <div>Drafting evaluation report<span class="loading-dots"></span></div>
@@ -2206,81 +2240,20 @@ ADHD:{
   }
 },
 Autism:{
-  aq:{
-    name:"Adult Autism Spectrum Quotient",abbr:"AQ-50",warn:true,primary:true,
-    instr:"How strongly do you agree or disagree with each statement? There are no right or wrong answers.",
-    scale:{l:["Definitely Agree","Slightly Agree","Slightly Disagree","Definitely Disagree"],v:[1,2,3,4]},
-    items:[
-      {q:"I prefer to do things with others rather than on my own.",d:"dis"},
-      {q:"I prefer to do things the same way over and over again.",d:"agr"},
-      {q:"If I try to imagine something, I find it very easy to create a picture in my mind.",d:"dis"},
-      {q:"I frequently get so strongly absorbed in one thing that I lose sight of other things.",d:"agr"},
-      {q:"I often notice small sounds when others do not.",d:"agr"},
-      {q:"I usually notice car number plates or similar strings of information.",d:"agr"},
-      {q:"Other people frequently tell me that what I've said is impolite, even though I think it is polite.",d:"agr"},
-      {q:"When I'm reading a story, I can easily imagine what the characters might look like.",d:"dis"},
-      {q:"I am fascinated by dates.",d:"agr"},
-      {q:"In a social group, I can easily keep track of several different people's conversations.",d:"dis"},
-      {q:"I find social situations easy.",d:"dis"},
-      {q:"I tend to notice details that others do not.",d:"agr"},
-      {q:"I would rather go to a library than a party.",d:"agr"},
-      {q:"I find making up stories easy.",d:"dis"},
-      {q:"I find myself drawn more strongly to people than to things.",d:"dis"},
-      {q:"I tend to have very strong interests, which I get upset about if I can't pursue.",d:"agr"},
-      {q:"I enjoy social chit-chat.",d:"dis"},
-      {q:"When I talk, it isn't always easy for others to get a word in edgeways.",d:"agr"},
-      {q:"I am fascinated by numbers.",d:"agr"},
-      {q:"When I'm reading a story, I find it difficult to work out the characters' intentions or feelings.",d:"agr"},
-      {q:"I don't particularly enjoy reading fiction.",d:"agr"},
-      {q:"I find it hard to make new friends.",d:"agr"},
-      {q:"I notice patterns in things all the time.",d:"agr"},
-      {q:"I would rather go to the theatre than a museum.",d:"dis"},
-      {q:"It does not upset me if my daily routine is disturbed.",d:"dis"},
-      {q:"I frequently find that I don't know how to keep a conversation going.",d:"agr"},
-      {q:"I find it easy to 'read between the lines' when someone is talking to me.",d:"dis"},
-      {q:"I usually concentrate more on the whole picture, rather than the small details.",d:"dis"},
-      {q:"I am not very good at remembering phone numbers.",d:"dis"},
-      {q:"I don't usually notice small changes in a situation, or a person's appearance.",d:"dis"},
-      {q:"I know how to tell if someone listening to me is getting bored.",d:"dis"},
-      {q:"I find it easy to do more than one thing at once.",d:"dis"},
-      {q:"When I talk on the phone, I'm not sure when it's my turn to speak.",d:"agr"},
-      {q:"I enjoy doing things spontaneously.",d:"dis"},
-      {q:"I am often the last to understand the point of a joke.",d:"agr"},
-      {q:"I find it easy to work out what someone is thinking or feeling just by looking at their face.",d:"dis"},
-      {q:"If there is an interruption, I can switch back to what I was doing very quickly.",d:"dis"},
-      {q:"I am good at social chit-chat.",d:"dis"},
-      {q:"People often tell me that I keep going on and on about the same thing.",d:"agr"},
-      {q:"When I was young, I used to enjoy playing games involving pretending with other children.",d:"dis"},
-      {q:"I like to collect information about categories of things (e.g., types of car, types of bird, types of train, types of plant).",d:"agr"},
-      {q:"I find it difficult to imagine what it would be like to be someone else.",d:"agr"},
-      {q:"I like to plan any activities I participate in carefully.",d:"agr"},
-      {q:"I enjoy social occasions.",d:"dis"},
-      {q:"I find it difficult to work out people's intentions.",d:"agr"},
-      {q:"New situations make me anxious.",d:"agr"},
-      {q:"I enjoy meeting new people.",d:"dis"},
-      {q:"I am a good diplomat.",d:"dis"},
-      {q:"I am not very good at remembering people's date of birth.",d:"dis"},
-      {q:"I find it very easy to play games with children that involve pretending things.",d:"dis"}
-    ],
-    score(r){
-      let t=0;
-      this.items.forEach((item,i)=>{ if(r[i]===null)return; if(item.d==='agr'&&r[i]<=2)t++; if(item.d==='dis'&&r[i]>=3)t++; });
-      return {"AQ Total":t+"/50"+(t>=32?" ⚑ ≥32":"")};
-    }
-  },
-  eq:{
-    name:"Cambridge Behavior Scale (EQ)",abbr:"EQ",type:"entry",primary:true,
-    note:"Empathy Quotient (Baron-Cohen et al.), developed by the Autism Research Centre, University of Cambridge. Enter total and, if scored, subscale values from the separately administered EQ. General population mean ≈42; autistic mean ≈20 (0–80 range, lower scores associated with autism).",
+  rmet:{
+    name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:true,reporter:"self",rowColor:"red",manualComplete:true,
+    note:"Baron-Cohen et al. (2001), Autism Research Centre, University of Cambridge. The RMET's 36 items are copyrighted photographic stimuli (black-and-white photographs of the eye region, each with 4 forced-choice mental-state words) — the images themselves are the licensed test content and cannot be reproduced here. Administer the official stimulus set/booklet or licensed digital version separately, then enter the resulting score. Adult norms: general population mean ≈26/36; autistic-sample mean ≈21/36. No single validated clinical cutoff — interpret relative to population norms and convergent evidence.",
+    link:{url:"https://psytests.org/arc/rmeten.html",label:"Administer RMET at psytests.org"},
     fields:[
-      {id:"eqTotal",l:"EQ Total Score",h:"0–80 range; lower scores associated with autism (general population mean ~42)"},
-      {id:"eqCognitive",l:"Cognitive Empathy",h:"optional subscale, if scored"},
-      {id:"eqEmotional",l:"Emotional Reactivity",h:"optional subscale, if scored"},
-      {id:"eqSocialSkills",l:"Social Skills",h:"optional subscale, if scored"}
+      {id:"rmetTotal",l:"Total Correct",h:"out of 36 (Revised Adult version)"},
+      {id:"rmetVersion",l:"Version / Form Used",h:"e.g., Revised Adult 36-item, Child version"},
+      {id:"rmetNotes",l:"Administration Notes",h:"e.g., practice item used, any items omitted"}
     ]
   },
   srs2_self:{
-    name:"Social Responsiveness Scale — Second Edition (SRS-2), Self-Report",abbr:"SRS-2 Self",type:"entry",primary:true,
+    name:"Social Responsiveness Scale — Second Edition (SRS-2), Self-Report",abbr:"SRS-2 Self",type:"entry",primary:true,reporter:"self",rowColor:"orange",manualComplete:true,
     note:"WPS-licensed. Enter T-scores from the Adult Self-Report form. T ≥60 mild-to-moderate range; T ≥76 severe range.",
+    link:{url:"https://hub.wpspublish.com/",label:"Administer via WPS Hub"},
     fields:[
       {id:"srs2SelfTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
       {id:"srs2SelfSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
@@ -2288,54 +2261,105 @@ Autism:{
       {id:"srs2SelfDMC",l:"DSM-5 Compatible Score",h:"if reported"}
     ]
   },
-  srs2_other:{
-    name:"Social Responsiveness Scale — Second Edition (SRS-2), Relative/Other Report",abbr:"SRS-2 Other",type:"entry",primary:true,
-    note:"WPS-licensed. Enter T-scores from the Adult Relative/Other-Report form, completed by someone who knows the client well.",
-    fields:[
-      {id:"srs2OtherTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
-      {id:"srs2OtherSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
-      {id:"srs2OtherRRB",l:"Restricted Interests & Repetitive Behavior",h:"subscale T-score"},
-      {id:"srs2OtherRelationship",l:"Rater's Relationship to Client",h:"e.g., partner, parent, sibling"}
-    ]
-  },
-  scq:{
-    name:"Social Communication Questionnaire (SCQ), Caregiver-Report",abbr:"SCQ",type:"entry",primary:true,
-    note:"Rutter, Bailey & Lord; WPS-published. Caregiver-completed. Total score ≥15 (Lifetime form) suggests further evaluation warranted.",
-    fields:[
-      {id:"scqTotal",l:"Total Score",h:"≥15 threshold, max 39 (Lifetime form)"},
-      {id:"scqForm",l:"Form Used",h:"Lifetime or Current"},
-      {id:"scqRespondent",l:"Caregiver / Respondent",h:"relationship to client"}
-    ]
-  },
-  vineland3:{
-    name:"Vineland Adaptive Behavior Scales — Third Edition (Vineland-3)",abbr:"Vineland-3",type:"entry",primary:true,
-    note:"Pearson-licensed. Enter standard scores (M=100, SD=15) from the administered form (Comprehensive Interview, Domain-Level, or Rating Scale).",
-    fields:[
-      {id:"vinelandABC",l:"Adaptive Behavior Composite",h:"standard score, M=100/SD=15"},
-      {id:"vinelandComm",l:"Communication Domain",h:"standard score"},
-      {id:"vinelandDaily",l:"Daily Living Skills Domain",h:"standard score"},
-      {id:"vinelandSocial",l:"Socialization Domain",h:"standard score"},
-      {id:"vinelandMotor",l:"Motor Skills Domain",h:"optional — if administered"},
-      {id:"vinelandRespondent",l:"Respondent",h:"self, caregiver, or clinician-observed form"}
-    ]
-  },
   pai:{
-    name:"Personality Assessment Inventory (PAI)",abbr:"PAI",type:"entry",primary:true,
+    name:"Personality Assessment Inventory (PAI)",abbr:"PAI",type:"entry",primary:true,reporter:"self",rowColor:"yellow",manualComplete:true,
     note:"PAR-licensed. Enter T-scores from the administered PAI. T ≥70 clinically elevated on most scales. Used to characterize co-occurring personality/psychopathology features relevant to differential diagnosis.",
+    link:{url:"https://app.pariconnect.com/auth/login",label:"Administer via PARiConnect"},
     fields:[
-      {id:"paiValidity",l:"Validity Scales Summary",h:"e.g., ICN, INF, NIM, PIM — flag any invalid profile"},
-      {id:"paiSomatic",l:"Somatic Complaints (SOM)",h:"T-score"},
-      {id:"paiAnxiety",l:"Anxiety (ANX)",h:"T-score"},
-      {id:"paiAnxietyRelated",l:"Anxiety-Related Disorders (ARD)",h:"T-score"},
-      {id:"paiDepression",l:"Depression (DEP)",h:"T-score"},
-      {id:"paiMania",l:"Mania (MAN)",h:"T-score"},
-      {id:"paiBorderline",l:"Borderline Features (BOR)",h:"T-score"},
-      {id:"paiSchizophrenia",l:"Schizophrenia (SCZ)",h:"T-score"},
+      {id:"paiICN",l:"Inconsistency (ICN)",h:"validity scale T-score",required:true},
+      {id:"paiINF",l:"Infrequency (INF)",h:"validity scale T-score",required:true},
+      {id:"paiNIM",l:"Negative Impression Management (NIM)",h:"validity scale T-score",required:true},
+      {id:"paiPIM",l:"Positive Impression Management (PIM)",h:"validity scale T-score",required:true},
+      {id:"paiSomatic",l:"Somatic Complaints (SOM)",h:"T-score",required:true},
+      {id:"paiAnxiety",l:"Anxiety (ANX)",h:"T-score",required:true},
+      {id:"paiAnxietyRelated",l:"Anxiety-Related Disorders (ARD)",h:"T-score",required:true},
+      {id:"paiDepression",l:"Depression (DEP)",h:"T-score",required:true},
+      {id:"paiMania",l:"Mania (MAN)",h:"T-score",required:true},
+      {id:"paiBorderline",l:"Borderline Features (BOR)",h:"T-score",required:true},
+      {id:"paiSchizophrenia",l:"Schizophrenia (SCZ)",h:"T-score",required:true},
       {id:"paiOther",l:"Other Elevated Scales / Notes",h:"e.g., ALC, DRG, AGG, SUI, STR, NON, RXR, DOM, WRM"}
     ]
   },
+  eq:{
+    name:"Cambridge Behaviour Scale (Empathy Quotient)",abbr:"EQ",warn:true,primary:true,reporter:"self",rowColor:"green",
+    note:"Empathy Quotient (Baron-Cohen & Wheelwright, 2004; © MRC-SBC/SJW 1999), developed by the Autism Research Centre, University of Cambridge. 60 items — 40 scored, 20 unscored filler items included to reduce response bias. All 60 must be answered for the scale to be valid. General population mean ≈42; autistic-sample mean ≈20 (0–80 range; lower scores associated with autism).",
+    instr:"Please read each statement very carefully and rate how strongly you agree or disagree with it. There are no right or wrong answers, or trick questions. In order for the scale to be valid, you must answer every question.",
+    scale:{l:["Strongly Agree","Slightly Agree","Slightly Disagree","Strongly Disagree"],v:[1,2,3,4]},
+    items:[
+      {q:"I can easily tell if someone else wants to enter a conversation.",d:"pos"},
+      {q:"I prefer animals to humans.",d:"fil"},
+      {q:"I try to keep up with the current trends and fashions.",d:"fil"},
+      {q:"I find it difficult to explain to others things that I understand easily, when they don't understand it first time.",d:"neg"},
+      {q:"I dream most nights.",d:"fil"},
+      {q:"I really enjoy caring for other people.",d:"pos"},
+      {q:"I try to solve my own problems rather than discussing them with others.",d:"fil"},
+      {q:"I find it hard to know what to do in a social situation.",d:"neg"},
+      {q:"I am at my best first thing in the morning.",d:"fil"},
+      {q:"People often tell me that I went too far in driving my point home in a discussion.",d:"neg"},
+      {q:"It doesn't bother me too much if I am late meeting a friend.",d:"neg"},
+      {q:"Friendships and relationships are just too difficult, so I tend not to bother with them.",d:"neg"},
+      {q:"I would never break a law, no matter how minor.",d:"fil"},
+      {q:"I often find it difficult to judge if something is rude or polite.",d:"neg"},
+      {q:"In a conversation, I tend to focus on my own thoughts rather than on what my listener might be thinking.",d:"neg"},
+      {q:"I prefer practical jokes to verbal humour.",d:"fil"},
+      {q:"I live life for today rather than the future.",d:"fil"},
+      {q:"When I was a child, I enjoyed cutting up worms to see what would happen.",d:"neg"},
+      {q:"I can pick up quickly if someone says one thing but means another.",d:"pos"},
+      {q:"I tend to have very strong opinions about morality.",d:"fil"},
+      {q:"It is hard for me to see why some things upset people so much.",d:"neg"},
+      {q:"I find it easy to put myself in somebody else's shoes.",d:"pos"},
+      {q:"I think that good manners are the most important thing a parent can teach their child.",d:"fil"},
+      {q:"I like to do things on the spur of the moment.",d:"fil"},
+      {q:"I am good at predicting how someone will feel.",d:"pos"},
+      {q:"I am quick to spot when someone in a group is feeling awkward or uncomfortable.",d:"pos"},
+      {q:"If I say something that someone else is offended by, I think that that's their problem, not mine.",d:"neg"},
+      {q:"If anyone asked me if I liked their haircut, I would reply truthfully, even if I didn't like it.",d:"neg"},
+      {q:"I can't always see why someone should have felt offended by a remark.",d:"neg"},
+      {q:"People often tell me that I am very unpredictable.",d:"fil"},
+      {q:"I enjoy being the centre of attention at any social gathering.",d:"fil"},
+      {q:"Seeing people cry doesn't really upset me.",d:"neg"},
+      {q:"I enjoy having discussions about politics.",d:"fil"},
+      {q:"I am very blunt, which some people take to be rudeness, even though this is unintentional.",d:"neg"},
+      {q:"I don't tend to find social situations confusing.",d:"pos"},
+      {q:"Other people tell me I am good at understanding how they are feeling and what they are thinking.",d:"pos"},
+      {q:"When I talk to people, I tend to talk about their experiences rather than my own.",d:"pos"},
+      {q:"It upsets me to see an animal in pain.",d:"pos"},
+      {q:"I am able to make decisions without being influenced by people's feelings.",d:"neg"},
+      {q:"I can't relax until I have done everything I had planned to do that day.",d:"fil"},
+      {q:"I can easily tell if someone else is interested or bored with what I am saying.",d:"pos"},
+      {q:"I get upset if I see people suffering on news programmes.",d:"pos"},
+      {q:"Friends usually talk to me about their problems as they say that I am very understanding.",d:"pos"},
+      {q:"I can sense if I am intruding, even if the other person doesn't tell me.",d:"pos"},
+      {q:"I often start new hobbies but quickly become bored with them and move on to something else.",d:"fil"},
+      {q:"People sometimes tell me that I have gone too far with teasing.",d:"neg"},
+      {q:"I would be too nervous to go on a big rollercoaster.",d:"fil"},
+      {q:"Other people often say that I am insensitive, though I don't always see why.",d:"neg"},
+      {q:"If I see a stranger in a group, I think that it is up to them to make an effort to join in.",d:"neg"},
+      {q:"I usually stay emotionally detached when watching a film.",d:"neg"},
+      {q:"I like to be very organised in day to day life and often make lists of the chores I have to do.",d:"fil"},
+      {q:"I can tune into how someone else feels rapidly and intuitively.",d:"pos"},
+      {q:"I don't like to take risks.",d:"fil"},
+      {q:"I can easily work out what another person might want to talk about.",d:"pos"},
+      {q:"I can tell if someone is masking their true emotion.",d:"pos"},
+      {q:"Before making a decision I always weigh up the pros and cons.",d:"fil"},
+      {q:"I don't consciously work out the rules of social situations.",d:"pos"},
+      {q:"I am good at predicting what someone will do.",d:"pos"},
+      {q:"I tend to get emotionally involved with a friend's problems.",d:"pos"},
+      {q:"I can usually appreciate the other person's viewpoint, even if I don't agree with it.",d:"pos"}
+    ],
+    score(r){
+      let t=0,ans=0;
+      this.items.forEach((item,i)=>{
+        if(r[i]===null)return;
+        ans++;
+        if(item.d==='pos'){ if(r[i]===1)t+=2; else if(r[i]===2)t+=1; }
+        else if(item.d==='neg'){ if(r[i]===4)t+=2; else if(r[i]===3)t+=1; }
+      });
+      return {"EQ Total":t+"/80"+(t<=30?" ⚑ ≤30 (low; autism-consistent range)":"")};
+    }
+  },
   catq:{
-    name:"Camouflaging Autistic Traits Questionnaire",abbr:"CAT-Q",warn:true,primary:false,
+    name:"Camouflaging Autistic Traits Questionnaire",abbr:"CAT-Q",warn:true,primary:true,reporter:"self",rowColor:"blue",
     instr:"The following statements describe ways that people interact with others. Please indicate how much each statement applies to you.",
     scale:{l:["Strongly Disagree","2","3","4","5","6","Strongly Agree"],v:[1,2,3,4,5,6,7]},
     subs:{C:[0,2,4,6,11,18,19,20,24],A:[1,3,5,9,12,15,21],K:[7,8,10,13,14,16,17,22,23]},
@@ -2373,36 +2397,131 @@ Autism:{
     }
   },
   raadsr:{
-    name:"RAADS-R",abbr:"RAADS-R",type:"entry",primary:false,
-    note:"Enter total and subscale scores from separately administered RAADS-R. Threshold: ≥65 consistent with autism; ≥90 strongly consistent.",
+    name:"Ritvo Autism Asperger Diagnostic Scale — Revised (RAADS-R)",abbr:"RAADS-R",warn:true,primary:true,reporter:"self",rowColor:"purple",
+    note:"© Riva Ariella Ritvo, Ph.D. and Edward Ritvo, M.D., 2007 (Ritvo et al., 2011, J Autism Dev Disord 41:1076–1089). 80 items; 17 items (marked * below) are reverse-scored normative items per the official scoring key. Total range 0–240; ≥65 consistent with autism, ≥90 strongly consistent. Subscale breakdown (Social Relatedness /88, Language /28, Sensory-Motor /60, Circumscribed Interests /64) requires the original publication's item-to-subscale key and is entered separately below if computed via a validated scoring tool.",
+    instr:"Some life experiences and personality characteristics that may apply to you. For each statement, check the single column that best applies. There are no right or wrong answers.",
+    scale:{l:["True now and when I was young","True only now","True only when I was younger than 16","Never true"],v:[3,2,1,0]},
+    items:[
+      {q:"I am a sympathetic person.",d:"rev"},
+      {q:"I often use words and phrases from movies and television in conversations.",d:"std"},
+      {q:"I am often surprised when others tell me I have been rude.",d:"std"},
+      {q:"Sometimes I talk too loudly or too softly, and I am not aware of it.",d:"std"},
+      {q:"I often don't know how to act in social situations.",d:"std"},
+      {q:"I can \"put myself in other people's shoes.\"",d:"rev"},
+      {q:"I have a hard time figuring out what some phrases mean, like \"you are the apple of my eye.\"",d:"std"},
+      {q:"I only like to talk to people who share my special interests.",d:"std"},
+      {q:"I focus on details rather than the overall idea.",d:"std"},
+      {q:"I always notice how food feels in my mouth. This is more important to me than how it tastes.",d:"std"},
+      {q:"I miss my best friends or family when we are apart for a long time.",d:"rev"},
+      {q:"Sometimes I offend others by saying what I am thinking, even if I don't mean to.",d:"std"},
+      {q:"I only like to think and talk about a few things that interest me.",d:"std"},
+      {q:"I'd rather go out to eat in a restaurant by myself than with someone I know.",d:"std"},
+      {q:"I cannot imagine what it would be like to be someone else.",d:"std"},
+      {q:"I have been told that I am clumsy or uncoordinated.",d:"std"},
+      {q:"Others consider me odd or different.",d:"std"},
+      {q:"I understand when friends need to be comforted.",d:"rev"},
+      {q:"I am very sensitive to the way my clothes feel when I touch them. How they feel is more important to me than how they look.",d:"std"},
+      {q:"I like to copy the way certain people speak and act. It helps me appear more normal.",d:"std"},
+      {q:"It can be very intimidating for me to talk to more than one person at the same time.",d:"std"},
+      {q:"I have to \"act normal\" to please other people and make them like me.",d:"std"},
+      {q:"Meeting new people is usually easy for me.",d:"rev"},
+      {q:"I get highly confused when someone interrupts me when I am talking about something I am very interested in.",d:"std"},
+      {q:"It is difficult for me to understand how other people are feeling when we are talking.",d:"std"},
+      {q:"I like having a conversation with several people, for instance around a dinner table, at school or at work.",d:"rev"},
+      {q:"I take things too literally, so I often miss what people are trying to say.",d:"std"},
+      {q:"It is very difficult for me to understand when someone is embarrassed or jealous.",d:"std"},
+      {q:"Some ordinary textures that do not bother others feel very offensive when they touch my skin.",d:"std"},
+      {q:"I get extremely upset when the way I like to do things is suddenly changed.",d:"std"},
+      {q:"I have never wanted or needed to have what other people call an \"intimate relationship.\"",d:"std"},
+      {q:"It is difficult for me to start and stop a conversation. I need to keep going until I am finished.",d:"std"},
+      {q:"I speak with a normal rhythm.",d:"rev"},
+      {q:"The same sound, color or texture can suddenly change from very sensitive to very dull.",d:"std"},
+      {q:"The phrase \"I've got you under my skin\" makes me very uncomfortable.",d:"std"},
+      {q:"Sometimes the sound of a word or a high-pitched noise can be painful to my ears.",d:"std"},
+      {q:"I am an understanding type of person.",d:"rev"},
+      {q:"I do not connect with characters in movies and cannot feel what they feel.",d:"std"},
+      {q:"I cannot tell when someone is flirting with me.",d:"std"},
+      {q:"I can see in my mind in exact detail things that I am interested in.",d:"std"},
+      {q:"I keep lists of things that interest me, even when they have no practical use (for example sports statistics, train schedules, calendar dates, historical facts and dates).",d:"std"},
+      {q:"When I feel overwhelmed by my senses, I have to isolate myself to shut them down.",d:"std"},
+      {q:"I like to talk things over with my friends.",d:"rev"},
+      {q:"I cannot tell if someone is interested or bored with what I am saying.",d:"std"},
+      {q:"It can be very hard to read someone's face, hand and body movements when they are talking.",d:"std"},
+      {q:"The same thing (like clothes or temperatures) can feel very different to me at different times.",d:"std"},
+      {q:"I feel very comfortable with dating or being in social situations with others.",d:"rev"},
+      {q:"I try to be as helpful as I can when other people tell me their personal problems.",d:"rev"},
+      {q:"I have been told that I have an unusual voice (for example flat, monotone, childish, or high-pitched).",d:"std"},
+      {q:"Sometimes a thought or a subject gets stuck in my mind and I have to talk about it even if no one is interested.",d:"std"},
+      {q:"I do certain things with my hands over and over again (like flapping, twirling sticks or strings, waving things by my eyes).",d:"std"},
+      {q:"I have never been interested in what most of the people I know consider interesting.",d:"std"},
+      {q:"I am considered a compassionate type of person.",d:"rev"},
+      {q:"I get along with other people by following a set of specific rules that help me look normal.",d:"std"},
+      {q:"It is very difficult for me to work and function in groups.",d:"std"},
+      {q:"When I am talking to someone, it is hard to change the subject. If the other person does so, I can get very upset and confused.",d:"std"},
+      {q:"Sometimes I have to cover my ears to block out painful noises (like vacuum cleaners or people talking too much or too loudly).",d:"std"},
+      {q:"I can chat and make small talk with people.",d:"rev"},
+      {q:"Sometimes things that should feel painful are not (for instance when I hurt myself or burn my hand on a stove).",d:"std"},
+      {q:"When talking to someone, I have a hard time telling when it is my turn to talk or to listen.",d:"std"},
+      {q:"I am considered a loner by those who know me best.",d:"std"},
+      {q:"I usually speak in a normal tone.",d:"rev"},
+      {q:"I like things to be exactly the same day after day and even small changes in my routines upset me.",d:"std"},
+      {q:"How to make friends and socialize is a mystery to me.",d:"std"},
+      {q:"It calms me to spin around or to rock in a chair when I am feeling stressed.",d:"std"},
+      {q:"The phrase, \"He wears his heart on his sleeve,\" does not make sense to me.",d:"std"},
+      {q:"If I am in a place where there are many smells, textures to feel, noises or bright lights, I feel anxious or frightened.",d:"std"},
+      {q:"I can tell when someone says one thing but means something else.",d:"rev"},
+      {q:"I like to be by myself as much as I can.",d:"std"},
+      {q:"I keep my thoughts stacked in my memory like they are on filing cards, and I pick out the ones I need by looking through the stack and finding the right one (or another unique way).",d:"std"},
+      {q:"The same sound sometimes seems very loud or very soft, even though I know it has not changed.",d:"std"},
+      {q:"I enjoy spending time eating and talking with my family and friends.",d:"rev"},
+      {q:"I can't tolerate things I dislike (like smells, textures, sounds or colors).",d:"std"},
+      {q:"I don't like to be hugged or held.",d:"std"},
+      {q:"When I go somewhere, I have to follow a familiar route or I can get very confused and upset.",d:"std"},
+      {q:"It is difficult to figure out what other people expect of me.",d:"std"},
+      {q:"I like to have close friends.",d:"rev"},
+      {q:"People tell me that I give too much detail.",d:"std"},
+      {q:"I am often told that I ask embarrassing questions.",d:"std"},
+      {q:"I tend to point out other people's mistakes.",d:"std"}
+    ],
+    score(r){
+      let t=0;
+      this.items.forEach((item,i)=>{
+        if(r[i]===null)return;
+        t += item.d==='rev' ? (3-r[i]) : r[i];
+      });
+      return {"RAADS-R Total":t+"/240"+(t>=65?" ⚑ ≥65 (consistent with autism)":"")+(t>=90?" ⚑⚑ ≥90 strongly consistent":"")};
+    }
+  },
+  srs2_other:{
+    name:"Social Responsiveness Scale — Second Edition (SRS-2), Relative/Other Report",abbr:"SRS-2 Other",type:"entry",primary:true,reporter:"other",
+    note:"WPS-licensed. Enter T-scores from the Adult Relative/Other-Report form, completed by someone who knows the client well.",
+    link:{url:"https://hub.wpspublish.com/",label:"Administer via WPS Hub"},
     fields:[
-      {id:"raadsTotal",l:"Total Score",h:"≥65 threshold, max 240"},
-      {id:"raadsSocial",l:"Social Relatedness",h:"max 88"},
-      {id:"raadsLang",l:"Language",h:"max 28"},
-      {id:"raadsSens",l:"Sensory-Motor",h:"max 60"},
-      {id:"raadsCirc",l:"Circumscribed Interests",h:"max 64"}
+      {id:"srs2OtherTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
+      {id:"srs2OtherSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
+      {id:"srs2OtherRRB",l:"Restricted Interests & Repetitive Behavior",h:"subscale T-score"},
+      {id:"srs2OtherRelationship",l:"Rater's Relationship to Client",h:"e.g., partner, parent, sibling"}
     ]
   },
-  collateralaq:{
-    name:"AQ-50 Collateral / Observer Report",abbr:"AQ-Collateral",type:"entry",primary:false,
-    note:"Enter total score from collateral AQ-50 completed by a trusted person who knows the client well. Optional but clinically valuable for high-masking presentations.",
+  scq:{
+    name:"Social Communication Questionnaire (SCQ), Caregiver-Report",abbr:"SCQ",type:"entry",primary:true,reporter:"other",
+    note:"Rutter, Bailey & Lord; WPS-published. Caregiver-completed. Total score ≥15 (Lifetime form) suggests further evaluation warranted.",
     fields:[
-      {id:"collateralAQTotal",l:"Collateral AQ-50 Total",h:"≥32 threshold, max 50"},
-      {id:"collateralSource",l:"Relationship to Client",h:"e.g., partner, parent, sibling"}
+      {id:"scqTotal",l:"Total Score",h:"≥15 threshold, max 39 (Lifetime form)"},
+      {id:"scqForm",l:"Form Used",h:"Lifetime or Current"},
+      {id:"scqRespondent",l:"Caregiver / Respondent",h:"relationship to client"}
     ]
   },
-  autism_ci:{
-    name:"Autism Spectrum — Structured Clinical Interview",abbr:"ASD CI",type:"interview",
-    sections:[
-      {id:"A1",label:"Criterion A1 — Social-Emotional Reciprocity",ph:"Deficits in: back-and-forth conversation; sharing interests/emotions/affect; initiating or responding to social interactions.\n\nClient reported:\n\nObserved in session:\n\nHistorical examples:\n\nMasking/compensation noted:"},
-      {id:"A2",label:"Criterion A2 — Nonverbal Communication",ph:"Deficits in: eye contact; body language; facial expressions; understanding nonverbal cues; integrating verbal and nonverbal communication.\n\nClient reported:\n\nObserved in session:\n\nHistorical examples:"},
-      {id:"A3",label:"Criterion A3 — Developing and Maintaining Relationships",ph:"Difficulties: adjusting behavior to social context; imaginative play; making/keeping friends; interest in peers.\n\nClient reported:\n\nHistorical examples:\n\nCurrent social landscape:"},
-      {id:"B1",label:"Criterion B1 — Stereotyped/Repetitive Motor, Speech, or Object Use",ph:"Simple/complex motor stereotypies; echolalia; idiosyncratic phrases; lining up or flipping objects.\n\nPresent? Examples:"},
-      {id:"B2",label:"Criterion B2 — Insistence on Sameness / Routines / Ritualized Patterns",ph:"Extreme distress at small changes; difficulties with transitions; rigid thinking patterns; greeting rituals; same routes or foods.\n\nPresent? Examples:"},
-      {id:"B3",label:"Criterion B3 — Highly Restricted, Fixated Interests",ph:"Abnormal in intensity or focus; current and historical special interests; depth of engagement; identity-significance.\n\nPresent? Examples:"},
-      {id:"B4",label:"Criterion B4 — Hyper/Hyporeactivity to Sensory Input",ph:"Seeking or avoiding: sounds, textures, pain, temperature, light, smell, taste, vestibular, proprioceptive.\n\nSensory seeking behaviors:\nSensory avoiding behaviors:\nFunctional impact:"},
-      {id:"masking",label:"Masking History and Late Diagnosis Context",ph:"Age of first suspicion or self-identification:\nContexts where masking is most effortful:\nMasking fatigue / burnout episodes:\nHow diagnosis was missed previously:\nCultural or gender factors affecting presentation:\nExhaustion after social situations:"},
-      {id:"dev_hx",label:"Early Developmental History",ph:"Language milestones:\nMotor milestones:\nEarly play patterns:\nSchool adjustment and peer relationships:\nFriendship history:\nAny regression noted:\nFamily history of neurodivergence:"}
+  vineland3:{
+    name:"Vineland Adaptive Behavior Scales — Third Edition (Vineland-3)",abbr:"Vineland-3",type:"entry",primary:true,reporter:"other",
+    note:"Pearson-licensed. Enter standard scores (M=100, SD=15) from the administered form (Comprehensive Interview, Domain-Level, or Rating Scale).",
+    fields:[
+      {id:"vinelandABC",l:"Adaptive Behavior Composite",h:"standard score, M=100/SD=15"},
+      {id:"vinelandComm",l:"Communication Domain",h:"standard score"},
+      {id:"vinelandDaily",l:"Daily Living Skills Domain",h:"standard score"},
+      {id:"vinelandSocial",l:"Socialization Domain",h:"standard score"},
+      {id:"vinelandMotor",l:"Motor Skills Domain",h:"optional — if administered"},
+      {id:"vinelandRespondent",l:"Respondent",h:"self, caregiver, or clinician-observed form"}
     ]
   },
   dev_hx_asd:{
@@ -2433,16 +2552,6 @@ Autism:{
       {id:"legal",label:"Legal History",ph:"Legal/criminal history, or state 'none reported':"},
       {id:"benefits",label:"Benefits / Secondary Gain",ph:"Is the patient seeking evaluation for benefits, accommodations, disability, legal, or other purposes? Describe, or state 'denies secondary gain':"},
       {id:"daily_living",label:"Current Daily Living Skills and Habits",ph:"Typical day:\nGrooming/hygiene:\nTransportation:\nMoney management:\nHousekeeping:\nCooking/eating/meal preparation:\nHealthcare management:\nSleep:\nProblem-solving:"}
-    ]
-  },
-  collateral_autism:{
-    name:"Collateral Informant Interview — Autism",abbr:"Collateral",type:"interview",primary:false,
-    note:"Interview with person who knew client in childhood and/or observes current functioning. Particularly valuable for masking presentations where self-report may underrepresent autistic traits.",
-    sections:[
-      {id:"informant",label:"Informant Information",ph:"Name/relationship to client:\nHow long known:\nContext of observation:\nFrequency of contact:"},
-      {id:"childhood",label:"Childhood Observations",ph:"Social behavior and peer relationships in childhood:\nCommunication style:\nPlay patterns and interests:\nRigidity or routines observed:\nSensory behaviors:\nHow they differed from peers:\nTeacher or parent feedback at the time:"},
-      {id:"current",label:"Current Observations",ph:"Social communication style currently:\nBehaviors that stand out:\nHow they navigate social situations:\nRigidity or routines currently:\nSensory behaviors:\nImpact on daily functioning:"},
-      {id:"other",label:"Additional Observations",ph:""}
     ]
   }
 },
@@ -2743,7 +2852,10 @@ function renderUniversal(){
         <span class="measure-name">${scl.name}</span>
         <span class="warn-tag">Score entry — Pearson licensed</span>
       </div>
-      <span class="chevron" id="cv_uni_scl90r">▼</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        ${dlUploadControls('UNIVERSAL','scl90r')}
+        <span class="chevron" id="cv_uni_scl90r">▼</span>
+      </div>
     </div>
     <div class="measure-body" id="mb_uni_scl90r">
       <div class="measure-instruction">${scl.note}</div>
@@ -2772,7 +2884,10 @@ function renderUniversal(){
         <span class="measure-name">${mini.name}</span>
         <span class="warn-tag">Structured interview</span>
       </div>
-      <span class="chevron" id="cv_uni_mini">▼</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        ${dlUploadControls('UNIVERSAL','mini')}
+        <span class="chevron" id="cv_uni_mini">▼</span>
+      </div>
     </div>
     <div class="measure-body" id="mb_uni_mini">
       <div class="measure-instruction">${mini.note}</div>`;
@@ -4012,12 +4127,31 @@ function initR(mod){
 // ================================================================
 // RENDER MEASURES
 // ================================================================
+const REPORTER_SECTIONS=[
+  {key:"self",label:"Self-Report Measures",note:"Completed by the client."},
+  {key:"other",label:"Other-Report / Collateral Measures",note:"Completed by a parent, partner, or other informant who knows the client well."},
+  {key:"optional",label:"Optional / Supplementary Measures",note:"Additional measures — clinician-administered, multi-form, or supplementary to the primary battery. Primary/Optional pills on each card still reflect battery tier, independent of this grouping."}
+];
+
 function renderMeasures(){
   const c=document.getElementById('measuresContainer');
   if(!selectedModules.length){c.innerHTML='<div style="color:var(--text-muted);font-style:italic;padding:16px 0;">Select one or more modules above to begin.</div>';return;}
   let h='';
   selectedModules.forEach(mod=>{
-    for(let key in M[mod]) h+=buildMCard(mod,key,M[mod][key]);
+    const keys=Object.keys(M[mod]);
+    const grouped=keys.some(key=>M[mod][key].reporter);
+    if(!grouped){
+      keys.forEach(key=>h+=buildMCard(mod,key,M[mod][key]));
+      return;
+    }
+    REPORTER_SECTIONS.forEach(sec=>{
+      const secKeys=keys.filter(key=>(M[mod][key].reporter||"optional")===sec.key);
+      if(!secKeys.length)return;
+      h+=`<div class="section"><div class="section-label">${sec.label}</div>
+        <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin:-8px 0 12px;text-transform:none;letter-spacing:normal;font-family:var(--font-sans,inherit);font-weight:400;">${sec.note}</div>`;
+      secKeys.forEach(key=>h+=buildMCard(mod,key,M[mod][key]));
+      h+=`</div>`;
+    });
   });
   c.innerHTML=h;
 }
@@ -4026,6 +4160,19 @@ function tierTag(m){
   if(m.primary===true)return '<span class="tier-tag tier-primary">Primary</span>';
   if(m.primary===false)return '<span class="tier-tag tier-optional">Optional</span>';
   return '';
+}
+
+function dlUploadControls(mod,key){
+  const mid=mod+'_'+key;
+  return `<span class="dlup-controls" onclick="event.stopPropagation()">
+    <button type="button" class="btn-icon" title="Download this measure as a PDF" onclick="downloadMeasurePDF('${mod}','${key}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+    </button>
+    <button type="button" class="btn-icon" title="Upload a previously-downloaded PDF to restore responses" onclick="document.getElementById('upl_${mid}').click()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V8m0 0l-4 4m4-4l4 4M5 3h14"/></svg>
+    </button>
+    <input type="file" accept="application/pdf" id="upl_${mid}" style="display:none" onchange="handleMeasureUpload('${mod}','${key}',this)">
+  </span>`;
 }
 
 function buildMCard(mod,key,m){
@@ -4048,6 +4195,7 @@ function buildMCard(mod,key,m){
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="score-badge" id="sb_${mid}">not started</span>
+        ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
     </div>
@@ -4082,7 +4230,10 @@ function buildInterviewCard(mod,key,m){
         <span class="warn-tag">Interview notes</span>
         ${tierTag(m)}
       </div>
-      <span class="chevron" id="cv_${mid}">▼</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        ${dlUploadControls(mod,key)}
+        <span class="chevron" id="cv_${mid}">▼</span>
+      </div>
     </div>
     <div class="measure-body" id="mb_${mid}">`;
   if(m.note) h+=`<div class="measure-instruction">${m.note}</div>`;
@@ -4105,14 +4256,31 @@ function buildEntryCard(mod,key,m){
         <span class="measure-name">${m.name}</span>
         ${tierTag(m)}
       </div>
-      <span class="chevron" id="cv_${mid}">▼</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        ${m.manualComplete?`<span class="score-badge" id="sb_${mid}">not started</span>`:''}
+        ${dlUploadControls(mod,key)}
+        <span class="chevron" id="cv_${mid}">▼</span>
+      </div>
     </div>
     <div class="measure-body" id="mb_${mid}">
       <div class="score-entry-box">
         <div class="score-entry-note">${m.note}</div>
+        ${m.link?`<a class="btn-sm btn-word" href="${m.link.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">${m.link.label} ↗</a>`:''}
         <div class="form-grid cols-3">`;
-  m.fields.forEach(f=>h+=`<div class="field"><label>${f.l}<br><span class="hint">${f.h}</span></label><input type="${f.id.includes('Source')||f.id.includes('source')?'text':'number'}" id="entry_${mod}_${f.id}" min="0" placeholder="—"></div>`);
-  h+=`</div></div></div></div>`;
+  const TEXT_FIELD_RE=/source|form|version|relationship|respondent|notes|summary/i;
+  const oninput=m.manualComplete?` oninput="refreshManualCompleteAvailability('${mod}','${key}')"`:'';
+  m.fields.forEach(f=>{
+    const isText=TEXT_FIELD_RE.test(f.id);
+    h+=`<div class="field"><label>${f.l}${f.required?' <span class="field-required" title="Required">*</span>':''}<br><span class="hint">${f.h}</span></label><input type="${isText?'text':'number'}" id="entry_${mod}_${f.id}" ${isText?'':'min="0"'} ${f.required?'required':''}${oninput} placeholder="—"></div>`;
+  });
+  h+=`</div>`;
+  if(m.manualComplete){
+    h+=`<label style="display:flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;font-size:13px;font-weight:600;">
+      <input type="checkbox" id="mcb_${mid}" disabled onchange="toggleManualComplete('${mod}','${key}',this)">
+      Mark this section complete
+    </label>`;
+  }
+  h+=`</div></div></div>`;
   return h;
 }
 
@@ -4133,6 +4301,7 @@ function buildClinicianCard(mod,key,m){
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="score-badge" id="sb_${mid}">not started</span>
+        ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
     </div>
@@ -4208,6 +4377,43 @@ function updateProg(mod,key){
     else if(ans<tot){sb.textContent=ans+'/'+tot;sb.classList.remove('complete');}
     else{sb.textContent='complete ✓';sb.classList.add('complete');}
   }
+  const rowColor=M[mod][key]&&M[mod][key].rowColor;
+  if(rowColor) applyRowColorClass(mid,rowColor,tot>0&&ans===tot);
+}
+
+// ================================================================
+// RAINBOW ROW COLORING — tile turns its assigned color once complete,
+// grey (default card styling) otherwise.
+// ================================================================
+const ROW_COLORS=['red','orange','yellow','green','blue','purple'];
+function applyRowColorClass(mid,color,isComplete){
+  const el=document.getElementById('mc_'+mid);
+  if(!el||!color)return;
+  ROW_COLORS.forEach(c=>el.classList.remove('rc-'+c));
+  if(isComplete) el.classList.add('rc-'+color);
+}
+
+function refreshManualCompleteAvailability(mod,key){
+  const mid=mod+'_'+key;
+  const cb=document.getElementById('mcb_'+mid);
+  if(!cb)return;
+  const has=measureHasData(mod,key);
+  cb.disabled=!has;
+  if(!has&&cb.checked){
+    cb.checked=false;
+    toggleManualComplete(mod,key,cb);
+  }
+}
+
+function toggleManualComplete(mod,key,cb){
+  const mid=mod+'_'+key;
+  const m=M[mod][key];
+  const sb=document.getElementById('sb_'+mid);
+  if(sb){
+    if(cb.checked){ sb.textContent='complete ✓'; sb.classList.add('complete'); }
+    else{ sb.textContent=measureHasData(mod,key)?'in progress':'not started'; sb.classList.remove('complete'); }
+  }
+  applyRowColorClass(mid,m.rowColor,cb.checked);
 }
 
 function updateScores(mod,key){
@@ -4256,7 +4462,7 @@ function renderReportModules(){
 
     for(let key in M[mod]){
       const m=M[mod][key];
-      if(m.type==='entry'){h+=`<span class="sc-pill pending">RAADS-R: enter below</span>`;continue;}
+      if(m.type==='entry'){h+=`<span class="sc-pill pending">${m.abbr}: enter below</span>`;continue;}
       if(m.score&&responses[mod]&&responses[mod][key]){
         const sc=m.score(responses[mod][key]);
         for(let l in sc)h+=`<span class="sc-pill">${l}: ${sc[l]}</span>`;
@@ -4266,14 +4472,6 @@ function renderReportModules(){
     }
     h+=`</div>`;
 
-    if(mod==='Autism'){
-      h+=`<div class="form-grid" style="margin-top:10px;">
-        <div class="field"><label>RAADS-R Total <span style="color:var(--text-muted);font-style:italic;font-size:10px;">≥65</span></label><input type="number" id="rpt_raadsTotal" min="0" max="240" placeholder="—"></div>
-        <div class="field"><label>Social Relatedness</label><input type="number" id="rpt_raadsSocial" min="0" max="88" placeholder="—"></div>
-        <div class="field"><label>Language</label><input type="number" id="rpt_raadsLang" min="0" max="28" placeholder="—"></div>
-        <div class="field"><label>Sensory-Motor</label><input type="number" id="rpt_raadsSens" min="0" max="60" placeholder="—"></div>
-      </div>`;
-    }
     if(mod==='ADHD'){
       h+=`<div class="form-grid" style="margin-top:10px;">
         <div class="field"><label>CAARS Inattentive T-score</label><input type="number" id="rpt_caarsI" min="0" placeholder="—"></div>
@@ -4314,7 +4512,7 @@ For each measure administered:
 - State the obtained score and what it means clinically
 - Compare to threshold: is this score in the subclinical, borderline, elevated, or markedly elevated range?
 - Note any subscale patterns that have differential diagnostic significance
-- Flag convergence or divergence between measures (e.g., AQ-50 below threshold but RAADS-R elevated + high CAT-Q = masking hypothesis)
+- Flag convergence or divergence between measures (e.g., RAADS-R subclinical but high CAT-Q + low EQ = masking hypothesis)
 
 STEP 2 — CRITERION-BY-CRITERION ANALYSIS
 Work through every DSM-5 criterion for the diagnosis. For each criterion, state:
@@ -4461,8 +4659,9 @@ SCORING THRESHOLDS (for Step 1 interpretation):
 ASRS Part A: ≥4/6 positive (items 1–3: ≥Sometimes=2; items 4–6: ≥Often=3). Sensitivity ~68%, specificity ~99% for ADHD.
 CAARS T-scores: ≥65 clinically elevated (>1.5 SD); ≥70 markedly elevated (>2 SD).
 DIVA-5: Adult threshold ≥5 symptoms each domain; childhood onset evidence required.
-AQ-50: ≥32 consistent with autism; 26–31 borderline; mean in autistic samples ~35.
 RAADS-R: ≥65 consistent; ≥90 strongly consistent. Max 240.
+Cambridge Behaviour Scale / EQ: Max 80. No hard clinical cutoff; general population mean ~42, autistic-sample mean ~20. Scores ≤30 are in the autism-consistent low range — interpret alongside RAADS-R/CAT-Q, not in isolation.
+RMET (Reading the Mind in the Eyes, Revised): Max 36 correct. No single validated clinical cutoff; general population mean ~26/36, autistic-sample mean ~21/36. Lower scores indicate reduced ability to infer mental states from the eye region.
 CAT-Q: ≥100 high camouflaging. Compensation max 63, Assimilation max 49, Masking max 63.
 OCI-R: ≥21 clinical. Subscale cutoffs: Washing ≥4, Obsessing ≥8, Hoarding ≥7, Ordering ≥9, Checking ≥9, Neutralizing ≥5.
 Y-BOCS: 0–7 subclinical; 8–15 mild; 16–23 moderate; 24–31 severe; 32–40 extreme.
@@ -4640,7 +4839,7 @@ CURRENT EVALUATION PROCEDURES AND RESULTS
 Write each of the following as its own labeled subsection:
 Collateral / Consultation: summarize collateral reports from spouse, caregiver, therapist, teacher, provider, or other informant. State "No collateral information obtained" if none was gathered.
 Self-Report Measures: one line per self-report measure administered: "[Measure name]: Score [value], interpretation [clinical interpretation]."
-Other-Report Measures: same one-line format for other-report/collateral measures (e.g., SRS-2 Relative/Other Report, collateral AQ-50), plus a line noting reporter reliability/limitations.
+Other-Report Measures: same one-line format for other-report/collateral measures (e.g., SRS-2 Relative/Other Report, SCQ), plus a line noting reporter reliability/limitations.
 Adaptive Functioning: for Vineland-3 or any adaptive behavior measure administered, report the Adaptive Behavior Composite and each domain score (Communication, Daily Living Skills, Socialization, and any other domain/subdomain administered) as standard scores with interpretation.
 Personality / Emotional Functioning: for PAI or any personality/psychopathology measure administered, report the validity scale summary and clinical profile (elevated scales with T-scores and interpretation).
 
@@ -4783,6 +4982,385 @@ const SYS_ADHD=SYS_HEADER+"\n\n"+SYS_SECTION1+"\n\n"+SYS_SECTION2_ADHD+"\n\n"+SY
 
 
 // ================================================================
+// SHARED PDF WRITER — used by per-measure and full assessment exports
+// ================================================================
+function newPDFWriter(){
+  const { jsPDF }=window.jspdf;
+  const doc=new jsPDF({unit:'pt',format:'letter'});
+  const pageW=doc.internal.pageSize.getWidth();
+  const pageH=doc.internal.pageSize.getHeight();
+  const margin=54;
+  const contentW=pageW-2*margin;
+  let y=margin;
+
+  const ensure=needed=>{ if(y+needed>pageH-margin){doc.addPage();y=margin;} };
+  const writeLine=(text,opts={})=>{
+    const size=opts.size||10,style=opts.style||'normal',indent=opts.indent||0;
+    doc.setFont('helvetica',style);
+    doc.setFontSize(size);
+    doc.setTextColor(0);
+    const lineH=size*1.3;
+    const lines=doc.splitTextToSize(String(text),contentW-indent);
+    lines.forEach(l=>{ ensure(lineH); doc.text(l,margin+indent,y); y+=lineH; });
+  };
+  const writeBlank=(h=8)=>{ y+=h; };
+  const writeMultiline=(text,opts={})=>{
+    String(text).split('\n').forEach(p=>{ if(p.trim()==='')writeBlank(4); else writeLine(p,opts); });
+  };
+  const writeHr=()=>{ ensure(10); doc.setDrawColor(180); doc.line(margin,y,pageW-margin,y); y+=10; };
+  const sectionHeader=title=>{ writeBlank(8); writeLine(title.toUpperCase(),{size:12,style:'bold'}); writeHr(); };
+  const subHeader=title=>{ writeBlank(5); writeLine(title,{size:11,style:'bold'}); writeBlank(2); };
+  const titleBlock=title=>{
+    writeLine(title,{size:16,style:'bold'});
+    writeBlank(2);
+    writeLine(CLINICIAN_INFO.practice,{size:10});
+    writeLine(CLINICIAN_INFO.name+' — License '+CLINICIAN_INFO.license,{size:10});
+    writeLine(CLINICIAN_INFO.location,{size:10});
+    writeBlank(4);
+    writeLine('Exported: '+new Date().toLocaleString(),{size:10});
+    const clientNameRaw=(document.getElementById('clientName')?.value||'').trim();
+    if(clientNameRaw) writeLine('Client: '+clientNameRaw,{size:10});
+  };
+  return {doc,ensure,writeLine,writeBlank,writeMultiline,writeHr,sectionHeader,subHeader,titleBlock};
+}
+
+function safeFileToken(s,fallback){
+  return (s||'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||fallback;
+}
+
+// ================================================================
+// DOWNLOAD ASSESSMENT DATA (PDF) — everything entered, nothing blank
+// ================================================================
+function measureHasData(mod,key){
+  const m=M[mod][key];
+  const v=id=>(document.getElementById(id)?.value||'').trim();
+  if(m.type==='entry') return m.fields.some(f=>v(`entry_${mod}_${f.id}`)!=='');
+  if(m.type==='interview') return m.sections.some(s=>v(`ci_${mod}_${key}_${s.id}`)!=='');
+  const r=responses[mod]&&responses[mod][key];
+  return !!(r&&r.some(x=>x!==null));
+}
+
+// Writes the human-readable body (items+score, or fields, or sections) for one M[mod][key] measure.
+function writeMeasureBody(w,mod,key){
+  const m=M[mod][key];
+  const v=id=>document.getElementById(id)?.value||'';
+  if(m.type==='entry'){
+    m.fields.forEach(f=>{
+      const val=v(`entry_${mod}_${f.id}`).trim();
+      if(val==='')return;
+      w.writeLine(f.l+': '+val,{size:10,indent:6});
+    });
+    w.writeBlank(4);
+    return;
+  }
+  if(m.type==='interview'){
+    m.sections.forEach(s=>{
+      const val=v(`ci_${mod}_${key}_${s.id}`).trim();
+      if(val==='')return;
+      w.writeLine(s.label+':',{size:9,style:'italic',indent:6});
+      w.writeMultiline(val,{size:10,indent:12});
+      w.writeBlank(3);
+    });
+    w.writeBlank(4);
+    return;
+  }
+  // scored self/other-report measure, or clinician-rated
+  const r=(responses[mod]&&responses[mod][key])||[];
+  const isClinician=m.type==='clinician';
+  const items=isClinician?[].concat(...m.parts.map(p=>p.items)):m.items;
+  items.forEach((item,i)=>{
+    if(r[i]===undefined||r[i]===null)return;
+    const q=typeof item==='string'?item:item.q;
+    w.writeLine((i+1)+'. '+q,{size:9,indent:6});
+    const respText=isClinician?item.a[r[i]]:(m.scale.l[m.scale.v.indexOf(r[i])]??String(r[i]));
+    w.writeLine('Response: '+respText,{size:9,style:'italic',indent:14});
+  });
+  if(m.score){
+    const sc=m.score(r);
+    w.writeBlank(3);
+    for(const lbl in sc) w.writeLine(lbl+': '+String(sc[lbl]).replace(' ⚑',' (elevated)'),{size:10,style:'bold',indent:6});
+  }
+  w.writeBlank(6);
+}
+
+function universalHasData(key){
+  const v=id=>(document.getElementById(id)?.value||'').trim();
+  if(key==='scl90r'){
+    const scl=UNIVERSAL.scl90r;
+    return [...scl.subscales,...scl.globals].some(f=>v(`uni_scl90r_${f.id}`)!=='')||v('uni_scl90r_notes')!=='';
+  }
+  if(key==='mini') return UNIVERSAL.mini.sections.some(s=>v(`uni_mini_${s.id}`)!=='');
+  return false;
+}
+
+function writeUniversalBody(w,key){
+  const v=id=>document.getElementById(id)?.value||'';
+  if(key==='scl90r'){
+    const scl=UNIVERSAL.scl90r;
+    [...scl.subscales,...scl.globals].forEach(f=>{
+      const val=v(`uni_scl90r_${f.id}`).trim();
+      if(val==='')return;
+      w.writeLine(f.l+': '+val,{size:10,indent:6});
+    });
+    const notes=v('uni_scl90r_notes').trim();
+    if(notes){ w.writeBlank(3); w.writeLine('Interpretation Notes:',{size:9,style:'italic',indent:6}); w.writeMultiline(notes,{size:10,indent:12}); }
+    w.writeBlank(4);
+    return;
+  }
+  if(key==='mini'){
+    UNIVERSAL.mini.sections.forEach(s=>{
+      const val=v(`uni_mini_${s.id}`).trim();
+      if(val==='')return;
+      w.writeLine(s.label+':',{size:9,style:'italic',indent:6});
+      w.writeMultiline(val,{size:10,indent:12});
+      w.writeBlank(3);
+    });
+    w.writeBlank(4);
+  }
+}
+
+function downloadAssessmentDataPDF(){
+  const v=id=>document.getElementById(id)?.value||'';
+  const clientNameRaw=v('clientName').trim();
+  const dob=v('dob');let age='';
+  if(dob){const d=Date.now()-new Date(dob).getTime();age=Math.abs(new Date(d).getUTCFullYear()-1970);}
+
+  const w=newPDFWriter();
+  w.titleBlock('Assessment Data Export');
+
+  let anyDataAtAll=false;
+
+  // Client information
+  const clientFields=[
+    ['Name',clientNameRaw],
+    ['Date of Birth',dob?dob+(age?` (Age ${age})`:''):''],
+    ['Pronouns',v('pronouns').trim()],
+    ['Date of Evaluation',v('evalDate').trim()],
+    ['Referral Source',v('referralSource').trim()],
+    ['Reason for Referral',v('reasonForReferral').trim()],
+    ['Relevant Background and History',v('relevantHistory').trim()]
+  ].filter(([,val])=>val!=='');
+  if(clientFields.length){
+    anyDataAtAll=true;
+    w.sectionHeader('Client Information');
+    clientFields.forEach(([label,val])=>{
+      w.writeLine(label+':',{size:9,style:'italic'});
+      w.writeMultiline(val,{size:10,indent:12});
+      w.writeBlank(4);
+    });
+  }
+
+  // Module measures — only those with at least one answered item/field/section
+  selectedModules.forEach(mod=>{
+    const keysWithData=Object.keys(M[mod]).filter(key=>measureHasData(mod,key));
+    const notesVal=v('notes_'+mod).trim();
+    const diffVal=v('diff_'+mod).trim();
+    if(!keysWithData.length&&!notesVal&&!diffVal) return;
+    anyDataAtAll=true;
+    w.sectionHeader(mod+' Module');
+
+    keysWithData.forEach(key=>{
+      const m=M[mod][key];
+      w.subHeader(m.name+' ('+m.abbr+')');
+      writeMeasureBody(w,mod,key);
+    });
+
+    if(notesVal){
+      w.subHeader('Session Notes');
+      w.writeMultiline(notesVal,{size:10,indent:6});
+      w.writeBlank(4);
+    }
+    if(diffVal){
+      w.subHeader('Differential Considerations');
+      w.writeMultiline(diffVal,{size:10,indent:6});
+      w.writeBlank(4);
+    }
+  });
+
+  // Universal screening
+  const sclHasData=universalHasData('scl90r');
+  const miniHasData=universalHasData('mini');
+  if(sclHasData||miniHasData){
+    anyDataAtAll=true;
+    w.sectionHeader('Universal Screening');
+    if(sclHasData){ w.subHeader('SCL-90-R'); writeUniversalBody(w,'scl90r'); }
+    if(miniHasData){ w.subHeader('M.I.N.I. International Neuropsychiatric Interview'); writeUniversalBody(w,'mini'); }
+  }
+
+  // General behavioral observations
+  const obs=v('generalObservations').trim();
+  if(obs){
+    anyDataAtAll=true;
+    w.sectionHeader('General Session Observations');
+    w.writeMultiline(obs,{size:10,indent:6});
+  }
+
+  if(!anyDataAtAll){
+    w.writeBlank(14);
+    w.writeLine('No assessment data has been entered yet.',{size:11,style:'italic'});
+  }
+
+  const todayISO=new Date().toISOString().split('T')[0];
+  w.doc.save(`Assessment_Data_${safeFileToken(clientNameRaw,'Client')}_${todayISO}.pdf`);
+}
+
+// ================================================================
+// PER-MEASURE DOWNLOAD / UPLOAD — round-trips a single measure's
+// data through a PDF that embeds a machine-readable copy of the
+// same data, so it can be re-imported later.
+// ================================================================
+function utf8ToB64(str){ return btoa(unescape(encodeURIComponent(str))); }
+function b64ToUtf8(b64){ return decodeURIComponent(escape(atob(b64))); }
+
+function writeMeasureDataPage(w,payload){
+  w.doc.addPage();
+  w.writeLine('MACHINE-READABLE DATA — DO NOT EDIT',{size:9,style:'italic'});
+  w.writeLine('Re-upload this PDF via the Upload button on this measure to restore these responses.',{size:8,style:'italic'});
+  w.writeBlank(6);
+  const b64=utf8ToB64(JSON.stringify(payload));
+  w.writeLine('=== OLIVECLINICAL_DATA_START ===',{size:8});
+  const CHUNK=90;
+  for(let i=0;i<b64.length;i+=CHUNK) w.writeLine(b64.slice(i,i+CHUNK),{size:8});
+  w.writeLine('=== OLIVECLINICAL_DATA_END ===',{size:8});
+}
+
+function buildMeasurePayload(mod,key){
+  const m=M[mod][key];
+  const v=id=>document.getElementById(id)?.value??'';
+  if(m.type==='entry'){
+    const fields={};
+    m.fields.forEach(f=>fields[f.id]=v(`entry_${mod}_${f.id}`));
+    const payload={mod,key,mtype:'entry',fields};
+    if(m.manualComplete) payload.complete=!!document.getElementById(`mcb_${mod}_${key}`)?.checked;
+    return payload;
+  }
+  if(m.type==='interview'){
+    const sections={};
+    m.sections.forEach(s=>sections[s.id]=v(`ci_${mod}_${key}_${s.id}`));
+    return {mod,key,mtype:'interview',sections};
+  }
+  const r=(responses[mod]&&responses[mod][key])||[];
+  return {mod,key,mtype:m.type==='clinician'?'clinician':'scored',responses:r};
+}
+
+function buildUniversalPayload(key){
+  const v=id=>document.getElementById(id)?.value??'';
+  if(key==='scl90r'){
+    const scl=UNIVERSAL.scl90r;
+    const fields={};
+    [...scl.subscales,...scl.globals].forEach(f=>fields[f.id]=v(`uni_scl90r_${f.id}`));
+    return {mod:'UNIVERSAL',key:'scl90r',mtype:'entry',fields,notes:v('uni_scl90r_notes')};
+  }
+  const sections={};
+  UNIVERSAL.mini.sections.forEach(s=>sections[s.id]=v(`uni_mini_${s.id}`));
+  return {mod:'UNIVERSAL',key:'mini',mtype:'interview',sections};
+}
+
+function downloadMeasurePDF(mod,key){
+  const isUniversal=mod==='UNIVERSAL';
+  const m=isUniversal?UNIVERSAL[key]:M[mod][key];
+  if(!m) return;
+  const w=newPDFWriter();
+  w.titleBlock(m.name+' ('+m.abbr+')');
+  w.writeBlank(4);
+  if(isUniversal) writeUniversalBody(w,key); else writeMeasureBody(w,mod,key);
+  const payload=isUniversal?buildUniversalPayload(key):buildMeasurePayload(mod,key);
+  writeMeasureDataPage(w,payload);
+  const todayISO=new Date().toISOString().split('T')[0];
+  const clientNameRaw=(document.getElementById('clientName')?.value||'').trim();
+  w.doc.save(`${safeFileToken(m.abbr,key)}_${safeFileToken(clientNameRaw,'Client')}_${todayISO}.pdf`);
+}
+
+// Applies an imported payload to an M[mod][key] measure. For scored/clinician
+// measures this routes through setR() item-by-item so buttons, progress, and
+// scores update via the existing targeted DOM updates — never a full
+// renderMeasures() call, which would wipe unrelated entry/interview fields
+// elsewhere on the page (those aren't backed by any persisted state).
+function importMeasurePayload(mod,key,payload){
+  const m=M[mod][key];
+  if(!m) return false;
+  if(payload.mtype==='entry'&&m.type==='entry'){
+    m.fields.forEach(f=>{
+      const el=document.getElementById(`entry_${mod}_${f.id}`);
+      if(el&&payload.fields&&Object.prototype.hasOwnProperty.call(payload.fields,f.id)) el.value=payload.fields[f.id];
+    });
+    if(m.manualComplete){
+      refreshManualCompleteAvailability(mod,key);
+      const cb=document.getElementById(`mcb_${mod}_${key}`);
+      if(cb&&!cb.disabled&&payload.complete){ cb.checked=true; toggleManualComplete(mod,key,cb); }
+    }
+    return true;
+  }
+  if(payload.mtype==='interview'&&m.type==='interview'){
+    m.sections.forEach(s=>{
+      const el=document.getElementById(`ci_${mod}_${key}_${s.id}`);
+      if(el&&payload.sections&&Object.prototype.hasOwnProperty.call(payload.sections,s.id)) el.value=payload.sections[s.id];
+    });
+    return true;
+  }
+  if((payload.mtype==='scored'||payload.mtype==='clinician')&&(m.type===undefined||m.type==='clinician')){
+    const expectedLen=m.type==='clinician'?[].concat(...m.parts.map(p=>p.items)).length:m.items.length;
+    const src=Array.isArray(payload.responses)?payload.responses:[];
+    for(let i=0;i<expectedLen;i++) setR(mod,key,i,i<src.length?src[i]:null);
+    return true;
+  }
+  return false;
+}
+
+function importUniversalPayload(key,payload){
+  if(key==='scl90r'&&payload.mtype==='entry'){
+    const scl=UNIVERSAL.scl90r;
+    [...scl.subscales,...scl.globals].forEach(f=>{
+      const el=document.getElementById(`uni_scl90r_${f.id}`);
+      if(el&&payload.fields&&Object.prototype.hasOwnProperty.call(payload.fields,f.id)) el.value=payload.fields[f.id];
+    });
+    const notesEl=document.getElementById('uni_scl90r_notes');
+    if(notesEl&&payload.notes!==undefined) notesEl.value=payload.notes;
+    return true;
+  }
+  if(key==='mini'&&payload.mtype==='interview'){
+    UNIVERSAL.mini.sections.forEach(s=>{
+      const el=document.getElementById(`uni_mini_${s.id}`);
+      if(el&&payload.sections&&Object.prototype.hasOwnProperty.call(payload.sections,s.id)) el.value=payload.sections[s.id];
+    });
+    return true;
+  }
+  return false;
+}
+
+async function extractPDFText(file){
+  if(!window.pdfjsLib) throw new Error('PDF reader failed to load — refresh the page and try again.');
+  const buf=await file.arrayBuffer();
+  const pdf=await window.pdfjsLib.getDocument({data:buf}).promise;
+  let text='';
+  for(let p=1;p<=pdf.numPages;p++){
+    const page=await pdf.getPage(p);
+    const content=await page.getTextContent();
+    text+=content.items.map(it=>it.str).join('');
+  }
+  return text;
+}
+
+async function handleMeasureUpload(mod,key,inputEl){
+  const file=inputEl.files&&inputEl.files[0];
+  if(!file) return;
+  const abbr=(mod==='UNIVERSAL'?UNIVERSAL[key]:M[mod][key])?.abbr||key;
+  try{
+    const text=await extractPDFText(file);
+    const match=text.match(/===\s*OLIVECLINICAL_DATA_START\s*===([\s\S]*?)===\s*OLIVECLINICAL_DATA_END\s*===/);
+    if(!match) throw new Error('No embedded data found — this PDF wasn\'t downloaded from this measure, or the data page is missing.');
+    const payload=JSON.parse(b64ToUtf8(match[1].replace(/\s+/g,'')));
+    const ok=mod==='UNIVERSAL'?importUniversalPayload(key,payload):importMeasurePayload(mod,key,payload);
+    if(!ok) throw new Error('This PDF is for a different measure and can\'t be imported here.');
+    alert('Imported responses for '+abbr+'.');
+  }catch(e){
+    alert('Could not import this PDF for '+abbr+': '+e.message);
+  }finally{
+    inputEl.value='';
+  }
+}
+
+// ================================================================
 // BUILD USER MSG
 // ================================================================
 function buildMsg(){
@@ -4796,7 +5374,6 @@ function buildMsg(){
   // Legacy quick-entry fields on the Report Generator tab — checked first, falling back to the
   // matching Diagnostic Assessment entry field of the same measure.
   const RPT_FALLBACK={
-    Autism:{raadsTotal:'rpt_raadsTotal',raadsSocial:'rpt_raadsSocial',raadsLang:'rpt_raadsLang',raadsSens:'rpt_raadsSens'},
     ADHD:{caarsInatt:'rpt_caarsI',caarsHyper:'rpt_caarsH',caarsTotal:'rpt_caarsX',collateralInatt:'rpt_collat'}
   };
 
@@ -5309,14 +5886,12 @@ const BUILDOUT_SECTIONS=[
       {t:'Collateral Informant Interview — ADHD (custom structured interview; no licensing needed)', tags:[]}
     ]},
     { label:"Autism Spectrum module", items:[
-      {t:'AQ-50 (Autism Spectrum Quotient) — Baron-Cohen et al.; confirm free research/clinical use terms', tags:["legal"]},
       {t:'CAT-Q (Camouflaging Autistic Traits Questionnaire) — confirm free clinical use and current scoring norms', tags:["legal"]},
       {t:'RAADS-R (Ritvo Autism Asperger Diagnostic Scale — Revised) — confirm licensing and scoring threshold (≥65)', tags:["legal"]},
+      {t:'Cambridge Behaviour Scale / Empathy Quotient (EQ) — Baron-Cohen & Wheelwright, Autism Research Centre; confirm free research/clinical use terms', tags:["legal"]},
+      {t:'RMET (Reading the Mind in the Eyes Test, Revised) — Autism Research Centre; the 36 eye-region photographs are licensed stimuli and are NOT reproduced in-platform — confirm how the practice will source/administer the official stimulus set (booklet or licensed digital tool) and log results via score entry', tags:["legal","urgent"]},
       {t:'SRS (Social Responsiveness Scale, SRS-2) — WPS licensed; confirm adult form availability, cost, and scoring software; note it is typically used as an observer/self-report adjunct', tags:["legal","finance"]},
-      {t:'MIGDAS-2 (Monteiro Interview Guidelines for Diagnosing Autism Spectrum Disorder) — confirm publisher (AAPC), licensing, and whether postdocs need specific training before administering', tags:["legal","hiring"]},
-      {t:'AQ-50 Collateral / Observer Report — same licensing as AQ-50; confirm applicability for observer use', tags:["legal"]},
-      {t:'Autism Spectrum Structured Clinical Interview — confirm it is a custom structured interview with no separate license', tags:[]},
-      {t:'Collateral Informant Interview — Autism (custom structured interview; no licensing needed)', tags:[]}
+      {t:'MIGDAS-2 (Monteiro Interview Guidelines for Diagnosing Autism Spectrum Disorder) — confirm publisher (AAPC), licensing, and whether postdocs need specific training before administering', tags:["legal","hiring"]}
     ]},
     { label:"OCD module", items:[
       {t:'OCI-R (Obsessive-Compulsive Inventory — Revised) — Foa et al.; confirm free clinical use', tags:["legal"]},
