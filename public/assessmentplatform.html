@@ -469,6 +469,7 @@ body::before{display:none;}
 }
 .chevron.open{transform:rotate(180deg);}
 .dlup-controls{display:inline-flex;align-items:center;gap:4px;}
+.field-required{color:var(--danger);font-weight:700;}
 .btn-icon{
   width:26px;height:26px;padding:0;
   display:inline-flex;align-items:center;justify-content:center;
@@ -2324,14 +2325,17 @@ Autism:{
     note:"PAR-licensed. Enter T-scores from the administered PAI. T ≥70 clinically elevated on most scales. Used to characterize co-occurring personality/psychopathology features relevant to differential diagnosis.",
     link:{url:"https://app.pariconnect.com/auth/login",label:"Administer via PARiConnect"},
     fields:[
-      {id:"paiValidity",l:"Validity Scales Summary",h:"e.g., ICN, INF, NIM, PIM — flag any invalid profile"},
-      {id:"paiSomatic",l:"Somatic Complaints (SOM)",h:"T-score"},
-      {id:"paiAnxiety",l:"Anxiety (ANX)",h:"T-score"},
-      {id:"paiAnxietyRelated",l:"Anxiety-Related Disorders (ARD)",h:"T-score"},
-      {id:"paiDepression",l:"Depression (DEP)",h:"T-score"},
-      {id:"paiMania",l:"Mania (MAN)",h:"T-score"},
-      {id:"paiBorderline",l:"Borderline Features (BOR)",h:"T-score"},
-      {id:"paiSchizophrenia",l:"Schizophrenia (SCZ)",h:"T-score"},
+      {id:"paiICN",l:"Inconsistency (ICN)",h:"validity scale T-score",required:true},
+      {id:"paiINF",l:"Infrequency (INF)",h:"validity scale T-score",required:true},
+      {id:"paiNIM",l:"Negative Impression Management (NIM)",h:"validity scale T-score",required:true},
+      {id:"paiPIM",l:"Positive Impression Management (PIM)",h:"validity scale T-score",required:true},
+      {id:"paiSomatic",l:"Somatic Complaints (SOM)",h:"T-score",required:true},
+      {id:"paiAnxiety",l:"Anxiety (ANX)",h:"T-score",required:true},
+      {id:"paiAnxietyRelated",l:"Anxiety-Related Disorders (ARD)",h:"T-score",required:true},
+      {id:"paiDepression",l:"Depression (DEP)",h:"T-score",required:true},
+      {id:"paiMania",l:"Mania (MAN)",h:"T-score",required:true},
+      {id:"paiBorderline",l:"Borderline Features (BOR)",h:"T-score",required:true},
+      {id:"paiSchizophrenia",l:"Schizophrenia (SCZ)",h:"T-score",required:true},
       {id:"paiOther",l:"Other Elevated Scales / Notes",h:"e.g., ALC, DRG, AGG, SUI, STR, NON, RXR, DOM, WRM"}
     ]
   },
@@ -4194,7 +4198,7 @@ function buildEntryCard(mod,key,m){
   const TEXT_FIELD_RE=/source|form|version|relationship|respondent|notes|summary/i;
   m.fields.forEach(f=>{
     const isText=TEXT_FIELD_RE.test(f.id);
-    h+=`<div class="field"><label>${f.l}<br><span class="hint">${f.h}</span></label><input type="${isText?'text':'number'}" id="entry_${mod}_${f.id}" ${isText?'':'min="0"'} placeholder="—"></div>`;
+    h+=`<div class="field"><label>${f.l}${f.required?' <span class="field-required" title="Required">*</span>':''}<br><span class="hint">${f.h}</span></label><input type="${isText?'text':'number'}" id="entry_${mod}_${f.id}" ${isText?'':'min="0"'} ${f.required?'required':''} placeholder="—"></div>`;
   });
   h+=`</div></div></div></div>`;
   return h;
