@@ -423,11 +423,19 @@ body::before{display:none;}
 .measure-card{
   background:var(--surface);
   border:none;
+  border-left:6px solid transparent;
   border-radius:var(--radius);
   margin-bottom:16px;
   overflow:hidden;
   box-shadow:var(--neu-out-sm);
+  transition:border-color 0.25s ease, background 0.25s ease;
 }
+.measure-card.rc-red{border-left-color:#E53935;background:linear-gradient(90deg,rgba(229,57,53,0.10),var(--surface) 45%);}
+.measure-card.rc-orange{border-left-color:#FB8C00;background:linear-gradient(90deg,rgba(251,140,0,0.10),var(--surface) 45%);}
+.measure-card.rc-yellow{border-left-color:#FDD835;background:linear-gradient(90deg,rgba(253,216,53,0.16),var(--surface) 45%);}
+.measure-card.rc-green{border-left-color:#43A047;background:linear-gradient(90deg,rgba(67,160,71,0.10),var(--surface) 45%);}
+.measure-card.rc-blue{border-left-color:#1E88E5;background:linear-gradient(90deg,rgba(30,136,229,0.10),var(--surface) 45%);}
+.measure-card.rc-purple{border-left-color:#8E24AA;background:linear-gradient(90deg,rgba(142,36,170,0.10),var(--surface) 45%);}
 .measure-header{
   padding:16px 20px;
   background:transparent;
@@ -2205,8 +2213,48 @@ ADHD:{
   }
 },
 Autism:{
+  rmet:{
+    name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:true,reporter:"self",rowColor:"red",manualComplete:true,
+    note:"Baron-Cohen et al. (2001), Autism Research Centre, University of Cambridge. The RMET's 36 items are copyrighted photographic stimuli (black-and-white photographs of the eye region, each with 4 forced-choice mental-state words) — the images themselves are the licensed test content and cannot be reproduced here. Administer the official stimulus set/booklet or licensed digital version separately, then enter the resulting score. Adult norms: general population mean ≈26/36; autistic-sample mean ≈21/36. No single validated clinical cutoff — interpret relative to population norms and convergent evidence.",
+    link:{url:"https://psytests.org/arc/rmeten.html",label:"Administer RMET at psytests.org"},
+    fields:[
+      {id:"rmetTotal",l:"Total Correct",h:"out of 36 (Revised Adult version)"},
+      {id:"rmetVersion",l:"Version / Form Used",h:"e.g., Revised Adult 36-item, Child version"},
+      {id:"rmetNotes",l:"Administration Notes",h:"e.g., practice item used, any items omitted"}
+    ]
+  },
+  srs2_self:{
+    name:"Social Responsiveness Scale — Second Edition (SRS-2), Self-Report",abbr:"SRS-2 Self",type:"entry",primary:true,reporter:"self",rowColor:"orange",manualComplete:true,
+    note:"WPS-licensed. Enter T-scores from the Adult Self-Report form. T ≥60 mild-to-moderate range; T ≥76 severe range.",
+    link:{url:"https://hub.wpspublish.com/",label:"Administer via WPS Hub"},
+    fields:[
+      {id:"srs2SelfTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
+      {id:"srs2SelfSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
+      {id:"srs2SelfRRB",l:"Restricted Interests & Repetitive Behavior",h:"subscale T-score"},
+      {id:"srs2SelfDMC",l:"DSM-5 Compatible Score",h:"if reported"}
+    ]
+  },
+  pai:{
+    name:"Personality Assessment Inventory (PAI)",abbr:"PAI",type:"entry",primary:true,reporter:"self",rowColor:"yellow",manualComplete:true,
+    note:"PAR-licensed. Enter T-scores from the administered PAI. T ≥70 clinically elevated on most scales. Used to characterize co-occurring personality/psychopathology features relevant to differential diagnosis.",
+    link:{url:"https://app.pariconnect.com/auth/login",label:"Administer via PARiConnect"},
+    fields:[
+      {id:"paiICN",l:"Inconsistency (ICN)",h:"validity scale T-score",required:true},
+      {id:"paiINF",l:"Infrequency (INF)",h:"validity scale T-score",required:true},
+      {id:"paiNIM",l:"Negative Impression Management (NIM)",h:"validity scale T-score",required:true},
+      {id:"paiPIM",l:"Positive Impression Management (PIM)",h:"validity scale T-score",required:true},
+      {id:"paiSomatic",l:"Somatic Complaints (SOM)",h:"T-score",required:true},
+      {id:"paiAnxiety",l:"Anxiety (ANX)",h:"T-score",required:true},
+      {id:"paiAnxietyRelated",l:"Anxiety-Related Disorders (ARD)",h:"T-score",required:true},
+      {id:"paiDepression",l:"Depression (DEP)",h:"T-score",required:true},
+      {id:"paiMania",l:"Mania (MAN)",h:"T-score",required:true},
+      {id:"paiBorderline",l:"Borderline Features (BOR)",h:"T-score",required:true},
+      {id:"paiSchizophrenia",l:"Schizophrenia (SCZ)",h:"T-score",required:true},
+      {id:"paiOther",l:"Other Elevated Scales / Notes",h:"e.g., ALC, DRG, AGG, SUI, STR, NON, RXR, DOM, WRM"}
+    ]
+  },
   eq:{
-    name:"Cambridge Behaviour Scale (Empathy Quotient)",abbr:"EQ",warn:true,primary:true,reporter:"self",
+    name:"Cambridge Behaviour Scale (Empathy Quotient)",abbr:"EQ",warn:true,primary:true,reporter:"self",rowColor:"green",
     note:"Empathy Quotient (Baron-Cohen & Wheelwright, 2004; © MRC-SBC/SJW 1999), developed by the Autism Research Centre, University of Cambridge. 60 items — 40 scored, 20 unscored filler items included to reduce response bias. All 60 must be answered for the scale to be valid. General population mean ≈42; autistic-sample mean ≈20 (0–80 range; lower scores associated with autism).",
     instr:"Please read each statement very carefully and rate how strongly you agree or disagree with it. There are no right or wrong answers, or trick questions. In order for the scale to be valid, you must answer every question.",
     scale:{l:["Strongly Agree","Slightly Agree","Slightly Disagree","Strongly Disagree"],v:[1,2,3,4]},
@@ -2283,70 +2331,8 @@ Autism:{
       return {"EQ Total":t+"/80"+(t<=30?" ⚑ ≤30 (low; autism-consistent range)":"")};
     }
   },
-  srs2_self:{
-    name:"Social Responsiveness Scale — Second Edition (SRS-2), Self-Report",abbr:"SRS-2 Self",type:"entry",primary:true,reporter:"self",
-    note:"WPS-licensed. Enter T-scores from the Adult Self-Report form. T ≥60 mild-to-moderate range; T ≥76 severe range.",
-    link:{url:"https://hub.wpspublish.com/",label:"Administer via WPS Hub"},
-    fields:[
-      {id:"srs2SelfTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
-      {id:"srs2SelfSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
-      {id:"srs2SelfRRB",l:"Restricted Interests & Repetitive Behavior",h:"subscale T-score"},
-      {id:"srs2SelfDMC",l:"DSM-5 Compatible Score",h:"if reported"}
-    ]
-  },
-  srs2_other:{
-    name:"Social Responsiveness Scale — Second Edition (SRS-2), Relative/Other Report",abbr:"SRS-2 Other",type:"entry",primary:true,reporter:"other",
-    note:"WPS-licensed. Enter T-scores from the Adult Relative/Other-Report form, completed by someone who knows the client well.",
-    link:{url:"https://hub.wpspublish.com/",label:"Administer via WPS Hub"},
-    fields:[
-      {id:"srs2OtherTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
-      {id:"srs2OtherSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
-      {id:"srs2OtherRRB",l:"Restricted Interests & Repetitive Behavior",h:"subscale T-score"},
-      {id:"srs2OtherRelationship",l:"Rater's Relationship to Client",h:"e.g., partner, parent, sibling"}
-    ]
-  },
-  scq:{
-    name:"Social Communication Questionnaire (SCQ), Caregiver-Report",abbr:"SCQ",type:"entry",primary:true,reporter:"other",
-    note:"Rutter, Bailey & Lord; WPS-published. Caregiver-completed. Total score ≥15 (Lifetime form) suggests further evaluation warranted.",
-    fields:[
-      {id:"scqTotal",l:"Total Score",h:"≥15 threshold, max 39 (Lifetime form)"},
-      {id:"scqForm",l:"Form Used",h:"Lifetime or Current"},
-      {id:"scqRespondent",l:"Caregiver / Respondent",h:"relationship to client"}
-    ]
-  },
-  vineland3:{
-    name:"Vineland Adaptive Behavior Scales — Third Edition (Vineland-3)",abbr:"Vineland-3",type:"entry",primary:true,reporter:"other",
-    note:"Pearson-licensed. Enter standard scores (M=100, SD=15) from the administered form (Comprehensive Interview, Domain-Level, or Rating Scale).",
-    fields:[
-      {id:"vinelandABC",l:"Adaptive Behavior Composite",h:"standard score, M=100/SD=15"},
-      {id:"vinelandComm",l:"Communication Domain",h:"standard score"},
-      {id:"vinelandDaily",l:"Daily Living Skills Domain",h:"standard score"},
-      {id:"vinelandSocial",l:"Socialization Domain",h:"standard score"},
-      {id:"vinelandMotor",l:"Motor Skills Domain",h:"optional — if administered"},
-      {id:"vinelandRespondent",l:"Respondent",h:"self, caregiver, or clinician-observed form"}
-    ]
-  },
-  pai:{
-    name:"Personality Assessment Inventory (PAI)",abbr:"PAI",type:"entry",primary:true,reporter:"self",
-    note:"PAR-licensed. Enter T-scores from the administered PAI. T ≥70 clinically elevated on most scales. Used to characterize co-occurring personality/psychopathology features relevant to differential diagnosis.",
-    link:{url:"https://app.pariconnect.com/auth/login",label:"Administer via PARiConnect"},
-    fields:[
-      {id:"paiICN",l:"Inconsistency (ICN)",h:"validity scale T-score",required:true},
-      {id:"paiINF",l:"Infrequency (INF)",h:"validity scale T-score",required:true},
-      {id:"paiNIM",l:"Negative Impression Management (NIM)",h:"validity scale T-score",required:true},
-      {id:"paiPIM",l:"Positive Impression Management (PIM)",h:"validity scale T-score",required:true},
-      {id:"paiSomatic",l:"Somatic Complaints (SOM)",h:"T-score",required:true},
-      {id:"paiAnxiety",l:"Anxiety (ANX)",h:"T-score",required:true},
-      {id:"paiAnxietyRelated",l:"Anxiety-Related Disorders (ARD)",h:"T-score",required:true},
-      {id:"paiDepression",l:"Depression (DEP)",h:"T-score",required:true},
-      {id:"paiMania",l:"Mania (MAN)",h:"T-score",required:true},
-      {id:"paiBorderline",l:"Borderline Features (BOR)",h:"T-score",required:true},
-      {id:"paiSchizophrenia",l:"Schizophrenia (SCZ)",h:"T-score",required:true},
-      {id:"paiOther",l:"Other Elevated Scales / Notes",h:"e.g., ALC, DRG, AGG, SUI, STR, NON, RXR, DOM, WRM"}
-    ]
-  },
   catq:{
-    name:"Camouflaging Autistic Traits Questionnaire",abbr:"CAT-Q",warn:true,primary:true,reporter:"self",
+    name:"Camouflaging Autistic Traits Questionnaire",abbr:"CAT-Q",warn:true,primary:true,reporter:"self",rowColor:"blue",
     instr:"The following statements describe ways that people interact with others. Please indicate how much each statement applies to you.",
     scale:{l:["Strongly Disagree","2","3","4","5","6","Strongly Agree"],v:[1,2,3,4,5,6,7]},
     subs:{C:[0,2,4,6,11,18,19,20,24],A:[1,3,5,9,12,15,21],K:[7,8,10,13,14,16,17,22,23]},
@@ -2384,7 +2370,7 @@ Autism:{
     }
   },
   raadsr:{
-    name:"Ritvo Autism Asperger Diagnostic Scale — Revised (RAADS-R)",abbr:"RAADS-R",warn:true,primary:true,reporter:"self",
+    name:"Ritvo Autism Asperger Diagnostic Scale — Revised (RAADS-R)",abbr:"RAADS-R",warn:true,primary:true,reporter:"self",rowColor:"purple",
     note:"© Riva Ariella Ritvo, Ph.D. and Edward Ritvo, M.D., 2007 (Ritvo et al., 2011, J Autism Dev Disord 41:1076–1089). 80 items; 17 items (marked * below) are reverse-scored normative items per the official scoring key. Total range 0–240; ≥65 consistent with autism, ≥90 strongly consistent. Subscale breakdown (Social Relatedness /88, Language /28, Sensory-Motor /60, Circumscribed Interests /64) requires the original publication's item-to-subscale key and is entered separately below if computed via a validated scoring tool.",
     instr:"Some life experiences and personality characteristics that may apply to you. For each statement, check the single column that best applies. There are no right or wrong answers.",
     scale:{l:["True now and when I was young","True only now","True only when I was younger than 16","Never true"],v:[3,2,1,0]},
@@ -2479,16 +2465,38 @@ Autism:{
       return {"RAADS-R Total":t+"/240"+(t>=65?" ⚑ ≥65 (consistent with autism)":"")+(t>=90?" ⚑⚑ ≥90 strongly consistent":"")};
     }
   },
-  rmet:{
-    name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:true,reporter:"self",
-    note:"Baron-Cohen et al. (2001), Autism Research Centre, University of Cambridge. The RMET's 36 items are copyrighted photographic stimuli (black-and-white photographs of the eye region, each with 4 forced-choice mental-state words) — the images themselves are the licensed test content and cannot be reproduced here. Administer the official stimulus set/booklet or licensed digital version separately, then enter the resulting score. Adult norms: general population mean ≈26/36; autistic-sample mean ≈21/36. No single validated clinical cutoff — interpret relative to population norms and convergent evidence.",
-    link:{url:"https://psytests.org/arc/rmeten.html",label:"Administer RMET at psytests.org"},
+  srs2_other:{
+    name:"Social Responsiveness Scale — Second Edition (SRS-2), Relative/Other Report",abbr:"SRS-2 Other",type:"entry",primary:true,reporter:"other",
+    note:"WPS-licensed. Enter T-scores from the Adult Relative/Other-Report form, completed by someone who knows the client well.",
+    link:{url:"https://hub.wpspublish.com/",label:"Administer via WPS Hub"},
     fields:[
-      {id:"rmetTotal",l:"Total Correct",h:"out of 36 (Revised Adult version)"},
-      {id:"rmetVersion",l:"Version / Form Used",h:"e.g., Revised Adult 36-item, Child version"},
-      {id:"rmetNotes",l:"Administration Notes",h:"e.g., practice item used, any items omitted"}
+      {id:"srs2OtherTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
+      {id:"srs2OtherSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
+      {id:"srs2OtherRRB",l:"Restricted Interests & Repetitive Behavior",h:"subscale T-score"},
+      {id:"srs2OtherRelationship",l:"Rater's Relationship to Client",h:"e.g., partner, parent, sibling"}
     ]
-  }
+  },
+  scq:{
+    name:"Social Communication Questionnaire (SCQ), Caregiver-Report",abbr:"SCQ",type:"entry",primary:true,reporter:"other",
+    note:"Rutter, Bailey & Lord; WPS-published. Caregiver-completed. Total score ≥15 (Lifetime form) suggests further evaluation warranted.",
+    fields:[
+      {id:"scqTotal",l:"Total Score",h:"≥15 threshold, max 39 (Lifetime form)"},
+      {id:"scqForm",l:"Form Used",h:"Lifetime or Current"},
+      {id:"scqRespondent",l:"Caregiver / Respondent",h:"relationship to client"}
+    ]
+  },
+  vineland3:{
+    name:"Vineland Adaptive Behavior Scales — Third Edition (Vineland-3)",abbr:"Vineland-3",type:"entry",primary:true,reporter:"other",
+    note:"Pearson-licensed. Enter standard scores (M=100, SD=15) from the administered form (Comprehensive Interview, Domain-Level, or Rating Scale).",
+    fields:[
+      {id:"vinelandABC",l:"Adaptive Behavior Composite",h:"standard score, M=100/SD=15"},
+      {id:"vinelandComm",l:"Communication Domain",h:"standard score"},
+      {id:"vinelandDaily",l:"Daily Living Skills Domain",h:"standard score"},
+      {id:"vinelandSocial",l:"Socialization Domain",h:"standard score"},
+      {id:"vinelandMotor",l:"Motor Skills Domain",h:"optional — if administered"},
+      {id:"vinelandRespondent",l:"Respondent",h:"self, caregiver, or clinician-observed form"}
+    ]
+  },
 },
 OCD:{
   ocd_ci:{
@@ -4192,6 +4200,7 @@ function buildEntryCard(mod,key,m){
         ${tierTag(m)}
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
+        ${m.manualComplete?`<span class="score-badge" id="sb_${mid}">not started</span>`:''}
         ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
@@ -4202,11 +4211,19 @@ function buildEntryCard(mod,key,m){
         ${m.link?`<a class="btn-sm btn-word" href="${m.link.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">${m.link.label} ↗</a>`:''}
         <div class="form-grid cols-3">`;
   const TEXT_FIELD_RE=/source|form|version|relationship|respondent|notes|summary/i;
+  const oninput=m.manualComplete?` oninput="refreshManualCompleteAvailability('${mod}','${key}')"`:'';
   m.fields.forEach(f=>{
     const isText=TEXT_FIELD_RE.test(f.id);
-    h+=`<div class="field"><label>${f.l}${f.required?' <span class="field-required" title="Required">*</span>':''}<br><span class="hint">${f.h}</span></label><input type="${isText?'text':'number'}" id="entry_${mod}_${f.id}" ${isText?'':'min="0"'} ${f.required?'required':''} placeholder="—"></div>`;
+    h+=`<div class="field"><label>${f.l}${f.required?' <span class="field-required" title="Required">*</span>':''}<br><span class="hint">${f.h}</span></label><input type="${isText?'text':'number'}" id="entry_${mod}_${f.id}" ${isText?'':'min="0"'} ${f.required?'required':''}${oninput} placeholder="—"></div>`;
   });
-  h+=`</div></div></div></div>`;
+  h+=`</div>`;
+  if(m.manualComplete){
+    h+=`<label style="display:flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;font-size:13px;font-weight:600;">
+      <input type="checkbox" id="mcb_${mid}" disabled onchange="toggleManualComplete('${mod}','${key}',this)">
+      Mark this section complete
+    </label>`;
+  }
+  h+=`</div></div></div>`;
   return h;
 }
 
@@ -4303,6 +4320,43 @@ function updateProg(mod,key){
     else if(ans<tot){sb.textContent=ans+'/'+tot;sb.classList.remove('complete');}
     else{sb.textContent='complete ✓';sb.classList.add('complete');}
   }
+  const rowColor=M[mod][key]&&M[mod][key].rowColor;
+  if(rowColor) applyRowColorClass(mid,rowColor,tot>0&&ans===tot);
+}
+
+// ================================================================
+// RAINBOW ROW COLORING — tile turns its assigned color once complete,
+// grey (default card styling) otherwise.
+// ================================================================
+const ROW_COLORS=['red','orange','yellow','green','blue','purple'];
+function applyRowColorClass(mid,color,isComplete){
+  const el=document.getElementById('mc_'+mid);
+  if(!el||!color)return;
+  ROW_COLORS.forEach(c=>el.classList.remove('rc-'+c));
+  if(isComplete) el.classList.add('rc-'+color);
+}
+
+function refreshManualCompleteAvailability(mod,key){
+  const mid=mod+'_'+key;
+  const cb=document.getElementById('mcb_'+mid);
+  if(!cb)return;
+  const has=measureHasData(mod,key);
+  cb.disabled=!has;
+  if(!has&&cb.checked){
+    cb.checked=false;
+    toggleManualComplete(mod,key,cb);
+  }
+}
+
+function toggleManualComplete(mod,key,cb){
+  const mid=mod+'_'+key;
+  const m=M[mod][key];
+  const sb=document.getElementById('sb_'+mid);
+  if(sb){
+    if(cb.checked){ sb.textContent='complete ✓'; sb.classList.add('complete'); }
+    else{ sb.textContent=measureHasData(mod,key)?'in progress':'not started'; sb.classList.remove('complete'); }
+  }
+  applyRowColorClass(mid,m.rowColor,cb.checked);
 }
 
 function updateScores(mod,key){
@@ -5119,7 +5173,9 @@ function buildMeasurePayload(mod,key){
   if(m.type==='entry'){
     const fields={};
     m.fields.forEach(f=>fields[f.id]=v(`entry_${mod}_${f.id}`));
-    return {mod,key,mtype:'entry',fields};
+    const payload={mod,key,mtype:'entry',fields};
+    if(m.manualComplete) payload.complete=!!document.getElementById(`mcb_${mod}_${key}`)?.checked;
+    return payload;
   }
   if(m.type==='interview'){
     const sections={};
@@ -5171,6 +5227,11 @@ function importMeasurePayload(mod,key,payload){
       const el=document.getElementById(`entry_${mod}_${f.id}`);
       if(el&&payload.fields&&Object.prototype.hasOwnProperty.call(payload.fields,f.id)) el.value=payload.fields[f.id];
     });
+    if(m.manualComplete){
+      refreshManualCompleteAvailability(mod,key);
+      const cb=document.getElementById(`mcb_${mod}_${key}`);
+      if(cb&&!cb.disabled&&payload.complete){ cb.checked=true; toggleManualComplete(mod,key,cb); }
+    }
     return true;
   }
   if(payload.mtype==='interview'&&m.type==='interview'){
