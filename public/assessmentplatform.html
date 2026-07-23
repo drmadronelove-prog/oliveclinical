@@ -2176,6 +2176,33 @@ ADHD:{
       r.forEach((v,i)=>{ if(v===null)return; t+=v; if(i<6)a+=v; if(i<3&&v>=2)sc++; if(i>=3&&i<6&&v>=3)sc++; });
       return {"Part A Raw":a+"/24","Part A Screen":sc+"/6"+(sc>=4?" ⚑ positive":""),"Total Raw":t+"/72"};
     }
+  },
+  dev_hx_adhd:{
+    name:"Developmental History Questionnaire — ADHD",abbr:"ADHD Dev Hx",type:"interview",
+    note:"Structured background history intake, matching the Developmental History section of the ADHD report template. Complete with the client and/or a collateral informant.",
+    sections:[
+      {id:"family",label:"Family",ph:"Birthplace/upbringing:\nFamily structure and relationships:\nDiscipline history:\nDevelopmental context:\nTrauma history:\nCurrent living situation:\nRelationship status, children:\nIdentity and pronouns:"},
+      {id:"home",label:"Difficulties at Home",ph:"Childhood home functioning:\nDiscipline concerns:\nChores:\nOrganization:\nFamily dynamics:\nEmotional/behavioral concerns:"},
+      {id:"school",label:"Difficulties in School",ph:"Elementary/middle/high school functioning:\nAttention:\nHomework completion:\nGrades:\nLearning concerns:\nOrganization:\nTime management:\nCollege/graduate school history:"},
+      {id:"social",label:"Social Relationships",ph:"Friendships:\nPeer relationships:\nSocial functioning:\nRelationship patterns:"},
+      {id:"mental_health",label:"Mental Health",ph:"Depression:\nAnxiety:\nTrauma history:\nMood symptoms:\nTherapy history:\nOther relevant diagnoses:"}
+    ]
+  },
+  dev_hx_audhd:{
+    name:"Developmental History Questionnaire — AuDHD (Combined)",abbr:"AuDHD Dev Hx",type:"interview",
+    note:"For combined ADHD + Autism (AuDHD) evaluations. Merges the developmental history domains from both the ADHD and Autism report templates into a single questionnaire. Also appears in the Autism stack — complete it once; it applies to both modules.",
+    sections:[
+      {id:"family",label:"Family",ph:"Birthplace/upbringing:\nFamily structure and relationships:\nDiscipline history:\nDevelopmental context:\nTrauma history:\nCurrent living situation:\nRelationship status, children:\nIdentity and pronouns:\nFamily psychiatric/developmental/neurodivergence history:"},
+      {id:"medical",label:"Medical History",ph:"Birth history:\nHospitalizations:\nSurgeries:\nSignificant illnesses/injuries:\nSeizures:\nMedications:\nAllergies:\nDevelopmental motor/speech concerns:"},
+      {id:"home",label:"Difficulties at Home (Childhood)",ph:"Childhood home functioning:\nDiscipline concerns:\nChores:\nOrganization:\nFamily dynamics:\nEmotional/behavioral concerns:\nEarly play patterns and routines/rigidity:"},
+      {id:"school",label:"Difficulties in School",ph:"Elementary/middle/high school functioning:\nAttention:\nHomework completion:\nGrades:\nLearning concerns:\nOrganization:\nTime management:\nCollege/graduate school history:\nSchool adjustment and peer relationships:"},
+      {id:"social",label:"Social Relationships",ph:"Friendships:\nPeer relationships:\nSocial functioning:\nRelationship patterns:\nMasking or camouflaging behaviors noted:"},
+      {id:"psychiatric",label:"Psychiatric / Mental Health History",ph:"Depression:\nAnxiety:\nTrauma history:\nMood symptoms:\nTherapy history:\nPsychiatric hospitalization:\nSuicide attempts:\nSelf-harm history:\nSubstance use:\nCurrent substances:\nOther relevant diagnoses:"},
+      {id:"occupational",label:"Occupational History",ph:"Current job:\nLongest job held:\nWork-related difficulties:\nFuture employment plans:"},
+      {id:"legal",label:"Legal History",ph:"Legal/criminal history, or state 'none reported':"},
+      {id:"benefits",label:"Benefits / Secondary Gain",ph:"Is the patient seeking evaluation for benefits, accommodations, disability, legal, or other purposes? Describe, or state 'denies secondary gain':"},
+      {id:"daily_living",label:"Current Daily Living Skills and Habits",ph:"Typical day:\nGrooming/hygiene:\nTransportation:\nMoney management:\nHousekeeping:\nCooking/eating/meal preparation:\nHealthcare management:\nSleep:\nProblem-solving:"}
+    ]
   }
 },
 Autism:{
@@ -2376,6 +2403,36 @@ Autism:{
       {id:"B4",label:"Criterion B4 — Hyper/Hyporeactivity to Sensory Input",ph:"Seeking or avoiding: sounds, textures, pain, temperature, light, smell, taste, vestibular, proprioceptive.\n\nSensory seeking behaviors:\nSensory avoiding behaviors:\nFunctional impact:"},
       {id:"masking",label:"Masking History and Late Diagnosis Context",ph:"Age of first suspicion or self-identification:\nContexts where masking is most effortful:\nMasking fatigue / burnout episodes:\nHow diagnosis was missed previously:\nCultural or gender factors affecting presentation:\nExhaustion after social situations:"},
       {id:"dev_hx",label:"Early Developmental History",ph:"Language milestones:\nMotor milestones:\nEarly play patterns:\nSchool adjustment and peer relationships:\nFriendship history:\nAny regression noted:\nFamily history of neurodivergence:"}
+    ]
+  },
+  dev_hx_asd:{
+    name:"Developmental History Questionnaire — Autism",abbr:"ASD Dev Hx",type:"interview",
+    note:"Structured background history intake, matching the Relevant Background Information section of the Autism report template. Complete with the client and/or a collateral informant.",
+    sections:[
+      {id:"family",label:"Family History",ph:"Birthplace and upbringing:\nFamily structure and relationships:\nFamily psychiatric/developmental history:\nRelevant trauma or stressors:"},
+      {id:"medical",label:"Medical History",ph:"Birth history:\nHospitalizations:\nSurgeries:\nSignificant illnesses/injuries:\nSeizures:\nMedications:\nAllergies:"},
+      {id:"psychiatric",label:"Psychiatric History",ph:"Mental health diagnoses/symptoms:\nTherapy history:\nPsychiatric hospitalization:\nSuicide attempts:\nSelf-harm history:\nSubstance use:\nCurrent substances:"},
+      {id:"education",label:"Education History",ph:"Academic history:\nSupports/accommodations received:\nLearning concerns:\nGrades:\nCollege/graduate history:\nDevelopmental motor/speech concerns:"},
+      {id:"occupational",label:"Occupational History",ph:"Current job:\nLongest job held:\nWork-related difficulties:\nFuture employment plans:"},
+      {id:"legal",label:"Legal History",ph:"Legal/criminal history, or state 'none reported':"},
+      {id:"benefits",label:"Benefits / Secondary Gain",ph:"Is the patient seeking evaluation for benefits, accommodations, disability, legal, or other purposes? Describe, or state 'denies secondary gain':"},
+      {id:"daily_living",label:"Current Daily Living Skills and Habits",ph:"Typical day:\nGrooming/hygiene:\nTransportation:\nMoney management:\nHousekeeping:\nCooking/eating/meal preparation:\nHealthcare management:\nSleep:\nProblem-solving:"}
+    ]
+  },
+  dev_hx_audhd:{
+    name:"Developmental History Questionnaire — AuDHD (Combined)",abbr:"AuDHD Dev Hx",type:"interview",
+    note:"For combined ADHD + Autism (AuDHD) evaluations. Merges the developmental history domains from both the Autism and ADHD report templates into a single questionnaire. Also appears in the ADHD stack — complete it once; it applies to both modules.",
+    sections:[
+      {id:"family",label:"Family",ph:"Birthplace/upbringing:\nFamily structure and relationships:\nDiscipline history:\nDevelopmental context:\nTrauma history:\nCurrent living situation:\nRelationship status, children:\nIdentity and pronouns:\nFamily psychiatric/developmental/neurodivergence history:"},
+      {id:"medical",label:"Medical History",ph:"Birth history:\nHospitalizations:\nSurgeries:\nSignificant illnesses/injuries:\nSeizures:\nMedications:\nAllergies:\nDevelopmental motor/speech concerns:"},
+      {id:"home",label:"Difficulties at Home (Childhood)",ph:"Childhood home functioning:\nDiscipline concerns:\nChores:\nOrganization:\nFamily dynamics:\nEmotional/behavioral concerns:\nEarly play patterns and routines/rigidity:"},
+      {id:"school",label:"Difficulties in School",ph:"Elementary/middle/high school functioning:\nAttention:\nHomework completion:\nGrades:\nLearning concerns:\nOrganization:\nTime management:\nCollege/graduate school history:\nSchool adjustment and peer relationships:"},
+      {id:"social",label:"Social Relationships",ph:"Friendships:\nPeer relationships:\nSocial functioning:\nRelationship patterns:\nMasking or camouflaging behaviors noted:"},
+      {id:"psychiatric",label:"Psychiatric / Mental Health History",ph:"Depression:\nAnxiety:\nTrauma history:\nMood symptoms:\nTherapy history:\nPsychiatric hospitalization:\nSuicide attempts:\nSelf-harm history:\nSubstance use:\nCurrent substances:\nOther relevant diagnoses:"},
+      {id:"occupational",label:"Occupational History",ph:"Current job:\nLongest job held:\nWork-related difficulties:\nFuture employment plans:"},
+      {id:"legal",label:"Legal History",ph:"Legal/criminal history, or state 'none reported':"},
+      {id:"benefits",label:"Benefits / Secondary Gain",ph:"Is the patient seeking evaluation for benefits, accommodations, disability, legal, or other purposes? Describe, or state 'denies secondary gain':"},
+      {id:"daily_living",label:"Current Daily Living Skills and Habits",ph:"Typical day:\nGrooming/hygiene:\nTransportation:\nMoney management:\nHousekeeping:\nCooking/eating/meal preparation:\nHealthcare management:\nSleep:\nProblem-solving:"}
     ]
   },
   collateral_autism:{
