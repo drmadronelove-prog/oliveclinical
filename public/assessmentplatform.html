@@ -468,6 +468,19 @@ body::before{display:none;}
   transition:transform 0.2s;margin-left:8px;
 }
 .chevron.open{transform:rotate(180deg);}
+.dlup-controls{display:inline-flex;align-items:center;gap:4px;}
+.btn-icon{
+  width:26px;height:26px;padding:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:8px;cursor:pointer;border:none;
+  background:var(--surface);color:var(--ink-muted);
+  box-shadow:var(--neu-out-xs);
+  transition:all 0.18s ease;
+}
+.btn-icon:hover{box-shadow:var(--neu-out-sm);color:var(--primary);}
+.btn-icon:active{box-shadow:var(--neu-in-sm);}
+.btn-icon:focus-visible{outline:2px solid var(--primary);outline-offset:2px;}
+.btn-icon svg{width:13px;height:13px;}
 .measure-body{padding:0 20px 20px;display:none;}
 .measure-body.open{display:block;}
 
@@ -2760,7 +2773,10 @@ function renderUniversal(){
         <span class="measure-name">${scl.name}</span>
         <span class="warn-tag">Score entry — Pearson licensed</span>
       </div>
-      <span class="chevron" id="cv_uni_scl90r">▼</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        ${dlUploadControls('UNIVERSAL','scl90r')}
+        <span class="chevron" id="cv_uni_scl90r">▼</span>
+      </div>
     </div>
     <div class="measure-body" id="mb_uni_scl90r">
       <div class="measure-instruction">${scl.note}</div>
@@ -2789,7 +2805,10 @@ function renderUniversal(){
         <span class="measure-name">${mini.name}</span>
         <span class="warn-tag">Structured interview</span>
       </div>
-      <span class="chevron" id="cv_uni_mini">▼</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        ${dlUploadControls('UNIVERSAL','mini')}
+        <span class="chevron" id="cv_uni_mini">▼</span>
+      </div>
     </div>
     <div class="measure-body" id="mb_uni_mini">
       <div class="measure-instruction">${mini.note}</div>`;
@@ -4064,6 +4083,19 @@ function tierTag(m){
   return '';
 }
 
+function dlUploadControls(mod,key){
+  const mid=mod+'_'+key;
+  return `<span class="dlup-controls" onclick="event.stopPropagation()">
+    <button type="button" class="btn-icon" title="Download this measure as a PDF" onclick="downloadMeasurePDF('${mod}','${key}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+    </button>
+    <button type="button" class="btn-icon" title="Upload a previously-downloaded PDF to restore responses" onclick="document.getElementById('upl_${mid}').click()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V8m0 0l-4 4m4-4l4 4M5 3h14"/></svg>
+    </button>
+    <input type="file" accept="application/pdf" id="upl_${mid}" style="display:none" onchange="handleMeasureUpload('${mod}','${key}',this)">
+  </span>`;
+}
+
 function buildMCard(mod,key,m){
   const mid=mod+'_'+key;
   if(m.type==='entry') return buildEntryCard(mod,key,m);
@@ -4084,6 +4116,7 @@ function buildMCard(mod,key,m){
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="score-badge" id="sb_${mid}">not started</span>
+        ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
     </div>
@@ -4118,7 +4151,10 @@ function buildInterviewCard(mod,key,m){
         <span class="warn-tag">Interview notes</span>
         ${tierTag(m)}
       </div>
-      <span class="chevron" id="cv_${mid}">▼</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        ${dlUploadControls(mod,key)}
+        <span class="chevron" id="cv_${mid}">▼</span>
+      </div>
     </div>
     <div class="measure-body" id="mb_${mid}">`;
   if(m.note) h+=`<div class="measure-instruction">${m.note}</div>`;
@@ -4141,7 +4177,10 @@ function buildEntryCard(mod,key,m){
         <span class="measure-name">${m.name}</span>
         ${tierTag(m)}
       </div>
-      <span class="chevron" id="cv_${mid}">▼</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        ${dlUploadControls(mod,key)}
+        <span class="chevron" id="cv_${mid}">▼</span>
+      </div>
     </div>
     <div class="measure-body" id="mb_${mid}">
       <div class="score-entry-box">
@@ -4173,6 +4212,7 @@ function buildClinicianCard(mod,key,m){
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="score-badge" id="sb_${mid}">not started</span>
+        ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
     </div>
@@ -4816,23 +4856,9 @@ const SYS_ADHD=SYS_HEADER+"\n\n"+SYS_SECTION1+"\n\n"+SYS_SECTION2_ADHD+"\n\n"+SY
 
 
 // ================================================================
-// DOWNLOAD ASSESSMENT DATA (PDF) — everything entered, nothing blank
+// SHARED PDF WRITER — used by per-measure and full assessment exports
 // ================================================================
-function measureHasData(mod,key){
-  const m=M[mod][key];
-  const v=id=>(document.getElementById(id)?.value||'').trim();
-  if(m.type==='entry') return m.fields.some(f=>v(`entry_${mod}_${f.id}`)!=='');
-  if(m.type==='interview') return m.sections.some(s=>v(`ci_${mod}_${key}_${s.id}`)!=='');
-  const r=responses[mod]&&responses[mod][key];
-  return !!(r&&r.some(x=>x!==null));
-}
-
-function downloadAssessmentDataPDF(){
-  const v=id=>document.getElementById(id)?.value||'';
-  const clientNameRaw=v('clientName').trim();
-  const dob=v('dob');let age='';
-  if(dob){const d=Date.now()-new Date(dob).getTime();age=Math.abs(new Date(d).getUTCFullYear()-1970);}
-
+function newPDFWriter(){
   const { jsPDF }=window.jspdf;
   const doc=new jsPDF({unit:'pt',format:'letter'});
   const pageW=doc.internal.pageSize.getWidth();
@@ -4851,24 +4877,130 @@ function downloadAssessmentDataPDF(){
     const lines=doc.splitTextToSize(String(text),contentW-indent);
     lines.forEach(l=>{ ensure(lineH); doc.text(l,margin+indent,y); y+=lineH; });
   };
+  const writeBlank=(h=8)=>{ y+=h; };
   const writeMultiline=(text,opts={})=>{
     String(text).split('\n').forEach(p=>{ if(p.trim()==='')writeBlank(4); else writeLine(p,opts); });
   };
-  const writeBlank=(h=8)=>{ y+=h; };
   const writeHr=()=>{ ensure(10); doc.setDrawColor(180); doc.line(margin,y,pageW-margin,y); y+=10; };
   const sectionHeader=title=>{ writeBlank(8); writeLine(title.toUpperCase(),{size:12,style:'bold'}); writeHr(); };
   const subHeader=title=>{ writeBlank(5); writeLine(title,{size:11,style:'bold'}); writeBlank(2); };
+  const titleBlock=title=>{
+    writeLine(title,{size:16,style:'bold'});
+    writeBlank(2);
+    writeLine(CLINICIAN_INFO.practice,{size:10});
+    writeLine(CLINICIAN_INFO.name+' — License '+CLINICIAN_INFO.license,{size:10});
+    writeLine(CLINICIAN_INFO.location,{size:10});
+    writeBlank(4);
+    writeLine('Exported: '+new Date().toLocaleString(),{size:10});
+    const clientNameRaw=(document.getElementById('clientName')?.value||'').trim();
+    if(clientNameRaw) writeLine('Client: '+clientNameRaw,{size:10});
+  };
+  return {doc,ensure,writeLine,writeBlank,writeMultiline,writeHr,sectionHeader,subHeader,titleBlock};
+}
 
-  // Title block
-  writeLine('Assessment Data Export',{size:16,style:'bold'});
-  writeBlank(2);
-  writeLine(CLINICIAN_INFO.practice,{size:10});
-  writeLine(CLINICIAN_INFO.name+' — License '+CLINICIAN_INFO.license,{size:10});
-  writeLine(CLINICIAN_INFO.location,{size:10});
-  writeBlank(4);
-  const today=new Date();
-  const todayISO=today.toISOString().split('T')[0];
-  writeLine('Exported: '+today.toLocaleString(),{size:10});
+function safeFileToken(s,fallback){
+  return (s||'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||fallback;
+}
+
+// ================================================================
+// DOWNLOAD ASSESSMENT DATA (PDF) — everything entered, nothing blank
+// ================================================================
+function measureHasData(mod,key){
+  const m=M[mod][key];
+  const v=id=>(document.getElementById(id)?.value||'').trim();
+  if(m.type==='entry') return m.fields.some(f=>v(`entry_${mod}_${f.id}`)!=='');
+  if(m.type==='interview') return m.sections.some(s=>v(`ci_${mod}_${key}_${s.id}`)!=='');
+  const r=responses[mod]&&responses[mod][key];
+  return !!(r&&r.some(x=>x!==null));
+}
+
+// Writes the human-readable body (items+score, or fields, or sections) for one M[mod][key] measure.
+function writeMeasureBody(w,mod,key){
+  const m=M[mod][key];
+  const v=id=>document.getElementById(id)?.value||'';
+  if(m.type==='entry'){
+    m.fields.forEach(f=>{
+      const val=v(`entry_${mod}_${f.id}`).trim();
+      if(val==='')return;
+      w.writeLine(f.l+': '+val,{size:10,indent:6});
+    });
+    w.writeBlank(4);
+    return;
+  }
+  if(m.type==='interview'){
+    m.sections.forEach(s=>{
+      const val=v(`ci_${mod}_${key}_${s.id}`).trim();
+      if(val==='')return;
+      w.writeLine(s.label+':',{size:9,style:'italic',indent:6});
+      w.writeMultiline(val,{size:10,indent:12});
+      w.writeBlank(3);
+    });
+    w.writeBlank(4);
+    return;
+  }
+  // scored self/other-report measure, or clinician-rated
+  const r=(responses[mod]&&responses[mod][key])||[];
+  const isClinician=m.type==='clinician';
+  const items=isClinician?[].concat(...m.parts.map(p=>p.items)):m.items;
+  items.forEach((item,i)=>{
+    if(r[i]===undefined||r[i]===null)return;
+    const q=typeof item==='string'?item:item.q;
+    w.writeLine((i+1)+'. '+q,{size:9,indent:6});
+    const respText=isClinician?item.a[r[i]]:(m.scale.l[m.scale.v.indexOf(r[i])]??String(r[i]));
+    w.writeLine('Response: '+respText,{size:9,style:'italic',indent:14});
+  });
+  if(m.score){
+    const sc=m.score(r);
+    w.writeBlank(3);
+    for(const lbl in sc) w.writeLine(lbl+': '+String(sc[lbl]).replace(' ⚑',' (elevated)'),{size:10,style:'bold',indent:6});
+  }
+  w.writeBlank(6);
+}
+
+function universalHasData(key){
+  const v=id=>(document.getElementById(id)?.value||'').trim();
+  if(key==='scl90r'){
+    const scl=UNIVERSAL.scl90r;
+    return [...scl.subscales,...scl.globals].some(f=>v(`uni_scl90r_${f.id}`)!=='')||v('uni_scl90r_notes')!=='';
+  }
+  if(key==='mini') return UNIVERSAL.mini.sections.some(s=>v(`uni_mini_${s.id}`)!=='');
+  return false;
+}
+
+function writeUniversalBody(w,key){
+  const v=id=>document.getElementById(id)?.value||'';
+  if(key==='scl90r'){
+    const scl=UNIVERSAL.scl90r;
+    [...scl.subscales,...scl.globals].forEach(f=>{
+      const val=v(`uni_scl90r_${f.id}`).trim();
+      if(val==='')return;
+      w.writeLine(f.l+': '+val,{size:10,indent:6});
+    });
+    const notes=v('uni_scl90r_notes').trim();
+    if(notes){ w.writeBlank(3); w.writeLine('Interpretation Notes:',{size:9,style:'italic',indent:6}); w.writeMultiline(notes,{size:10,indent:12}); }
+    w.writeBlank(4);
+    return;
+  }
+  if(key==='mini'){
+    UNIVERSAL.mini.sections.forEach(s=>{
+      const val=v(`uni_mini_${s.id}`).trim();
+      if(val==='')return;
+      w.writeLine(s.label+':',{size:9,style:'italic',indent:6});
+      w.writeMultiline(val,{size:10,indent:12});
+      w.writeBlank(3);
+    });
+    w.writeBlank(4);
+  }
+}
+
+function downloadAssessmentDataPDF(){
+  const v=id=>document.getElementById(id)?.value||'';
+  const clientNameRaw=v('clientName').trim();
+  const dob=v('dob');let age='';
+  if(dob){const d=Date.now()-new Date(dob).getTime();age=Math.abs(new Date(d).getUTCFullYear()-1970);}
+
+  const w=newPDFWriter();
+  w.titleBlock('Assessment Data Export');
 
   let anyDataAtAll=false;
 
@@ -4884,11 +5016,11 @@ function downloadAssessmentDataPDF(){
   ].filter(([,val])=>val!=='');
   if(clientFields.length){
     anyDataAtAll=true;
-    sectionHeader('Client Information');
+    w.sectionHeader('Client Information');
     clientFields.forEach(([label,val])=>{
-      writeLine(label+':',{size:9,style:'italic'});
-      writeMultiline(val,{size:10,indent:12});
-      writeBlank(4);
+      w.writeLine(label+':',{size:9,style:'italic'});
+      w.writeMultiline(val,{size:10,indent:12});
+      w.writeBlank(4);
     });
   }
 
@@ -4899,105 +5031,200 @@ function downloadAssessmentDataPDF(){
     const diffVal=v('diff_'+mod).trim();
     if(!keysWithData.length&&!notesVal&&!diffVal) return;
     anyDataAtAll=true;
-    sectionHeader(mod+' Module');
+    w.sectionHeader(mod+' Module');
 
     keysWithData.forEach(key=>{
       const m=M[mod][key];
-      subHeader(m.name+' ('+m.abbr+')');
-
-      if(m.type==='entry'){
-        m.fields.forEach(f=>{
-          const val=v(`entry_${mod}_${f.id}`).trim();
-          if(val==='')return;
-          writeLine(f.l+': '+val,{size:10,indent:6});
-        });
-        writeBlank(4);
-        return;
-      }
-      if(m.type==='interview'){
-        m.sections.forEach(s=>{
-          const val=v(`ci_${mod}_${key}_${s.id}`).trim();
-          if(val==='')return;
-          writeLine(s.label+':',{size:9,style:'italic',indent:6});
-          writeMultiline(val,{size:10,indent:12});
-          writeBlank(3);
-        });
-        writeBlank(4);
-        return;
-      }
-      // scored self/other-report measure, or clinician-rated
-      const r=responses[mod][key];
-      const isClinician=m.type==='clinician';
-      const items=isClinician?[].concat(...m.parts.map(p=>p.items)):m.items;
-      items.forEach((item,i)=>{
-        if(r[i]===undefined||r[i]===null)return;
-        const q=typeof item==='string'?item:item.q;
-        writeLine((i+1)+'. '+q,{size:9,indent:6});
-        const respText=isClinician?item.a[r[i]]:(m.scale.l[m.scale.v.indexOf(r[i])]??String(r[i]));
-        writeLine('Response: '+respText,{size:9,style:'italic',indent:14});
-      });
-      if(m.score){
-        const sc=m.score(r);
-        writeBlank(3);
-        for(const lbl in sc) writeLine(lbl+': '+String(sc[lbl]).replace(' ⚑',' (elevated)'),{size:10,style:'bold',indent:6});
-      }
-      writeBlank(6);
+      w.subHeader(m.name+' ('+m.abbr+')');
+      writeMeasureBody(w,mod,key);
     });
 
     if(notesVal){
-      subHeader('Session Notes');
-      writeMultiline(notesVal,{size:10,indent:6});
-      writeBlank(4);
+      w.subHeader('Session Notes');
+      w.writeMultiline(notesVal,{size:10,indent:6});
+      w.writeBlank(4);
     }
     if(diffVal){
-      subHeader('Differential Considerations');
-      writeMultiline(diffVal,{size:10,indent:6});
-      writeBlank(4);
+      w.subHeader('Differential Considerations');
+      w.writeMultiline(diffVal,{size:10,indent:6});
+      w.writeBlank(4);
     }
   });
 
   // Universal screening
-  const sclSubs=['som','oc','int','dep','anx','hos','phob','par','psy'];
-  const sclGlob=['gsi','psdi','pst'];
-  const sclLbls={som:'SOM',oc:'O-C',int:'INT',dep:'DEP',anx:'ANX',hos:'HOS',phob:'PHOB',par:'PAR',psy:'PSY',gsi:'GSI',psdi:'PSDI',pst:'PST'};
-  const sclVals=[...sclSubs,...sclGlob].map(f=>{const val=v('uni_scl90r_'+f).trim();return val?sclLbls[f]+': '+val:null;}).filter(Boolean);
-  const sclNotes=v('uni_scl90r_notes').trim();
-  const miniVals=UNIVERSAL.mini.sections.map(s=>{const val=v('uni_mini_'+s.id).trim();return val?[s.label,val]:null;}).filter(Boolean);
-
-  if(sclVals.length||sclNotes||miniVals.length){
+  const sclHasData=universalHasData('scl90r');
+  const miniHasData=universalHasData('mini');
+  if(sclHasData||miniHasData){
     anyDataAtAll=true;
-    sectionHeader('Universal Screening');
-    if(sclVals.length||sclNotes){
-      subHeader('SCL-90-R');
-      if(sclVals.length) writeLine(sclVals.join(' | '),{size:10,indent:6});
-      if(sclNotes){ writeBlank(3); writeLine('Notes:',{size:9,style:'italic',indent:6}); writeMultiline(sclNotes,{size:10,indent:12}); }
-      writeBlank(4);
-    }
-    if(miniVals.length){
-      subHeader('M.I.N.I. International Neuropsychiatric Interview');
-      miniVals.forEach(([label,val])=>{
-        writeLine(label+':',{size:9,style:'italic',indent:6});
-        writeMultiline(val,{size:10,indent:12});
-        writeBlank(3);
-      });
-    }
+    w.sectionHeader('Universal Screening');
+    if(sclHasData){ w.subHeader('SCL-90-R'); writeUniversalBody(w,'scl90r'); }
+    if(miniHasData){ w.subHeader('M.I.N.I. International Neuropsychiatric Interview'); writeUniversalBody(w,'mini'); }
   }
 
   // General behavioral observations
   const obs=v('generalObservations').trim();
   if(obs){
     anyDataAtAll=true;
-    sectionHeader('General Session Observations');
-    writeMultiline(obs,{size:10,indent:6});
+    w.sectionHeader('General Session Observations');
+    w.writeMultiline(obs,{size:10,indent:6});
   }
 
   if(!anyDataAtAll){
-    writeBlank(14);
-    writeLine('No assessment data has been entered yet.',{size:11,style:'italic'});
+    w.writeBlank(14);
+    w.writeLine('No assessment data has been entered yet.',{size:11,style:'italic'});
   }
 
-  const safeName=(clientNameRaw||'Client').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'Client';
-  doc.save(`Assessment_Data_${safeName}_${todayISO}.pdf`);
+  const todayISO=new Date().toISOString().split('T')[0];
+  w.doc.save(`Assessment_Data_${safeFileToken(clientNameRaw,'Client')}_${todayISO}.pdf`);
+}
+
+// ================================================================
+// PER-MEASURE DOWNLOAD / UPLOAD — round-trips a single measure's
+// data through a PDF that embeds a machine-readable copy of the
+// same data, so it can be re-imported later.
+// ================================================================
+function utf8ToB64(str){ return btoa(unescape(encodeURIComponent(str))); }
+function b64ToUtf8(b64){ return decodeURIComponent(escape(atob(b64))); }
+
+function writeMeasureDataPage(w,payload){
+  w.doc.addPage();
+  w.writeLine('MACHINE-READABLE DATA — DO NOT EDIT',{size:9,style:'italic'});
+  w.writeLine('Re-upload this PDF via the Upload button on this measure to restore these responses.',{size:8,style:'italic'});
+  w.writeBlank(6);
+  const b64=utf8ToB64(JSON.stringify(payload));
+  w.writeLine('=== OLIVECLINICAL_DATA_START ===',{size:8});
+  const CHUNK=90;
+  for(let i=0;i<b64.length;i+=CHUNK) w.writeLine(b64.slice(i,i+CHUNK),{size:8});
+  w.writeLine('=== OLIVECLINICAL_DATA_END ===',{size:8});
+}
+
+function buildMeasurePayload(mod,key){
+  const m=M[mod][key];
+  const v=id=>document.getElementById(id)?.value??'';
+  if(m.type==='entry'){
+    const fields={};
+    m.fields.forEach(f=>fields[f.id]=v(`entry_${mod}_${f.id}`));
+    return {mod,key,mtype:'entry',fields};
+  }
+  if(m.type==='interview'){
+    const sections={};
+    m.sections.forEach(s=>sections[s.id]=v(`ci_${mod}_${key}_${s.id}`));
+    return {mod,key,mtype:'interview',sections};
+  }
+  const r=(responses[mod]&&responses[mod][key])||[];
+  return {mod,key,mtype:m.type==='clinician'?'clinician':'scored',responses:r};
+}
+
+function buildUniversalPayload(key){
+  const v=id=>document.getElementById(id)?.value??'';
+  if(key==='scl90r'){
+    const scl=UNIVERSAL.scl90r;
+    const fields={};
+    [...scl.subscales,...scl.globals].forEach(f=>fields[f.id]=v(`uni_scl90r_${f.id}`));
+    return {mod:'UNIVERSAL',key:'scl90r',mtype:'entry',fields,notes:v('uni_scl90r_notes')};
+  }
+  const sections={};
+  UNIVERSAL.mini.sections.forEach(s=>sections[s.id]=v(`uni_mini_${s.id}`));
+  return {mod:'UNIVERSAL',key:'mini',mtype:'interview',sections};
+}
+
+function downloadMeasurePDF(mod,key){
+  const isUniversal=mod==='UNIVERSAL';
+  const m=isUniversal?UNIVERSAL[key]:M[mod][key];
+  if(!m) return;
+  const w=newPDFWriter();
+  w.titleBlock(m.name+' ('+m.abbr+')');
+  w.writeBlank(4);
+  if(isUniversal) writeUniversalBody(w,key); else writeMeasureBody(w,mod,key);
+  const payload=isUniversal?buildUniversalPayload(key):buildMeasurePayload(mod,key);
+  writeMeasureDataPage(w,payload);
+  const todayISO=new Date().toISOString().split('T')[0];
+  const clientNameRaw=(document.getElementById('clientName')?.value||'').trim();
+  w.doc.save(`${safeFileToken(m.abbr,key)}_${safeFileToken(clientNameRaw,'Client')}_${todayISO}.pdf`);
+}
+
+// Applies an imported payload to an M[mod][key] measure. For scored/clinician
+// measures this routes through setR() item-by-item so buttons, progress, and
+// scores update via the existing targeted DOM updates — never a full
+// renderMeasures() call, which would wipe unrelated entry/interview fields
+// elsewhere on the page (those aren't backed by any persisted state).
+function importMeasurePayload(mod,key,payload){
+  const m=M[mod][key];
+  if(!m) return false;
+  if(payload.mtype==='entry'&&m.type==='entry'){
+    m.fields.forEach(f=>{
+      const el=document.getElementById(`entry_${mod}_${f.id}`);
+      if(el&&payload.fields&&Object.prototype.hasOwnProperty.call(payload.fields,f.id)) el.value=payload.fields[f.id];
+    });
+    return true;
+  }
+  if(payload.mtype==='interview'&&m.type==='interview'){
+    m.sections.forEach(s=>{
+      const el=document.getElementById(`ci_${mod}_${key}_${s.id}`);
+      if(el&&payload.sections&&Object.prototype.hasOwnProperty.call(payload.sections,s.id)) el.value=payload.sections[s.id];
+    });
+    return true;
+  }
+  if((payload.mtype==='scored'||payload.mtype==='clinician')&&(m.type===undefined||m.type==='clinician')){
+    const expectedLen=m.type==='clinician'?[].concat(...m.parts.map(p=>p.items)).length:m.items.length;
+    const src=Array.isArray(payload.responses)?payload.responses:[];
+    for(let i=0;i<expectedLen;i++) setR(mod,key,i,i<src.length?src[i]:null);
+    return true;
+  }
+  return false;
+}
+
+function importUniversalPayload(key,payload){
+  if(key==='scl90r'&&payload.mtype==='entry'){
+    const scl=UNIVERSAL.scl90r;
+    [...scl.subscales,...scl.globals].forEach(f=>{
+      const el=document.getElementById(`uni_scl90r_${f.id}`);
+      if(el&&payload.fields&&Object.prototype.hasOwnProperty.call(payload.fields,f.id)) el.value=payload.fields[f.id];
+    });
+    const notesEl=document.getElementById('uni_scl90r_notes');
+    if(notesEl&&payload.notes!==undefined) notesEl.value=payload.notes;
+    return true;
+  }
+  if(key==='mini'&&payload.mtype==='interview'){
+    UNIVERSAL.mini.sections.forEach(s=>{
+      const el=document.getElementById(`uni_mini_${s.id}`);
+      if(el&&payload.sections&&Object.prototype.hasOwnProperty.call(payload.sections,s.id)) el.value=payload.sections[s.id];
+    });
+    return true;
+  }
+  return false;
+}
+
+async function extractPDFText(file){
+  if(!window.pdfjsLib) throw new Error('PDF reader failed to load — refresh the page and try again.');
+  const buf=await file.arrayBuffer();
+  const pdf=await window.pdfjsLib.getDocument({data:buf}).promise;
+  let text='';
+  for(let p=1;p<=pdf.numPages;p++){
+    const page=await pdf.getPage(p);
+    const content=await page.getTextContent();
+    text+=content.items.map(it=>it.str).join('');
+  }
+  return text;
+}
+
+async function handleMeasureUpload(mod,key,inputEl){
+  const file=inputEl.files&&inputEl.files[0];
+  if(!file) return;
+  const abbr=(mod==='UNIVERSAL'?UNIVERSAL[key]:M[mod][key])?.abbr||key;
+  try{
+    const text=await extractPDFText(file);
+    const match=text.match(/===\s*OLIVECLINICAL_DATA_START\s*===([\s\S]*?)===\s*OLIVECLINICAL_DATA_END\s*===/);
+    if(!match) throw new Error('No embedded data found — this PDF wasn\'t downloaded from this measure, or the data page is missing.');
+    const payload=JSON.parse(b64ToUtf8(match[1].replace(/\s+/g,'')));
+    const ok=mod==='UNIVERSAL'?importUniversalPayload(key,payload):importMeasurePayload(mod,key,payload);
+    if(!ok) throw new Error('This PDF is for a different measure and can\'t be imported here.');
+    alert('Imported responses for '+abbr+'.');
+  }catch(e){
+    alert('Could not import this PDF for '+abbr+': '+e.message);
+  }finally{
+    inputEl.value='';
+  }
 }
 
 // ================================================================
