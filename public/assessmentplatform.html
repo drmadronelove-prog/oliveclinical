@@ -2279,6 +2279,7 @@ Autism:{
   srs2_self:{
     name:"Social Responsiveness Scale — Second Edition (SRS-2), Self-Report",abbr:"SRS-2 Self",type:"entry",primary:true,reporter:"self",
     note:"WPS-licensed. Enter T-scores from the Adult Self-Report form. T ≥60 mild-to-moderate range; T ≥76 severe range.",
+    link:{url:"https://hub.wpspublish.com/",label:"Administer via WPS Hub"},
     fields:[
       {id:"srs2SelfTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
       {id:"srs2SelfSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
@@ -2289,6 +2290,7 @@ Autism:{
   srs2_other:{
     name:"Social Responsiveness Scale — Second Edition (SRS-2), Relative/Other Report",abbr:"SRS-2 Other",type:"entry",primary:true,reporter:"other",
     note:"WPS-licensed. Enter T-scores from the Adult Relative/Other-Report form, completed by someone who knows the client well.",
+    link:{url:"https://hub.wpspublish.com/",label:"Administer via WPS Hub"},
     fields:[
       {id:"srs2OtherTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
       {id:"srs2OtherSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
@@ -2320,6 +2322,7 @@ Autism:{
   pai:{
     name:"Personality Assessment Inventory (PAI)",abbr:"PAI",type:"entry",primary:true,reporter:"self",
     note:"PAR-licensed. Enter T-scores from the administered PAI. T ≥70 clinically elevated on most scales. Used to characterize co-occurring personality/psychopathology features relevant to differential diagnosis.",
+    link:{url:"https://app.pariconnect.com/auth/login",label:"Administer via PARiConnect"},
     fields:[
       {id:"paiValidity",l:"Validity Scales Summary",h:"e.g., ICN, INF, NIM, PIM — flag any invalid profile"},
       {id:"paiSomatic",l:"Somatic Complaints (SOM)",h:"T-score"},
@@ -2469,6 +2472,7 @@ Autism:{
   rmet:{
     name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:true,reporter:"self",
     note:"Baron-Cohen et al. (2001), Autism Research Centre, University of Cambridge. The RMET's 36 items are copyrighted photographic stimuli (black-and-white photographs of the eye region, each with 4 forced-choice mental-state words) — the images themselves are the licensed test content and cannot be reproduced here. Administer the official stimulus set/booklet or licensed digital version separately, then enter the resulting score. Adult norms: general population mean ≈26/36; autistic-sample mean ≈21/36. No single validated clinical cutoff — interpret relative to population norms and convergent evidence.",
+    link:{url:"https://psytests.org/arc/rmeten.html",label:"Administer RMET at psytests.org"},
     fields:[
       {id:"rmetTotal",l:"Total Correct",h:"out of 36 (Revised Adult version)"},
       {id:"rmetVersion",l:"Version / Form Used",h:"e.g., Revised Adult 36-item, Child version"},
@@ -4185,6 +4189,7 @@ function buildEntryCard(mod,key,m){
     <div class="measure-body" id="mb_${mid}">
       <div class="score-entry-box">
         <div class="score-entry-note">${m.note}</div>
+        ${m.link?`<a class="btn-sm btn-word" href="${m.link.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">${m.link.label} ↗</a>`:''}
         <div class="form-grid cols-3">`;
   const TEXT_FIELD_RE=/source|form|version|relationship|respondent|notes|summary/i;
   m.fields.forEach(f=>{
