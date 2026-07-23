@@ -2215,27 +2215,27 @@ ADHD:{
     name:"Developmental History Questionnaire — ADHD",abbr:"ADHD Dev Hx",type:"interview",
     note:"Structured background history intake, matching the Developmental History section of the ADHD report template. Complete with the client and/or a collateral informant.",
     sections:[
-      {id:"family",label:"Family",ph:"Birthplace/upbringing:\nFamily structure and relationships:\nDiscipline history:\nDevelopmental context:\nTrauma history:\nCurrent living situation:\nRelationship status, children:\nIdentity and pronouns:"},
-      {id:"home",label:"Difficulties at Home",ph:"Childhood home functioning:\nDiscipline concerns:\nChores:\nOrganization:\nFamily dynamics:\nEmotional/behavioral concerns:"},
-      {id:"school",label:"Difficulties in School",ph:"Elementary/middle/high school functioning:\nAttention:\nHomework completion:\nGrades:\nLearning concerns:\nOrganization:\nTime management:\nCollege/graduate school history:"},
-      {id:"social",label:"Social Relationships",ph:"Friendships:\nPeer relationships:\nSocial functioning:\nRelationship patterns:"},
-      {id:"mental_health",label:"Mental Health",ph:"Depression:\nAnxiety:\nTrauma history:\nMood symptoms:\nTherapy history:\nOther relevant diagnoses:"}
+      {id:"family",label:"Family",items:[{id:"birthplace_upbringing",q:"Birthplace/upbringing"},{id:"family_structure_and_relations",q:"Family structure and relationships"},{id:"discipline_history",q:"Discipline history"},{id:"developmental_context",q:"Developmental context"},{id:"trauma_history",q:"Trauma history"},{id:"current_living_situation",q:"Current living situation"},{id:"relationship_status_children",q:"Relationship status, children"},{id:"identity_and_pronouns",q:"Identity and pronouns"}]},
+      {id:"home",label:"Difficulties at Home",items:[{id:"childhood_home_functioning",q:"Childhood home functioning"},{id:"discipline_concerns",q:"Discipline concerns"},{id:"chores",q:"Chores"},{id:"organization",q:"Organization"},{id:"family_dynamics",q:"Family dynamics"},{id:"emotional_behavioral_concerns",q:"Emotional/behavioral concerns"}]},
+      {id:"school",label:"Difficulties in School",items:[{id:"elementary_middle_high_school",q:"Elementary/middle/high school functioning"},{id:"attention",q:"Attention"},{id:"homework_completion",q:"Homework completion"},{id:"grades",q:"Grades"},{id:"learning_concerns",q:"Learning concerns"},{id:"organization",q:"Organization"},{id:"time_management",q:"Time management"},{id:"college_graduate_school_histor",q:"College/graduate school history"}]},
+      {id:"social",label:"Social Relationships",items:[{id:"friendships",q:"Friendships"},{id:"peer_relationships",q:"Peer relationships"},{id:"social_functioning",q:"Social functioning"},{id:"relationship_patterns",q:"Relationship patterns"}]},
+      {id:"mental_health",label:"Mental Health",items:[{id:"depression",q:"Depression"},{id:"anxiety",q:"Anxiety"},{id:"trauma_history",q:"Trauma history"},{id:"mood_symptoms",q:"Mood symptoms"},{id:"therapy_history",q:"Therapy history"},{id:"other_relevant_diagnoses",q:"Other relevant diagnoses"}]}
     ]
   },
   dev_hx_audhd:{
     name:"Developmental History Questionnaire — AuDHD (Combined)",abbr:"AuDHD Dev Hx",type:"interview",
     note:"For combined ADHD + Autism (AuDHD) evaluations. Merges the developmental history domains from both the ADHD and Autism report templates into a single questionnaire. Also appears in the Autism stack — complete it once; it applies to both modules.",
     sections:[
-      {id:"family",label:"Family",ph:"Birthplace/upbringing:\nFamily structure and relationships:\nDiscipline history:\nDevelopmental context:\nTrauma history:\nCurrent living situation:\nRelationship status, children:\nIdentity and pronouns:\nFamily psychiatric/developmental/neurodivergence history:"},
-      {id:"medical",label:"Medical History",ph:"Birth history:\nHospitalizations:\nSurgeries:\nSignificant illnesses/injuries:\nSeizures:\nMedications:\nAllergies:\nDevelopmental motor/speech concerns:"},
-      {id:"home",label:"Difficulties at Home (Childhood)",ph:"Childhood home functioning:\nDiscipline concerns:\nChores:\nOrganization:\nFamily dynamics:\nEmotional/behavioral concerns:\nEarly play patterns and routines/rigidity:"},
-      {id:"school",label:"Difficulties in School",ph:"Elementary/middle/high school functioning:\nAttention:\nHomework completion:\nGrades:\nLearning concerns:\nOrganization:\nTime management:\nCollege/graduate school history:\nSchool adjustment and peer relationships:"},
-      {id:"social",label:"Social Relationships",ph:"Friendships:\nPeer relationships:\nSocial functioning:\nRelationship patterns:\nMasking or camouflaging behaviors noted:"},
-      {id:"psychiatric",label:"Psychiatric / Mental Health History",ph:"Depression:\nAnxiety:\nTrauma history:\nMood symptoms:\nTherapy history:\nPsychiatric hospitalization:\nSuicide attempts:\nSelf-harm history:\nSubstance use:\nCurrent substances:\nOther relevant diagnoses:"},
-      {id:"occupational",label:"Occupational History",ph:"Current job:\nLongest job held:\nWork-related difficulties:\nFuture employment plans:"},
-      {id:"legal",label:"Legal History",ph:"Legal/criminal history, or state 'none reported':"},
-      {id:"benefits",label:"Benefits / Secondary Gain",ph:"Is the patient seeking evaluation for benefits, accommodations, disability, legal, or other purposes? Describe, or state 'denies secondary gain':"},
-      {id:"daily_living",label:"Current Daily Living Skills and Habits",ph:"Typical day:\nGrooming/hygiene:\nTransportation:\nMoney management:\nHousekeeping:\nCooking/eating/meal preparation:\nHealthcare management:\nSleep:\nProblem-solving:"}
+      {id:"family",label:"Family",items:[{id:"birthplace_upbringing",q:"Birthplace/upbringing"},{id:"family_structure_and_relations",q:"Family structure and relationships"},{id:"discipline_history",q:"Discipline history"},{id:"developmental_context",q:"Developmental context"},{id:"trauma_history",q:"Trauma history"},{id:"current_living_situation",q:"Current living situation"},{id:"relationship_status_children",q:"Relationship status, children"},{id:"identity_and_pronouns",q:"Identity and pronouns"},{id:"family_psychiatric_development",q:"Family psychiatric/developmental/neurodivergence history"}]},
+      {id:"medical",label:"Medical History",items:[{id:"birth_history",q:"Birth history"},{id:"hospitalizations",q:"Hospitalizations"},{id:"surgeries",q:"Surgeries"},{id:"significant_illnesses_injuries",q:"Significant illnesses/injuries"},{id:"seizures",q:"Seizures"},{id:"medications",q:"Medications"},{id:"allergies",q:"Allergies"},{id:"developmental_motor_speech_con",q:"Developmental motor/speech concerns"}]},
+      {id:"home",label:"Difficulties at Home (Childhood)",items:[{id:"childhood_home_functioning",q:"Childhood home functioning"},{id:"discipline_concerns",q:"Discipline concerns"},{id:"chores",q:"Chores"},{id:"organization",q:"Organization"},{id:"family_dynamics",q:"Family dynamics"},{id:"emotional_behavioral_concerns",q:"Emotional/behavioral concerns"},{id:"early_play_patterns_and",q:"Early play patterns and routines/rigidity"}]},
+      {id:"school",label:"Difficulties in School",items:[{id:"elementary_middle_high_school",q:"Elementary/middle/high school functioning"},{id:"attention",q:"Attention"},{id:"homework_completion",q:"Homework completion"},{id:"grades",q:"Grades"},{id:"learning_concerns",q:"Learning concerns"},{id:"organization",q:"Organization"},{id:"time_management",q:"Time management"},{id:"college_graduate_school_histor",q:"College/graduate school history"},{id:"school_adjustment_and_peer",q:"School adjustment and peer relationships"}]},
+      {id:"social",label:"Social Relationships",items:[{id:"friendships",q:"Friendships"},{id:"peer_relationships",q:"Peer relationships"},{id:"social_functioning",q:"Social functioning"},{id:"relationship_patterns",q:"Relationship patterns"},{id:"masking_or_camouflaging_behavi",q:"Masking or camouflaging behaviors noted"}]},
+      {id:"psychiatric",label:"Psychiatric / Mental Health History",items:[{id:"depression",q:"Depression"},{id:"anxiety",q:"Anxiety"},{id:"trauma_history",q:"Trauma history"},{id:"mood_symptoms",q:"Mood symptoms"},{id:"therapy_history",q:"Therapy history"},{id:"psychiatric_hospitalization",q:"Psychiatric hospitalization"},{id:"suicide_attempts",q:"Suicide attempts"},{id:"self_harm_history",q:"Self-harm history"},{id:"substance_use",q:"Substance use"},{id:"current_substances",q:"Current substances"},{id:"other_relevant_diagnoses",q:"Other relevant diagnoses"}]},
+      {id:"occupational",label:"Occupational History",items:[{id:"current_job",q:"Current job"},{id:"longest_job_held",q:"Longest job held"},{id:"work_related_difficulties",q:"Work-related difficulties"},{id:"future_employment_plans",q:"Future employment plans"}]},
+      {id:"legal",label:"Legal History",items:[{id:"legal_criminal_history_or",q:"Legal/criminal history, or state 'none reported'"}]},
+      {id:"benefits",label:"Benefits / Secondary Gain",items:[{id:"is_the_patient_seeking",q:"Is the patient seeking evaluation for benefits, accommodations, disability, legal, or other purposes? Describe, or state 'denies secondary gain'"}]},
+      {id:"daily_living",label:"Current Daily Living Skills and Habits",items:[{id:"typical_day",q:"Typical day"},{id:"grooming_hygiene",q:"Grooming/hygiene"},{id:"transportation",q:"Transportation"},{id:"money_management",q:"Money management"},{id:"housekeeping",q:"Housekeeping"},{id:"cooking_eating_meal_preparatio",q:"Cooking/eating/meal preparation"},{id:"healthcare_management",q:"Healthcare management"},{id:"sleep",q:"Sleep"},{id:"problem_solving",q:"Problem-solving"}]}
     ]
   }
 },
@@ -2528,30 +2528,30 @@ Autism:{
     name:"Developmental History Questionnaire — Autism",abbr:"ASD Dev Hx",type:"interview",
     note:"Structured background history intake, matching the Relevant Background Information section of the Autism report template. Complete with the client and/or a collateral informant.",
     sections:[
-      {id:"family",label:"Family History",ph:"Birthplace and upbringing:\nFamily structure and relationships:\nFamily psychiatric/developmental history:\nRelevant trauma or stressors:"},
-      {id:"medical",label:"Medical History",ph:"Birth history:\nHospitalizations:\nSurgeries:\nSignificant illnesses/injuries:\nSeizures:\nMedications:\nAllergies:"},
-      {id:"psychiatric",label:"Psychiatric History",ph:"Mental health diagnoses/symptoms:\nTherapy history:\nPsychiatric hospitalization:\nSuicide attempts:\nSelf-harm history:\nSubstance use:\nCurrent substances:"},
-      {id:"education",label:"Education History",ph:"Academic history:\nSupports/accommodations received:\nLearning concerns:\nGrades:\nCollege/graduate history:\nDevelopmental motor/speech concerns:"},
-      {id:"occupational",label:"Occupational History",ph:"Current job:\nLongest job held:\nWork-related difficulties:\nFuture employment plans:"},
-      {id:"legal",label:"Legal History",ph:"Legal/criminal history, or state 'none reported':"},
-      {id:"benefits",label:"Benefits / Secondary Gain",ph:"Is the patient seeking evaluation for benefits, accommodations, disability, legal, or other purposes? Describe, or state 'denies secondary gain':"},
-      {id:"daily_living",label:"Current Daily Living Skills and Habits",ph:"Typical day:\nGrooming/hygiene:\nTransportation:\nMoney management:\nHousekeeping:\nCooking/eating/meal preparation:\nHealthcare management:\nSleep:\nProblem-solving:"}
+      {id:"family",label:"Family History",items:[{id:"birthplace_and_upbringing",q:"Birthplace and upbringing"},{id:"family_structure_and_relations",q:"Family structure and relationships"},{id:"family_psychiatric_development",q:"Family psychiatric/developmental history"},{id:"relevant_trauma_or_stressors",q:"Relevant trauma or stressors"}]},
+      {id:"medical",label:"Medical History",items:[{id:"birth_history",q:"Birth history"},{id:"hospitalizations",q:"Hospitalizations"},{id:"surgeries",q:"Surgeries"},{id:"significant_illnesses_injuries",q:"Significant illnesses/injuries"},{id:"seizures",q:"Seizures"},{id:"medications",q:"Medications"},{id:"allergies",q:"Allergies"}]},
+      {id:"psychiatric",label:"Psychiatric History",items:[{id:"mental_health_diagnoses_sympto",q:"Mental health diagnoses/symptoms"},{id:"therapy_history",q:"Therapy history"},{id:"psychiatric_hospitalization",q:"Psychiatric hospitalization"},{id:"suicide_attempts",q:"Suicide attempts"},{id:"self_harm_history",q:"Self-harm history"},{id:"substance_use",q:"Substance use"},{id:"current_substances",q:"Current substances"}]},
+      {id:"education",label:"Education History",items:[{id:"academic_history",q:"Academic history"},{id:"supports_accommodations_receiv",q:"Supports/accommodations received"},{id:"learning_concerns",q:"Learning concerns"},{id:"grades",q:"Grades"},{id:"college_graduate_history",q:"College/graduate history"},{id:"developmental_motor_speech_con",q:"Developmental motor/speech concerns"}]},
+      {id:"occupational",label:"Occupational History",items:[{id:"current_job",q:"Current job"},{id:"longest_job_held",q:"Longest job held"},{id:"work_related_difficulties",q:"Work-related difficulties"},{id:"future_employment_plans",q:"Future employment plans"}]},
+      {id:"legal",label:"Legal History",items:[{id:"legal_criminal_history_or",q:"Legal/criminal history, or state 'none reported'"}]},
+      {id:"benefits",label:"Benefits / Secondary Gain",items:[{id:"is_the_patient_seeking",q:"Is the patient seeking evaluation for benefits, accommodations, disability, legal, or other purposes? Describe, or state 'denies secondary gain'"}]},
+      {id:"daily_living",label:"Current Daily Living Skills and Habits",items:[{id:"typical_day",q:"Typical day"},{id:"grooming_hygiene",q:"Grooming/hygiene"},{id:"transportation",q:"Transportation"},{id:"money_management",q:"Money management"},{id:"housekeeping",q:"Housekeeping"},{id:"cooking_eating_meal_preparatio",q:"Cooking/eating/meal preparation"},{id:"healthcare_management",q:"Healthcare management"},{id:"sleep",q:"Sleep"},{id:"problem_solving",q:"Problem-solving"}]}
     ]
   },
   dev_hx_audhd:{
     name:"Developmental History Questionnaire — AuDHD (Combined)",abbr:"AuDHD Dev Hx",type:"interview",
     note:"For combined ADHD + Autism (AuDHD) evaluations. Merges the developmental history domains from both the Autism and ADHD report templates into a single questionnaire. Also appears in the ADHD stack — complete it once; it applies to both modules.",
     sections:[
-      {id:"family",label:"Family",ph:"Birthplace/upbringing:\nFamily structure and relationships:\nDiscipline history:\nDevelopmental context:\nTrauma history:\nCurrent living situation:\nRelationship status, children:\nIdentity and pronouns:\nFamily psychiatric/developmental/neurodivergence history:"},
-      {id:"medical",label:"Medical History",ph:"Birth history:\nHospitalizations:\nSurgeries:\nSignificant illnesses/injuries:\nSeizures:\nMedications:\nAllergies:\nDevelopmental motor/speech concerns:"},
-      {id:"home",label:"Difficulties at Home (Childhood)",ph:"Childhood home functioning:\nDiscipline concerns:\nChores:\nOrganization:\nFamily dynamics:\nEmotional/behavioral concerns:\nEarly play patterns and routines/rigidity:"},
-      {id:"school",label:"Difficulties in School",ph:"Elementary/middle/high school functioning:\nAttention:\nHomework completion:\nGrades:\nLearning concerns:\nOrganization:\nTime management:\nCollege/graduate school history:\nSchool adjustment and peer relationships:"},
-      {id:"social",label:"Social Relationships",ph:"Friendships:\nPeer relationships:\nSocial functioning:\nRelationship patterns:\nMasking or camouflaging behaviors noted:"},
-      {id:"psychiatric",label:"Psychiatric / Mental Health History",ph:"Depression:\nAnxiety:\nTrauma history:\nMood symptoms:\nTherapy history:\nPsychiatric hospitalization:\nSuicide attempts:\nSelf-harm history:\nSubstance use:\nCurrent substances:\nOther relevant diagnoses:"},
-      {id:"occupational",label:"Occupational History",ph:"Current job:\nLongest job held:\nWork-related difficulties:\nFuture employment plans:"},
-      {id:"legal",label:"Legal History",ph:"Legal/criminal history, or state 'none reported':"},
-      {id:"benefits",label:"Benefits / Secondary Gain",ph:"Is the patient seeking evaluation for benefits, accommodations, disability, legal, or other purposes? Describe, or state 'denies secondary gain':"},
-      {id:"daily_living",label:"Current Daily Living Skills and Habits",ph:"Typical day:\nGrooming/hygiene:\nTransportation:\nMoney management:\nHousekeeping:\nCooking/eating/meal preparation:\nHealthcare management:\nSleep:\nProblem-solving:"}
+      {id:"family",label:"Family",items:[{id:"birthplace_upbringing",q:"Birthplace/upbringing"},{id:"family_structure_and_relations",q:"Family structure and relationships"},{id:"discipline_history",q:"Discipline history"},{id:"developmental_context",q:"Developmental context"},{id:"trauma_history",q:"Trauma history"},{id:"current_living_situation",q:"Current living situation"},{id:"relationship_status_children",q:"Relationship status, children"},{id:"identity_and_pronouns",q:"Identity and pronouns"},{id:"family_psychiatric_development",q:"Family psychiatric/developmental/neurodivergence history"}]},
+      {id:"medical",label:"Medical History",items:[{id:"birth_history",q:"Birth history"},{id:"hospitalizations",q:"Hospitalizations"},{id:"surgeries",q:"Surgeries"},{id:"significant_illnesses_injuries",q:"Significant illnesses/injuries"},{id:"seizures",q:"Seizures"},{id:"medications",q:"Medications"},{id:"allergies",q:"Allergies"},{id:"developmental_motor_speech_con",q:"Developmental motor/speech concerns"}]},
+      {id:"home",label:"Difficulties at Home (Childhood)",items:[{id:"childhood_home_functioning",q:"Childhood home functioning"},{id:"discipline_concerns",q:"Discipline concerns"},{id:"chores",q:"Chores"},{id:"organization",q:"Organization"},{id:"family_dynamics",q:"Family dynamics"},{id:"emotional_behavioral_concerns",q:"Emotional/behavioral concerns"},{id:"early_play_patterns_and",q:"Early play patterns and routines/rigidity"}]},
+      {id:"school",label:"Difficulties in School",items:[{id:"elementary_middle_high_school",q:"Elementary/middle/high school functioning"},{id:"attention",q:"Attention"},{id:"homework_completion",q:"Homework completion"},{id:"grades",q:"Grades"},{id:"learning_concerns",q:"Learning concerns"},{id:"organization",q:"Organization"},{id:"time_management",q:"Time management"},{id:"college_graduate_school_histor",q:"College/graduate school history"},{id:"school_adjustment_and_peer",q:"School adjustment and peer relationships"}]},
+      {id:"social",label:"Social Relationships",items:[{id:"friendships",q:"Friendships"},{id:"peer_relationships",q:"Peer relationships"},{id:"social_functioning",q:"Social functioning"},{id:"relationship_patterns",q:"Relationship patterns"},{id:"masking_or_camouflaging_behavi",q:"Masking or camouflaging behaviors noted"}]},
+      {id:"psychiatric",label:"Psychiatric / Mental Health History",items:[{id:"depression",q:"Depression"},{id:"anxiety",q:"Anxiety"},{id:"trauma_history",q:"Trauma history"},{id:"mood_symptoms",q:"Mood symptoms"},{id:"therapy_history",q:"Therapy history"},{id:"psychiatric_hospitalization",q:"Psychiatric hospitalization"},{id:"suicide_attempts",q:"Suicide attempts"},{id:"self_harm_history",q:"Self-harm history"},{id:"substance_use",q:"Substance use"},{id:"current_substances",q:"Current substances"},{id:"other_relevant_diagnoses",q:"Other relevant diagnoses"}]},
+      {id:"occupational",label:"Occupational History",items:[{id:"current_job",q:"Current job"},{id:"longest_job_held",q:"Longest job held"},{id:"work_related_difficulties",q:"Work-related difficulties"},{id:"future_employment_plans",q:"Future employment plans"}]},
+      {id:"legal",label:"Legal History",items:[{id:"legal_criminal_history_or",q:"Legal/criminal history, or state 'none reported'"}]},
+      {id:"benefits",label:"Benefits / Secondary Gain",items:[{id:"is_the_patient_seeking",q:"Is the patient seeking evaluation for benefits, accommodations, disability, legal, or other purposes? Describe, or state 'denies secondary gain'"}]},
+      {id:"daily_living",label:"Current Daily Living Skills and Habits",items:[{id:"typical_day",q:"Typical day"},{id:"grooming_hygiene",q:"Grooming/hygiene"},{id:"transportation",q:"Transportation"},{id:"money_management",q:"Money management"},{id:"housekeeping",q:"Housekeeping"},{id:"cooking_eating_meal_preparatio",q:"Cooking/eating/meal preparation"},{id:"healthcare_management",q:"Healthcare management"},{id:"sleep",q:"Sleep"},{id:"problem_solving",q:"Problem-solving"}]}
     ]
   }
 },
@@ -4239,9 +4239,18 @@ function buildInterviewCard(mod,key,m){
   if(m.note) h+=`<div class="measure-instruction">${m.note}</div>`;
   m.sections.forEach(s=>{
     h+=`<div style="margin-bottom:14px;">
-      <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);font-family:var(--font-display);margin-bottom:6px;">${s.label}</div>
-      <textarea style="font-size:14px;min-height:120px;" id="ci_${mid}_${s.id}" placeholder="${s.ph}"></textarea>
-    </div>`;
+      <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);font-family:var(--font-display);margin-bottom:6px;">${s.label}</div>`;
+    if(s.items){
+      s.items.forEach(it=>{
+        h+=`<div class="field" style="margin-bottom:10px;">
+          <label style="font-size:13px;">${it.q}</label>
+          <textarea style="font-size:14px;min-height:60px;" id="ci_${mid}_${s.id}_${it.id}" placeholder="Response..."></textarea>
+        </div>`;
+      });
+    } else {
+      h+=`<textarea style="font-size:14px;min-height:120px;" id="ci_${mid}_${s.id}" placeholder="${s.ph}"></textarea>`;
+    }
+    h+=`</div>`;
   });
   h+=`</div></div>`;
   return h;
@@ -5035,7 +5044,9 @@ function measureHasData(mod,key){
   const m=M[mod][key];
   const v=id=>(document.getElementById(id)?.value||'').trim();
   if(m.type==='entry') return m.fields.some(f=>v(`entry_${mod}_${f.id}`)!=='');
-  if(m.type==='interview') return m.sections.some(s=>v(`ci_${mod}_${key}_${s.id}`)!=='');
+  if(m.type==='interview') return m.sections.some(s=>s.items
+    ? s.items.some(it=>v(`ci_${mod}_${key}_${s.id}_${it.id}`)!=='')
+    : v(`ci_${mod}_${key}_${s.id}`)!=='');
   const r=responses[mod]&&responses[mod][key];
   return !!(r&&r.some(x=>x!==null));
 }
@@ -5055,6 +5066,18 @@ function writeMeasureBody(w,mod,key){
   }
   if(m.type==='interview'){
     m.sections.forEach(s=>{
+      if(s.items){
+        const answered=s.items.filter(it=>v(`ci_${mod}_${key}_${s.id}_${it.id}`).trim()!=='');
+        if(!answered.length)return;
+        w.writeLine(s.label+':',{size:9,style:'italic',indent:6});
+        answered.forEach(it=>{
+          const val=v(`ci_${mod}_${key}_${s.id}_${it.id}`).trim();
+          w.writeLine(it.q+':',{size:9,indent:12});
+          w.writeMultiline(val,{size:10,indent:18});
+        });
+        w.writeBlank(3);
+        return;
+      }
       const val=v(`ci_${mod}_${key}_${s.id}`).trim();
       if(val==='')return;
       w.writeLine(s.label+':',{size:9,style:'italic',indent:6});
@@ -5236,7 +5259,15 @@ function buildMeasurePayload(mod,key){
   }
   if(m.type==='interview'){
     const sections={};
-    m.sections.forEach(s=>sections[s.id]=v(`ci_${mod}_${key}_${s.id}`));
+    m.sections.forEach(s=>{
+      if(s.items){
+        const itemVals={};
+        s.items.forEach(it=>itemVals[it.id]=v(`ci_${mod}_${key}_${s.id}_${it.id}`));
+        sections[s.id]=itemVals;
+      } else {
+        sections[s.id]=v(`ci_${mod}_${key}_${s.id}`);
+      }
+    });
     return {mod,key,mtype:'interview',sections};
   }
   const r=(responses[mod]&&responses[mod][key])||[];
@@ -5293,8 +5324,18 @@ function importMeasurePayload(mod,key,payload){
   }
   if(payload.mtype==='interview'&&m.type==='interview'){
     m.sections.forEach(s=>{
-      const el=document.getElementById(`ci_${mod}_${key}_${s.id}`);
-      if(el&&payload.sections&&Object.prototype.hasOwnProperty.call(payload.sections,s.id)) el.value=payload.sections[s.id];
+      const secVal=payload.sections&&payload.sections[s.id];
+      if(s.items){
+        if(secVal&&typeof secVal==='object'){
+          s.items.forEach(it=>{
+            const el=document.getElementById(`ci_${mod}_${key}_${s.id}_${it.id}`);
+            if(el&&Object.prototype.hasOwnProperty.call(secVal,it.id)) el.value=secVal[it.id];
+          });
+        }
+      } else if(typeof secVal==='string'){
+        const el=document.getElementById(`ci_${mod}_${key}_${s.id}`);
+        if(el) el.value=secVal;
+      }
     });
     return true;
   }
@@ -5402,6 +5443,13 @@ function buildMsg(){
       const m=M[mod][key];
       if(m.type!=='interview') continue;
       const sections=m.sections.map(s=>{
+        if(s.items){
+          const answers=s.items.map(it=>{
+            const val=v(`ci_${mod}_${key}_${s.id}_${it.id}`);
+            return val?`${it.q}: ${val}`:null;
+          }).filter(Boolean);
+          return answers.length?`${s.label}:\n${answers.join('\n')}`:null;
+        }
         const val=v(`ci_${mod}_${key}_${s.id}`);
         return val?`${s.label}:\n${val}`:null;
       }).filter(Boolean);
