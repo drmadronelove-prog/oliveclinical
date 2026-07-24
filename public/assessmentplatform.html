@@ -1903,17 +1903,23 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
     </button>
   </div>
   <div class="section">
-    <button class="btn-generate" id="generateBtn" onclick="generateReport()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-      Generate Report
+    <button class="btn-generate" id="downloadTemplateBtn" onclick="downloadAssessmentTemplatePDF()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6M9 9h1"/></svg>
+      Download Assessment Template (PDF)
     </button>
-    <div class="error-msg" id="errorMsg"></div>
   </div>
   <div class="section">
     <a class="btn-generate" href="https://www.openevidence.com/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
       OpenEvidence
     </a>
+  </div>
+  <div class="section" style="margin-top:36px;">
+    <button class="btn-generate" id="generateBtn" onclick="generateReport()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+      Generate Report
+    </button>
+    <div class="error-msg" id="errorMsg"></div>
   </div>
   <div class="loading" id="loadingIndicator">
     <div>Drafting evaluation report<span class="loading-dots"></span></div>
@@ -5248,6 +5254,131 @@ function downloadAssessmentDataPDF(){
 
   const todayISO=new Date().toISOString().split('T')[0];
   w.doc.save(`Assessment_Data_${safeFileToken(clientNameRaw,'Client')}_${todayISO}.pdf`);
+}
+
+// ================================================================
+// DOWNLOAD ASSESSMENT TEMPLATE (PDF) — blank form for the currently
+// selected modules, for printing and filling out by hand.
+// ================================================================
+function writeMeasureBodyTemplate(w,mod,key){
+  const m=M[mod][key];
+  if(m.type==='entry'){
+    m.fields.forEach(f=>{
+      w.writeLine(f.l+(f.h?' ('+f.h+')':'')+':',{size:10,indent:6});
+      w.writeBlank(2);
+      w.writeHr();
+    });
+    w.writeBlank(4);
+    return;
+  }
+  if(m.type==='interview'){
+    m.sections.forEach(s=>{
+      w.writeLine(s.label+':',{size:9,style:'italic',indent:6});
+      if(s.items){
+        s.items.forEach(it=>{
+          w.writeLine(it.q,{size:10,indent:12});
+          w.writeBlank(16);
+          w.writeHr();
+        });
+      } else {
+        w.writeBlank(16);
+        w.writeHr();
+        w.writeBlank(16);
+        w.writeHr();
+      }
+      w.writeBlank(3);
+    });
+    w.writeBlank(4);
+    return;
+  }
+  // scored self/other-report measure, or clinician-rated
+  const isClinician=m.type==='clinician';
+  const items=isClinician?[].concat(...m.parts.map(p=>p.items)):m.items;
+  items.forEach((item,i)=>{
+    const q=typeof item==='string'?item:item.q;
+    w.writeLine((i+1)+'. '+q,{size:9,indent:6});
+    w.writeBlank(2);
+    w.writeHr();
+  });
+  w.writeBlank(6);
+}
+
+function writeUniversalBodyTemplate(w,key){
+  if(key==='scl90r'){
+    const scl=UNIVERSAL.scl90r;
+    [...scl.subscales,...scl.globals].forEach(f=>{
+      w.writeLine(f.l+':',{size:10,indent:6});
+      w.writeBlank(2);
+      w.writeHr();
+    });
+    w.writeLine('Interpretation Notes:',{size:9,style:'italic',indent:6});
+    w.writeBlank(16);
+    w.writeHr();
+    w.writeBlank(4);
+    return;
+  }
+  if(key==='mini'){
+    UNIVERSAL.mini.sections.forEach(s=>{
+      w.writeLine(s.label+':',{size:9,style:'italic',indent:6});
+      w.writeBlank(16);
+      w.writeHr();
+      w.writeBlank(3);
+    });
+    w.writeBlank(4);
+  }
+}
+
+function downloadAssessmentTemplatePDF(){
+  const w=newPDFWriter();
+  w.titleBlock('Assessment Template');
+  w.writeBlank(4);
+  w.writeLine('Blank template for the currently selected modules — print and fill in by hand, or use as an intake worksheet.',{size:9,style:'italic'});
+
+  w.sectionHeader('Client Information');
+  ['Name','Date of Birth','Pronouns','Date of Evaluation','Referral Source'].forEach(label=>{
+    w.writeLine(label+':',{size:10});
+    w.writeBlank(2);
+    w.writeHr();
+  });
+  w.writeLine('Reason for Referral:',{size:10});
+  w.writeBlank(16);
+  w.writeHr();
+  w.writeLine('Relevant Background and History:',{size:10});
+  w.writeBlank(20);
+  w.writeHr();
+
+  if(!selectedModules.length){
+    w.writeBlank(10);
+    w.writeLine('No diagnostic modules are currently selected — select modules on the Diagnostic Assessment tab to include them in the template.',{size:10,style:'italic'});
+  }
+
+  selectedModules.forEach(mod=>{
+    w.sectionHeader(mod+' Module');
+    Object.keys(M[mod]).forEach(key=>{
+      const m=M[mod][key];
+      w.subHeader(m.name+' ('+m.abbr+')');
+      writeMeasureBodyTemplate(w,mod,key);
+    });
+    w.subHeader('Session Notes');
+    w.writeBlank(16);
+    w.writeHr();
+    w.subHeader('Differential Considerations');
+    w.writeBlank(16);
+    w.writeHr();
+  });
+
+  w.sectionHeader('Universal Screening');
+  w.subHeader('SCL-90-R');
+  writeUniversalBodyTemplate(w,'scl90r');
+  w.subHeader('M.I.N.I. International Neuropsychiatric Interview');
+  writeUniversalBodyTemplate(w,'mini');
+
+  w.subHeader('General Session Observations');
+  w.writeBlank(20);
+  w.writeHr();
+
+  const todayISO=new Date().toISOString().split('T')[0];
+  w.doc.save(`Assessment_Template_${todayISO}.pdf`);
 }
 
 // ================================================================
