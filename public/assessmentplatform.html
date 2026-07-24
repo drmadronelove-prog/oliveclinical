@@ -6,31 +6,35 @@
 <title>Clinical Assessment Suite</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:wght@500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Neumorphism palette — soft monochrome surface */
-  --surface:#F1F1F1;
-  --surface-raised:#F7F7F7;
-  --surface-sunken:#E2E2E2;
-  --surface-deep:#D0D0D0;
+  /* Neumorphism palette — slate canvas, cream/brass/sage surfaces */
+  --page-bg:#7C8B99;
+  --surface:#ECEEF1;
+  --surface-raised:#F4F2EE;
+  --surface-sunken:#E4E7EA;
+  --surface-deep:#D5D9DC;
 
-  --ink:#1E2938;
+  --ink:#152238;
   --ink-soft:#3F4D55;
-  --ink-muted:#6E7B82;
+  --ink-muted:#5B6B7C;
 
   /* Brand accents */
-  --primary:#006666;
-  --primary-soft:rgba(0,102,102,0.10);
+  --primary:#3F7D6E;
+  --primary-soft:rgba(63,125,110,0.10);
   --secondary:#F1F2F5;
   --success:#00A63D;
   --warning:#FE9900;
   --danger:#FF2157;
-  --info:#006666;
+  --info:#3F7D6E;
+
+  --brass:#A98959;
+  --brass-light:#BD9A67;
 
   /* Neumorphic shadow tokens */
-  --shadow-light:rgba(255,255,255,0.85);
-  --shadow-dark:rgba(163,177,198,0.55);
+  --shadow-light:rgba(255,255,255,0.75);
+  --shadow-dark:rgba(20,30,45,0.10);
 
   /* Outer extrusion (raised) */
   --neu-out:
@@ -102,7 +106,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 
 body{
-  background:var(--surface);
+  background:var(--page-bg);
   color:var(--ink);
   font-family:var(--font-body);
   font-size:15px;
@@ -114,14 +118,13 @@ body::before{display:none;}
 
 .wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:48px 32px 80px;}
 
-/* ── Header — dark grey-blue bar ─────────────────── */
+/* ── Header — slate gradient bar ─────────────────── */
 .lq-header{
   position:sticky;top:0;z-index:40;
-  background:#FAFAF8;
+  background:linear-gradient(180deg,#71889A,#5C7284);
   border:none;
-  border-bottom:1px solid rgba(11,37,69,0.10);
   border-radius:0;
-  box-shadow:none;
+  box-shadow:0 3px 7px rgba(25,32,40,0.22),inset 0 -2px 6px rgba(255,255,255,0.08);
   margin:0;
 }
 .lq-header-inner{
@@ -137,11 +140,11 @@ body::before{display:none;}
   display:block;
 }
 .lq-wordmark-rest{
-  font-family:'Fraunces','Georgia',serif;
-  font-size:28px;
-  font-weight:400;
-  letter-spacing:-0.02em;
-  color:#1E2938;
+  font-family:'Cormorant Garamond','Georgia',serif;
+  font-size:29px;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  color:#F8F6F2;
   white-space:nowrap;
   line-height:1;
 }
@@ -151,19 +154,20 @@ body::before{display:none;}
 .lq-tagline::after{content:'';}
 .lq-active-client{
   font-family:var(--font-mono);
-  font-size:13px;
-  letter-spacing:0.04em;
-  color:rgba(30,41,56,0.75);
-  padding:8px 16px;
-  border-radius:50px;
-  background:rgba(30,41,56,0.05);
-  border:1px solid rgba(30,41,56,0.12);
+  font-size:12px;
+  letter-spacing:0.02em;
+  color:#F2EEE6;
+  padding:11px 20px;
+  border-radius:10px;
+  background:rgba(186,224,240,0.55);
+  border:none;
+  box-shadow:inset 2px 2px 5px rgba(0,0,0,0.15),inset -1px -1px 3px rgba(255,255,255,0.15);
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
   max-width:320px;
 }
-.lq-active-client.empty{color:rgba(30,41,56,0.40);font-style:italic;}
+.lq-active-client.empty{color:rgba(248,246,242,0.55);font-style:italic;}
 
 /* ── Floating control cluster — neumorphic pill ── */
 .lq-float-controls{
@@ -278,69 +282,58 @@ body::before{display:none;}
 .tab-btn{
   display:block;width:100%;
   text-align:left;
-  padding:13px 18px;
-  background:linear-gradient(145deg,#d9bd7c,#b9944f);
+  padding:16px 22px;
+  background:linear-gradient(145deg,var(--brass-light),var(--brass));
   border:none;
   border-radius:var(--radius-sm);
-  color:#4a3814;
+  color:#F9F5EE;
   cursor:pointer;
-  font-family:var(--font-body);font-size:13px;font-weight:500;
+  font-family:var(--font-body);font-size:14px;font-weight:700;
   letter-spacing:-0.003em;
   position:relative;
   transition:all 220ms cubic-bezier(.2,.8,.2,1);
-  box-shadow:5px 5px 12px rgba(107,80,20,0.35),-5px -5px 12px rgba(255,240,200,0.55);
+  box-shadow:3px 3px 7px rgba(25,32,40,0.22),-3px -3px 7px rgba(255,255,255,0.12);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   margin-bottom:0;
 }
-.tab-btn:nth-child(odd){padding-left:18px;}
+.tab-btn:nth-child(odd){padding-left:22px;}
 .tab-btn.tab-parent{
   font-weight:700;
-  color:#3a2c0f;
   margin-top:6px;
 }
 .tab-btn.tab-child{
   margin-left:18px;
   width:calc(100% - 18px);
-  font-size:12.5px;
-  padding:11px 16px;
+  font-size:13px;
+  padding:13px 18px;
 }
 .tab-btn.tab-child::before{display:none;}
-.tab-btn.tab-child.active::before{
-  content:'';position:absolute;left:6px;top:50%;
-  transform:translateY(-50%);
-  width:3px;height:16px;border-radius:2px;
-  background:#5c4415;
-  display:block;
-}
+.tab-btn.tab-child.active::before{display:none;}
 .tab-btn:hover:not(.active){
-  color:#2e2209;
   transform:none;
-  background:linear-gradient(145deg,#e2c98c,#c39f57);
-  box-shadow:6px 6px 16px rgba(107,80,20,0.4),-6px -6px 16px rgba(255,244,212,0.6);
+  background:linear-gradient(145deg,#CBAA78,#B39566);
+  box-shadow:4px 4px 9px rgba(25,32,40,0.26),-4px -4px 9px rgba(255,255,255,0.16);
 }
 .tab-btn.active{
-  background:linear-gradient(145deg,#b08c47,#8f7038);
-  color:#fff4dc;
-  box-shadow:inset 4px 4px 9px rgba(63,46,10,0.45),inset -4px -4px 9px rgba(224,193,130,0.4);
+  background:linear-gradient(145deg,#FDFCFA,#F4EDE0);
+  color:var(--primary);
+  box-shadow:3px 3px 7px rgba(25,32,40,0.22),-2px -2px 6px rgba(255,255,255,0.25);
   font-weight:700;
   transform:none;
 }
 .tab-btn.active::before{
-  content:'';position:absolute;left:6px;top:50%;
-  transform:translateY(-50%);
-  width:3px;height:18px;border-radius:2px;
-  background:#fff4dc;
+  display:none;
 }
 
 /* ── Content area — raised panel ────────────────── */
 .content-main{
   flex:1;min-width:0;
-  background:var(--surface);
+  background:var(--surface-raised);
   border:none;
-  border-radius:var(--radius);
+  border-radius:22px;
   padding:36px 36px 64px;
   margin-bottom:80px;
-  box-shadow:var(--neu-out);
+  box-shadow:8px 8px 22px rgba(25,32,40,0.35),-8px -8px 22px rgba(130,145,159,0.3);
   min-height:calc(100vh - 220px);
 }
 .tab-pane{display:none;}
@@ -383,10 +376,10 @@ body::before{display:none;}
   display:flex;align-items:center;gap:12px;
 }
 .section-label::after{
-  content:'';flex:1;height:2px;
-  background:var(--surface);
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,var(--brass),var(--primary));
   border-radius:1px;
-  box-shadow:var(--neu-in-sm);
+  box-shadow:none;
 }
 
 /* ── Cards ─────────────────────────────────────── */
@@ -634,15 +627,16 @@ body::before{display:none;}
 .field.span-2{grid-column:span 2;}
 .field label{
   font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--ink-soft);font-family:var(--font-mono);font-weight:700;
+  color:var(--ink-muted);font-family:var(--font-mono);font-weight:700;
 }
 .field .hint{font-size:11px;color:var(--ink-muted);font-style:italic;margin-top:-2px;}
 
-/* ── Inputs — sunken neumorphic ────────────────── */
+/* ── Inputs — sunken neumorphic, sage-tinted ─────── */
 input[type="text"],input[type="email"],input[type="tel"],
 input[type="number"],input[type="date"],select,textarea{
-  background:var(--surface);
+  background:rgba(63,125,110,0.118);
   border:none;
+  border-bottom:2px solid var(--primary);
   color:var(--ink);
   font-family:var(--font-body);font-size:15px;
   padding:12px 16px;
@@ -654,7 +648,7 @@ input[type="number"],input[type="date"],select,textarea{
 }
 input[type="text"]:focus,input[type="email"]:focus,input[type="tel"]:focus,
 input[type="number"]:focus,input[type="date"]:focus,select:focus,textarea:focus{
-  box-shadow:var(--neu-in-sm), 0 0 0 2px rgba(0,102,102,0.35);
+  box-shadow:var(--neu-in-sm), 0 0 0 2px rgba(63,125,110,0.35);
 }
 textarea{resize:vertical;min-height:84px;line-height:1.6;}
 textarea.tall{min-height:112px;}
@@ -827,33 +821,33 @@ input[type="number"]{-moz-appearance:textfield;}
 .modal-actions{display:flex;gap:10px;margin-top:18px;justify-content:flex-end;}
 
 .btn-primary{
-  padding:10px 22px;
-  background:var(--surface);
+  padding:12px 22px;
+  background:linear-gradient(145deg,#4A8C7C,#3F7D6E);
   border:none;
-  color:var(--primary);font-weight:700;
+  color:#FDFCFA;font-weight:700;
   border-radius:var(--radius-sm);
   cursor:pointer;
-  font-family:var(--font-body);font-size:14px;
+  font-family:var(--font-body);font-size:14px;letter-spacing:0.03em;
   transition:all 0.18s ease;
-  box-shadow:var(--neu-out-sm);
+  box-shadow:5px 5px 12px rgba(20,30,45,0.16),-5px -5px 12px rgba(255,255,255,0.4);
 }
-.btn-primary:hover{box-shadow:var(--neu-out);}
-.btn-primary:active{box-shadow:var(--neu-in-sm);}
+.btn-primary:hover{filter:brightness(1.05);}
+.btn-primary:active{box-shadow:inset 3px 3px 7px rgba(20,30,45,0.25),inset -3px -3px 7px rgba(255,255,255,0.15);}
 .btn-primary:focus-visible{outline:2px solid var(--primary);outline-offset:2px;}
 
 .btn-cancel{
-  padding:10px 22px;
-  background:var(--surface);
+  padding:12px 22px;
+  background:rgba(123,163,189,0.18);
   border:none;
-  color:var(--ink-muted);
+  color:#7BA3BD;
   border-radius:var(--radius-sm);
   cursor:pointer;
   font-family:var(--font-body);font-size:14px;
-  box-shadow:var(--neu-out-xs);
+  box-shadow:inset 2px 2px 5px rgba(20,30,45,0.06),inset -2px -2px 5px rgba(255,255,255,0.6);
   transition:all 0.18s ease;
 }
-.btn-cancel:hover{box-shadow:var(--neu-out-sm);color:var(--ink);}
-.btn-cancel:active{box-shadow:var(--neu-in-sm);}
+.btn-cancel:hover{filter:brightness(0.97);color:#5F8CA8;}
+.btn-cancel:active{box-shadow:inset 3px 3px 7px rgba(20,30,45,0.1),inset -3px -3px 7px rgba(255,255,255,0.5);}
 
 .required-star{color:var(--danger);margin-left:3px;}
 
@@ -1177,9 +1171,9 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
   <div class="lq-header-inner">
     <div class="lq-brand">
       <svg class="lq-wordmark-o" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M 100 30 C 138 30, 166 60, 166 100 C 166 140, 138 170, 100 170 C 62 170, 34 140, 34 100 C 34 60, 62 30, 100 30 Z M 108 46 C 120.15 46, 130 55.85, 130 68 C 130 80.15, 120.15 90, 108 90 C 95.85 90, 86 80.15, 86 68 C 86 55.85, 95.85 46, 108 46 Z" fill="#1E2938" fill-rule="evenodd"/>
+        <path d="M 100 30 C 138 30, 166 60, 166 100 C 166 140, 138 170, 100 170 C 62 170, 34 140, 34 100 C 34 60, 62 30, 100 30 Z M 108 46 C 120.15 46, 130 55.85, 130 68 C 130 80.15, 120.15 90, 108 90 C 95.85 90, 86 80.15, 86 68 C 86 55.85, 95.85 46, 108 46 Z" fill="#152238" fill-rule="evenodd"/>
       </svg>
-      <span style="display:inline-block;width:1.5px;height:30px;background:#cba558;flex-shrink:0;margin:0 8px;"></span>
+      <span style="display:inline-block;width:1.5px;height:30px;background:#8A9B78;flex-shrink:0;margin:0 8px;"></span>
       <span class="lq-wordmark-rest">Olive Clinical</span>
     </div>
     <div class="lq-active-client" id="lqActiveClient">No client selected</div>
