@@ -1199,6 +1199,7 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 
 <aside class="tabs-sidebar">
 <div class="tabs">
+  <button class="tab-btn" onclick="switchTab('competence',this)">Clinician Competence</button>
   <button class="tab-btn" onclick="switchTab('buildout',this)">Buildout Todo List</button>
   <button class="tab-btn active" onclick="switchTab('clinic',this)">Clinic Information</button>
   <button class="tab-btn tab-parent" onclick="switchTab('client',this)">Client Information</button>
@@ -1217,6 +1218,25 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 </aside>
 
 <main class="content-main">
+
+<div class="tab-pane" id="tab-competence">
+
+  <div class="section">
+    <div class="section-label">Clinician Competence</div>
+    <div class="card">
+      <p class="bt-intro"><strong>What this is:</strong> a checklist for maintaining the clinical and technical competence expected of a clinician using AI tools in assessment work. Check items off as you complete them; your progress is saved automatically in this browser.</p>
+      <div class="bt-progress-row">
+        <div class="bt-progress-wrap">
+          <div class="bt-progress-track"><div class="bt-progress-fill" id="ccPbar"></div></div>
+          <div class="bt-progress-label" id="ccPlabel">0 of 0 complete</div>
+        </div>
+        <button class="btn-cancel" onclick="resetCompetenceChecklist()">Reset all</button>
+      </div>
+    </div>
+    <div id="ccChecklist"></div>
+  </div>
+
+</div>
 
 <div class="tab-pane" id="tab-buildout">
 
@@ -6226,6 +6246,142 @@ function resetBuildoutChecklist(){
   renderBuildoutChecklist();
 }
 
+// ================================================================
+// CLINICIAN COMPETENCE CHECKLIST
+// ================================================================
+const COMPETENCE_SECTIONS=[
+  { num:1, title:"AI Fundamentals", sub:"Understanding the basic concepts underlying the tools you use", groups:[
+    { label:null, items:[
+      {t:'Understand what machine learning is and, at a basic level, how AI models are trained on data.', tags:[]},
+      {t:'Understand the basics of natural language processing (NLP) — how AI systems process and generate human language.', tags:[]},
+      {t:'Understand algorithmic decision-making, including the "black box" nature of many AI systems and the limits of explainability.', tags:[]},
+      {t:'Understand introductory principles of generative AI — systems that create new content such as text, summaries, or draft reports.', tags:[]},
+      {t:'Understand introductory principles of agentic AI — systems that can take multi-step actions or use tools with some autonomy.', tags:[]},
+      {t:'Understand the concept of AI "hallucination" — a model confidently producing false, fabricated, or unsupported information.', tags:[]}
+    ]}
+  ]},
+  { num:2, title:"Human Oversight", sub:"Keeping professional judgment central to every AI-assisted output", groups:[
+    { label:null, items:[
+      {t:'Know how to critically review an AI-generated output before relying on or releasing it.', tags:[]},
+      {t:'Know how to interpret AI-generated clinical content in light of your own clinical judgment and the full case record.', tags:[]},
+      {t:'Know when and how to intervene, correct, or override AI-generated content.', tags:["urgent"]},
+      {t:'Hold as a firm professional standard that final clinical judgment and responsibility always rest with the licensed clinician, never the AI.', tags:["urgent"]},
+      {t:'Document your review process (e.g., noting that a report was AI-drafted and clinician-reviewed before it was finalized).', tags:[]}
+    ]}
+  ]},
+  { num:3, title:"Tool-Specific Training", sub:"Vendor training for every AI tool you actually use", groups:[
+    { label:null, items:[
+      {t:'Complete the vendor-provided training for each AI tool you plan to use in your practice (e.g., Anthropic Claude / AWS Bedrock).', tags:[]},
+      {t:"Review each vendor's documentation on how the tool operationally works — what data goes in, what comes out, and where it runs.", tags:[]},
+      {t:"Review each vendor's security protocols — encryption, access controls, and incident response.", tags:["hipaa"]},
+      {t:'Review each vendor\'s data usage, training, and retention terms, confirming zero data retention where that applies.', tags:["hipaa"]},
+      {t:'Keep a record of completed vendor trainings and certificates for compliance and audit purposes.', tags:[]}
+    ]}
+  ]},
+  { num:4, title:"Continuing Education", sub:"Staying current as AI-in-assessment guidance evolves", groups:[
+    { label:null, items:[
+      {t:'Participate in continuing education (CE) specifically focused on the use of AI in psychological and clinical assessment.', tags:[]},
+      {t:'Read and review "Responsible Use of AI in Assessment: A Practical Overview" (American Psychological Association).', tags:[]},
+      {t:'Stay current on APA and state licensing board guidance regarding AI use in clinical practice.', tags:[]},
+      {t:'Set a recurring schedule (e.g., annually) to review new CE offerings on AI in assessment as the field evolves.', tags:[]}
+    ]}
+  ]}
+];
+
+let CC_ALL_BOXES=[];
+
+function renderCompetenceChecklist(){
+  const container=document.getElementById('ccChecklist');
+  if(!container)return;
+  container.innerHTML='';
+
+  COMPETENCE_SECTIONS.forEach(sec=>{
+    const mid='cc_s'+sec.num;
+    let itemCounter=0;
+    let bodyHTML='';
+    sec.groups.forEach(group=>{
+      if(group.label) bodyHTML+=`<div class="bt-group-label">${group.label}</div>`;
+      group.items.forEach(item=>{
+        itemCounter++;
+        const cid=`cc_s${sec.num}_${itemCounter}`;
+        let checked=false;
+        try{ checked=localStorage.getItem('ntc_'+cid)==='1'; }catch{}
+        const tagsHTML=item.tags.map(tg=>`<span class="bt-tag ${BT_TAGS[tg].cls}">${BT_TAGS[tg].label}</span>`).join('');
+        bodyHTML+=`<label class="bt-item-row${checked?' done':''}" id="row_${cid}">
+          <input type="checkbox" class="bt-persist-check" id="${cid}" ${checked?'checked':''}>
+          <span class="bt-item-text">${item.t}<span class="bt-tags">${tagsHTML}</span></span>
+        </label>`;
+      });
+    });
+    const total=itemCounter;
+    const cardHTML=`<div class="measure-card">
+      <div class="measure-header" onclick="tog('${mid}')">
+        <div class="measure-header-left">
+          <span class="measure-abbr" id="ban_${mid}">${sec.num}</span>
+          <div>
+            <span class="measure-name">${sec.title}</span>
+            <div class="bt-section-sub">${sec.sub}</div>
+          </div>
+        </div>
+        <span class="score-badge" id="sb_${mid}">0/${total}</span>
+        <span class="chevron" id="cv_${mid}">▼</span>
+      </div>
+      <div class="measure-body" id="mb_${mid}">${bodyHTML}</div>
+    </div>`;
+    container.insertAdjacentHTML('beforeend',cardHTML);
+  });
+
+  CC_ALL_BOXES=[...document.querySelectorAll('#ccChecklist .bt-persist-check')];
+  CC_ALL_BOXES.forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      try{ localStorage.setItem('ntc_'+cb.id, cb.checked?'1':'0'); }catch{}
+      const row=document.getElementById('row_'+cb.id);
+      if(row) row.classList.toggle('done',cb.checked);
+      updateCompetenceCounts();
+    });
+  });
+
+  COMPETENCE_SECTIONS.some(sec=>{
+    const mid='cc_s'+sec.num;
+    const boxes=document.querySelectorAll(`#mb_${mid} .bt-persist-check`);
+    const done=[...boxes].filter(b=>b.checked).length;
+    if(done<boxes.length){
+      document.getElementById('mb_'+mid).classList.add('open');
+      document.getElementById('cv_'+mid).classList.add('open');
+      return true;
+    }
+    return false;
+  });
+
+  updateCompetenceCounts();
+}
+
+function updateCompetenceCounts(){
+  COMPETENCE_SECTIONS.forEach(sec=>{
+    const mid='cc_s'+sec.num;
+    const boxes=document.querySelectorAll(`#mb_${mid} .bt-persist-check`);
+    const done=[...boxes].filter(b=>b.checked).length;
+    const total=boxes.length;
+    const badge=document.getElementById('sb_'+mid);
+    const abbr=document.getElementById('ban_'+mid);
+    if(badge){ badge.textContent=`${done}/${total}`; badge.classList.toggle('complete',total>0&&done===total); }
+    if(abbr){ abbr.textContent=(total>0&&done===total)?'✓':sec.num; }
+  });
+  const total=CC_ALL_BOXES.length;
+  const done=CC_ALL_BOXES.filter(b=>b.checked).length;
+  const pct=total>0?(done/total*100):0;
+  const pbar=document.getElementById('ccPbar');
+  const plabel=document.getElementById('ccPlabel');
+  if(pbar) pbar.style.width=pct+'%';
+  if(plabel) plabel.textContent=`${done} of ${total} complete`;
+}
+
+function resetCompetenceChecklist(){
+  if(!confirm('Reset all progress on the Clinician Competence checklist? This will uncheck every item and cannot be undone.'))return;
+  CC_ALL_BOXES.forEach(cb=>{ try{ localStorage.removeItem('ntc_'+cb.id); }catch{} });
+  renderCompetenceChecklist();
+}
+
 const CLINIC_FIELDS=['clinic_name','clinic_clinician','clinic_license','clinic_npi','clinic_phone','clinic_email','clinic_address','clinic_tax','clinic_website'];
 function initClinicInfo(){
   CLINIC_FIELDS.forEach(id=>{
@@ -7003,6 +7159,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   initClientInfo();
   initClinicInfo();
   renderBuildoutChecklist();
+  renderCompetenceChecklist();
   initGCal();
   initGamesSkills();
   initTreatmentPlan();
