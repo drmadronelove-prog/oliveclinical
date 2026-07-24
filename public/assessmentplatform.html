@@ -2212,7 +2212,7 @@ ADHD:{
     }
   },
   dev_hx_adhd:{
-    name:"Developmental History Questionnaire — ADHD",abbr:"ADHD Dev Hx",type:"interview",
+    name:"Developmental History Questionnaire — ADHD",abbr:"ADHD Dev Hx",type:"interview",category:"developmental",
     note:"Structured background history intake, matching the Developmental History section of the ADHD report template. Complete with the client and/or a collateral informant.",
     sections:[
       {id:"family",label:"Family",items:[{id:"birthplace_upbringing",q:"Where were you born, and what was your upbringing like?"},{id:"family_structure_and_relations",q:"What is your family structure, and what are your relationships with family members like?"},{id:"discipline_history",q:"What was discipline like growing up?"},{id:"developmental_context",q:"Is there anything notable about your early developmental context?"},{id:"trauma_history",q:"Do you have a history of trauma?"},{id:"current_living_situation",q:"What is your current living situation?"},{id:"relationship_status_children",q:"What is your relationship status, and do you have children?"},{id:"identity_and_pronouns",q:"What are your gender identity and pronouns?"}]},
@@ -2223,7 +2223,7 @@ ADHD:{
     ]
   },
   dev_hx_audhd:{
-    name:"Developmental History Questionnaire — AuDHD (Combined)",abbr:"AuDHD Dev Hx",type:"interview",
+    name:"Developmental History Questionnaire — AuDHD (Combined)",abbr:"AuDHD Dev Hx",type:"interview",category:"developmental",
     note:"For combined ADHD + Autism (AuDHD) evaluations. Merges the developmental history domains from both the ADHD and Autism report templates into a single questionnaire. Also appears in the Autism stack — complete it once; it applies to both modules.",
     sections:[
       {id:"family",label:"Family",items:[{id:"birthplace_upbringing",q:"Where were you born, and what was your upbringing like?"},{id:"family_structure_and_relations",q:"What is your family structure, and what are your relationships with family members like?"},{id:"discipline_history",q:"What was discipline like growing up?"},{id:"developmental_context",q:"Is there anything notable about your early developmental context?"},{id:"trauma_history",q:"Do you have a history of trauma?"},{id:"current_living_situation",q:"What is your current living situation?"},{id:"relationship_status_children",q:"What is your relationship status, and do you have children?"},{id:"identity_and_pronouns",q:"What are your gender identity and pronouns?"},{id:"family_psychiatric_development",q:"Is there a family history of psychiatric, developmental, or neurodivergent conditions?"}]},
@@ -2525,7 +2525,7 @@ Autism:{
     ]
   },
   dev_hx_asd:{
-    name:"Developmental History Questionnaire — Autism",abbr:"ASD Dev Hx",type:"interview",
+    name:"Developmental History Questionnaire — Autism",abbr:"ASD Dev Hx",type:"interview",category:"developmental",
     note:"Structured background history intake, matching the Relevant Background Information section of the Autism report template. Complete with the client and/or a collateral informant.",
     sections:[
       {id:"family",label:"Family History",items:[{id:"birthplace_and_upbringing",q:"Where were you born, and what was your upbringing like?"},{id:"family_structure_and_relations",q:"What is your family structure, and what are your relationships with family members like?"},{id:"family_psychiatric_development",q:"Is there a family history of psychiatric or developmental conditions?"},{id:"relevant_trauma_or_stressors",q:"Are there any relevant trauma histories or significant life stressors?"}]},
@@ -2539,7 +2539,7 @@ Autism:{
     ]
   },
   dev_hx_audhd:{
-    name:"Developmental History Questionnaire — AuDHD (Combined)",abbr:"AuDHD Dev Hx",type:"interview",
+    name:"Developmental History Questionnaire — AuDHD (Combined)",abbr:"AuDHD Dev Hx",type:"interview",category:"developmental",
     note:"For combined ADHD + Autism (AuDHD) evaluations. Merges the developmental history domains from both the Autism and ADHD report templates into a single questionnaire. Also appears in the ADHD stack — complete it once; it applies to both modules.",
     sections:[
       {id:"family",label:"Family",items:[{id:"birthplace_upbringing",q:"Where were you born, and what was your upbringing like?"},{id:"family_structure_and_relations",q:"What is your family structure, and what are your relationships with family members like?"},{id:"discipline_history",q:"What was discipline like growing up?"},{id:"developmental_context",q:"Is there anything notable about your early developmental context?"},{id:"trauma_history",q:"Do you have a history of trauma?"},{id:"current_living_situation",q:"What is your current living situation?"},{id:"relationship_status_children",q:"What is your relationship status, and do you have children?"},{id:"identity_and_pronouns",q:"What are your gender identity and pronouns?"},{id:"family_psychiatric_development",q:"Is there a family history of psychiatric, developmental, or neurodivergent conditions?"}]},
@@ -4133,12 +4133,35 @@ const REPORTER_SECTIONS=[
   {key:"optional",label:"Optional / Supplementary Measures",note:"Additional measures — clinician-administered, multi-form, or supplementary to the primary battery. Primary/Optional pills on each card still reflect battery tier, independent of this grouping."}
 ];
 
+const DEV_HX_MODULE_ORDER=['Autism','ADHD','OCD','GAD','PTSD'];
+
 function renderMeasures(){
   const c=document.getElementById('measuresContainer');
   if(!selectedModules.length){c.innerHTML='<div style="color:var(--text-muted);font-style:italic;padding:16px 0;">Select one or more modules above to begin.</div>';return;}
   let h='';
+
+  // Developmental History questionnaires render first, above the scored/self-other measures.
+  // Deduped by key so a questionnaire shared across modules (e.g. the AuDHD combined form)
+  // only appears once even when both of its modules are selected.
+  const devSeen=new Set();
+  let devHTML='';
+  DEV_HX_MODULE_ORDER.filter(mod=>selectedModules.includes(mod)).forEach(mod=>{
+    Object.keys(M[mod]).forEach(key=>{
+      const m=M[mod][key];
+      if(m.category==='developmental'&&!devSeen.has(key)){
+        devSeen.add(key);
+        devHTML+=buildMCard(mod,key,m);
+      }
+    });
+  });
+  if(devHTML){
+    h+=`<div class="section"><div class="section-label">Developmental History</div>
+      <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin:-8px 0 12px;text-transform:none;letter-spacing:normal;font-family:var(--font-sans,inherit);font-weight:400;">Structured background history intake — complete before or alongside the scored measures below.</div>
+      ${devHTML}</div>`;
+  }
+
   selectedModules.forEach(mod=>{
-    const keys=Object.keys(M[mod]);
+    const keys=Object.keys(M[mod]).filter(key=>M[mod][key].category!=='developmental');
     const grouped=keys.some(key=>M[mod][key].reporter);
     if(!grouped){
       keys.forEach(key=>h+=buildMCard(mod,key,M[mod][key]));
