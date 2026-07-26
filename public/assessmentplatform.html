@@ -283,8 +283,12 @@ body::before{display:none;}
 /* ── Tabs — raised pills, pressed when active ──── */
 .tabs{
   display:flex;flex-direction:column;
-  gap:10px;position:relative;margin:0;padding:0;
-  border:none;list-style:none;background:transparent;
+  gap:10px;position:relative;margin:0;
+  padding:18px 14px;
+  border:none;list-style:none;
+  background:var(--surface-raised);
+  border-radius:28px;
+  box-shadow:8px 8px 18px rgba(25,32,40,0.28),-8px -8px 18px rgba(255,255,255,0.35),inset 0 1px 0 rgba(255,255,255,0.4);
 }
 .tab-btn{
   display:block;width:100%;
