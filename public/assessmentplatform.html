@@ -10,7 +10,7 @@
 <style>
 :root {
   /* Neumorphism palette — slate canvas, cream/brass/sage surfaces */
-  --page-bg:#7C8B99;
+  --page-bg:#C7CDD3;
   --surface:#ECEEF1;
   --surface-raised:#F4F2EE;
   --surface-sunken:#E4E7EA;
@@ -149,9 +149,16 @@ body::before{display:none;}
   line-height:1;
 }
 .lq-tagline{
-  display:none;
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:rgba(248,246,242,0.72);
+  white-space:nowrap;
+  line-height:1;
+  margin-left:12px;
+  padding-bottom:3px;
 }
-.lq-tagline::after{content:'';}
 .lq-active-client{
   font-family:var(--font-mono);
   font-size:12px;
@@ -282,10 +289,10 @@ body::before{display:none;}
 .tab-btn{
   display:block;width:100%;
   text-align:left;
-  padding:16px 22px;
+  padding:14px 22px;
   background:linear-gradient(145deg,var(--brass-light),var(--brass));
   border:none;
-  border-radius:var(--radius-sm);
+  border-radius:999px;
   color:#F9F5EE;
   cursor:pointer;
   font-family:var(--font-body);font-size:14px;font-weight:700;
@@ -305,7 +312,7 @@ body::before{display:none;}
   margin-left:18px;
   width:calc(100% - 18px);
   font-size:13px;
-  padding:13px 18px;
+  padding:11px 20px;
 }
 .tab-btn.tab-child::before{display:none;}
 .tab-btn.tab-child.active::before{display:none;}
@@ -1176,6 +1183,7 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
       </svg>
       <span style="display:inline-block;width:1.5px;height:30px;background:#8A9B78;flex-shrink:0;margin:0 8px;"></span>
       <span class="lq-wordmark-rest">Olive Clinical</span>
+      <span class="lq-tagline">Assessment Dashboard</span>
     </div>
     <div class="lq-active-client" id="lqActiveClient">No client selected</div>
   </div>
