@@ -630,6 +630,29 @@ body::before{display:none;}
 }
 .score-entry-note{font-size:13px;color:var(--ink-muted);font-style:italic;margin-bottom:14px;}
 
+/* ── Answer sheet (M.I.N.I.) — item-code + N/Y grid ─ */
+.mini-as-grid{display:flex;flex-wrap:wrap;gap:6px 10px;}
+.mini-as-row{
+  display:flex;align-items:center;gap:5px;
+  background:var(--surface-sunken);
+  border-radius:8px;
+  padding:5px 8px;
+  font-family:var(--font-mono);font-size:11px;
+  box-shadow:var(--neu-in-sm);
+}
+.mini-as-code{font-weight:700;color:var(--ink-soft);white-space:nowrap;}
+.mini-as-sub{font-size:10px;color:var(--ink-muted);margin-left:2px;}
+.mini-as-yn{
+  font-family:var(--font-mono);font-size:11px;
+  border:none;border-radius:5px;padding:2px 3px;
+  background:var(--surface);color:var(--ink);
+}
+.mini-as-text{
+  font-family:var(--font-mono);font-size:11px;
+  border:none;border-radius:5px;padding:2px 6px;
+  width:84px;background:var(--surface);color:var(--ink);
+}
+
 /* ── Form ──────────────────────────────────────── */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .form-grid.cols-3{grid-template-columns:1fr 1fr 1fr;}
@@ -2170,8 +2193,43 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 // ================================================================
 // MEASURE DATA
 // ================================================================
+
+// M.I.N.I. blank scoring/answer sheet — item codes and N/Y response
+// fields only, no interview questions, instructions, or scoring
+// algorithm (those are the copyrighted expression of the source
+// instrument). Administer using your own licensed copy of the
+// M.I.N.I. (Sheehan et al.); this just records the outcomes.
+const MINI_AS_SECTIONS=[
+  {code:"A",label:"Major Depressive Episode / Disorder",items:[{id:"a1a",code:"A1a",kind:"yn"},{id:"a1b",code:"A1b",kind:"yn"},{id:"a2a",code:"A2a",kind:"yn"},{id:"a2b",code:"A2b",kind:"yn"},{id:"a_1a_2a_summary",code:"A (1a/2a summary)",kind:"yn"},{id:"a3a",code:"A3a",kind:"yn2"},{id:"a3b",code:"A3b",kind:"yn2"},{id:"a3c",code:"A3c",kind:"yn2"},{id:"a3d",code:"A3d",kind:"yn2"},{id:"a3e",code:"A3e",kind:"yn2"},{id:"a3e_add_l",code:"A3e (add'l)",kind:"yn2"},{id:"a3f",code:"A3f",kind:"yn2"},{id:"a3g",code:"A3g",kind:"yn2"},{id:"a4",code:"A4",kind:"yn2"},{id:"a5",code:"A5",kind:"text"},{id:"a6a_count",code:"A6a (count)",kind:"text"}]},
+  {code:"B",label:"Suicidality",items:[{id:"b1",code:"B1",kind:"yn"},{id:"b1a",code:"B1a",kind:"yn"},{id:"b1b",code:"B1b",kind:"yn"},{id:"b2",code:"B2",kind:"yn"},{id:"b3",code:"B3",kind:"yn"},{id:"b3_freq",code:"B3 (freq.)",kind:"text"},{id:"b3_intensity",code:"B3 (intensity)",kind:"text"},{id:"b4",code:"B4",kind:"yn"},{id:"b4_detail",code:"B4 (detail)",kind:"text"},{id:"b5",code:"B5",kind:"yn"},{id:"b6",code:"B6",kind:"yn"},{id:"b7",code:"B7",kind:"yn"},{id:"b8",code:"B8",kind:"yn"},{id:"b9",code:"B9",kind:"yn"},{id:"b10",code:"B10",kind:"yn"},{id:"b10_detail",code:"B10 (detail)",kind:"text"},{id:"b11",code:"B11",kind:"yn"},{id:"b11_detail",code:"B11 (detail)",kind:"text"},{id:"b12",code:"B12",kind:"yn"},{id:"b12_detail",code:"B12 (detail)",kind:"text"},{id:"b13",code:"B13",kind:"yn"},{id:"b14",code:"B14",kind:"yn"},{id:"b14a",code:"B14a",kind:"yn"},{id:"b14b",code:"B14b",kind:"yn"},{id:"b14c",code:"B14c",kind:"yn"},{id:"b15",code:"B15",kind:"yn"},{id:"b16",code:"B16",kind:"yn"},{id:"b16a",code:"B16a",kind:"yn"},{id:"b16b",code:"B16b",kind:"yn"},{id:"b16c",code:"B16c",kind:"yn"},{id:"b16c_detail",code:"B16c (detail)",kind:"text"},{id:"b17_usual",code:"B17 (usual)",kind:"text"},{id:"b17_least",code:"B17 (least)",kind:"text"},{id:"b17_most",code:"B17 (most)",kind:"text"},{id:"b18",code:"B18",kind:"yn"},{id:"b18_count",code:"B18 (count)",kind:"text"},{id:"b18_when",code:"B18 (when)",kind:"text"},{id:"b19",code:"B19 (%)",kind:"text"},{id:"b19_summary",code:"B19 (summary)",kind:"yn"},{id:"b_outcome",code:"B outcome",kind:"text"},{id:"b_outcome_2",code:"B outcome (2)",kind:"text"}]},
+  {code:"C",label:"Manic / Hypomanic Episode, Bipolar Disorder",items:[{id:"c_family_hx",code:"C (family hx)",kind:"yn"},{id:"c_family_hx_who",code:"C (family hx who)",kind:"text"},{id:"c1a",code:"C1a",kind:"yn"},{id:"c1b",code:"C1b",kind:"yn"},{id:"c2a",code:"C2a",kind:"yn"},{id:"c2b",code:"C2b",kind:"yn"},{id:"c_1a_2a_summary",code:"C (1a/2a summary)",kind:"yn"},{id:"c3a",code:"C3a",kind:"yn2"},{id:"c3a_add_l",code:"C3a (add'l)",kind:"yn2"},{id:"c3b",code:"C3b",kind:"yn2"},{id:"c3c",code:"C3c",kind:"yn2"},{id:"c3d",code:"C3d",kind:"yn2"},{id:"c3e",code:"C3e",kind:"yn2"},{id:"c3f",code:"C3f",kind:"yn2"},{id:"c3g",code:"C3g",kind:"yn2"},{id:"c3_summary",code:"C3 summary",kind:"yn2"},{id:"c4",code:"C4",kind:"text"},{id:"c5",code:"C5",kind:"yn2"},{id:"c6",code:"C6",kind:"yn2"},{id:"c7",code:"C7",kind:"yn2"},{id:"c_outcome_1",code:"C outcome 1",kind:"text"},{id:"c_outcome_2",code:"C outcome 2",kind:"text"},{id:"c_outcome_3",code:"C outcome 3",kind:"text"},{id:"c8a",code:"C8a",kind:"yn"},{id:"c8b",code:"C8b",kind:"yn"},{id:"c8c",code:"C8c",kind:"yn"}]},
+  {code:"D",label:"Panic Disorder",items:[{id:"d1a",code:"D1a",kind:"yn"},{id:"d1b",code:"D1b",kind:"yn"},{id:"d2",code:"D2",kind:"yn"},{id:"d3",code:"D3",kind:"yn"},{id:"d4a",code:"D4a",kind:"yn"},{id:"d4b",code:"D4b",kind:"yn"},{id:"d4c",code:"D4c",kind:"yn"},{id:"d4d",code:"D4d",kind:"yn"},{id:"d4e",code:"D4e",kind:"yn"},{id:"d4f",code:"D4f",kind:"yn"},{id:"d4g",code:"D4g",kind:"yn"},{id:"d4h",code:"D4h",kind:"yn"},{id:"d4i",code:"D4i",kind:"yn"},{id:"d4j",code:"D4j",kind:"yn"},{id:"d4k",code:"D4k",kind:"yn"},{id:"d4l",code:"D4l",kind:"yn"},{id:"d4m",code:"D4m",kind:"yn"},{id:"d5",code:"D5",kind:"yn"},{id:"d6",code:"D6",kind:"yn"},{id:"d_outcome",code:"D outcome",kind:"text"}]},
+  {code:"E",label:"Agoraphobia",items:[{id:"e1",code:"E1",kind:"yn"},{id:"e_2_summary",code:"E (2+ summary)",kind:"yn"},{id:"e2",code:"E2",kind:"yn"},{id:"e3",code:"E3",kind:"yn"},{id:"e4",code:"E4",kind:"yn"},{id:"e5",code:"E5",kind:"yn"},{id:"e6",code:"E6",kind:"yn"},{id:"e_outcome",code:"E outcome",kind:"text"}]},
+  {code:"F",label:"Social Anxiety Disorder",items:[{id:"f1",code:"F1",kind:"yn"},{id:"f2",code:"F2",kind:"yn"},{id:"f3",code:"F3",kind:"yn"},{id:"f4",code:"F4",kind:"yn"},{id:"f5",code:"F5",kind:"yn"},{id:"f6",code:"F6",kind:"yn"},{id:"f_outcome",code:"F outcome",kind:"text"}]},
+  {code:"G",label:"Obsessive-Compulsive Disorder",items:[{id:"g1a",code:"G1a",kind:"yn"},{id:"g1b",code:"G1b",kind:"yn"},{id:"g2",code:"G2",kind:"yn"},{id:"g3a",code:"G3a",kind:"yn"},{id:"g3b",code:"G3b",kind:"yn"},{id:"g_summary",code:"G summary",kind:"yn"},{id:"g4",code:"G4",kind:"yn"},{id:"g_outcome",code:"G outcome",kind:"text"}]},
+  {code:"H",label:"Posttraumatic Stress Disorder",items:[{id:"h1",code:"H1",kind:"yn"},{id:"h2",code:"H2",kind:"yn"},{id:"h3a",code:"H3a",kind:"yn"},{id:"h3b",code:"H3b",kind:"yn"},{id:"h3_summary",code:"H3 summary",kind:"yn"},{id:"h4a",code:"H4a",kind:"yn"},{id:"h4b",code:"H4b",kind:"yn"},{id:"h4c",code:"H4c",kind:"yn"},{id:"h4d",code:"H4d",kind:"yn"},{id:"h4e",code:"H4e",kind:"yn"},{id:"h4f",code:"H4f",kind:"yn"},{id:"h4g",code:"H4g",kind:"yn"},{id:"h4_summary",code:"H4 summary",kind:"yn"},{id:"h5a",code:"H5a",kind:"yn"},{id:"h5b",code:"H5b",kind:"yn"},{id:"h5c",code:"H5c",kind:"yn"},{id:"h5d",code:"H5d",kind:"yn"},{id:"h5e",code:"H5e",kind:"yn"},{id:"h5f",code:"H5f",kind:"yn"},{id:"h5_summary",code:"H5 summary",kind:"yn"},{id:"h6",code:"H6",kind:"yn"},{id:"h7",code:"H7",kind:"yn"},{id:"h_outcome",code:"H outcome",kind:"text"}]},
+  {code:"I",label:"Alcohol Use Disorder",items:[{id:"i1",code:"I1",kind:"yn"},{id:"i2a",code:"I2a",kind:"yn"},{id:"i2b",code:"I2b",kind:"yn"},{id:"i2c",code:"I2c",kind:"yn"},{id:"i2d",code:"I2d",kind:"yn"},{id:"i2e",code:"I2e",kind:"yn"},{id:"i2f",code:"I2f",kind:"yn"},{id:"i2g",code:"I2g",kind:"yn"},{id:"i2h",code:"I2h",kind:"yn"},{id:"i2i",code:"I2i",kind:"yn"},{id:"i2j",code:"I2j",kind:"yn"},{id:"i2k1",code:"I2k1",kind:"yn"},{id:"i2k2",code:"I2k2",kind:"yn"},{id:"i2k_summary",code:"I2k summary",kind:"yn"},{id:"i2_2_summary",code:"I2 (2+ summary)",kind:"yn"},{id:"i_outcome",code:"I outcome",kind:"text"},{id:"i_specifiers",code:"I specifiers",kind:"text"}]},
+  {code:"J",label:"Substance Use Disorder (Non-Alcohol)",items:[{id:"j1a",code:"J1a",kind:"yn"},{id:"j1_most_used",code:"J1 (most used)",kind:"text"},{id:"j1_biggest_problem",code:"J1 (biggest problem)",kind:"text"},{id:"j2a",code:"J2a",kind:"yn"},{id:"j2b",code:"J2b",kind:"yn"},{id:"j2c",code:"J2c",kind:"yn"},{id:"j2d",code:"J2d",kind:"yn"},{id:"j2e",code:"J2e",kind:"yn"},{id:"j2f",code:"J2f",kind:"yn"},{id:"j2g",code:"J2g",kind:"yn"},{id:"j2h",code:"J2h",kind:"yn"},{id:"j2i",code:"J2i",kind:"yn"},{id:"j2j",code:"J2j",kind:"yn"},{id:"j2k1",code:"J2k1",kind:"yn"},{id:"j2k2",code:"J2k2",kind:"yn"},{id:"j2k_summary",code:"J2k summary",kind:"yn"},{id:"j2_2_summary",code:"J2 (2+ summary)",kind:"yn"},{id:"j_outcome",code:"J outcome",kind:"text"},{id:"j_specifiers",code:"J specifiers",kind:"text"}]},
+  {code:"K",label:"Psychotic Disorders",items:[{id:"k1a",code:"K1a",kind:"yn"},{id:"k1b",code:"K1b",kind:"yn"},{id:"k2a",code:"K2a",kind:"yn"},{id:"k2b",code:"K2b",kind:"yn"},{id:"k3a",code:"K3a",kind:"yn"},{id:"k3b",code:"K3b",kind:"yn"},{id:"k4a",code:"K4a",kind:"yn"},{id:"k4b",code:"K4b",kind:"yn"},{id:"k5a",code:"K5a",kind:"yn"},{id:"k5b",code:"K5b",kind:"yn"},{id:"k6a",code:"K6a",kind:"yn"},{id:"k6a_add_l",code:"K6a (add'l)",kind:"yn"},{id:"k6b",code:"K6b",kind:"yn"},{id:"k6b_add_l",code:"K6b (add'l)",kind:"yn"},{id:"k7a",code:"K7a",kind:"yn"},{id:"k7b",code:"K7b",kind:"yn"},{id:"k8a",code:"K8a",kind:"yn"},{id:"k8b",code:"K8b",kind:"yn"},{id:"k9a",code:"K9a",kind:"yn"},{id:"k9b",code:"K9b",kind:"yn"},{id:"k10a",code:"K10a",kind:"yn"},{id:"k10b",code:"K10b",kind:"yn"},{id:"k11a",code:"K11a",kind:"yn"},{id:"k11_mood_duration",code:"K11 (mood duration)",kind:"text"},{id:"k11_psychotic_duration",code:"K11 (psychotic duration)",kind:"text"},{id:"k11_outcome",code:"K11 outcome",kind:"text"},{id:"k12a",code:"K12a",kind:"yn"},{id:"k12_outcome",code:"K12 outcome",kind:"text"},{id:"k13",code:"K13",kind:"yn"},{id:"k13_outcome",code:"K13 outcome",kind:"text"},{id:"k14",code:"K14",kind:"yn"},{id:"k14_outcome",code:"K14 outcome",kind:"text"}]},
+  {code:"L",label:"Anorexia Nervosa",items:[{id:"l1a_height",code:"L1a (height)",kind:"text"},{id:"l1b_weight",code:"L1b (weight)",kind:"text"},{id:"l1c",code:"L1c",kind:"yn"},{id:"l2",code:"L2",kind:"yn"},{id:"l3",code:"L3",kind:"yn"},{id:"l4a",code:"L4a",kind:"yn"},{id:"l4b",code:"L4b",kind:"yn"},{id:"l4c",code:"L4c",kind:"yn"},{id:"l5",code:"L5",kind:"yn"},{id:"l_outcome",code:"L outcome",kind:"text"}]},
+  {code:"M",label:"Bulimia Nervosa",items:[{id:"m1",code:"M1",kind:"yn"},{id:"m2",code:"M2",kind:"yn"},{id:"m3",code:"M3",kind:"yn"},{id:"m4",code:"M4",kind:"yn"},{id:"m4a_episodes_wk",code:"M4a (episodes/wk)",kind:"text"},{id:"m4a_days_wk",code:"M4a (days/wk)",kind:"text"},{id:"m5",code:"M5",kind:"yn"},{id:"m6",code:"M6",kind:"yn"},{id:"m7",code:"M7",kind:"yn"},{id:"m7_threshold",code:"M7 (threshold)",kind:"text"},{id:"m8",code:"M8",kind:"yn"},{id:"m_outcome_1",code:"M outcome 1",kind:"text"},{id:"m_outcome_2",code:"M outcome 2",kind:"text"}]},
+  {code:"MB",label:"Binge-Eating Disorder",items:[{id:"mb1",code:"MB1",kind:"yn"},{id:"mb2",code:"MB2",kind:"yn"},{id:"mb3",code:"MB3",kind:"yn"},{id:"mb4",code:"MB4",kind:"yn"},{id:"mb5",code:"MB5",kind:"yn"},{id:"mb6a",code:"MB6a",kind:"yn"},{id:"mb6b",code:"MB6b",kind:"yn"},{id:"mb6c",code:"MB6c",kind:"yn"},{id:"mb6d",code:"MB6d",kind:"yn"},{id:"mb6e",code:"MB6e",kind:"yn"},{id:"mb_3_summary",code:"MB (3+ summary)",kind:"yn"},{id:"mb7",code:"MB7",kind:"yn"},{id:"mb8_episodes_wk",code:"MB8 (episodes/wk)",kind:"text"},{id:"mb8_days_wk",code:"MB8 (days/wk)",kind:"text"},{id:"mb_outcome",code:"MB outcome",kind:"text"},{id:"mb_specifiers",code:"MB specifiers",kind:"text"}]},
+  {code:"N",label:"Generalized Anxiety Disorder",items:[{id:"n1a",code:"N1a",kind:"yn"},{id:"n1b",code:"N1b",kind:"yn"},{id:"n_restricted",code:"N (restricted?)",kind:"yn"},{id:"n2",code:"N2",kind:"yn"},{id:"n3a",code:"N3a",kind:"yn"},{id:"n3b",code:"N3b",kind:"yn"},{id:"n3c",code:"N3c",kind:"yn"},{id:"n3d",code:"N3d",kind:"yn"},{id:"n3e",code:"N3e",kind:"yn"},{id:"n3f",code:"N3f",kind:"yn"},{id:"n3_3_summary",code:"N3 (3+ summary)",kind:"yn"},{id:"n4",code:"N4",kind:"yn"},{id:"n_outcome",code:"N outcome",kind:"text"}]},
+  {code:"O",label:"Medical / Organic / Substance Cause",items:[{id:"o1a",code:"O1a",kind:"text"},{id:"o1b",code:"O1b",kind:"text"},{id:"o2",code:"O2",kind:"text"},{id:"o2_summary",code:"O2 summary",kind:"text"}]},
+  {code:"P",label:"Antisocial Personality Disorder",items:[{id:"p1a",code:"P1a",kind:"yn"},{id:"p1b",code:"P1b",kind:"yn"},{id:"p1c",code:"P1c",kind:"yn"},{id:"p1d",code:"P1d",kind:"yn"},{id:"p1e",code:"P1e",kind:"yn"},{id:"p1f",code:"P1f",kind:"yn"},{id:"p1_2_summary",code:"P1 (2+ summary)",kind:"yn"},{id:"p2a",code:"P2a",kind:"yn"},{id:"p2b",code:"P2b",kind:"yn"},{id:"p2c",code:"P2c",kind:"yn"},{id:"p2d",code:"P2d",kind:"yn"},{id:"p2e",code:"P2e",kind:"yn"},{id:"p2f",code:"P2f",kind:"yn"},{id:"p2g",code:"P2g",kind:"yn"},{id:"p2_3_summary",code:"P2 (3+ summary)",kind:"yn"},{id:"p_outcome",code:"P outcome",kind:"text"}]},
+];
+
+function makeMiniAnswerSheet(){
+  return {
+    name:"M.I.N.I. — Structured Interview Answer Sheet",abbr:"MINI",type:"answersheet",category:"mini_as",
+    note:"Blank scoring sheet — item codes and N/Y response fields only. Administer using your own licensed copy of the M.I.N.I. (Sheehan et al., DSM-5), which contains the actual questions, instructions, and scoring rules; record outcomes here.",
+    sections:MINI_AS_SECTIONS
+  };
+}
+
 const M = {
 ADHD:{
+  mini_as:makeMiniAnswerSheet(),
   caars:{
     name:"Conners Adult ADHD Rating Scales (CAARS)",abbr:"CAARS",type:"entry",
     note:"MHS licensed measure. Administered pre-session. Enter T-scores from Self-Report form and Observer form if available. T ≥65 elevated (>1.5 SD); T ≥70 markedly elevated (>2 SD).",
@@ -2274,6 +2332,7 @@ ADHD:{
   }
 },
 Autism:{
+  mini_as:makeMiniAnswerSheet(),
   rmet:{
     name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:true,reporter:"self",rowColor:"red",manualComplete:true,
     note:"Baron-Cohen et al. (2001), Autism Research Centre, University of Cambridge. The RMET's 36 items are copyrighted photographic stimuli (black-and-white photographs of the eye region, each with 4 forced-choice mental-state words) — the images themselves are the licensed test content and cannot be reproduced here. Administer the official stimulus set/booklet or licensed digital version separately, then enter the resulting score. Adult norms: general population mean ≈26/36; autistic-sample mean ≈21/36. No single validated clinical cutoff — interpret relative to population norms and convergent evidence.",
@@ -2590,6 +2649,7 @@ Autism:{
   }
 },
 OCD:{
+  mini_as:makeMiniAnswerSheet(),
   ocd_ci:{
     name:"OCD Clinical Interview",abbr:"OCD CI",type:"interview",
     sections:[
@@ -2663,6 +2723,7 @@ OCD:{
   }
 },
 GAD:{
+  mini_as:makeMiniAnswerSheet(),
   gad_ci:{
     name:"GAD Clinical Interview",abbr:"GAD CI",type:"interview",
     sections:[
@@ -2723,6 +2784,7 @@ GAD:{
   }
 },
 PTSD:{
+  mini_as:makeMiniAnswerSheet(),
   caps5:{
     name:"Clinician-Administered PTSD Scale for DSM-5",abbr:"CAPS-5",type:"clinician",
     note:"National Center for PTSD — free for clinical use. Rate each item 0–4 based on severity over the past month, combining frequency and intensity. 0=Absent, 1=Mild/subthreshold, 2=Moderate/threshold, 3=Severe, 4=Extreme/incapacitating. Threshold: total ≥25 probable PTSD.",
@@ -4148,7 +4210,7 @@ function initR(mod){
   responses[mod]={};
   for(let key in M[mod]){
     const m=M[mod][key];
-    if(m.type==='entry'||m.type==='interview') continue;
+    if(m.type==='entry'||m.type==='interview'||m.type==='answersheet') continue;
     if(m.type==='clinician'){
       let n=0; m.parts.forEach(p=>n+=p.items.length);
       responses[mod][key]=new Array(n).fill(null);
@@ -4194,8 +4256,27 @@ function renderMeasures(){
       ${devHTML}</div>`;
   }
 
+  // M.I.N.I. answer sheet renders next — identical across modules, so it's
+  // deduped the same way as the developmental questionnaires above.
+  const miniSeen=new Set();
+  let miniHTML='';
+  DEV_HX_MODULE_ORDER.filter(mod=>selectedModules.includes(mod)).forEach(mod=>{
+    Object.keys(M[mod]).forEach(key=>{
+      const m=M[mod][key];
+      if(m.category==='mini_as'&&!miniSeen.has(key)){
+        miniSeen.add(key);
+        miniHTML+=buildMCard(mod,key,m);
+      }
+    });
+  });
+  if(miniHTML){
+    h+=`<div class="section"><div class="section-label">M.I.N.I. Structured Interview</div>
+      <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin:-8px 0 12px;text-transform:none;letter-spacing:normal;font-family:var(--font-sans,inherit);font-weight:400;">Blank item-code answer sheet — administer using your own licensed copy of the M.I.N.I. (Sheehan et al.), which contains the actual questions, instructions, and scoring rules.</div>
+      ${miniHTML}</div>`;
+  }
+
   selectedModules.forEach(mod=>{
-    const keys=Object.keys(M[mod]).filter(key=>M[mod][key].category!=='developmental');
+    const keys=Object.keys(M[mod]).filter(key=>M[mod][key].category!=='developmental'&&M[mod][key].category!=='mini_as');
     const grouped=keys.some(key=>M[mod][key].reporter);
     if(!grouped){
       keys.forEach(key=>h+=buildMCard(mod,key,M[mod][key]));
@@ -4237,6 +4318,7 @@ function buildMCard(mod,key,m){
   if(m.type==='entry') return buildEntryCard(mod,key,m);
   if(m.type==='clinician') return buildClinicianCard(mod,key,m);
   if(m.type==='interview') return buildInterviewCard(mod,key,m);
+  if(m.type==='answersheet') return buildAnswerSheetCard(mod,key,m);
 
   let items=m.items;
   let n=items.length;
@@ -4308,6 +4390,47 @@ function buildInterviewCard(mod,key,m){
       h+=`<textarea style="font-size:14px;min-height:120px;" id="ci_${mid}_${s.id}" placeholder="${s.ph}"></textarea>`;
     }
     h+=`</div>`;
+  });
+  h+=`</div></div>`;
+  return h;
+}
+
+function miniYnSelect(id){
+  return `<select id="${id}" class="mini-as-yn"><option value="">—</option><option value="N">N</option><option value="Y">Y</option></select>`;
+}
+
+function buildAnswerSheetCard(mod,key,m){
+  const mid=mod+'_'+key;
+  let h=`<div class="measure-card" id="mc_${mid}">
+    <div class="measure-header" onclick="tog('${mid}')">
+      <div class="measure-header-left">
+        <span class="measure-abbr" style="background:var(--clay-dim);color:var(--clay);border-color:rgba(193,124,116,0.4);">${m.abbr}</span>
+        <span class="measure-name">${m.name}</span>
+        <span class="warn-tag">Answer sheet</span>
+        ${tierTag(m)}
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        ${dlUploadControls(mod,key)}
+        <span class="chevron" id="cv_${mid}">▼</span>
+      </div>
+    </div>
+    <div class="measure-body" id="mb_${mid}">`;
+  if(m.note) h+=`<div class="measure-instruction">${m.note}</div>`;
+  m.sections.forEach(s=>{
+    h+=`<div style="margin-bottom:14px;">
+      <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);font-family:var(--font-display);margin-bottom:6px;">${s.code} — ${s.label}</div>
+      <div class="mini-as-grid">`;
+    s.items.forEach(it=>{
+      const base=`mini_${mid}_${it.id}`;
+      if(it.kind==='text'){
+        h+=`<div class="mini-as-row"><span class="mini-as-code">${it.code}</span><input type="text" id="${base}" class="mini-as-text" placeholder="—"></div>`;
+      } else if(it.kind==='yn2'){
+        h+=`<div class="mini-as-row"><span class="mini-as-code">${it.code}</span><span class="mini-as-sub">(1)</span>${miniYnSelect(base+'_1')}<span class="mini-as-sub">(2)</span>${miniYnSelect(base+'_2')}</div>`;
+      } else {
+        h+=`<div class="mini-as-row"><span class="mini-as-code">${it.code}</span>${miniYnSelect(base)}</div>`;
+      }
+    });
+    h+=`</div></div>`;
   });
   h+=`</div></div>`;
   return h;
@@ -5097,6 +5220,13 @@ function safeFileToken(s,fallback){
 // ================================================================
 // DOWNLOAD ASSESSMENT DATA (PDF) — everything entered, nothing blank
 // ================================================================
+// Returns [id, hasSubparts] pairs for every field element belonging to one
+// M.I.N.I. answer-sheet item, for the given mid ("mod_key") prefix.
+function miniAsFieldIds(mid,it){
+  const base=`mini_${mid}_${it.id}`;
+  return it.kind==='yn2'?[base+'_1',base+'_2']:[base];
+}
+
 function measureHasData(mod,key){
   const m=M[mod][key];
   const v=id=>(document.getElementById(id)?.value||'').trim();
@@ -5104,6 +5234,10 @@ function measureHasData(mod,key){
   if(m.type==='interview') return m.sections.some(s=>s.items
     ? s.items.some(it=>v(`ci_${mod}_${key}_${s.id}_${it.id}`)!=='')
     : v(`ci_${mod}_${key}_${s.id}`)!=='');
+  if(m.type==='answersheet'){
+    const mid=mod+'_'+key;
+    return m.sections.some(s=>s.items.some(it=>miniAsFieldIds(mid,it).some(id=>v(id)!=='')));
+  }
   const r=responses[mod]&&responses[mod][key];
   return !!(r&&r.some(x=>x!==null));
 }
@@ -5139,6 +5273,23 @@ function writeMeasureBody(w,mod,key){
       if(val==='')return;
       w.writeLine(s.label+':',{size:9,style:'italic',indent:6});
       w.writeMultiline(val,{size:10,indent:12});
+      w.writeBlank(3);
+    });
+    w.writeBlank(4);
+    return;
+  }
+  if(m.type==='answersheet'){
+    const mid=mod+'_'+key;
+    m.sections.forEach(s=>{
+      const rows=s.items.map(it=>{
+        const ids=miniAsFieldIds(mid,it);
+        const vals=ids.map(v).map(x=>x.trim());
+        if(vals.every(x=>x===''))return null;
+        return it.kind==='yn2'?`${it.code}: (1) ${vals[0]||'—'}  (2) ${vals[1]||'—'}`:`${it.code}: ${vals[0]}`;
+      }).filter(Boolean);
+      if(!rows.length)return;
+      w.writeLine(`${s.code} — ${s.label}:`,{size:9,style:'italic',indent:6});
+      w.writeLine(rows.join('   '),{size:9,indent:12});
       w.writeBlank(3);
     });
     w.writeBlank(4);
@@ -5319,6 +5470,16 @@ function writeMeasureBodyTemplate(w,mod,key){
     w.writeBlank(4);
     return;
   }
+  if(m.type==='answersheet'){
+    m.sections.forEach(s=>{
+      w.writeLine(`${s.code} — ${s.label}:`,{size:9,style:'italic',indent:6});
+      const codes=s.items.map(it=>it.kind==='yn2'?`${it.code} (1)__ (2)__`:`${it.code} __`).join('   ');
+      w.writeLine(codes,{size:9,indent:12});
+      w.writeBlank(3);
+    });
+    w.writeBlank(4);
+    return;
+  }
   // scored self/other-report measure, or clinician-rated
   const isClinician=m.type==='clinician';
   const items=isClinician?[].concat(...m.parts.map(p=>p.items)):m.items;
@@ -5452,6 +5613,14 @@ function buildMeasurePayload(mod,key){
     });
     return {mod,key,mtype:'interview',sections};
   }
+  if(m.type==='answersheet'){
+    const mid=mod+'_'+key;
+    const items={};
+    m.sections.forEach(s=>s.items.forEach(it=>{
+      items[it.id]=miniAsFieldIds(mid,it).map(v);
+    }));
+    return {mod,key,mtype:'answersheet',items};
+  }
   const r=(responses[mod]&&responses[mod][key])||[];
   return {mod,key,mtype:m.type==='clinician'?'clinician':'scored',responses:r};
 }
@@ -5519,6 +5688,18 @@ function importMeasurePayload(mod,key,payload){
         if(el) el.value=secVal;
       }
     });
+    return true;
+  }
+  if(payload.mtype==='answersheet'&&m.type==='answersheet'){
+    const mid=mod+'_'+key;
+    m.sections.forEach(s=>s.items.forEach(it=>{
+      const vals=payload.items&&payload.items[it.id];
+      if(!Array.isArray(vals))return;
+      miniAsFieldIds(mid,it).forEach((id,i)=>{
+        const el=document.getElementById(id);
+        if(el&&vals[i]!==undefined) el.value=vals[i];
+      });
+    }));
     return true;
   }
   if((payload.mtype==='scored'||payload.mtype==='clinician')&&(m.type===undefined||m.type==='clinician')){
@@ -5636,6 +5817,26 @@ function buildMsg(){
         return val?`${s.label}:\n${val}`:null;
       }).filter(Boolean);
       if(sections.length) msg+=`\n${m.name}:\n${sections.join('\n\n')}\n`;
+    }
+    // Collect M.I.N.I. answer-sheet endorsements (Y responses and any free-text specifiers)
+    for(let key in M[mod]){
+      const m=M[mod][key];
+      if(m.type!=='answersheet') continue;
+      const mid=mod+'_'+key;
+      const sections=m.sections.map(s=>{
+        const rows=s.items.map(it=>{
+          const ids=miniAsFieldIds(mid,it);
+          const vals=ids.map(v);
+          if(it.kind==='yn2'){
+            if(vals[0]!=='Y'&&vals[1]!=='Y')return null;
+            return `${it.code}: (1) ${vals[0]||'—'} (2) ${vals[1]||'—'}`;
+          }
+          if(it.kind==='yn') return vals[0]==='Y'?`${it.code}: Y`:null;
+          return vals[0]?`${it.code}: ${vals[0]}`:null;
+        }).filter(Boolean);
+        return rows.length?`${s.code} — ${s.label}: ${rows.join(', ')}`:null;
+      }).filter(Boolean);
+      if(sections.length) msg+=`\n${m.name} (positive/notable items only):\n${sections.join('\n')}\n`;
     }
     const n=v('notes_'+mod);if(n)msg+=`\nSession Notes:\n${n}\n`;
     const d=v('diff_'+mod);if(d)msg+=`\nDifferential Considerations:\n${d}\n`;
