@@ -338,17 +338,19 @@ body::before{display:none;}
 
 /* ── Content area — raised panel ────────────────── */
 .content-main{
-  /* Retint nested surface tokens using multiple tones lifted from the
-     background image (pale cream highlight, dusty lavender-mauve,
-     deeper plum) rather than one flat coral, so cards/dropdowns/inputs
-     contrast against each other and against the coral outer panel.
-     Cascades into .card, .measure-card, .ms-trigger/.ms-menu dropdowns,
-     the mini-as answer-sheet grid, and (via its translucent overlay)
-     the text/select input fields, without touching those rules directly. */
-  --surface:#F3E6DD;
-  --surface-raised:#F8EFE7;
-  --surface-sunken:#D8C0C4;
-  --surface-deep:#B98A90;
+  /* One warm family tying the whole page together: cream echoes the
+     sidebar keypad card, bronze-tan echoes the brass nav pills, and
+     terracotta echoes this panel's own coral. No unrelated hues
+     (no mauve/lavender) so it reads as coordinated with the header's
+     slate blue + bronze sidebar + coral panel, not four separate
+     palettes. Cascades into .card, .ms-trigger/.ms-menu dropdowns, the
+     mini-as answer-sheet grid, and (via its translucent overlay) the
+     text/select input fields. .measure-card gets its own explicit
+     terracotta tone below so it reads as visibly different from .card. */
+  --surface:#F6EFE5;
+  --surface-raised:#FAF5EE;
+  --surface-sunken:#C89A6E;
+  --surface-deep:#A6754C;
 
   flex:1;min-width:0;
   background:linear-gradient(155deg,#F7E4DB,#EDD2CC 45%,#E7C7C6);
@@ -447,6 +449,7 @@ body::before{display:none;}
   box-shadow:var(--neu-out-sm);
   transition:border-color 0.25s ease, background 0.25s ease;
 }
+.content-main .measure-card{background:#E5AF8F;border-left-color:rgba(169,137,89,0.5);}
 .measure-card.rc-red{border-left-color:#E53935;background:linear-gradient(90deg,rgba(229,57,53,0.10),var(--surface) 45%);}
 .measure-card.rc-orange{border-left-color:#FB8C00;background:linear-gradient(90deg,rgba(251,140,0,0.10),var(--surface) 45%);}
 .measure-card.rc-yellow{border-left-color:#FDD835;background:linear-gradient(90deg,rgba(253,216,53,0.16),var(--surface) 45%);}
