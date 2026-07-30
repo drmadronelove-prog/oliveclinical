@@ -339,10 +339,11 @@ body::before{display:none;}
 
 /* ── Content area — raised panel ────────────────── */
 .content-main{
-  /* Three-tier stack: cards (bronze, below) sit on this soft blush/coral
-     panel (harmonizing with the background image), fillable pills inside
-     those cards are cream (--surface / --input-bg), and the layer between
-     card and pill — sunken chips/rows — is coral. */
+  /* Three-tier stack: cards (bronze, below) sit on this marbled cream/
+     blush panel — the sidebar placard's cream (#F4F2EE) blended with
+     pale blush in soft organic blobs rather than a clean linear sweep —
+     fillable pills inside those cards are cream (--surface / --input-bg),
+     and the layer between card and pill — sunken chips/rows — is coral. */
   --surface:#F8F1E5;
   --surface-raised:#FBF6EE;
   --surface-sunken:#E5AF8F;
@@ -351,7 +352,13 @@ body::before{display:none;}
   --clay:#FFDCAA;
 
   flex:1;min-width:0;
-  background:linear-gradient(155deg,#FBEAE0 0%,#F0C7B4 50%,#E0A184 100%);
+  background:
+    radial-gradient(ellipse 55% 40% at 15% 15%,#F4F2EE 0%,transparent 65%),
+    radial-gradient(ellipse 45% 55% at 85% 10%,#FBEAE0 0%,transparent 60%),
+    radial-gradient(ellipse 60% 45% at 75% 75%,#F4F2EE 0%,transparent 65%),
+    radial-gradient(ellipse 50% 50% at 10% 85%,#FBEAE0 0%,transparent 60%),
+    radial-gradient(ellipse 40% 60% at 50% 45%,#F4F2EE 0%,transparent 70%),
+    linear-gradient(150deg,#FBEAE0,#F4F2EE 50%,#FBEAE0);
   border:none;
   border-radius:22px;
   padding:36px 36px 64px;
@@ -423,8 +430,9 @@ body::before{display:none;}
   background:linear-gradient(150deg,var(--brass-light),var(--brass));
   box-shadow:6px 6px 16px rgba(25,32,40,0.28),-6px -6px 16px rgba(255,255,255,0.25);
 }
-.content-main .card .field label,
-.content-main .measure-card .field label{color:#F9F1E4;}
+.content-main .card .field > label,
+.content-main .measure-card .field > label{color:#F9F1E4;}
+.content-main .ms-menu label{color:var(--ink);}
 .content-main .card .field .hint,
 .content-main .measure-card .field .hint{color:rgba(249,241,228,0.75);}
 .content-main .measure-name{color:#FBF3E7;}
