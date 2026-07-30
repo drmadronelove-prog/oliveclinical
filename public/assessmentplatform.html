@@ -440,6 +440,10 @@ body::before{display:none;}
 .content-main .warn-tag,
 .content-main .measure-abbr.clinician,
 .content-main .sc-val.elevated{color:#FFDCAA;}
+.content-main .measure-card .item-text,
+.content-main .measure-card .d5-q{color:#241505;}
+.content-main .measure-card .item-num{color:#4A2F12;}
+.content-main .measure-card .part-div{color:#3A2408;border-bottom-color:rgba(36,21,5,0.2);}
 
 /* ── Module buttons ────────────────────────────── */
 .module-grid{display:flex;flex-wrap:wrap;gap:10px;}
@@ -692,6 +696,32 @@ body::before{display:none;}
   border:none;border-radius:5px;padding:2px 6px;
   width:84px;background:var(--surface);color:var(--ink);
 }
+
+/* ── DIVA-5 interview ────────────────────────────── */
+.d5-part-label{
+  font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--clay);font-family:var(--font-display);font-weight:700;
+  margin:22px 0 4px;
+}
+.d5-item{margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(21,34,56,0.08);}
+.d5-item:last-child{border-bottom:none;}
+.d5-q{font-size:14px;font-weight:600;margin-bottom:2px;}
+.d5-note{font-size:11px;font-style:italic;color:var(--ink-muted);margin-bottom:8px;}
+.d5-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:8px;}
+.d5-col-label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);font-family:var(--font-display);margin-bottom:6px;}
+.d5-ex{display:flex;align-items:flex-start;gap:6px;font-size:13px;margin-bottom:5px;line-height:1.35;}
+.d5-ex input[type="checkbox"]{margin-top:3px;flex-shrink:0;}
+.d5-other{margin-top:8px;}
+.d5-other input{font-size:12px;padding:8px 10px;}
+.d5-yn-row{display:flex;gap:24px;align-items:center;margin-top:10px;font-size:13px;font-weight:600;flex-wrap:wrap;}
+.d5-yn-row select{width:auto;min-width:90px;padding:6px 10px;font-size:12px;}
+.d5-summary{
+  display:flex;gap:14px;flex-wrap:wrap;margin:18px 0;
+  padding:14px 16px;background:var(--surface-sunken);border-radius:12px;
+  box-shadow:var(--neu-in-sm);
+}
+.d5-summary-item{font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--ink);}
+.d5-summary-item .met{color:var(--success);}
 
 /* ── Form ──────────────────────────────────────── */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
@@ -2267,6 +2297,70 @@ function makeMiniAnswerSheet(){
   };
 }
 
+// DIVA-5 (Kooij, Francken & Bron, DIVA Foundation) — free for clinical use.
+// Full interview: 18 DSM-5 criteria (9 Attention, 9 Hyperactivity/Impulsivity),
+// each with adulthood/childhood example checklists and a symptom-present
+// judgment; five impairment domains; and the DIVA-5 score form / diagnosis
+// conclusion. Criterion-A symptom counts are auto-tallied from the 18 items.
+const DIVA5_ITEMS=[
+  {code:"A1",domain:"attn",q:"Do you often fail to give close attention to details, or do you make careless mistakes in your work or during other activities? And how was that during childhood (in schoolwork or during other activities)?",note:null,adult:["Makes careless mistakes","Works slowly to avoid mistakes","Work is inaccurate","Does not read instructions carefully","Overlooks or misses details","Too much time needed to complete detailed tasks","Gets easily bogged down by details","Works too quickly and therefore makes mistakes"],child:["Careless mistakes in schoolwork","Mistakes made by not reading questions properly","Overlooks or misses details","Work is inaccurate","Leaves questions unanswered by not reading them properly","Leaves the reverse side of a test unanswered","Others comment about careless work","Not checking the answers in homework","Too much time needed to complete detailed tasks"]},
+  {code:"A2",domain:"attn",q:"Do you often have difficulty sustaining your attention in tasks? And how was that during childhood (in play activities)?",note:"*Unless the subject is found to be really interesting (e.g. computer or hobby)",adult:["Not able to keep attention on tasks for long*","Quickly distracted by own thoughts or associations","Easily distracted by unrelated thoughts","Difficulty remaining focused during lectures and/or conversations","Finds it difficult to watch a film through to the end, or to read a book*","Quickly becomes bored with things*","Asks questions about subjects that have already been discussed"],child:["Difficulty keeping attention on schoolwork","Difficulty keeping attention on play*","Difficulty remaining focused during lectures and/or conversations","Easily distracted","Difficulty concentrating*","Needing structure to avoid becoming distracted","Quickly becoming bored of activities*"]},
+  {code:"A3",domain:"attn",q:"Does it often seem as though you are not listening when you are spoken to directly? And how was that during childhood?",note:null,adult:["Dreamy or preoccupied","Difficulty concentrating on a conversation","Afterwards, not knowing what a conversation was about","Often changing the subject of the conversation","Others saying that your thoughts are somewhere else","Mind seems elsewhere, even in the absence of any obvious distraction"],child:["Not knowing what parents/teachers have said","Dreamy or preoccupied","Only listening during eye contact or when a voice is raised","Mind seems elsewhere, even in the absence of any obvious distraction","Often having to be addressed again","Questions having to be repeated"]},
+  {code:"A4",domain:"attn",q:"Do you often not follow through on instructions and often fail to finish chores or duties in the workplace? And how was that during childhood (in schoolwork)?",note:null,adult:["Does things that are muddled up together without completing them","Starts tasks but quickly loses focus and is easily sidetracked","Needing a time limit to complete tasks","Difficulty completing administrative tasks","Difficultly following instructions from a manual"],child:["Difficulty following instructions","Difficulty with instructions involving more than one step","Starts tasks but quickly loses focus and is easily sidetracked","Not completing things","Not completing homework or handing it in","Needing a lot of structure in order to complete tasks"]},
+  {code:"A5",domain:"attn",q:"Do you often find it difficult to organise tasks and activities? And how was that during childhood?",note:null,adult:["Difficultly with planning activities of daily life","Difficulty managing sequential tasks","House and/or workplace are disorganised","Difficulty keeping materials and belongings in order","Works messy and disorganized","Planning too many tasks or non-efficient planning","Regularly booking things to take place at the same time (double-booking)","Arriving late","Fails to meet deadlines","Not able to use an agenda or diary consistently","Inflexible because of the need to keep to schedules","Poor sense and management of time","Creating schedules but not using them","Needing other people to structure things"],child:["Difficultly being ready on time","Messy room / desk and/or work","Difficulty keeping materials and belongings in order","Difficultly playing alone","Difficulty planning tasks or homework","Fails to meet deadlines","Doing things in a muddled way","Arriving late","Poor sense of time","Difficulty keeping himself/herself entertained"]},
+  {code:"A6",domain:"attn",q:"Do you often avoid (or do you dislike, or are you reluctant to engage in) tasks that require sustained mental effort? And how was that during childhood?",note:null,adult:["Do the easiest or nicest things first of all","Often postpone boring or difficult tasks","Postpone tasks so that deadlines are missed","Avoid monotonous work, such as administration","Avoids preparing reports, completing forms, or reviewing lengthy papers","Do not like reading due to mental effort","Avoidance of tasks that require a lot of concentration"],child:["Avoidance of homework or has an aversion to this","Reads few books or does not feel like reading due to mental effort","Avoidance of tasks that require a lot of concentration","Aversion to school subjects that require a lot of concentration","Often postpones boring or difficult tasks"]},
+  {code:"A7",domain:"attn",q:"Do you often lose things that are necessary for tasks or activities? And how was that during childhood?",note:null,adult:["Mislays tools, paperwork, eyeglasses, mobile telephones, wallet, keys, or agenda","Often leaves things behind","Loses papers for work","Loses a lot of time searching for things","Gets in a panic if other people move things around","Stores things away in the wrong place","Loses notes, lists or telephone numbers"],child:["Loses school materials, pencils, books, or other items","Mislays toys, clothing, or homework","Spends a lot of time searching for things","Gets in a panic if other people move things around","Comments from parents and/or teacher about things being lost"]},
+  {code:"A8",domain:"attn",q:"Are you often easily distracted by extraneous stimuli? And how was that during childhood?",note:null,adult:["Difficulty shutting off from external stimuli","After being distracted, difficult to pick up the thread again","Easily distracted by noises or events","Easily distracted by the conversations of others","Difficulty in filtering and/or selecting information"],child:["In the classroom, often looking outside","Easily distracted by noises or events","After being distracted, has difficultly picking up the thread again"]},
+  {code:"A9",domain:"attn",q:"Are you often forgetful in daily activities? And how was that during childhood?",note:null,adult:["Forgets appointments or other obligations","Forgets keys, agenda etc.","Needs frequent reminders for appointments","Forgets to pay bills or to return calls","Returning home to fetch forgotten things","Rigid use of lists to make sure things aren't forgotten","Forgets to keep or look at daily agenda","Forgets to do chores or run errands"],child:["Forgets appointments or instructions","Forgets to do chores or run errands","Has to be frequently reminded of things","Half-way through a task, forgetting what has to be done","Forgets to take things to school","Leaving things behind at school or at friends' houses"]},
+  {code:"HI1",domain:"hi",q:"Do you often fidget with or tap hands or feet, or do you often squirm in your seat? And how was that during childhood?",note:null,adult:["Difficulty sitting still","Fidgets with the legs","Tapping with a pen or playing with something","Fiddling with hair or biting nails","Able to control restlessness, but feels stressed as a result"],child:["Parents often said “sit still” or similar","Fidgets with the legs","Tapping with a pen or playing with something","Fiddling with hair or biting nails","Unable to remain seated in a chair in a relaxed manner","Able to control restlessness, but feels stressed as a result"]},
+  {code:"HI2",domain:"hi",q:"Do you often leave your seat in situations where it is expected that you remain seated? And how was that during childhood?",note:null,adult:["Often leaves his/her place in the office or in the workplace","Avoids symposiums, lectures, church etc.","Prefers to walk around rather than sit","Never sits still for long, always moving around","Stressed owing to the difficulty of sitting still","Makes excuses in order to be able to walk around"],child:["Often stands up while eating or leaves his/her place in the classroom","Finds it very difficult to stay seated at school or during meals","Being told to remain seated","Making excuses in order to walk around"]},
+  {code:"HI3",domain:"hi",q:"Do you often feel restless? And how was that during childhood?",note:null,adult:["Feeling restless or agitated inside","Constantly having the feeling that you have to be doing something","Finding it hard to relax"],child:["Always running around where it is inappropriate","Climbing on furniture, or jumping on the sofa","Climbing in trees","Feeling restless inside"]},
+  {code:"HI4",domain:"hi",q:"Do you often find it difficult to engage in leisure activities quietly? And how was that during childhood (in play activities)?",note:null,adult:["Talks during activities when this is not appropriate","Becoming quickly too cocky in public","Being loud in all kinds of situations","Difficulty doing activities quietly","Difficultly in speaking softly"],child:["Being loud-spoken during play or in the classroom","Unable to watch TV or films quietly","Asked to be quieter or calm down","Becoming quickly too cocky in public"]},
+  {code:"HI5",domain:"hi",q:"Are you often “on the go” or do you often act as if “driven by a motor”? And how was that during childhood?",note:null,adult:["Always busy doing something","Is uncomfortable being still for extended time, e.g. in restaurants or meetings","Has too much energy, always on the move","Others find you restless or difficult to keep up with","Stepping over own boundaries","Finds it difficult to let things go, excessively driven"],child:["Constantly busy","Others find you restless or difficult to keep up with","Is uncomfortable being still for extended time","Excessively active at school and at home","Has lots of energy","Always on the go, excessively driven"]},
+  {code:"HI6",domain:"hi",q:"Do you often talk excessively? And how was that during childhood?",note:null,adult:["So busy talking that other people find it tiring","Known to be an incessant talker","Finds it difficult to stop talking","Tendency to talk too much","Not giving others room to interject during a conversation","Needing a lot of words to say something"],child:["Known as a chatterbox","Teachers and parents often ask you to be quiet","Comments in school reports about talking too much","Being punished for talking too much","Keeping others from doing schoolwork by talking too much","Not giving others room during a conversation"]},
+  {code:"HI7",domain:"hi",q:"Do you often blurt out an answer before questions have been completed? And how was that during childhood?",note:null,adult:["Being a blabbermouth, saying what you think","Saying things without thinking first","Giving people answers before they have finished speaking","Completing other people's sentences","Being tactless"],child:["Being a blabbermouth, saying things without thinking first","Wants to be the first to answer questions at school","Blurts out an answer even if it is wrong","Interrupts others before sentences are finished","Difficulty waiting for turn during conversations","Coming across as being tactless"]},
+  {code:"HI8",domain:"hi",q:"Do you often find it difficult to await your turn? And how was that during childhood?",note:null,adult:["Difficulty waiting in a queue, jumping the queue","Difficulty in patiently waiting in the traffic/traffic jams","Being impatient","Quickly starting relationships/jobs, or ending/leaving these because of impatience"],child:["Difficultly waiting turn in group activities","Difficultly waiting turn in the classroom","Always being the first to talk or act","Becomes quickly impatient","Crosses the road without looking"]},
+  {code:"HI9",domain:"hi",q:"Do you often interrupt or intrude on others? And how was that during childhood?",note:null,adult:["Being quick to interfere with others","Intrudes on others","Disturbs other people's activities without being asked, or takes over their tasks","Comments from others about interference","Difficulty respecting the boundaries of others","Having an opinion about everything and immediately expressing this"],child:["Interrupts the games or activities of others","Starts using people's things without asking or permission","Interrupts the conversations of others","Reacts to everything","Unable to wait"]},
+];
+
+const DIVA5_DOMAINS=[
+  {id:"work_education",adultLabel:"Work/education",childLabel:"Education",adult:["Did not complete education/training needed for work","Work below level of education","Tire quickly of a workplace","Pattern of many short-lasting jobs","Difficulty with administrative work/planning","Not achieving promotions","Under-performing at work","Left work following arguments or dismissal","Sickness benefits/disability benefit as a result of symptoms","Limited impairment through compensation of high IQ","Limited impairment through compensation of external structure"],child:["Lower educational level than expected based on IQ","Staying back (repeating classes) as a result of concentration problems","Education not completed / rejected from school","Took much longer to complete education than usual","Achieved education suited to IQ with a lot of effort","Difficulty doing homework","Followed special education on account of symptoms","Comments from teachers about behaviour or concentration","Limited impairment through compensation of high IQ","Limited impairment through compensation of external structure"]},
+  {id:"relationship_family",adultLabel:"Relationship and/or family",childLabel:"Family",adult:["Tire quickly of relationships","Impulsively commencing/ending relationships","Unequal partner relationship owing to symptoms","Relationship problems, lots of arguments, lack of intimacy","Divorced owing to symptoms","Problems with sexuality as a result of symptoms","Problems with upbringing as a result of symptoms","Difficulty with housekeeping and/or administration","Financial problems or gambling","Not daring to start a relationship"],child:["Frequent arguments with brothers or sisters","Frequent punishment or hiding","Little contact with family on account of conflicts","Required structure from parents for a longer period than would normally be the case"]},
+  {id:"social_contacts",adultLabel:"Social contacts",childLabel:"Social contacts",adult:["Tire quickly of social contacts","Difficultly maintaining social contacts","Conflicts as a result of communication problems","Difficulty initiating social contacts","Low self-assertiveness as a result of negative experiences","Not being attentive (i.e. forget to send a card/empathising/phoning, etc)"],child:["Difficultly maintaining social contacts","Conflicts as a result of communication problems","Difficultly entering into social contacts","Low self-assertiveness as a result of negative experiences","Few friends","Being teased","Shut out by, or not being allowed, to do things with a group","Being a bully"]},
+  {id:"free_time_hobby",adultLabel:"Free time / hobby",childLabel:"Free time/hobby",adult:["Unable to relax properly during free time","Having to play lots of sports in order to relax","Injuries as a result of excessive sport","Unable to finish a book or watch a film all the way through","Being continually busy and therefore becoming overtired","Tire quickly of hobbies","Accidents/loss of driving licence as a result of reckless driving behaviour","Sensation seeking and/or taking too many risks","Contact with the police/the courts","Binge eating"],child:["Unable to relax properly during free time","Having to play lots of sport to be able to relax","Injuries as a result of excessive sport","Unable to finish a book or watch a film all the way through","Being continually busy and therefore becoming overtired","Tired quickly of hobbies","Sensation seeking and/or taking too many risks","Contact with the police/courts","Increased number of accidents"]},
+  {id:"self_confidence",adultLabel:"Self-confidence / self-image",childLabel:"Self-confidence / self-image",adult:["Uncertainty through negative comments of others","Negative self-image due to experiences of failure","Fear of failure in terms of starting new things","Excessive intense reaction to criticism","Perfectionism","Distressed by the symptoms of ADHD"],child:["Uncertainty through negative comments of others","Negative self-image due to experiences of failure","Fear of failure in terms of starting new things","Excessive intense reaction to criticism","Perfectionism"]},
+];
+
+// Part 3 (Criterion B / impairment) and Score Form fields — driven generically
+// by kind ('select' | 'text' | 'textarea') so one read/write path covers all of them.
+const DIVA5_EXTRA=[
+  {id:"critB_always",kind:"select",label:"Criterion B — Have you always had these symptoms of attention deficit and/or hyperactivity/impulsivity?",options:["","Yes (several symptoms were present prior to the 12th year of age)","No"]},
+  {id:"critB_onsetAge",kind:"text",label:"If no, starting from what age"},
+  {id:"imp2_adult",kind:"select",label:"Adulthood: evidence of impairment in ≥2 areas?",options:["","Yes","No"]},
+  {id:"imp2_child",kind:"select",label:"Childhood: evidence of impairment in ≥2 areas?",options:["","Yes","No"]},
+  {id:"details",kind:"textarea",label:"Potential details"},
+  {id:"critE",kind:"select",label:"Criterion E — the symptoms cannot be (better) explained by the presence of another psychiatric disorder",options:["","No","Yes, by:"]},
+  {id:"critE_by",kind:"text",label:"If yes, by which disorder"},
+  {id:"collat_parent",kind:"select",label:"Collateral support — Parent(s)/brother/sister/other",options:["","N/A","0","1","2"]},
+  {id:"collat_parent_who",kind:"text",label:"Indicate from whom (parent/sibling/other)"},
+  {id:"collat_partner",kind:"select",label:"Collateral support — Partner/good friend/other",options:["","N/A","0","1","2"]},
+  {id:"collat_partner_who",kind:"text",label:"Indicate from whom (partner/friend/other)"},
+  {id:"collat_school",kind:"select",label:"Collateral support — School reports",options:["","N/A","0","1","2"]},
+  {id:"collat_explain",kind:"textarea",label:"Explanation (0 = none/little support, 1 = some support, 2 = clear support)"},
+  {id:"dx",kind:"select",label:"Diagnosis: ADHD",options:["","No","Yes"]},
+  {id:"dx_type",kind:"select",label:"Presentation type (if Yes)",options:["","314.01 Combined presentation type","314.00 Predominantly inattentive presentation type","314.01 Predominantly hyperactive-impulsive presentation type","314.01 Other specified attention-deficit/hyperactivity disorder","314.01 Not specified attention-deficit/hyperactivity disorder"]},
+  {id:"dx_remission",kind:"select",label:"Partly in remission",options:["","No","Yes"]},
+  {id:"dx_severity",kind:"select",label:"Severity (if Yes)",options:["","Mild","Moderate","Severe"]}
+];
+
+function makeDiva5(){
+  return {
+    name:"DIVA-5 — Diagnostic Interview for ADHD in Adults",abbr:"DIVA-5",type:"diva5",primary:true,reporter:"self",
+    note:"Kooij, Francken & Bron (3rd ed., DIVA Foundation, 2019) — free for clinical use. Ask each question, working through the adulthood and childhood example lists together with the patient (and partner/family member if present), then judge whether the symptom is present in each period. Criterion-A symptom totals below are tallied automatically from your Yes/No judgments.",
+    items:DIVA5_ITEMS,domains:DIVA5_DOMAINS,extra:DIVA5_EXTRA
+  };
+}
+
 const M = {
 ADHD:{
   mini_as:makeMiniAnswerSheet(),
@@ -2282,26 +2376,7 @@ ADHD:{
       {id:"collateralHyper",l:"Observer Hyper-Impulsive T-score",h:"optional — from CAARS-O"}
     ]
   },
-  diva:{
-    name:"DIVA-5 — Score Entry",abbr:"DIVA-5",type:"entry",
-    note:"Clinician-administered structured interview for ADHD (Kooij & Francken). Document narrative findings in the DIVA-5 Interview card below. Enter symptom counts here for report generation.",
-    fields:[
-      {id:"divaInattCount",l:"Adult Inattentive Count",h:"DSM-5 threshold: ≥5 for adults"},
-      {id:"divaHyperCount",l:"Adult Hyper-Impulsive Count",h:"DSM-5 threshold: ≥5 for adults"},
-      {id:"divaChildhoodInatt",l:"Childhood Inattentive Count",h:"onset before age 12 required"},
-      {id:"divaChildhoodHyper",l:"Childhood Hyper-Impulsive Count",h:"onset before age 12 required"}
-    ]
-  },
-  diva_ci:{
-    name:"DIVA-5 Clinical Interview — Narrative Notes",abbr:"DIVA-5 CI",type:"interview",
-    sections:[
-      {id:"inatt",label:"Inattentive Symptoms — Adult (Criterion A1)",ph:"For each symptom endorsed, provide a specific behavioral example in at least two settings (work, home, social):\n\n1. Careless mistakes / poor attention to detail:\n2. Difficulty sustaining attention:\n3. Doesn't seem to listen:\n4. Doesn't follow through / leaves tasks unfinished:\n5. Difficulty organizing tasks:\n6. Avoids/dislikes tasks requiring sustained effort:\n7. Loses things:\n8. Easily distracted by extraneous stimuli:\n9. Forgetful in daily activities:"},
-      {id:"hyper",label:"Hyperactive-Impulsive Symptoms — Adult (Criterion A2)",ph:"1. Fidgets / squirms:\n2. Leaves seat in situations requiring seated:\n3. Restlessness (subjective in adults):\n4. Unable to engage in leisure quietly:\n5. 'On the go' / driven by a motor:\n6. Talks excessively:\n7. Blurts out answers:\n8. Difficulty waiting turn:\n9. Interrupts or intrudes:"},
-      {id:"childhood",label:"Childhood Onset (Before Age 12)",ph:"Evidence of symptoms before age 12:\n• School reports / report cards:\n• Parent recollections:\n• Client's own childhood memories:\n• Specific examples per setting (school, home, social):\n• Estimated age of symptom emergence:\n• How symptoms were explained at the time:"},
-      {id:"impairment",label:"Functional Impairment Across Settings (≥2 required)",ph:"Occupational/Academic:\n\nHome/Domestic:\n\nSocial/Relational:\n\nFinancial/Organizational:\n\nSelf-care:"},
-      {id:"diff",label:"Differential Considerations",ph:"Anxiety-driven inattention:\nTrauma dysregulation:\nAutism demand avoidance:\nSleep disorder:\nMood episode:\nSubstance use:\nMedication effects:"}
-    ]
-  },
+  diva5:makeDiva5(),
   collateral_adhd:{
     name:"Collateral Informant Interview — ADHD",abbr:"Collateral",type:"interview",
     note:"Structured interview with trusted adult who knew client in childhood and/or observes them currently (partner, parent, sibling). Optional but clinically strengthens diagnosis.",
@@ -4250,7 +4325,7 @@ function initR(mod){
   responses[mod]={};
   for(let key in M[mod]){
     const m=M[mod][key];
-    if(m.type==='entry'||m.type==='interview'||m.type==='answersheet') continue;
+    if(m.type==='entry'||m.type==='interview'||m.type==='answersheet'||m.type==='diva5') continue;
     if(m.type==='clinician'){
       let n=0; m.parts.forEach(p=>n+=p.items.length);
       responses[mod][key]=new Array(n).fill(null);
@@ -4359,6 +4434,7 @@ function buildMCard(mod,key,m){
   if(m.type==='clinician') return buildClinicianCard(mod,key,m);
   if(m.type==='interview') return buildInterviewCard(mod,key,m);
   if(m.type==='answersheet') return buildAnswerSheetCard(mod,key,m);
+  if(m.type==='diva5') return buildDiva5Card(mod,key,m);
 
   let items=m.items;
   let n=items.length;
@@ -4474,6 +4550,163 @@ function buildAnswerSheetCard(mod,key,m){
   });
   h+=`</div></div>`;
   return h;
+}
+
+function diva5YnSelect(id,onchange){
+  return `<select id="${id}"${onchange?` onchange="${onchange}"`:''}><option value="">—</option><option value="Yes">Yes</option><option value="No">No</option></select>`;
+}
+function diva5Select(id,options){
+  let h=`<select id="${id}">`;
+  options.forEach(o=>h+=`<option value="${escapeHtml(o)}">${escapeHtml(o)||'—'}</option>`);
+  h+=`</select>`;
+  return h;
+}
+
+function buildDiva5Card(mod,key,m){
+  const mid=mod+'_'+key;
+  let h=`<div class="measure-card" id="mc_${mid}">
+    <div class="measure-header" onclick="tog('${mid}')">
+      <div class="measure-header-left">
+        <span class="measure-abbr" style="background:var(--clay-dim);color:var(--clay);border-color:rgba(193,124,116,0.4);">${m.abbr}</span>
+        <span class="measure-name">${m.name}</span>
+        <span class="warn-tag">Structured interview</span>
+        ${tierTag(m)}
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        ${dlUploadControls(mod,key)}
+        <span class="chevron" id="cv_${mid}">▼</span>
+      </div>
+    </div>
+    <div class="measure-body" id="mb_${mid}">`;
+  if(m.note) h+=`<div class="measure-instruction">${m.note}</div>`;
+
+  h+=`<div class="d5-summary" id="d5_${mid}_sum">
+    <span class="d5-summary-item">Attention — Adult: <span id="d5_${mid}_sum_a_adult">0</span>/9</span>
+    <span class="d5-summary-item">Attention — Childhood: <span id="d5_${mid}_sum_a_child">0</span>/9</span>
+    <span class="d5-summary-item">Hyperactivity/Impulsivity — Adult: <span id="d5_${mid}_sum_hi_adult">0</span>/9</span>
+    <span class="d5-summary-item">Hyperactivity/Impulsivity — Childhood: <span id="d5_${mid}_sum_hi_child">0</span>/9</span>
+  </div>`;
+
+  h+=`<div class="d5-part-label">Part 1: Symptoms of Attention Deficit (DSM-5 Criterion A1)</div>`;
+  m.items.filter(it=>it.domain==='attn').forEach(it=>{h+=diva5ItemHTML(mod,key,mid,it);});
+  h+=`<div class="d5-part-label">Part 2: Symptoms of Hyperactivity-Impulsivity (DSM-5 Criterion A2)</div>`;
+  m.items.filter(it=>it.domain==='hi').forEach(it=>{h+=diva5ItemHTML(mod,key,mid,it);});
+
+  h+=`<div class="d5-part-label">Part 3: Impairment on Account of the Symptoms (DSM-5 Criteria B, C and D)</div>`;
+  h+=`<div class="d5-item">
+    <div class="d5-q">Criterion B — Have you always had these symptoms of attention deficit and/or hyperactivity/impulsivity?</div>
+    <div class="d5-yn-row">
+      ${diva5FieldHTML(mid,{id:"critB_always",kind:"select",label:"",options:["","Yes (several symptoms were present prior to the 12th year of age)","No"]},true)}
+      <span>${diva5FieldHTML(mid,{id:"critB_onsetAge",kind:"text",label:"If no, starting from what age"},true)}</span>
+    </div>
+  </div>`;
+
+  h+=`<div class="d5-item"><div class="d5-q">Criterion C — In which areas do you have / have you had problems with these symptoms?</div>`;
+  m.domains.forEach(d=>{
+    h+=`<div style="margin:14px 0;">
+      <div style="font-size:12px;font-weight:700;margin-bottom:8px;">${escapeHtml(d.adultLabel)} / ${escapeHtml(d.childLabel)}</div>
+      <div class="d5-cols">
+        <div>
+          <div class="d5-col-label">Adulthood — ${escapeHtml(d.adultLabel)}</div>
+          ${d.adult.map((ex,i)=>`<label class="d5-ex"><input type="checkbox" id="d5_${mid}_dom_${d.id}_ea_${i}">${escapeHtml(ex)}</label>`).join('')}
+          <div class="field d5-other"><label>Other</label><input type="text" id="d5_${mid}_dom_${d.id}_oa"></div>
+        </div>
+        <div>
+          <div class="d5-col-label">Childhood — ${escapeHtml(d.childLabel)}</div>
+          ${d.child.map((ex,i)=>`<label class="d5-ex"><input type="checkbox" id="d5_${mid}_dom_${d.id}_ec_${i}">${escapeHtml(ex)}</label>`).join('')}
+          <div class="field d5-other"><label>Other</label><input type="text" id="d5_${mid}_dom_${d.id}_oc"></div>
+        </div>
+      </div>
+    </div>`;
+  });
+  h+=`<div class="d5-yn-row">
+      <span>Adulthood: evidence of impairment in ≥2 areas? ${diva5FieldHTML(mid,{id:"imp2_adult",kind:"select",label:"",options:["","Yes","No"]},true)}</span>
+      <span>Childhood: evidence of impairment in ≥2 areas? ${diva5FieldHTML(mid,{id:"imp2_child",kind:"select",label:"",options:["","Yes","No"]},true)}</span>
+    </div>
+  </div>`;
+
+  h+=`<div class="field" style="margin-bottom:18px;"><label>Potential details</label><textarea id="d5_${mid}_details" style="min-height:70px;"></textarea></div>`;
+
+  h+=`<div class="d5-part-label">Score Form</div>`;
+  h+=`<div class="d5-item">
+    <div class="d5-q" style="font-size:13px;">Criterion A (auto-tallied from Parts 1 &amp; 2 above)</div>
+    <div class="d5-summary" style="margin-top:8px;">
+      <span class="d5-summary-item">Childhood: 3+ symptoms present (A and/or HI)? <span id="d5_${mid}_crit_a_child3">—</span></span>
+      <span class="d5-summary-item">Adulthood: A characteristics ≥5? <span id="d5_${mid}_crit_a_adult5">—</span></span>
+      <span class="d5-summary-item">Adulthood: HI characteristics ≥5? <span id="d5_${mid}_crit_hi_adult5">—</span></span>
+    </div>
+  </div>`;
+  h+=`<div class="form-grid cols-3" style="margin-bottom:18px;">
+    ${diva5FieldHTML(mid,{id:"critE",kind:"select",label:"Criterion E — not better explained by another psychiatric disorder",options:["","No","Yes, by:"]})}
+    ${diva5FieldHTML(mid,{id:"critE_by",kind:"text",label:"If yes, by which disorder"})}
+  </div>`;
+  h+=`<div class="form-grid cols-3" style="margin-bottom:18px;">
+    ${diva5FieldHTML(mid,{id:"collat_parent",kind:"select",label:"Collateral support — Parent(s)/sibling/other",options:["","N/A","0","1","2"]})}
+    ${diva5FieldHTML(mid,{id:"collat_parent_who",kind:"text",label:"Indicate from whom"})}
+    ${diva5FieldHTML(mid,{id:"collat_partner",kind:"select",label:"Collateral support — Partner/good friend/other",options:["","N/A","0","1","2"]})}
+    ${diva5FieldHTML(mid,{id:"collat_partner_who",kind:"text",label:"Indicate from whom"})}
+    ${diva5FieldHTML(mid,{id:"collat_school",kind:"select",label:"Collateral support — School reports",options:["","N/A","0","1","2"]})}
+  </div>
+  <div class="field" style="margin-bottom:18px;"><label>Explanation (0 = none/little support, 1 = some support, 2 = clear support)</label><textarea id="d5_${mid}_collat_explain" style="min-height:60px;"></textarea></div>`;
+  h+=`<div class="form-grid" style="margin-bottom:8px;">
+    ${diva5FieldHTML(mid,{id:"dx",kind:"select",label:"Diagnosis: ADHD",options:["","No","Yes"]})}
+    ${diva5FieldHTML(mid,{id:"dx_type",kind:"select",label:"Presentation type (if Yes)",options:["","314.01 Combined presentation type","314.00 Predominantly inattentive presentation type","314.01 Predominantly hyperactive-impulsive presentation type","314.01 Other specified attention-deficit/hyperactivity disorder","314.01 Not specified attention-deficit/hyperactivity disorder"]})}
+    ${diva5FieldHTML(mid,{id:"dx_remission",kind:"select",label:"Partly in remission",options:["","No","Yes"]})}
+    ${diva5FieldHTML(mid,{id:"dx_severity",kind:"select",label:"Severity (if Yes)",options:["","Mild","Moderate","Severe"]})}
+  </div>`;
+
+  h+=`</div></div>`;
+  return h;
+}
+
+function diva5FieldHTML(mid,f,inline){
+  const id=`d5_${mid}_${f.id}`;
+  const ctrl=f.kind==='select'?diva5Select(id,f.options):`<input type="text" id="${id}">`;
+  if(inline) return ctrl;
+  return `<div class="field"><label>${escapeHtml(f.label)}</label>${ctrl}</div>`;
+}
+
+function diva5ItemHTML(mod,key,mid,it){
+  const onchg=`updateDiva5Summary('${mod}','${key}')`;
+  let h=`<div class="d5-item">
+    <div class="d5-q">${it.code}. ${escapeHtml(it.q)}</div>`;
+  if(it.note) h+=`<div class="d5-note">${escapeHtml(it.note)}</div>`;
+  h+=`<div class="d5-cols">
+    <div>
+      <div class="d5-col-label">Examples — Adulthood</div>
+      ${it.adult.map((ex,i)=>`<label class="d5-ex"><input type="checkbox" id="d5_${mid}_${it.code}_ea_${i}">${escapeHtml(ex)}</label>`).join('')}
+      <div class="field d5-other"><label>Other</label><input type="text" id="d5_${mid}_${it.code}_oa"></div>
+    </div>
+    <div>
+      <div class="d5-col-label">Examples — Childhood</div>
+      ${it.child.map((ex,i)=>`<label class="d5-ex"><input type="checkbox" id="d5_${mid}_${it.code}_ec_${i}">${escapeHtml(ex)}</label>`).join('')}
+      <div class="field d5-other"><label>Other</label><input type="text" id="d5_${mid}_${it.code}_oc"></div>
+    </div>
+  </div>
+  <div class="d5-yn-row">
+    <span>Symptom present — Adulthood? ${diva5YnSelect(`d5_${mid}_${it.code}_ya`,onchg)}</span>
+    <span>Symptom present — Childhood? ${diva5YnSelect(`d5_${mid}_${it.code}_yc`,onchg)}</span>
+  </div>
+  </div>`;
+  return h;
+}
+
+function updateDiva5Summary(mod,key){
+  const m=M[mod][key];
+  const mid=mod+'_'+key;
+  const v=id=>document.getElementById(id)?.value||'';
+  let aAdult=0,aChild=0,hiAdult=0,hiChild=0;
+  m.items.forEach(it=>{
+    const ya=v(`d5_${mid}_${it.code}_ya`),yc=v(`d5_${mid}_${it.code}_yc`);
+    if(it.domain==='attn'){ if(ya==='Yes')aAdult++; if(yc==='Yes')aChild++; }
+    else { if(ya==='Yes')hiAdult++; if(yc==='Yes')hiChild++; }
+  });
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  set(`d5_${mid}_sum_a_adult`,aAdult); set(`d5_${mid}_sum_a_child`,aChild);
+  set(`d5_${mid}_sum_hi_adult`,hiAdult); set(`d5_${mid}_sum_hi_child`,hiChild);
+  set(`d5_${mid}_crit_a_child3`,(aChild+hiChild)>=3?'Yes':'No');
+  set(`d5_${mid}_crit_a_adult5`,aAdult>=5?'Yes':'No');
+  set(`d5_${mid}_crit_hi_adult5`,hiAdult>=5?'Yes':'No');
 }
 
 function buildEntryCard(mod,key,m){
@@ -5278,6 +5511,18 @@ function measureHasData(mod,key){
     const mid=mod+'_'+key;
     return m.sections.some(s=>s.items.some(it=>miniAsFieldIds(mid,it).some(id=>v(id)!=='')));
   }
+  if(m.type==='diva5'){
+    const mid=mod+'_'+key;
+    const checked=id=>!!document.getElementById(id)?.checked;
+    const itemHas=it=>it.adult.some((_,i)=>checked(`d5_${mid}_${it.code}_ea_${i}`))
+      ||it.child.some((_,i)=>checked(`d5_${mid}_${it.code}_ec_${i}`))
+      ||v(`d5_${mid}_${it.code}_oa`)!==''||v(`d5_${mid}_${it.code}_oc`)!==''
+      ||v(`d5_${mid}_${it.code}_ya`)!==''||v(`d5_${mid}_${it.code}_yc`)!=='';
+    const domHas=d=>d.adult.some((_,i)=>checked(`d5_${mid}_dom_${d.id}_ea_${i}`))
+      ||d.child.some((_,i)=>checked(`d5_${mid}_dom_${d.id}_ec_${i}`))
+      ||v(`d5_${mid}_dom_${d.id}_oa`)!==''||v(`d5_${mid}_dom_${d.id}_oc`)!=='';
+    return m.items.some(itemHas)||m.domains.some(domHas)||m.extra.some(f=>v(`d5_${mid}_${f.id}`)!=='');
+  }
   const r=responses[mod]&&responses[mod][key];
   return !!(r&&r.some(x=>x!==null));
 }
@@ -5332,6 +5577,40 @@ function writeMeasureBody(w,mod,key){
       w.writeLine(rows.join('   '),{size:9,indent:12});
       w.writeBlank(3);
     });
+    w.writeBlank(4);
+    return;
+  }
+  if(m.type==='diva5'){
+    const mid=mod+'_'+key;
+    const checked=id=>!!document.getElementById(id)?.checked;
+    m.items.forEach(it=>{
+      const ea=it.adult.filter((_,i)=>checked(`d5_${mid}_${it.code}_ea_${i}`));
+      const ec=it.child.filter((_,i)=>checked(`d5_${mid}_${it.code}_ec_${i}`));
+      const oa=v(`d5_${mid}_${it.code}_oa`).trim(),oc=v(`d5_${mid}_${it.code}_oc`).trim();
+      const ya=v(`d5_${mid}_${it.code}_ya`),yc=v(`d5_${mid}_${it.code}_yc`);
+      if(!ea.length&&!ec.length&&!oa&&!oc&&!ya&&!yc)return;
+      w.writeLine(`${it.code}. ${it.q}`,{size:9,indent:6});
+      if(ya)w.writeLine('Symptom present — Adulthood: '+ya,{size:9,style:'italic',indent:12});
+      if(ea.length||oa)w.writeMultiline('Adult examples: '+[...ea,oa&&('Other: '+oa)].filter(Boolean).join('; '),{size:9,indent:14});
+      if(yc)w.writeLine('Symptom present — Childhood: '+yc,{size:9,style:'italic',indent:12});
+      if(ec.length||oc)w.writeMultiline('Childhood examples: '+[...ec,oc&&('Other: '+oc)].filter(Boolean).join('; '),{size:9,indent:14});
+      w.writeBlank(3);
+    });
+    m.domains.forEach(d=>{
+      const ea=d.adult.filter((_,i)=>checked(`d5_${mid}_dom_${d.id}_ea_${i}`));
+      const ec=d.child.filter((_,i)=>checked(`d5_${mid}_dom_${d.id}_ec_${i}`));
+      const oa=v(`d5_${mid}_dom_${d.id}_oa`).trim(),oc=v(`d5_${mid}_dom_${d.id}_oc`).trim();
+      if(!ea.length&&!ec.length&&!oa&&!oc)return;
+      w.writeLine(`Impairment — ${d.adultLabel} / ${d.childLabel}:`,{size:9,style:'italic',indent:6});
+      if(ea.length||oa)w.writeMultiline('Adulthood: '+[...ea,oa&&('Other: '+oa)].filter(Boolean).join('; '),{size:9,indent:14});
+      if(ec.length||oc)w.writeMultiline('Childhood: '+[...ec,oc&&('Other: '+oc)].filter(Boolean).join('; '),{size:9,indent:14});
+      w.writeBlank(3);
+    });
+    const extraVals=m.extra.map(f=>{const val=v(`d5_${mid}_${f.id}`).trim();return val?`${f.label}: ${val}`:null;}).filter(Boolean);
+    if(extraVals.length){
+      w.writeLine('Score Form / Diagnosis:',{size:9,style:'italic',indent:6});
+      extraVals.forEach(line=>w.writeLine(line,{size:9,indent:12}));
+    }
     w.writeBlank(4);
     return;
   }
@@ -5520,6 +5799,24 @@ function writeMeasureBodyTemplate(w,mod,key){
     w.writeBlank(4);
     return;
   }
+  if(m.type==='diva5'){
+    m.items.forEach(it=>{
+      w.writeLine(`${it.code}. ${it.q}`,{size:9,indent:6});
+      w.writeLine('Adult examples noted / Symptom present (Y/N): ____________________  ____',{size:8,indent:12});
+      w.writeLine('Childhood examples noted / Symptom present (Y/N): ____________________  ____',{size:8,indent:12});
+      w.writeBlank(3);
+    });
+    m.domains.forEach(d=>{
+      w.writeLine(`Impairment — ${d.adultLabel} / ${d.childLabel}:`,{size:9,style:'italic',indent:6});
+      w.writeBlank(10);
+      w.writeHr();
+      w.writeBlank(3);
+    });
+    w.writeLine('Score Form / Diagnosis:',{size:9,style:'italic',indent:6});
+    m.extra.forEach(f=>{ w.writeLine(f.label+':',{size:8,indent:12}); w.writeBlank(2); w.writeHr(); });
+    w.writeBlank(4);
+    return;
+  }
   // scored self/other-report measure, or clinician-rated
   const isClinician=m.type==='clinician';
   const items=isClinician?[].concat(...m.parts.map(p=>p.items)):m.items;
@@ -5661,6 +5958,30 @@ function buildMeasurePayload(mod,key){
     }));
     return {mod,key,mtype:'answersheet',items};
   }
+  if(m.type==='diva5'){
+    const mid=mod+'_'+key;
+    const checked=id=>!!document.getElementById(id)?.checked;
+    const items={};
+    m.items.forEach(it=>{
+      items[it.code]={
+        ea:it.adult.map((_,i)=>checked(`d5_${mid}_${it.code}_ea_${i}`)),
+        ec:it.child.map((_,i)=>checked(`d5_${mid}_${it.code}_ec_${i}`)),
+        oa:v(`d5_${mid}_${it.code}_oa`),oc:v(`d5_${mid}_${it.code}_oc`),
+        ya:v(`d5_${mid}_${it.code}_ya`),yc:v(`d5_${mid}_${it.code}_yc`)
+      };
+    });
+    const domains={};
+    m.domains.forEach(d=>{
+      domains[d.id]={
+        ea:d.adult.map((_,i)=>checked(`d5_${mid}_dom_${d.id}_ea_${i}`)),
+        ec:d.child.map((_,i)=>checked(`d5_${mid}_dom_${d.id}_ec_${i}`)),
+        oa:v(`d5_${mid}_dom_${d.id}_oa`),oc:v(`d5_${mid}_dom_${d.id}_oc`)
+      };
+    });
+    const extra={};
+    m.extra.forEach(f=>extra[f.id]=v(`d5_${mid}_${f.id}`));
+    return {mod,key,mtype:'diva5',items,domains,extra};
+  }
   const r=(responses[mod]&&responses[mod][key])||[];
   return {mod,key,mtype:m.type==='clinician'?'clinician':'scored',responses:r};
 }
@@ -5740,6 +6061,31 @@ function importMeasurePayload(mod,key,payload){
         if(el&&vals[i]!==undefined) el.value=vals[i];
       });
     }));
+    return true;
+  }
+  if(payload.mtype==='diva5'&&m.type==='diva5'){
+    const mid=mod+'_'+key;
+    const setChk=(id,val)=>{const el=document.getElementById(id);if(el)el.checked=!!val;};
+    const setVal=(id,val)=>{const el=document.getElementById(id);if(el&&val!==undefined)el.value=val;};
+    m.items.forEach(it=>{
+      const rec=payload.items&&payload.items[it.code];
+      if(!rec)return;
+      (rec.ea||[]).forEach((val,i)=>setChk(`d5_${mid}_${it.code}_ea_${i}`,val));
+      (rec.ec||[]).forEach((val,i)=>setChk(`d5_${mid}_${it.code}_ec_${i}`,val));
+      setVal(`d5_${mid}_${it.code}_oa`,rec.oa); setVal(`d5_${mid}_${it.code}_oc`,rec.oc);
+      setVal(`d5_${mid}_${it.code}_ya`,rec.ya); setVal(`d5_${mid}_${it.code}_yc`,rec.yc);
+    });
+    m.domains.forEach(d=>{
+      const rec=payload.domains&&payload.domains[d.id];
+      if(!rec)return;
+      (rec.ea||[]).forEach((val,i)=>setChk(`d5_${mid}_dom_${d.id}_ea_${i}`,val));
+      (rec.ec||[]).forEach((val,i)=>setChk(`d5_${mid}_dom_${d.id}_ec_${i}`,val));
+      setVal(`d5_${mid}_dom_${d.id}_oa`,rec.oa); setVal(`d5_${mid}_dom_${d.id}_oc`,rec.oc);
+    });
+    m.extra.forEach(f=>{
+      if(payload.extra&&payload.extra[f.id]!==undefined) setVal(`d5_${mid}_${f.id}`,payload.extra[f.id]);
+    });
+    updateDiva5Summary(mod,key);
     return true;
   }
   if((payload.mtype==='scored'||payload.mtype==='clinician')&&(m.type===undefined||m.type==='clinician')){
@@ -5877,6 +6223,40 @@ function buildMsg(){
         return rows.length?`${s.code} — ${s.label}: ${rows.join(', ')}`:null;
       }).filter(Boolean);
       if(sections.length) msg+=`\n${m.name} (positive/notable items only):\n${sections.join('\n')}\n`;
+    }
+    // Collect DIVA-5 responses — endorsed symptoms with their checked examples,
+    // impairment domains, and the score-form/diagnosis conclusion.
+    for(let key in M[mod]){
+      const m=M[mod][key];
+      if(m.type!=='diva5') continue;
+      const mid=mod+'_'+key;
+      const checked=id=>!!document.getElementById(id)?.checked;
+      const itemLines=m.items.map(it=>{
+        const ya=v(`d5_${mid}_${it.code}_ya`),yc=v(`d5_${mid}_${it.code}_yc`);
+        if(ya!=='Yes'&&yc!=='Yes')return null;
+        const ea=it.adult.filter((_,i)=>checked(`d5_${mid}_${it.code}_ea_${i}`));
+        const ec=it.child.filter((_,i)=>checked(`d5_${mid}_${it.code}_ec_${i}`));
+        const oa=v(`d5_${mid}_${it.code}_oa`).trim(),oc=v(`d5_${mid}_${it.code}_oc`).trim();
+        let line=`${it.code} (${it.q}) — Adult: ${ya||'—'}`;
+        if(ya==='Yes'&&(ea.length||oa))line+=` [${[...ea,oa].filter(Boolean).join('; ')}]`;
+        line+=`; Childhood: ${yc||'—'}`;
+        if(yc==='Yes'&&(ec.length||oc))line+=` [${[...ec,oc].filter(Boolean).join('; ')}]`;
+        return line;
+      }).filter(Boolean);
+      const domainLines=m.domains.map(d=>{
+        const ea=d.adult.filter((_,i)=>checked(`d5_${mid}_dom_${d.id}_ea_${i}`));
+        const ec=d.child.filter((_,i)=>checked(`d5_${mid}_dom_${d.id}_ec_${i}`));
+        if(!ea.length&&!ec.length)return null;
+        return `${d.adultLabel}/${d.childLabel}: adult [${ea.join('; ')}] childhood [${ec.join('; ')}]`;
+      }).filter(Boolean);
+      const extraLines=m.extra.map(f=>{const val=v(`d5_${mid}_${f.id}`).trim();return val?`${f.label}: ${val}`:null;}).filter(Boolean);
+      if(itemLines.length||domainLines.length||extraLines.length){
+        msg+=`\n${m.name}:\n`;
+        msg+=`Auto-tallied counts — Attention adult ${document.getElementById(`d5_${mid}_sum_a_adult`)?.textContent||0}/9, childhood ${document.getElementById(`d5_${mid}_sum_a_child`)?.textContent||0}/9; Hyperactivity/Impulsivity adult ${document.getElementById(`d5_${mid}_sum_hi_adult`)?.textContent||0}/9, childhood ${document.getElementById(`d5_${mid}_sum_hi_child`)?.textContent||0}/9\n`;
+        if(itemLines.length) msg+=itemLines.join('\n')+'\n';
+        if(domainLines.length) msg+=`Impairment domains:\n${domainLines.join('\n')}\n`;
+        if(extraLines.length) msg+=`Score form / diagnosis:\n${extraLines.join('\n')}\n`;
+      }
     }
     const n=v('notes_'+mod);if(n)msg+=`\nSession Notes:\n${n}\n`;
     const d=v('diff_'+mod);if(d)msg+=`\nDifferential Considerations:\n${d}\n`;
