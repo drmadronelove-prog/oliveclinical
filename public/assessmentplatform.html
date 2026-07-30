@@ -15,6 +15,7 @@
   --surface-raised:#F4F2EE;
   --surface-sunken:#E4E7EA;
   --surface-deep:#D5D9DC;
+  --input-bg:rgba(63,125,110,0.118);
 
   --ink:#152238;
   --ink-soft:#3F4D55;
@@ -338,16 +339,15 @@ body::before{display:none;}
 
 /* ── Content area — raised panel ────────────────── */
 .content-main{
-  /* Cream, matching the sidebar keypad card's own material, so the two
-     large panels read as the same family instead of competing colors.
-     The coral/mauve background image already supplies the page's warm
-     accent in the margins — the card itself stays quiet so the blue
-     header and brass sidebar remain the color story, with only a thin
-     bronze thread (measure-card left border below) connecting into it. */
-  --surface:#F3EFE7;
-  --surface-raised:#F7F3EC;
-  --surface-sunken:#E6DECE;
-  --surface-deep:#D5C9B2;
+  /* Three-tier stack: cards (bronze, below) sit on this cream panel,
+     fillable pills inside those cards are cream (--surface / --input-bg),
+     and the layer between card and pill — sunken chips/rows — is coral. */
+  --surface:#F8F1E5;
+  --surface-raised:#FBF6EE;
+  --surface-sunken:#E5AF8F;
+  --surface-deep:#C98A6E;
+  --input-bg:#F8F1E5;
+  --clay:#FFDCAA;
 
   flex:1;min-width:0;
   background:linear-gradient(155deg,#F8F4ED,#F2EBE1);
@@ -413,13 +413,24 @@ body::before{display:none;}
   box-shadow:var(--neu-out-sm);
 }
 
-/* ── Clinic Information — bronze card, echoing the sidebar pills ── */
-#tab-clinic .card{
+/* ── Cards inside the content panel — bronze, echoing the sidebar pills.
+   Fillable pills (inputs/selects) inside them stay cream via --surface /
+   --input-bg above; text that sits directly on the bronze fill (not on
+   a nested cream pill) switches to a light cream for legibility. ── */
+.content-main .card,
+.content-main .measure-card{
   background:linear-gradient(150deg,var(--brass-light),var(--brass));
   box-shadow:6px 6px 16px rgba(25,32,40,0.28),-6px -6px 16px rgba(255,255,255,0.25);
 }
-#tab-clinic .card .field label{color:#F9F1E4;}
-#tab-clinic .card .field .hint{color:rgba(249,241,228,0.75);}
+.content-main .card .field label,
+.content-main .measure-card .field label{color:#F9F1E4;}
+.content-main .card .field .hint,
+.content-main .measure-card .field .hint{color:rgba(249,241,228,0.75);}
+.content-main .measure-name{color:#FBF3E7;}
+.content-main .chevron{color:rgba(249,241,228,0.85);}
+.content-main .warn-tag,
+.content-main .measure-abbr.clinician,
+.content-main .sc-val.elevated{color:#FFDCAA;}
 
 /* ── Module buttons ────────────────────────────── */
 .module-grid{display:flex;flex-wrap:wrap;gap:10px;}
@@ -454,7 +465,7 @@ body::before{display:none;}
   box-shadow:var(--neu-out-sm);
   transition:border-color 0.25s ease, background 0.25s ease;
 }
-.content-main .measure-card{background:#F8F3E9;border-left-color:rgba(169,137,89,0.4);}
+.content-main .measure-card{border-left-color:rgba(169,137,89,0.4);}
 .measure-card.rc-red{border-left-color:#E53935;background:linear-gradient(90deg,rgba(229,57,53,0.10),var(--surface) 45%);}
 .measure-card.rc-orange{border-left-color:#FB8C00;background:linear-gradient(90deg,rgba(251,140,0,0.10),var(--surface) 45%);}
 .measure-card.rc-yellow{border-left-color:#FDD835;background:linear-gradient(90deg,rgba(253,216,53,0.16),var(--surface) 45%);}
@@ -688,7 +699,7 @@ body::before{display:none;}
 /* ── Inputs — sunken neumorphic, sage-tinted ─────── */
 input[type="text"],input[type="email"],input[type="tel"],
 input[type="number"],input[type="date"],select,textarea{
-  background:rgba(63,125,110,0.118);
+  background:var(--input-bg);
   border:none;
   border-bottom:2px solid var(--primary);
   color:var(--ink);
