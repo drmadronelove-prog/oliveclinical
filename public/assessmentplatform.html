@@ -338,6 +338,15 @@ body::before{display:none;}
 
 /* ── Content area — raised panel ────────────────── */
 .content-main{
+  /* Retint every nested surface token to the coral/blush palette —
+     cascades into .card, .measure-card, .ms-trigger/.ms-menu dropdowns,
+     the mini-as answer-sheet grid, and (via its translucent overlay)
+     the text/select input fields, without touching those rules directly. */
+  --surface:#F3DED7;
+  --surface-raised:#F8E8E1;
+  --surface-sunken:#EAD0C7;
+  --surface-deep:#DFC0B7;
+
   flex:1;min-width:0;
   background:linear-gradient(155deg,#F7E4DB,#EDD2CC 45%,#E7C7C6);
   border:none;
