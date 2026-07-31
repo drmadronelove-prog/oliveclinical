@@ -445,6 +445,10 @@ body::before{display:none;}
 .content-main .measure-card .item-num{color:#4A2F12;}
 .content-main .measure-card .part-div{color:#3A2408;border-bottom-color:rgba(36,21,5,0.2);}
 .content-main .measure-card .d5-note{color:#4A2F12;}
+.content-main .measure-card .d5-table,
+.content-main .measure-card .d5-footnote{color:#241505;}
+.content-main .measure-card .d5-table th{color:#3A2408;}
+.content-main .measure-card .d5-mark.yes{color:#0F4D2A;}
 
 /* ── Module buttons ────────────────────────────── */
 .module-grid{display:flex;flex-wrap:wrap;gap:10px;}
@@ -723,6 +727,28 @@ body::before{display:none;}
 }
 .d5-summary-item{font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--ink);}
 .d5-summary-item .met{color:var(--success);}
+
+/* Summary of Symptoms (p.18) and Score Form (p.19) tables */
+.d5-table-wrap{overflow-x:auto;margin-bottom:18px;}
+.d5-table{width:100%;border-collapse:collapse;font-size:12px;}
+.d5-table th,.d5-table td{
+  padding:7px 10px;text-align:left;vertical-align:top;
+  border-bottom:1px solid rgba(36,21,5,0.18);
+}
+.d5-table th{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;
+  text-transform:uppercase;font-weight:700;white-space:nowrap;
+}
+.d5-table td.d5-c{text-align:center;white-space:nowrap;font-family:var(--font-mono);font-weight:700;}
+.d5-table td.d5-dsm{font-family:var(--font-mono);font-weight:700;white-space:nowrap;}
+.d5-table tr.d5-total td{font-weight:700;border-top:2px solid rgba(36,21,5,0.3);border-bottom:none;}
+.d5-mark{font-weight:700;}
+.d5-mark.yes{color:#1D6B3F;}
+.d5-mark.no{opacity:0.45;}
+.d5-footnote{font-size:11px;font-style:italic;margin-top:10px;line-height:1.5;}
+/* Inline controls sit in table cells — override the narrow inline text width */
+.d5-table input[type="text"]{width:100%;min-width:120px;font-size:12px;padding:6px 10px;}
+.d5-table select{width:auto;min-width:88px;font-size:12px;padding:6px 10px;}
 
 /* ── Form ──────────────────────────────────────── */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
@@ -2332,6 +2358,31 @@ const DIVA5_DOMAINS=[
   {id:"self_confidence",adultLabel:"Self-confidence / self-image",childLabel:"Self-confidence / self-image",adult:["Uncertainty through negative comments of others","Negative self-image due to experiences of failure","Fear of failure in terms of starting new things","Excessive intense reaction to criticism","Perfectionism","Distressed by the symptoms of ADHD"],child:["Uncertainty through negative comments of others","Negative self-image due to experiences of failure","Fear of failure in terms of starting new things","Excessive intense reaction to criticism","Perfectionism"]},
 ];
 
+// Summary of Symptoms table (DIVA-5 p.18) — DSM-5 criterion code and the
+// abbreviated symptom wording for each of the 18 items, keyed to DIVA5_ITEMS
+// by code. Adult/childhood marks and the /9 totals are derived from the
+// Yes/No judgments recorded in Parts 1 and 2, not entered separately.
+const DIVA5_SUMMARY=[
+  {code:"A1",dsm:"A1a",label:"A1. Often fails to give close attention to details, or makes careless mistakes in schoolwork, work or during other activities"},
+  {code:"A2",dsm:"A1b",label:"A2. Often has difficultly sustaining attention in tasks or play activities"},
+  {code:"A3",dsm:"A1c",label:"A3. Often does not seem to listen when spoken to directly"},
+  {code:"A4",dsm:"A1d",label:"A4. Often does not follow through on instructions and fails to finish schoolwork, chores, or duties in the workplace"},
+  {code:"A5",dsm:"A1e",label:"A5. Often has difficulty organizing tasks and activities"},
+  {code:"A6",dsm:"A1f",label:"A6. Often avoids, dislikes, or is reluctant to engage in tasks that require sustained mental effort"},
+  {code:"A7",dsm:"A1g",label:"A7. Often loses things necessary for tasks or activities"},
+  {code:"A8",dsm:"A1h",label:"A8. Often easily distracted by extraneous stimuli"},
+  {code:"A9",dsm:"A1i",label:"A9. Often forgetful in daily activities"},
+  {code:"HI1",dsm:"A2a",label:"H/I 1. Often fidgets with or taps hands or feet or squirms in seat"},
+  {code:"HI2",dsm:"A2b",label:"H/I 2. Often leaves seat in situations when remaining seated is expected"},
+  {code:"HI3",dsm:"A2c",label:"H/I 3. Often runs about or climbs in situations where it is inappropriate (in adolescents or adults this may be limited to subjective feelings of restlessness)"},
+  {code:"HI4",dsm:"A2d",label:"H/I 4. Often unable to play or take part in leisure activities quietly"},
+  {code:"HI5",dsm:"A2e",label:"H/I 5. Is often “on the go” acting as if “driven by a motor”"},
+  {code:"HI6",dsm:"A2f",label:"H/I 6. Often talks excessively"},
+  {code:"HI7",dsm:"A2g",label:"H/I 7. Often blurts out an answer before a question has been completed"},
+  {code:"HI8",dsm:"A2h",label:"H/I 8. Often has difficulty awaiting his or her turn"},
+  {code:"HI9",dsm:"A2i",label:"H/I 9. Often interrupts or intrudes on others"}
+];
+
 // Part 3 (Criterion B / impairment) and Score Form fields — driven generically
 // by kind ('select' | 'text' | 'textarea') so one read/write path covers all of them.
 const DIVA5_EXTRA=[
@@ -2340,6 +2391,9 @@ const DIVA5_EXTRA=[
   {id:"imp2_adult",kind:"select",label:"Adulthood: evidence of impairment in ≥2 areas?",options:["","Yes","No"]},
   {id:"imp2_child",kind:"select",label:"Childhood: evidence of impairment in ≥2 areas?",options:["","Yes","No"]},
   {id:"details",kind:"textarea",label:"Potential details"},
+  {id:"sf_critB",kind:"select",label:"Criterion B — Are there signs of a lifelong pattern of symptoms, starting before the 12th year of age?",options:["","Yes","No"]},
+  {id:"sf_critCD_adult",kind:"select",label:"Criterion C and D — symptoms and impairment expressed in at least two domains of functioning: Adulthood",options:["","Yes","No"]},
+  {id:"sf_critCD_child",kind:"select",label:"Criterion C and D — symptoms and impairment expressed in at least two domains of functioning: Childhood",options:["","Yes","No"]},
   {id:"critE",kind:"select",label:"Criterion E — the symptoms cannot be (better) explained by the presence of another psychiatric disorder",options:["","No","Yes, by:"]},
   {id:"critE_by",kind:"text",label:"If yes, by which disorder"},
   {id:"collat_parent",kind:"select",label:"Collateral support — Parent(s)/brother/sister/other",options:["","N/A","0","1","2"]},
@@ -2360,7 +2414,7 @@ function makeDiva5(){
     note:"Kooij, Francken & Bron (3rd ed., DIVA Foundation, 2019) — free for clinical use. Ask each question, working through the adulthood and childhood example lists together with the patient (and partner/family member if present), then judge whether the symptom is present in each period. Criterion-A symptom totals below are tallied automatically from your Yes/No judgments.",
     intro:"Explanation to be given beforehand to the patient: This interview will be used to ask about the presence of ADHD symptoms that you experienced during your childhood and adulthood. The questions are based on the official criteria for ADHD in the DSM-5. For each question I will ask you whether you recognise the problem. To help you during the interview I will provide some examples of each symptom, that describe the way that children and adults often experience difficulties related to each of the symptoms of ADHD. First of all, you will be asked the questions, then your partner and family members (if present) will be asked the same questions. Your partner will most likely have known you only since adulthood and will be asked questions about the period of your life that he or she knew you for; your family will have a better idea of your behaviour during childhood. Both stages of your life need to be investigated in order to be able to establish the diagnosis of ADHD.",
     partInstructions:"Instructions: the symptoms in adulthood have to have been present for at least 6 months. The symptoms in childhood relate to the age of 5-12 years. For a symptom to be ascribed to ADHD it should have a chronic trait-like course and should not be episodic.",
-    items:DIVA5_ITEMS,domains:DIVA5_DOMAINS,extra:DIVA5_EXTRA
+    items:DIVA5_ITEMS,domains:DIVA5_DOMAINS,extra:DIVA5_EXTRA,summary:DIVA5_SUMMARY
   };
 }
 
@@ -4636,33 +4690,100 @@ function buildDiva5Card(mod,key,m){
 
   h+=`<div class="field" style="margin-bottom:18px;"><label>Potential details</label><textarea id="d5_${mid}_details" style="min-height:70px;"></textarea></div>`;
 
+  // ── Summary of Symptoms A and H/I (DIVA-5 p.18) ─────────────────
+  // "Indicate which criteria were scored in parts 1 and 2 and add up" —
+  // derived from the Part 1/2 judgments rather than re-entered by hand.
+  h+=`<div class="d5-part-label">Summary of Symptoms A and H/I</div>`;
+  h+=`<div class="d5-note" style="margin-bottom:10px;">Indicate which criteria were scored in parts 1 and 2 and add up.</div>`;
+  h+=`<div class="d5-table-wrap"><table class="d5-table">
+    <thead><tr>
+      <th>Criterion DSM-5</th><th>Symptom</th>
+      <th style="text-align:center;">Present during adulthood</th>
+      <th style="text-align:center;">Present during childhood</th>
+    </tr></thead><tbody>`;
+  const attnRows=m.summary.filter(s=>s.code.startsWith('A'));
+  const hiRows=m.summary.filter(s=>s.code.startsWith('HI'));
+  const sumRow=s=>`<tr>
+      <td class="d5-dsm">${s.dsm}</td>
+      <td>${escapeHtml(s.label)}</td>
+      <td class="d5-c"><span class="d5-mark" id="d5_${mid}_sm_${s.code}_a">—</span></td>
+      <td class="d5-c"><span class="d5-mark" id="d5_${mid}_sm_${s.code}_c">—</span></td>
+    </tr>`;
+  attnRows.forEach(s=>{h+=sumRow(s);});
+  h+=`<tr class="d5-total">
+      <td></td><td>Total number of criteria Attention Deficit</td>
+      <td class="d5-c"><span id="d5_${mid}_sum_a_adult2">0</span>/9</td>
+      <td class="d5-c"><span id="d5_${mid}_sum_a_child2">0</span>/9</td>
+    </tr>`;
+  hiRows.forEach(s=>{h+=sumRow(s);});
+  h+=`<tr class="d5-total">
+      <td></td><td>Total number of criteria Hyperactivity/Impulsivity</td>
+      <td class="d5-c"><span id="d5_${mid}_sum_hi_adult2">0</span>/9</td>
+      <td class="d5-c"><span id="d5_${mid}_sum_hi_child2">0</span>/9</td>
+    </tr>`;
+  h+=`</tbody></table></div>`;
+
+  // ── Score form (DIVA-5 p.19) ────────────────────────────────────
   h+=`<div class="d5-part-label">Score Form</div>`;
-  h+=`<div class="d5-item">
-    <div class="d5-q" style="font-size:13px;">Criterion A (auto-tallied from Parts 1 &amp; 2 above)</div>
-    <div class="d5-summary" style="margin-top:8px;">
-      <span class="d5-summary-item">Childhood: 3+ symptoms present (A and/or HI)? <span id="d5_${mid}_crit_a_child3">—</span></span>
-      <span class="d5-summary-item">Adulthood: A characteristics ≥5? <span id="d5_${mid}_crit_a_adult5">—</span></span>
-      <span class="d5-summary-item">Adulthood: HI characteristics ≥5? <span id="d5_${mid}_crit_hi_adult5">—</span></span>
-    </div>
-  </div>`;
-  h+=`<div class="form-grid cols-3" style="margin-bottom:18px;">
-    ${diva5FieldHTML(mid,{id:"critE",kind:"select",label:"Criterion E — not better explained by another psychiatric disorder",options:["","No","Yes, by:"]})}
-    ${diva5FieldHTML(mid,{id:"critE_by",kind:"text",label:"If yes, by which disorder"})}
-  </div>`;
-  h+=`<div class="form-grid cols-3" style="margin-bottom:18px;">
-    ${diva5FieldHTML(mid,{id:"collat_parent",kind:"select",label:"Collateral support — Parent(s)/sibling/other",options:["","N/A","0","1","2"]})}
-    ${diva5FieldHTML(mid,{id:"collat_parent_who",kind:"text",label:"Indicate from whom"})}
-    ${diva5FieldHTML(mid,{id:"collat_partner",kind:"select",label:"Collateral support — Partner/good friend/other",options:["","N/A","0","1","2"]})}
-    ${diva5FieldHTML(mid,{id:"collat_partner_who",kind:"text",label:"Indicate from whom"})}
-    ${diva5FieldHTML(mid,{id:"collat_school",kind:"select",label:"Collateral support — School reports",options:["","N/A","0","1","2"]})}
-  </div>
-  <div class="field" style="margin-bottom:18px;"><label>Explanation (0 = none/little support, 1 = some support, 2 = clear support)</label><textarea id="d5_${mid}_collat_explain" style="min-height:60px;"></textarea></div>`;
+  h+=`<div class="d5-table-wrap"><table class="d5-table"><tbody>
+    <tr>
+      <td class="d5-dsm" rowspan="4">DSM-5<br>criterion A</td>
+      <td><strong>Childhood</strong><br>Are several (3 or more) symptoms present of A and/or HI?</td>
+      <td class="d5-c"><span class="d5-mark" id="d5_${mid}_crit_a_child3">—</span></td>
+    </tr>
+    <tr><td><strong>Adulthood</strong></td><td class="d5-c"></td></tr>
+    <tr><td>Is the number of A characteristics ≥ 5?</td><td class="d5-c"><span class="d5-mark" id="d5_${mid}_crit_a_adult5">—</span></td></tr>
+    <tr><td>Is the number of H/I characteristics ≥ 5?</td><td class="d5-c"><span class="d5-mark" id="d5_${mid}_crit_hi_adult5">—</span></td></tr>
+    <tr>
+      <td class="d5-dsm">DSM-5<br>criterion B</td>
+      <td>Are there signs of a lifelong pattern of symptoms, starting before the 12th year of age?</td>
+      <td class="d5-c">${diva5FieldHTML(mid,{id:"sf_critB",kind:"select",label:"",options:["","Yes","No"]},true)}</td>
+    </tr>
+    <tr>
+      <td class="d5-dsm" rowspan="3">DSM-5<br>criterion C<br>and D</td>
+      <td>The symptoms and the impairment are expressed in at least two domains of functioning</td>
+      <td class="d5-c"></td>
+    </tr>
+    <tr><td>Adulthood</td><td class="d5-c">${diva5FieldHTML(mid,{id:"sf_critCD_adult",kind:"select",label:"",options:["","Yes","No"]},true)}</td></tr>
+    <tr><td>Childhood</td><td class="d5-c">${diva5FieldHTML(mid,{id:"sf_critCD_child",kind:"select",label:"",options:["","Yes","No"]},true)}</td></tr>
+    <tr>
+      <td class="d5-dsm">DSM-5<br>criterion E</td>
+      <td>The symptoms cannot be (better) explained by the presence of another psychiatric disorder<br>
+        <span style="display:inline-block;margin-top:6px;">Yes, by ${diva5FieldHTML(mid,{id:"critE_by",kind:"text",label:""},true)}</span></td>
+      <td class="d5-c">${diva5FieldHTML(mid,{id:"critE",kind:"select",label:"",options:["","No","Yes, by:"]},true)}</td>
+    </tr>
+  </tbody></table></div>`;
+
+  h+=`<div class="d5-table-wrap"><table class="d5-table">
+    <thead><tr><th colspan="3">Is the diagnosis supported by collateral information?</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>Parent(s)/brother/sister/other, i.e. *</td>
+      <td>${diva5FieldHTML(mid,{id:"collat_parent_who",kind:"text",label:""},true)}</td>
+      <td class="d5-c">${diva5FieldHTML(mid,{id:"collat_parent",kind:"select",label:"",options:["","N/A","0","1","2"]},true)}</td>
+    </tr>
+    <tr>
+      <td>Partner/good friend/other, i.e. *</td>
+      <td>${diva5FieldHTML(mid,{id:"collat_partner_who",kind:"text",label:""},true)}</td>
+      <td class="d5-c">${diva5FieldHTML(mid,{id:"collat_partner",kind:"select",label:"",options:["","N/A","0","1","2"]},true)}</td>
+    </tr>
+    <tr>
+      <td>School reports</td>
+      <td></td>
+      <td class="d5-c">${diva5FieldHTML(mid,{id:"collat_school",kind:"select",label:"",options:["","N/A","0","1","2"]},true)}</td>
+    </tr>
+    </tbody></table></div>
+    <div class="d5-note" style="margin-bottom:6px;">0 = none/little support &nbsp;&nbsp; 1 = some support &nbsp;&nbsp; 2 = clear support</div>
+    <div class="field" style="margin-bottom:18px;"><label>Explanation</label><textarea id="d5_${mid}_collat_explain" style="min-height:60px;"></textarea></div>`;
+
   h+=`<div class="form-grid" style="margin-bottom:8px;">
-    ${diva5FieldHTML(mid,{id:"dx",kind:"select",label:"Diagnosis: ADHD",options:["","No","Yes"]})}
-    ${diva5FieldHTML(mid,{id:"dx_type",kind:"select",label:"Presentation type (if Yes)",options:["","314.01 Combined presentation type","314.00 Predominantly inattentive presentation type","314.01 Predominantly hyperactive-impulsive presentation type","314.01 Other specified attention-deficit/hyperactivity disorder","314.01 Not specified attention-deficit/hyperactivity disorder"]})}
+    ${diva5FieldHTML(mid,{id:"dx",kind:"select",label:"Diagnosis ADHD **",options:["","No","Yes"]})}
+    ${diva5FieldHTML(mid,{id:"dx_type",kind:"select",label:"If yes — presentation type",options:["","314.01 Combined presentation type","314.00 Predominantly inattentive presentation type","314.01 Predominantly hyperactive-impulsive presentation type","314.01 Other specified attention-deficit/hyperactivity disorder","314.01 Not specified attention-deficit/hyperactivity disorder"]})}
     ${diva5FieldHTML(mid,{id:"dx_remission",kind:"select",label:"Partly in remission",options:["","No","Yes"]})}
-    ${diva5FieldHTML(mid,{id:"dx_severity",kind:"select",label:"Severity (if Yes)",options:["","Mild","Moderate","Severe"]})}
+    ${diva5FieldHTML(mid,{id:"dx_severity",kind:"select",label:"Severity",options:["","Mild","Moderate","Severe"]})}
   </div>`;
+  h+=`<div class="d5-footnote">* Indicate from whom the collateral information was taken.<br>
+    ** If the established presentation types differ in childhood and adulthood, the current adult presentation type prevails for the diagnosis.</div>`;
 
   h+=`</div></div>`;
   return h;
@@ -4711,11 +4832,32 @@ function updateDiva5Summary(mod,key){
     else { if(ya==='Yes')hiAdult++; if(yc==='Yes')hiChild++; }
   });
   const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  // Header strip and the Summary-of-Symptoms table totals share the same counts.
   set(`d5_${mid}_sum_a_adult`,aAdult); set(`d5_${mid}_sum_a_child`,aChild);
   set(`d5_${mid}_sum_hi_adult`,hiAdult); set(`d5_${mid}_sum_hi_child`,hiChild);
-  set(`d5_${mid}_crit_a_child3`,(aChild+hiChild)>=3?'Yes':'No');
-  set(`d5_${mid}_crit_a_adult5`,aAdult>=5?'Yes':'No');
-  set(`d5_${mid}_crit_hi_adult5`,hiAdult>=5?'Yes':'No');
+  set(`d5_${mid}_sum_a_adult2`,aAdult); set(`d5_${mid}_sum_a_child2`,aChild);
+  set(`d5_${mid}_sum_hi_adult2`,hiAdult); set(`d5_${mid}_sum_hi_child2`,hiChild);
+  // Per-criterion marks in the Summary-of-Symptoms table.
+  const mark=(id,val)=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.textContent=val==='Yes'?'✓':(val==='No'?'—':'—');
+    el.className='d5-mark'+(val==='Yes'?' yes':' no');
+  };
+  (m.summary||[]).forEach(s=>{
+    mark(`d5_${mid}_sm_${s.code}_a`,v(`d5_${mid}_${s.code}_ya`));
+    mark(`d5_${mid}_sm_${s.code}_c`,v(`d5_${mid}_${s.code}_yc`));
+  });
+  // Score-form criterion A conclusions.
+  const critMark=(id,ok)=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.textContent=ok?'Yes':'No';
+    el.className='d5-mark'+(ok?' yes':' no');
+  };
+  critMark(`d5_${mid}_crit_a_child3`,(aChild+hiChild)>=3);
+  critMark(`d5_${mid}_crit_a_adult5`,aAdult>=5);
+  critMark(`d5_${mid}_crit_hi_adult5`,hiAdult>=5);
 }
 
 function buildEntryCard(mod,key,m){
@@ -5592,6 +5734,16 @@ function writeMeasureBody(w,mod,key){
   if(m.type==='diva5'){
     const mid=mod+'_'+key;
     const checked=id=>!!document.getElementById(id)?.checked;
+    // Summary of Symptoms totals (p.18), tallied from the Part 1/2 judgments.
+    let aA=0,aC=0,hA=0,hC=0;
+    m.items.forEach(it=>{
+      const ya=v(`d5_${mid}_${it.code}_ya`),yc=v(`d5_${mid}_${it.code}_yc`);
+      if(it.domain==='attn'){ if(ya==='Yes')aA++; if(yc==='Yes')aC++; }
+      else { if(ya==='Yes')hA++; if(yc==='Yes')hC++; }
+    });
+    w.writeLine('Summary of symptoms — Attention Deficit: '+aA+'/9 adulthood, '+aC+'/9 childhood; Hyperactivity/Impulsivity: '+hA+'/9 adulthood, '+hC+'/9 childhood',{size:9,style:'bold',indent:6});
+    w.writeLine('Criterion A — childhood 3+ of A and/or HI: '+((aC+hC)>=3?'Yes':'No')+'; adulthood A ≥5: '+(aA>=5?'Yes':'No')+'; adulthood H/I ≥5: '+(hA>=5?'Yes':'No'),{size:9,style:'bold',indent:6});
+    w.writeBlank(4);
     m.items.forEach(it=>{
       const ea=it.adult.filter((_,i)=>checked(`d5_${mid}_${it.code}_ea_${i}`));
       const ec=it.child.filter((_,i)=>checked(`d5_${mid}_${it.code}_ec_${i}`));
