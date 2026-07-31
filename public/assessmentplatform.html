@@ -4600,10 +4600,13 @@ function buildDiva5Card(mod,key,m){
 
   h+=`<div class="d5-part-label">Part 3: Impairment on Account of the Symptoms (DSM-5 Criteria B, C and D)</div>`;
   h+=`<div class="d5-item">
-    <div class="d5-q">Criterion B — Have you always had these symptoms of attention deficit and/or hyperactivity/impulsivity?</div>
+    <div class="d5-q">Criterion B</div>
+    <div class="d5-q" style="font-weight:400;">Have you always had these symptoms of attention deficit and/or hyperactivity/impulsivity?</div>
     <div class="d5-yn-row">
       ${diva5FieldHTML(mid,{id:"critB_always",kind:"select",label:"",options:["","Yes (several symptoms were present prior to the 12th year of age)","No"]},true)}
-      <span>${diva5FieldHTML(mid,{id:"critB_onsetAge",kind:"text",label:"If no, starting from what age"},true)}</span>
+    </div>
+    <div class="d5-yn-row" style="margin-top:6px;">
+      <span>If no is answered above, starting as from ${diva5FieldHTML(mid,{id:"critB_onsetAge",kind:"text",label:""},true)} year of age</span>
     </div>
   </div>`;
 
@@ -4667,7 +4670,7 @@ function buildDiva5Card(mod,key,m){
 
 function diva5FieldHTML(mid,f,inline){
   const id=`d5_${mid}_${f.id}`;
-  const ctrl=f.kind==='select'?diva5Select(id,f.options):`<input type="text" id="${id}">`;
+  const ctrl=f.kind==='select'?diva5Select(id,f.options):`<input type="text" id="${id}"${inline?' style="display:inline-block;width:80px;"':''}>`;
   if(inline) return ctrl;
   return `<div class="field"><label>${escapeHtml(f.label)}</label>${ctrl}</div>`;
 }
