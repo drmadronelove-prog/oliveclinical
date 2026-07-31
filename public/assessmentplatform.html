@@ -447,6 +447,17 @@ body::before{display:none;}
 .content-main .measure-card .item-num{color:#4A2F12;}
 .content-main .measure-card .part-div{color:#3A2408;border-bottom-color:rgba(36,21,5,0.2);}
 .content-main .measure-card .d5-note{color:#4A2F12;}
+/* M.I.N.I. text that sits directly on the bronze fill */
+.content-main .measure-card .mini-epi-head{color:#3A2408;}
+.content-main .measure-card .mini-prompt-q,
+.content-main .measure-card .mini-prompts-for{color:#241505;}
+/* The meets-criteria block is a light panel, so its text must stay dark —
+   overriding the cream label color used elsewhere on the bronze card. */
+.content-main .measure-card .mini-dx,
+.content-main .measure-card .mini-dx .mini-dx-head,
+.content-main .measure-card .mini-dx .mini-dx-name,
+.content-main .measure-card .mini-dx .mini-dx-tf,
+.content-main .measure-card .mini-dx .field > label{color:var(--ink);}
 /* Instruction panels and the M.I.N.I. answer-sheet controls are fill boxes
    too — match them to --input-bg so no bronze card mixes two shades. */
 .content-main .measure-instruction,
@@ -708,6 +719,60 @@ body::before{display:none;}
   border:none;border-radius:5px;padding:2px 6px;
   width:84px;background:var(--surface);color:var(--ink);
 }
+.mini-module{margin-bottom:22px;}
+.mini-module-head{
+  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--clay);font-family:var(--font-display);margin-bottom:8px;
+}
+/* Current vs past episode — explicit two-column block */
+.mini-epi{margin-top:10px;}
+.mini-epi-head,.mini-epi-row{
+  display:grid;grid-template-columns:120px 1fr 1fr;gap:8px;align-items:center;
+}
+.mini-epi-head{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:0.06em;
+  text-transform:uppercase;font-weight:700;padding:0 8px 5px;
+}
+.mini-epi-row{
+  background:var(--surface-sunken);border-radius:8px;
+  padding:5px 8px;margin-bottom:5px;box-shadow:var(--neu-in-sm);
+}
+.mini-epi-row select{width:100%;}
+/* Short qualifier probes under an item */
+.mini-prompts{
+  width:100%;margin:2px 0 10px 18px;padding-left:10px;
+  border-left:2px solid rgba(36,21,5,0.28);
+}
+.mini-prompts-for{
+  font-family:var(--font-mono);font-size:10px;font-weight:700;
+  letter-spacing:0.06em;margin-bottom:3px;
+}
+.mini-prompt{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;margin-bottom:4px;
+}
+.mini-prompt-q{flex:1;font-style:italic;}
+.mini-prompt select{width:auto;min-width:76px;}
+/* End-of-module diagnostic outcome */
+.mini-dx{
+  margin-top:12px;padding:12px 14px;
+  background:var(--surface-raised);border-radius:12px;
+  box-shadow:var(--neu-in-sm);
+}
+.mini-dx-head{
+  font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  font-family:var(--font-mono);font-weight:700;margin-bottom:10px;
+}
+.mini-dx-row{
+  display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;
+  padding:6px 0;border-bottom:1px solid rgba(36,21,5,0.12);
+}
+.mini-dx-row:last-of-type{border-bottom:none;}
+.mini-dx-name{flex:1 1 220px;font-size:12.5px;font-weight:600;}
+.mini-dx-icd{font-family:var(--font-mono);font-size:10px;font-weight:400;opacity:0.7;}
+.mini-dx-tfs{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;}
+.mini-dx-tf{display:flex;align-items:center;gap:6px;font-size:11px;text-transform:none;letter-spacing:0;font-weight:400;}
+.mini-dx-tf select.mini-met{width:auto;min-width:96px;font-size:11px;padding:4px 8px;}
 
 /* ── DIVA-5 interview ────────────────────────────── */
 .d5-part-label{
@@ -2304,29 +2369,29 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 // instrument). Administer using your own licensed copy of the
 // M.I.N.I. (Sheehan et al.); this just records the outcomes.
 const MINI_AS_SECTIONS=[
-  {code:"A",label:"Major Depressive Episode / Disorder",items:[{id:"a1a",code:"A1a",kind:"yn"},{id:"a1b",code:"A1b",kind:"yn"},{id:"a2a",code:"A2a",kind:"yn"},{id:"a2b",code:"A2b",kind:"yn"},{id:"a_1a_2a_summary",code:"A (1a/2a summary)",kind:"yn"},{id:"a3a",code:"A3a",kind:"yn2"},{id:"a3b",code:"A3b",kind:"yn2"},{id:"a3c",code:"A3c",kind:"yn2"},{id:"a3d",code:"A3d",kind:"yn2"},{id:"a3e",code:"A3e",kind:"yn2"},{id:"a3e_add_l",code:"A3e (add'l)",kind:"yn2"},{id:"a3f",code:"A3f",kind:"yn2"},{id:"a3g",code:"A3g",kind:"yn2"},{id:"a4",code:"A4",kind:"yn2"},{id:"a5",code:"A5",kind:"text"},{id:"a6a_count",code:"A6a (count)",kind:"text"}]},
-  {code:"B",label:"Suicidality",items:[{id:"b1",code:"B1",kind:"yn"},{id:"b1a",code:"B1a",kind:"yn"},{id:"b1b",code:"B1b",kind:"yn"},{id:"b2",code:"B2",kind:"yn"},{id:"b3",code:"B3",kind:"yn"},{id:"b3_freq",code:"B3 (freq.)",kind:"text"},{id:"b3_intensity",code:"B3 (intensity)",kind:"text"},{id:"b4",code:"B4",kind:"yn"},{id:"b4_detail",code:"B4 (detail)",kind:"text"},{id:"b5",code:"B5",kind:"yn"},{id:"b6",code:"B6",kind:"yn"},{id:"b7",code:"B7",kind:"yn"},{id:"b8",code:"B8",kind:"yn"},{id:"b9",code:"B9",kind:"yn"},{id:"b10",code:"B10",kind:"yn"},{id:"b10_detail",code:"B10 (detail)",kind:"text"},{id:"b11",code:"B11",kind:"yn"},{id:"b11_detail",code:"B11 (detail)",kind:"text"},{id:"b12",code:"B12",kind:"yn"},{id:"b12_detail",code:"B12 (detail)",kind:"text"},{id:"b13",code:"B13",kind:"yn"},{id:"b14",code:"B14",kind:"yn"},{id:"b14a",code:"B14a",kind:"yn"},{id:"b14b",code:"B14b",kind:"yn"},{id:"b14c",code:"B14c",kind:"yn"},{id:"b15",code:"B15",kind:"yn"},{id:"b16",code:"B16",kind:"yn"},{id:"b16a",code:"B16a",kind:"yn"},{id:"b16b",code:"B16b",kind:"yn"},{id:"b16c",code:"B16c",kind:"yn"},{id:"b16c_detail",code:"B16c (detail)",kind:"text"},{id:"b17_usual",code:"B17 (usual)",kind:"text"},{id:"b17_least",code:"B17 (least)",kind:"text"},{id:"b17_most",code:"B17 (most)",kind:"text"},{id:"b18",code:"B18",kind:"yn"},{id:"b18_count",code:"B18 (count)",kind:"text"},{id:"b18_when",code:"B18 (when)",kind:"text"},{id:"b19",code:"B19 (%)",kind:"text"},{id:"b19_summary",code:"B19 (summary)",kind:"yn"},{id:"b_outcome",code:"B outcome",kind:"text"},{id:"b_outcome_2",code:"B outcome (2)",kind:"text"}]},
-  {code:"C",label:"Manic / Hypomanic Episode, Bipolar Disorder",items:[{id:"c_family_hx",code:"C (family hx)",kind:"yn"},{id:"c_family_hx_who",code:"C (family hx who)",kind:"text"},{id:"c1a",code:"C1a",kind:"yn"},{id:"c1b",code:"C1b",kind:"yn"},{id:"c2a",code:"C2a",kind:"yn"},{id:"c2b",code:"C2b",kind:"yn"},{id:"c_1a_2a_summary",code:"C (1a/2a summary)",kind:"yn"},{id:"c3a",code:"C3a",kind:"yn2"},{id:"c3a_add_l",code:"C3a (add'l)",kind:"yn2"},{id:"c3b",code:"C3b",kind:"yn2"},{id:"c3c",code:"C3c",kind:"yn2"},{id:"c3d",code:"C3d",kind:"yn2"},{id:"c3e",code:"C3e",kind:"yn2"},{id:"c3f",code:"C3f",kind:"yn2"},{id:"c3g",code:"C3g",kind:"yn2"},{id:"c3_summary",code:"C3 summary",kind:"yn2"},{id:"c4",code:"C4",kind:"text"},{id:"c5",code:"C5",kind:"yn2"},{id:"c6",code:"C6",kind:"yn2"},{id:"c7",code:"C7",kind:"yn2"},{id:"c_outcome_1",code:"C outcome 1",kind:"text"},{id:"c_outcome_2",code:"C outcome 2",kind:"text"},{id:"c_outcome_3",code:"C outcome 3",kind:"text"},{id:"c8a",code:"C8a",kind:"yn"},{id:"c8b",code:"C8b",kind:"yn"},{id:"c8c",code:"C8c",kind:"yn"}]},
-  {code:"D",label:"Panic Disorder",items:[{id:"d1a",code:"D1a",kind:"yn"},{id:"d1b",code:"D1b",kind:"yn"},{id:"d2",code:"D2",kind:"yn"},{id:"d3",code:"D3",kind:"yn"},{id:"d4a",code:"D4a",kind:"yn"},{id:"d4b",code:"D4b",kind:"yn"},{id:"d4c",code:"D4c",kind:"yn"},{id:"d4d",code:"D4d",kind:"yn"},{id:"d4e",code:"D4e",kind:"yn"},{id:"d4f",code:"D4f",kind:"yn"},{id:"d4g",code:"D4g",kind:"yn"},{id:"d4h",code:"D4h",kind:"yn"},{id:"d4i",code:"D4i",kind:"yn"},{id:"d4j",code:"D4j",kind:"yn"},{id:"d4k",code:"D4k",kind:"yn"},{id:"d4l",code:"D4l",kind:"yn"},{id:"d4m",code:"D4m",kind:"yn"},{id:"d5",code:"D5",kind:"yn"},{id:"d6",code:"D6",kind:"yn"},{id:"d_outcome",code:"D outcome",kind:"text"}]},
-  {code:"E",label:"Agoraphobia",items:[{id:"e1",code:"E1",kind:"yn"},{id:"e_2_summary",code:"E (2+ summary)",kind:"yn"},{id:"e2",code:"E2",kind:"yn"},{id:"e3",code:"E3",kind:"yn"},{id:"e4",code:"E4",kind:"yn"},{id:"e5",code:"E5",kind:"yn"},{id:"e6",code:"E6",kind:"yn"},{id:"e_outcome",code:"E outcome",kind:"text"}]},
-  {code:"F",label:"Social Anxiety Disorder",items:[{id:"f1",code:"F1",kind:"yn"},{id:"f2",code:"F2",kind:"yn"},{id:"f3",code:"F3",kind:"yn"},{id:"f4",code:"F4",kind:"yn"},{id:"f5",code:"F5",kind:"yn"},{id:"f6",code:"F6",kind:"yn"},{id:"f_outcome",code:"F outcome",kind:"text"}]},
-  {code:"G",label:"Obsessive-Compulsive Disorder",items:[{id:"g1a",code:"G1a",kind:"yn"},{id:"g1b",code:"G1b",kind:"yn"},{id:"g2",code:"G2",kind:"yn"},{id:"g3a",code:"G3a",kind:"yn"},{id:"g3b",code:"G3b",kind:"yn"},{id:"g_summary",code:"G summary",kind:"yn"},{id:"g4",code:"G4",kind:"yn"},{id:"g_outcome",code:"G outcome",kind:"text"}]},
-  {code:"H",label:"Posttraumatic Stress Disorder",items:[{id:"h1",code:"H1",kind:"yn"},{id:"h2",code:"H2",kind:"yn"},{id:"h3a",code:"H3a",kind:"yn"},{id:"h3b",code:"H3b",kind:"yn"},{id:"h3_summary",code:"H3 summary",kind:"yn"},{id:"h4a",code:"H4a",kind:"yn"},{id:"h4b",code:"H4b",kind:"yn"},{id:"h4c",code:"H4c",kind:"yn"},{id:"h4d",code:"H4d",kind:"yn"},{id:"h4e",code:"H4e",kind:"yn"},{id:"h4f",code:"H4f",kind:"yn"},{id:"h4g",code:"H4g",kind:"yn"},{id:"h4_summary",code:"H4 summary",kind:"yn"},{id:"h5a",code:"H5a",kind:"yn"},{id:"h5b",code:"H5b",kind:"yn"},{id:"h5c",code:"H5c",kind:"yn"},{id:"h5d",code:"H5d",kind:"yn"},{id:"h5e",code:"H5e",kind:"yn"},{id:"h5f",code:"H5f",kind:"yn"},{id:"h5_summary",code:"H5 summary",kind:"yn"},{id:"h6",code:"H6",kind:"yn"},{id:"h7",code:"H7",kind:"yn"},{id:"h_outcome",code:"H outcome",kind:"text"}]},
-  {code:"I",label:"Alcohol Use Disorder",items:[{id:"i1",code:"I1",kind:"yn"},{id:"i2a",code:"I2a",kind:"yn"},{id:"i2b",code:"I2b",kind:"yn"},{id:"i2c",code:"I2c",kind:"yn"},{id:"i2d",code:"I2d",kind:"yn"},{id:"i2e",code:"I2e",kind:"yn"},{id:"i2f",code:"I2f",kind:"yn"},{id:"i2g",code:"I2g",kind:"yn"},{id:"i2h",code:"I2h",kind:"yn"},{id:"i2i",code:"I2i",kind:"yn"},{id:"i2j",code:"I2j",kind:"yn"},{id:"i2k1",code:"I2k1",kind:"yn"},{id:"i2k2",code:"I2k2",kind:"yn"},{id:"i2k_summary",code:"I2k summary",kind:"yn"},{id:"i2_2_summary",code:"I2 (2+ summary)",kind:"yn"},{id:"i_outcome",code:"I outcome",kind:"text"},{id:"i_specifiers",code:"I specifiers",kind:"text"}]},
-  {code:"J",label:"Substance Use Disorder (Non-Alcohol)",items:[{id:"j1a",code:"J1a",kind:"yn"},{id:"j1_most_used",code:"J1 (most used)",kind:"text"},{id:"j1_biggest_problem",code:"J1 (biggest problem)",kind:"text"},{id:"j2a",code:"J2a",kind:"yn"},{id:"j2b",code:"J2b",kind:"yn"},{id:"j2c",code:"J2c",kind:"yn"},{id:"j2d",code:"J2d",kind:"yn"},{id:"j2e",code:"J2e",kind:"yn"},{id:"j2f",code:"J2f",kind:"yn"},{id:"j2g",code:"J2g",kind:"yn"},{id:"j2h",code:"J2h",kind:"yn"},{id:"j2i",code:"J2i",kind:"yn"},{id:"j2j",code:"J2j",kind:"yn"},{id:"j2k1",code:"J2k1",kind:"yn"},{id:"j2k2",code:"J2k2",kind:"yn"},{id:"j2k_summary",code:"J2k summary",kind:"yn"},{id:"j2_2_summary",code:"J2 (2+ summary)",kind:"yn"},{id:"j_outcome",code:"J outcome",kind:"text"},{id:"j_specifiers",code:"J specifiers",kind:"text"}]},
-  {code:"K",label:"Psychotic Disorders",items:[{id:"k1a",code:"K1a",kind:"yn"},{id:"k1b",code:"K1b",kind:"yn"},{id:"k2a",code:"K2a",kind:"yn"},{id:"k2b",code:"K2b",kind:"yn"},{id:"k3a",code:"K3a",kind:"yn"},{id:"k3b",code:"K3b",kind:"yn"},{id:"k4a",code:"K4a",kind:"yn"},{id:"k4b",code:"K4b",kind:"yn"},{id:"k5a",code:"K5a",kind:"yn"},{id:"k5b",code:"K5b",kind:"yn"},{id:"k6a",code:"K6a",kind:"yn"},{id:"k6a_add_l",code:"K6a (add'l)",kind:"yn"},{id:"k6b",code:"K6b",kind:"yn"},{id:"k6b_add_l",code:"K6b (add'l)",kind:"yn"},{id:"k7a",code:"K7a",kind:"yn"},{id:"k7b",code:"K7b",kind:"yn"},{id:"k8a",code:"K8a",kind:"yn"},{id:"k8b",code:"K8b",kind:"yn"},{id:"k9a",code:"K9a",kind:"yn"},{id:"k9b",code:"K9b",kind:"yn"},{id:"k10a",code:"K10a",kind:"yn"},{id:"k10b",code:"K10b",kind:"yn"},{id:"k11a",code:"K11a",kind:"yn"},{id:"k11_mood_duration",code:"K11 (mood duration)",kind:"text"},{id:"k11_psychotic_duration",code:"K11 (psychotic duration)",kind:"text"},{id:"k11_outcome",code:"K11 outcome",kind:"text"},{id:"k12a",code:"K12a",kind:"yn"},{id:"k12_outcome",code:"K12 outcome",kind:"text"},{id:"k13",code:"K13",kind:"yn"},{id:"k13_outcome",code:"K13 outcome",kind:"text"},{id:"k14",code:"K14",kind:"yn"},{id:"k14_outcome",code:"K14 outcome",kind:"text"}]},
-  {code:"L",label:"Anorexia Nervosa",items:[{id:"l1a_height",code:"L1a (height)",kind:"text"},{id:"l1b_weight",code:"L1b (weight)",kind:"text"},{id:"l1c",code:"L1c",kind:"yn"},{id:"l2",code:"L2",kind:"yn"},{id:"l3",code:"L3",kind:"yn"},{id:"l4a",code:"L4a",kind:"yn"},{id:"l4b",code:"L4b",kind:"yn"},{id:"l4c",code:"L4c",kind:"yn"},{id:"l5",code:"L5",kind:"yn"},{id:"l_outcome",code:"L outcome",kind:"text"}]},
-  {code:"M",label:"Bulimia Nervosa",items:[{id:"m1",code:"M1",kind:"yn"},{id:"m2",code:"M2",kind:"yn"},{id:"m3",code:"M3",kind:"yn"},{id:"m4",code:"M4",kind:"yn"},{id:"m4a_episodes_wk",code:"M4a (episodes/wk)",kind:"text"},{id:"m4a_days_wk",code:"M4a (days/wk)",kind:"text"},{id:"m5",code:"M5",kind:"yn"},{id:"m6",code:"M6",kind:"yn"},{id:"m7",code:"M7",kind:"yn"},{id:"m7_threshold",code:"M7 (threshold)",kind:"text"},{id:"m8",code:"M8",kind:"yn"},{id:"m_outcome_1",code:"M outcome 1",kind:"text"},{id:"m_outcome_2",code:"M outcome 2",kind:"text"}]},
-  {code:"MB",label:"Binge-Eating Disorder",items:[{id:"mb1",code:"MB1",kind:"yn"},{id:"mb2",code:"MB2",kind:"yn"},{id:"mb3",code:"MB3",kind:"yn"},{id:"mb4",code:"MB4",kind:"yn"},{id:"mb5",code:"MB5",kind:"yn"},{id:"mb6a",code:"MB6a",kind:"yn"},{id:"mb6b",code:"MB6b",kind:"yn"},{id:"mb6c",code:"MB6c",kind:"yn"},{id:"mb6d",code:"MB6d",kind:"yn"},{id:"mb6e",code:"MB6e",kind:"yn"},{id:"mb_3_summary",code:"MB (3+ summary)",kind:"yn"},{id:"mb7",code:"MB7",kind:"yn"},{id:"mb8_episodes_wk",code:"MB8 (episodes/wk)",kind:"text"},{id:"mb8_days_wk",code:"MB8 (days/wk)",kind:"text"},{id:"mb_outcome",code:"MB outcome",kind:"text"},{id:"mb_specifiers",code:"MB specifiers",kind:"text"}]},
-  {code:"N",label:"Generalized Anxiety Disorder",items:[{id:"n1a",code:"N1a",kind:"yn"},{id:"n1b",code:"N1b",kind:"yn"},{id:"n_restricted",code:"N (restricted?)",kind:"yn"},{id:"n2",code:"N2",kind:"yn"},{id:"n3a",code:"N3a",kind:"yn"},{id:"n3b",code:"N3b",kind:"yn"},{id:"n3c",code:"N3c",kind:"yn"},{id:"n3d",code:"N3d",kind:"yn"},{id:"n3e",code:"N3e",kind:"yn"},{id:"n3f",code:"N3f",kind:"yn"},{id:"n3_3_summary",code:"N3 (3+ summary)",kind:"yn"},{id:"n4",code:"N4",kind:"yn"},{id:"n_outcome",code:"N outcome",kind:"text"}]},
-  {code:"O",label:"Medical / Organic / Substance Cause",items:[{id:"o1a",code:"O1a",kind:"text"},{id:"o1b",code:"O1b",kind:"text"},{id:"o2",code:"O2",kind:"text"},{id:"o2_summary",code:"O2 summary",kind:"text"}]},
-  {code:"P",label:"Antisocial Personality Disorder",items:[{id:"p1a",code:"P1a",kind:"yn"},{id:"p1b",code:"P1b",kind:"yn"},{id:"p1c",code:"P1c",kind:"yn"},{id:"p1d",code:"P1d",kind:"yn"},{id:"p1e",code:"P1e",kind:"yn"},{id:"p1f",code:"P1f",kind:"yn"},{id:"p1_2_summary",code:"P1 (2+ summary)",kind:"yn"},{id:"p2a",code:"P2a",kind:"yn"},{id:"p2b",code:"P2b",kind:"yn"},{id:"p2c",code:"P2c",kind:"yn"},{id:"p2d",code:"P2d",kind:"yn"},{id:"p2e",code:"P2e",kind:"yn"},{id:"p2f",code:"P2f",kind:"yn"},{id:"p2g",code:"P2g",kind:"yn"},{id:"p2_3_summary",code:"P2 (3+ summary)",kind:"yn"},{id:"p_outcome",code:"P outcome",kind:"text"}]},
+  {code:"A",label:"Major Depressive Episode / Disorder",epi:{a:"Current episode",b:"Past episode"},items:[{id:"a1a",code:"A1a",kind:"yn"},{id:"a1b",code:"A1b",kind:"yn"},{id:"a2a",code:"A2a",kind:"yn"},{id:"a2b",code:"A2b",kind:"yn"},{id:"a_1a_2a_summary",code:"A (1a/2a summary)",kind:"yn"},{id:"a3a",code:"A3a",kind:"yn2"},{id:"a3b",code:"A3b",kind:"yn2"},{id:"a3c",code:"A3c",kind:"yn2"},{id:"a3d",code:"A3d",kind:"yn2"},{id:"a3e",code:"A3e",kind:"yn2",prompts:[{id:"direction",q:"Was the change an increase (rather than a decrease)?"}]},{id:"a3e_add_l",code:"A3e (add'l)",kind:"yn2"},{id:"a3f",code:"A3f",kind:"yn2"},{id:"a3g",code:"A3g",kind:"yn2"},{id:"a4",code:"A4",kind:"yn2"},{id:"a5",code:"A5",kind:"text"},{id:"a6a_count",code:"A6a (count)",kind:"text"}],dx:[{id:"mde",name:"Major Depressive Episode",icd:"",tfs:[{id:"cur",label:"Current (2 weeks)"},{id:"past",label:"Past"},{id:"rec",label:"Recurrent"}]},{id:"mdd",name:"Major Depressive Disorder",icd:"F32.x / F33.x",tfs:[{id:"cur",label:"Current (2 weeks)"},{id:"past",label:"Past"},{id:"rec",label:"Recurrent"}]}]},
+  {code:"B",label:"Suicidality",items:[{id:"b1",code:"B1",kind:"yn"},{id:"b1a",code:"B1a",kind:"yn"},{id:"b1b",code:"B1b",kind:"yn"},{id:"b2",code:"B2",kind:"yn"},{id:"b3",code:"B3",kind:"yn"},{id:"b3_freq",code:"B3 (freq.)",kind:"text"},{id:"b3_intensity",code:"B3 (intensity)",kind:"text"},{id:"b4",code:"B4",kind:"yn",prompts:[{id:"plan",q:"Was a specific plan described?"},{id:"means",q:"Were means available?"}]},{id:"b4_detail",code:"B4 (detail)",kind:"text"},{id:"b5",code:"B5",kind:"yn"},{id:"b6",code:"B6",kind:"yn"},{id:"b7",code:"B7",kind:"yn"},{id:"b8",code:"B8",kind:"yn"},{id:"b9",code:"B9",kind:"yn"},{id:"b10",code:"B10",kind:"yn"},{id:"b10_detail",code:"B10 (detail)",kind:"text"},{id:"b11",code:"B11",kind:"yn"},{id:"b11_detail",code:"B11 (detail)",kind:"text"},{id:"b12",code:"B12",kind:"yn"},{id:"b12_detail",code:"B12 (detail)",kind:"text"},{id:"b13",code:"B13",kind:"yn"},{id:"b14",code:"B14",kind:"yn"},{id:"b14a",code:"B14a",kind:"yn"},{id:"b14b",code:"B14b",kind:"yn"},{id:"b14c",code:"B14c",kind:"yn"},{id:"b15",code:"B15",kind:"yn"},{id:"b16",code:"B16",kind:"yn"},{id:"b16a",code:"B16a",kind:"yn"},{id:"b16b",code:"B16b",kind:"yn"},{id:"b16c",code:"B16c",kind:"yn"},{id:"b16c_detail",code:"B16c (detail)",kind:"text"},{id:"b17_usual",code:"B17 (usual)",kind:"text"},{id:"b17_least",code:"B17 (least)",kind:"text"},{id:"b17_most",code:"B17 (most)",kind:"text"},{id:"b18",code:"B18",kind:"yn"},{id:"b18_count",code:"B18 (count)",kind:"text"},{id:"b18_when",code:"B18 (when)",kind:"text"},{id:"b19",code:"B19 (%)",kind:"text"},{id:"b19_summary",code:"B19 (summary)",kind:"yn"},{id:"b_outcome",code:"B outcome",kind:"text"},{id:"b_outcome_2",code:"B outcome (2)",kind:"text"}],dx:[{id:"suic",name:"Suicidality",icd:"",tfs:[{id:"cur",label:"Current (Past Month)"},{id:"life",label:"Lifetime attempt"}]},{id:"sbd",name:"Suicide Behavior Disorder",icd:"",tfs:[{id:"cur",label:"Current (In Past Year)"},{id:"rem",label:"In early remission (1\u20132 Years Ago)"}]}],dxExtra:[{id:"risk",label:"Suicide risk level",options:["","Low","Moderate","High"]}]},
+  {code:"C",label:"Manic / Hypomanic Episode, Bipolar Disorder",epi:{a:"Current episode",b:"Past episode"},items:[{id:"c_family_hx",code:"C (family hx)",kind:"yn"},{id:"c_family_hx_who",code:"C (family hx who)",kind:"text"},{id:"c1a",code:"C1a",kind:"yn"},{id:"c1b",code:"C1b",kind:"yn"},{id:"c2a",code:"C2a",kind:"yn"},{id:"c2b",code:"C2b",kind:"yn"},{id:"c_1a_2a_summary",code:"C (1a/2a summary)",kind:"yn"},{id:"c3a",code:"C3a",kind:"yn2"},{id:"c3a_add_l",code:"C3a (add'l)",kind:"yn2"},{id:"c3b",code:"C3b",kind:"yn2"},{id:"c3c",code:"C3c",kind:"yn2"},{id:"c3d",code:"C3d",kind:"yn2"},{id:"c3e",code:"C3e",kind:"yn2"},{id:"c3f",code:"C3f",kind:"yn2"},{id:"c3g",code:"C3g",kind:"yn2"},{id:"c3_summary",code:"C3 summary",kind:"yn2"},{id:"c4",code:"C4",kind:"text"},{id:"c5",code:"C5",kind:"yn2"},{id:"c6",code:"C6",kind:"yn2"},{id:"c7",code:"C7",kind:"yn2"},{id:"c_outcome_1",code:"C outcome 1",kind:"text"},{id:"c_outcome_2",code:"C outcome 2",kind:"text"},{id:"c_outcome_3",code:"C outcome 3",kind:"text"},{id:"c8a",code:"C8a",kind:"yn"},{id:"c8b",code:"C8b",kind:"yn"},{id:"c8c",code:"C8c",kind:"yn"}],dx:[{id:"manic",name:"Manic Episode",icd:"",tfs:[{id:"cur",label:"Current"},{id:"past",label:"Past"}]},{id:"hypo",name:"Hypomanic Episode",icd:"",tfs:[{id:"cur",label:"Current"},{id:"past",label:"Past"}]},{id:"bp1",name:"Bipolar I Disorder",icd:"F31.0 \u2013 F31.76",tfs:[{id:"cur",label:"Current"},{id:"past",label:"Past"}]},{id:"bp1p",name:"Bipolar I Disorder with Psychotic Features",icd:"F31.2 / F31.5 / F31.64",tfs:[{id:"cur",label:"Current"},{id:"past",label:"Past"}]},{id:"bp2",name:"Bipolar II Disorder",icd:"F31.81",tfs:[{id:"cur",label:"Current"},{id:"past",label:"Past"}]},{id:"bpo",name:"Other Specified Bipolar and Related Disorder",icd:"F31.89",tfs:[{id:"cur",label:"Current"},{id:"past",label:"Past"}]}]},
+  {code:"D",label:"Panic Disorder",items:[{id:"d1a",code:"D1a",kind:"yn"},{id:"d1b",code:"D1b",kind:"yn"},{id:"d2",code:"D2",kind:"yn"},{id:"d3",code:"D3",kind:"yn"},{id:"d4a",code:"D4a",kind:"yn"},{id:"d4b",code:"D4b",kind:"yn"},{id:"d4c",code:"D4c",kind:"yn"},{id:"d4d",code:"D4d",kind:"yn"},{id:"d4e",code:"D4e",kind:"yn"},{id:"d4f",code:"D4f",kind:"yn"},{id:"d4g",code:"D4g",kind:"yn"},{id:"d4h",code:"D4h",kind:"yn"},{id:"d4i",code:"D4i",kind:"yn"},{id:"d4j",code:"D4j",kind:"yn"},{id:"d4k",code:"D4k",kind:"yn"},{id:"d4l",code:"D4l",kind:"yn"},{id:"d4m",code:"D4m",kind:"yn"},{id:"d5",code:"D5",kind:"yn"},{id:"d6",code:"D6",kind:"yn"},{id:"d_outcome",code:"D outcome",kind:"text"}],dx:[{id:"pd",name:"Panic Disorder",icd:"F41.0 / F40.0",tfs:[{id:"cur",label:"Current (Past Month)"},{id:"life",label:"Lifetime"}]}]},
+  {code:"E",label:"Agoraphobia",items:[{id:"e1",code:"E1",kind:"yn"},{id:"e_2_summary",code:"E (2+ summary)",kind:"yn"},{id:"e2",code:"E2",kind:"yn"},{id:"e3",code:"E3",kind:"yn"},{id:"e4",code:"E4",kind:"yn"},{id:"e5",code:"E5",kind:"yn"},{id:"e6",code:"E6",kind:"yn"},{id:"e_outcome",code:"E outcome",kind:"text"}],dx:[{id:"agor",name:"Agoraphobia",icd:"F40.00",tfs:[{id:"cur",label:"Current"}]}]},
+  {code:"F",label:"Social Anxiety Disorder",items:[{id:"f1",code:"F1",kind:"yn"},{id:"f2",code:"F2",kind:"yn"},{id:"f3",code:"F3",kind:"yn"},{id:"f4",code:"F4",kind:"yn"},{id:"f5",code:"F5",kind:"yn"},{id:"f6",code:"F6",kind:"yn"},{id:"f_outcome",code:"F outcome",kind:"text"}],dx:[{id:"sad",name:"Social Anxiety Disorder (Social Phobia)",icd:"F40.10",tfs:[{id:"cur",label:"Current (Past Month)"}]}]},
+  {code:"G",label:"Obsessive-Compulsive Disorder",items:[{id:"g1a",code:"G1a",kind:"yn"},{id:"g1b",code:"G1b",kind:"yn"},{id:"g2",code:"G2",kind:"yn"},{id:"g3a",code:"G3a",kind:"yn"},{id:"g3b",code:"G3b",kind:"yn"},{id:"g_summary",code:"G summary",kind:"yn"},{id:"g4",code:"G4",kind:"yn"},{id:"g_outcome",code:"G outcome",kind:"text"}],dx:[{id:"ocd",name:"Obsessive-Compulsive Disorder",icd:"F42.2",tfs:[{id:"cur",label:"Current (Past Month)"}]}]},
+  {code:"H",label:"Posttraumatic Stress Disorder",items:[{id:"h1",code:"H1",kind:"yn",prompts:[{id:"witnessed",q:"Was the event experienced, witnessed, or learned about?"}]},{id:"h2",code:"H2",kind:"yn"},{id:"h3a",code:"H3a",kind:"yn"},{id:"h3b",code:"H3b",kind:"yn"},{id:"h3_summary",code:"H3 summary",kind:"yn"},{id:"h4a",code:"H4a",kind:"yn"},{id:"h4b",code:"H4b",kind:"yn"},{id:"h4c",code:"H4c",kind:"yn"},{id:"h4d",code:"H4d",kind:"yn"},{id:"h4e",code:"H4e",kind:"yn"},{id:"h4f",code:"H4f",kind:"yn"},{id:"h4g",code:"H4g",kind:"yn"},{id:"h4_summary",code:"H4 summary",kind:"yn"},{id:"h5a",code:"H5a",kind:"yn"},{id:"h5b",code:"H5b",kind:"yn"},{id:"h5c",code:"H5c",kind:"yn"},{id:"h5d",code:"H5d",kind:"yn"},{id:"h5e",code:"H5e",kind:"yn"},{id:"h5f",code:"H5f",kind:"yn"},{id:"h5_summary",code:"H5 summary",kind:"yn"},{id:"h6",code:"H6",kind:"yn"},{id:"h7",code:"H7",kind:"yn"},{id:"h_outcome",code:"H outcome",kind:"text"}],dx:[{id:"ptsd",name:"Posttraumatic Stress Disorder",icd:"F43.10",tfs:[{id:"cur",label:"Current (Past Month)"}]}]},
+  {code:"I",label:"Alcohol Use Disorder",items:[{id:"i1",code:"I1",kind:"yn",prompts:[{id:"pattern",q:"Is the pattern continuous rather than episodic?"}]},{id:"i2a",code:"I2a",kind:"yn"},{id:"i2b",code:"I2b",kind:"yn"},{id:"i2c",code:"I2c",kind:"yn"},{id:"i2d",code:"I2d",kind:"yn"},{id:"i2e",code:"I2e",kind:"yn"},{id:"i2f",code:"I2f",kind:"yn"},{id:"i2g",code:"I2g",kind:"yn"},{id:"i2h",code:"I2h",kind:"yn"},{id:"i2i",code:"I2i",kind:"yn"},{id:"i2j",code:"I2j",kind:"yn"},{id:"i2k1",code:"I2k1",kind:"yn"},{id:"i2k2",code:"I2k2",kind:"yn"},{id:"i2k_summary",code:"I2k summary",kind:"yn"},{id:"i2_2_summary",code:"I2 (2+ summary)",kind:"yn"},{id:"i_outcome",code:"I outcome",kind:"text"},{id:"i_specifiers",code:"I specifiers",kind:"text"}],dx:[{id:"aud",name:"Alcohol Use Disorder",icd:"F10.10 / F10.20",tfs:[{id:"cur",label:"Past 12 Months"}]}]},
+  {code:"J",label:"Substance Use Disorder (Non-Alcohol)",items:[{id:"j1a",code:"J1a",kind:"yn",prompts:[{id:"multiple",q:"Was more than one substance class involved?"}]},{id:"j1_most_used",code:"J1 (most used)",kind:"text"},{id:"j1_biggest_problem",code:"J1 (biggest problem)",kind:"text"},{id:"j2a",code:"J2a",kind:"yn"},{id:"j2b",code:"J2b",kind:"yn"},{id:"j2c",code:"J2c",kind:"yn"},{id:"j2d",code:"J2d",kind:"yn"},{id:"j2e",code:"J2e",kind:"yn"},{id:"j2f",code:"J2f",kind:"yn"},{id:"j2g",code:"J2g",kind:"yn"},{id:"j2h",code:"J2h",kind:"yn"},{id:"j2i",code:"J2i",kind:"yn"},{id:"j2j",code:"J2j",kind:"yn"},{id:"j2k1",code:"J2k1",kind:"yn"},{id:"j2k2",code:"J2k2",kind:"yn"},{id:"j2k_summary",code:"J2k summary",kind:"yn"},{id:"j2_2_summary",code:"J2 (2+ summary)",kind:"yn"},{id:"j_outcome",code:"J outcome",kind:"text"},{id:"j_specifiers",code:"J specifiers",kind:"text"}],dx:[{id:"sud",name:"Substance Use Disorder (Non-alcohol)",icd:"F11.10 / F11.20 \u2013 F19.20",tfs:[{id:"cur",label:"Past 12 Months"}]}]},
+  {code:"K",label:"Psychotic Disorders",items:[{id:"k1a",code:"K1a",kind:"yn",prompts:[{id:"conviction",q:"Was the belief held with full conviction?"},{id:"cultural",q:"Is the belief accounted for by the client\u2019s culture or faith community?"}]},{id:"k1b",code:"K1b",kind:"yn"},{id:"k2a",code:"K2a",kind:"yn",prompts:[{id:"conviction",q:"Was the belief held with full conviction?"}]},{id:"k2b",code:"K2b",kind:"yn"},{id:"k3a",code:"K3a",kind:"yn",prompts:[{id:"conviction",q:"Was the belief held with full conviction?"}]},{id:"k3b",code:"K3b",kind:"yn"},{id:"k4a",code:"K4a",kind:"yn"},{id:"k4b",code:"K4b",kind:"yn"},{id:"k5a",code:"K5a",kind:"yn"},{id:"k5b",code:"K5b",kind:"yn"},{id:"k6a",code:"K6a",kind:"yn",prompts:[{id:"voices",q:"Was it a voice or voices, rather than a sound or noise?"},{id:"sleep",q:"Did it happen only while falling asleep or waking up?"},{id:"commentary",q:"Did the voice(s) comment on the client or converse with each other?"}]},{id:"k6a_add_l",code:"K6a (add'l)",kind:"yn"},{id:"k6b",code:"K6b",kind:"yn",prompts:[{id:"outside",q:"Was the voice experienced as coming from outside the head?"},{id:"substance",q:"Did it occur only during intoxication or withdrawal?"}]},{id:"k6b_add_l",code:"K6b (add'l)",kind:"yn"},{id:"k7a",code:"K7a",kind:"yn",prompts:[{id:"dream",q:"Was it a dream, or only while falling asleep or waking up?"},{id:"eyesopen",q:"Was it seen with eyes open, in clear consciousness?"}]},{id:"k7b",code:"K7b",kind:"yn",prompts:[{id:"substance",q:"Did it occur only during intoxication or withdrawal?"}]},{id:"k8a",code:"K8a",kind:"yn"},{id:"k8b",code:"K8b",kind:"yn"},{id:"k9a",code:"K9a",kind:"yn"},{id:"k9b",code:"K9b",kind:"yn"},{id:"k10a",code:"K10a",kind:"yn"},{id:"k10b",code:"K10b",kind:"yn"},{id:"k11a",code:"K11a",kind:"yn"},{id:"k11_mood_duration",code:"K11 (mood duration)",kind:"text"},{id:"k11_psychotic_duration",code:"K11 (psychotic duration)",kind:"text"},{id:"k11_outcome",code:"K11 outcome",kind:"text"},{id:"k12a",code:"K12a",kind:"yn"},{id:"k12_outcome",code:"K12 outcome",kind:"text"},{id:"k13",code:"K13",kind:"yn"},{id:"k13_outcome",code:"K13 outcome",kind:"text"},{id:"k14",code:"K14",kind:"yn"},{id:"k14_outcome",code:"K14 outcome",kind:"text"}],dx:[{id:"psy",name:"Any Psychotic Disorder",icd:"F20.81 \u2013 F29",tfs:[{id:"cur",label:"Current"},{id:"life",label:"Lifetime"}]},{id:"mddp",name:"Major Depressive Disorder with Psychotic Features",icd:"F32.3 / F33.3",tfs:[{id:"cur",label:"Current"},{id:"past",label:"Past"}]},{id:"bp1p",name:"Bipolar I Disorder with Psychotic Features",icd:"F31.2 / F31.5 / F31.64",tfs:[{id:"cur",label:"Current"},{id:"past",label:"Past"}]}]},
+  {code:"L",label:"Anorexia Nervosa",items:[{id:"l1a_height",code:"L1a (height)",kind:"text"},{id:"l1b_weight",code:"L1b (weight)",kind:"text"},{id:"l1c",code:"L1c",kind:"yn"},{id:"l2",code:"L2",kind:"yn"},{id:"l3",code:"L3",kind:"yn"},{id:"l4a",code:"L4a",kind:"yn"},{id:"l4b",code:"L4b",kind:"yn"},{id:"l4c",code:"L4c",kind:"yn"},{id:"l5",code:"L5",kind:"yn"},{id:"l_outcome",code:"L outcome",kind:"text"}],dx:[{id:"an",name:"Anorexia Nervosa",icd:"F50.01 / F50.02",tfs:[{id:"cur",label:"Current (Past 3 Months)"}]}]},
+  {code:"M",label:"Bulimia Nervosa",items:[{id:"m1",code:"M1",kind:"yn"},{id:"m2",code:"M2",kind:"yn"},{id:"m3",code:"M3",kind:"yn"},{id:"m4",code:"M4",kind:"yn"},{id:"m4a_episodes_wk",code:"M4a (episodes/wk)",kind:"text"},{id:"m4a_days_wk",code:"M4a (days/wk)",kind:"text"},{id:"m5",code:"M5",kind:"yn"},{id:"m6",code:"M6",kind:"yn"},{id:"m7",code:"M7",kind:"yn"},{id:"m7_threshold",code:"M7 (threshold)",kind:"text"},{id:"m8",code:"M8",kind:"yn"},{id:"m_outcome_1",code:"M outcome 1",kind:"text"},{id:"m_outcome_2",code:"M outcome 2",kind:"text"}],dx:[{id:"bn",name:"Bulimia Nervosa",icd:"F50.2",tfs:[{id:"cur",label:"Current (Past 3 Months)"}]}]},
+  {code:"MB",label:"Binge-Eating Disorder",items:[{id:"mb1",code:"MB1",kind:"yn"},{id:"mb2",code:"MB2",kind:"yn"},{id:"mb3",code:"MB3",kind:"yn"},{id:"mb4",code:"MB4",kind:"yn"},{id:"mb5",code:"MB5",kind:"yn"},{id:"mb6a",code:"MB6a",kind:"yn"},{id:"mb6b",code:"MB6b",kind:"yn"},{id:"mb6c",code:"MB6c",kind:"yn"},{id:"mb6d",code:"MB6d",kind:"yn"},{id:"mb6e",code:"MB6e",kind:"yn"},{id:"mb_3_summary",code:"MB (3+ summary)",kind:"yn"},{id:"mb7",code:"MB7",kind:"yn"},{id:"mb8_episodes_wk",code:"MB8 (episodes/wk)",kind:"text"},{id:"mb8_days_wk",code:"MB8 (days/wk)",kind:"text"},{id:"mb_outcome",code:"MB outcome",kind:"text"},{id:"mb_specifiers",code:"MB specifiers",kind:"text"}],dx:[{id:"bed",name:"Binge-Eating Disorder",icd:"F50.81",tfs:[{id:"cur",label:"Current (Past 3 Months)"}]}]},
+  {code:"N",label:"Generalized Anxiety Disorder",items:[{id:"n1a",code:"N1a",kind:"yn"},{id:"n1b",code:"N1b",kind:"yn"},{id:"n_restricted",code:"N (restricted?)",kind:"yn"},{id:"n2",code:"N2",kind:"yn"},{id:"n3a",code:"N3a",kind:"yn"},{id:"n3b",code:"N3b",kind:"yn"},{id:"n3c",code:"N3c",kind:"yn"},{id:"n3d",code:"N3d",kind:"yn"},{id:"n3e",code:"N3e",kind:"yn"},{id:"n3f",code:"N3f",kind:"yn"},{id:"n3_3_summary",code:"N3 (3+ summary)",kind:"yn"},{id:"n4",code:"N4",kind:"yn"},{id:"n_outcome",code:"N outcome",kind:"text"}],dx:[{id:"gad",name:"Generalized Anxiety Disorder",icd:"F41.1",tfs:[{id:"cur",label:"Current (Past 6 Months)"}]}]},
+  {code:"O",label:"Medical / Organic / Substance Cause",items:[{id:"o1a",code:"O1a",kind:"text"},{id:"o1b",code:"O1b",kind:"text"},{id:"o2",code:"O2",kind:"text"},{id:"o2_summary",code:"O2 summary",kind:"text"}],dxExtra:[{id:"ruledout",label:"Medical, organic or drug cause ruled out",options:["","No","Yes","Uncertain"]}]},
+  {code:"P",label:"Antisocial Personality Disorder",items:[{id:"p1a",code:"P1a",kind:"yn"},{id:"p1b",code:"P1b",kind:"yn"},{id:"p1c",code:"P1c",kind:"yn"},{id:"p1d",code:"P1d",kind:"yn"},{id:"p1e",code:"P1e",kind:"yn"},{id:"p1f",code:"P1f",kind:"yn"},{id:"p1_2_summary",code:"P1 (2+ summary)",kind:"yn"},{id:"p2a",code:"P2a",kind:"yn"},{id:"p2b",code:"P2b",kind:"yn"},{id:"p2c",code:"P2c",kind:"yn"},{id:"p2d",code:"P2d",kind:"yn"},{id:"p2e",code:"P2e",kind:"yn"},{id:"p2f",code:"P2f",kind:"yn"},{id:"p2g",code:"P2g",kind:"yn"},{id:"p2_3_summary",code:"P2 (3+ summary)",kind:"yn"},{id:"p_outcome",code:"P outcome",kind:"text"}],dx:[{id:"aspd",name:"Antisocial Personality Disorder",icd:"F60.2",tfs:[{id:"life",label:"Lifetime"}]}]},
 ];
 
 function makeMiniAnswerSheet(){
   return {
     name:"M.I.N.I. — Structured Interview Answer Sheet",abbr:"MINI",type:"answersheet",category:"mini_as",
-    note:"Blank scoring sheet — item codes and N/Y response fields only. Administer using your own licensed copy of the M.I.N.I. (Sheehan et al., DSM-5), which contains the actual questions, instructions, and scoring rules; record outcomes here.",
+    note:"Scoring sheet — item codes with N/Y response fields, current- and past-episode columns where the instrument uses them, short clinical qualifier probes, and a meets-criteria outcome block at the end of each module. Administer using your own licensed copy of the M.I.N.I. (Sheehan et al., DSM-5), which contains the actual item wording, skip logic, and scoring rules; the qualifier probes here are standard clinical differentiators in plain language, not transcriptions of the instrument.",
     sections:MINI_AS_SECTIONS
   };
 }
@@ -4597,23 +4662,97 @@ function buildAnswerSheetCard(mod,key,m){
     <div class="measure-body" id="mb_${mid}">`;
   if(m.note) h+=`<div class="measure-instruction">${m.note}</div>`;
   m.sections.forEach(s=>{
-    h+=`<div style="margin-bottom:14px;">
-      <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);font-family:var(--font-display);margin-bottom:6px;">${s.code} — ${s.label}</div>
-      <div class="mini-as-grid">`;
-    s.items.forEach(it=>{
-      const base=`mini_${mid}_${it.id}`;
-      if(it.kind==='text'){
-        h+=`<div class="mini-as-row"><span class="mini-as-code">${it.code}</span><input type="text" id="${base}" class="mini-as-text" placeholder="—"></div>`;
-      } else if(it.kind==='yn2'){
-        h+=`<div class="mini-as-row"><span class="mini-as-code">${it.code}</span><span class="mini-as-sub">(1)</span>${miniYnSelect(base+'_1')}<span class="mini-as-sub">(2)</span>${miniYnSelect(base+'_2')}</div>`;
-      } else {
-        h+=`<div class="mini-as-row"><span class="mini-as-code">${it.code}</span>${miniYnSelect(base)}</div>`;
-      }
-    });
-    h+=`</div></div>`;
+    h+=`<div class="mini-module">
+      <div class="mini-module-head">${s.code} — ${escapeHtml(s.label)}</div>`;
+
+    // Paired-column modules (current vs past episode) get their own two-column
+    // block with explicit headers, so the (1)/(2) fields aren't ambiguous.
+    const paired=s.epi?s.items.filter(it=>it.kind==='yn2'):[];
+    const single=s.epi?s.items.filter(it=>it.kind!=='yn2'):s.items;
+
+    if(single.length){
+      h+=`<div class="mini-as-grid">`;
+      single.forEach(it=>{ h+=miniItemRowHTML(mid,it); });
+      h+=`</div>`;
+    }
+    if(paired.length){
+      h+=`<div class="mini-epi">
+        <div class="mini-epi-head"><span></span><span>${escapeHtml(s.epi.a)}</span><span>${escapeHtml(s.epi.b)}</span></div>`;
+      paired.forEach(it=>{
+        const base=`mini_${mid}_${it.id}`;
+        h+=`<div class="mini-epi-row">
+          <span class="mini-as-code">${it.code}</span>
+          ${miniYnSelect(base+'_1')}
+          ${miniYnSelect(base+'_2')}
+        </div>`;
+        h+=miniPromptsHTML(mid,it);
+      });
+      h+=`</div>`;
+    }
+
+    // End-of-module diagnostic outcome — met / not met per disorder & timeframe.
+    if(s.dx&&s.dx.length||s.dxExtra){
+      h+=`<div class="mini-dx">
+        <div class="mini-dx-head">Meets criteria — ${s.code} ${escapeHtml(s.label)}</div>`;
+      (s.dx||[]).forEach(d=>{
+        h+=`<div class="mini-dx-row">
+          <span class="mini-dx-name">${escapeHtml(d.name)}${d.icd?` <span class="mini-dx-icd">${escapeHtml(d.icd)}</span>`:''}</span>
+          <span class="mini-dx-tfs">`;
+        d.tfs.forEach(t=>{
+          h+=`<label class="mini-dx-tf"><span>${escapeHtml(t.label)}</span>${miniMetSelect(`mini_${mid}_dx_${s.code}_${d.id}_${t.id}`)}</label>`;
+        });
+        h+=`</span></div>`;
+      });
+      (s.dxExtra||[]).forEach(e=>{
+        h+=`<div class="mini-dx-row">
+          <span class="mini-dx-name">${escapeHtml(e.label)}</span>
+          <span class="mini-dx-tfs"><label class="mini-dx-tf">${miniOptSelect(`mini_${mid}_dxe_${s.code}_${e.id}`,e.options)}</label></span>
+        </div>`;
+      });
+      h+=`<div class="field" style="margin-top:8px;"><label>Notes for this module</label><input type="text" id="mini_${mid}_dxnote_${s.code}"></div>`;
+      h+=`</div>`;
+    }
+    h+=`</div>`;
   });
   h+=`</div></div>`;
   return h;
+}
+
+function miniItemRowHTML(mid,it){
+  const base=`mini_${mid}_${it.id}`;
+  let h='';
+  if(it.kind==='text'){
+    h+=`<div class="mini-as-row"><span class="mini-as-code">${it.code}</span><input type="text" id="${base}" class="mini-as-text" placeholder="—"></div>`;
+  } else if(it.kind==='yn2'){
+    h+=`<div class="mini-as-row"><span class="mini-as-code">${it.code}</span><span class="mini-as-sub">(1)</span>${miniYnSelect(base+'_1')}<span class="mini-as-sub">(2)</span>${miniYnSelect(base+'_2')}</div>`;
+  } else {
+    h+=`<div class="mini-as-row"><span class="mini-as-code">${it.code}</span>${miniYnSelect(base)}</div>`;
+  }
+  return h+miniPromptsHTML(mid,it);
+}
+
+// Short clinical qualifier probes hanging off an item, each answered Yes/No.
+function miniPromptsHTML(mid,it){
+  if(!it.prompts||!it.prompts.length) return '';
+  // The grid wraps, so each group is labelled with its item code to keep the
+  // association unambiguous no matter where the row breaks.
+  let h=`<div class="mini-prompts"><div class="mini-prompts-for">${it.code}</div>`;
+  it.prompts.forEach(p=>{
+    h+=`<div class="mini-prompt">
+      <span class="mini-prompt-q">${escapeHtml(p.q)}</span>
+      ${miniYnSelect(`mini_${mid}_${it.id}_p_${p.id}`)}
+    </div>`;
+  });
+  return h+`</div>`;
+}
+
+function miniMetSelect(id){
+  return `<select id="${id}" class="mini-met"><option value="">—</option><option value="Met">Met</option><option value="Not met">Not met</option></select>`;
+}
+function miniOptSelect(id,options){
+  let h=`<select id="${id}" class="mini-met">`;
+  options.forEach(o=>h+=`<option value="${escapeHtml(o)}">${escapeHtml(o)||'—'}</option>`);
+  return h+`</select>`;
 }
 
 function diva5YnSelect(id,onchange){
@@ -5657,6 +5796,18 @@ function miniAsFieldIds(mid,it){
   const base=`mini_${mid}_${it.id}`;
   return it.kind==='yn2'?[base+'_1',base+'_2']:[base];
 }
+// Yes/No field ids for an item's short clinical qualifier probes.
+function miniPromptFieldIds(mid,it){
+  return (it.prompts||[]).map(p=>`mini_${mid}_${it.id}_p_${p.id}`);
+}
+// Met/not-met (and module-note) field ids for a module's diagnostic outcome.
+function miniDxFieldIds(mid,s){
+  const ids=[];
+  (s.dx||[]).forEach(d=>d.tfs.forEach(t=>ids.push(`mini_${mid}_dx_${s.code}_${d.id}_${t.id}`)));
+  (s.dxExtra||[]).forEach(e=>ids.push(`mini_${mid}_dxe_${s.code}_${e.id}`));
+  ids.push(`mini_${mid}_dxnote_${s.code}`);
+  return ids;
+}
 
 function measureHasData(mod,key){
   const m=M[mod][key];
@@ -5667,7 +5818,10 @@ function measureHasData(mod,key){
     : v(`ci_${mod}_${key}_${s.id}`)!=='');
   if(m.type==='answersheet'){
     const mid=mod+'_'+key;
-    return m.sections.some(s=>s.items.some(it=>miniAsFieldIds(mid,it).some(id=>v(id)!=='')));
+    return m.sections.some(s=>
+      s.items.some(it=>miniAsFieldIds(mid,it).some(id=>v(id)!=='')
+        ||miniPromptFieldIds(mid,it).some(id=>v(id)!==''))
+      ||miniDxFieldIds(mid,s).some(id=>v(id)!==''));
   }
   if(m.type==='diva5'){
     const mid=mod+'_'+key;
@@ -5724,15 +5878,43 @@ function writeMeasureBody(w,mod,key){
   if(m.type==='answersheet'){
     const mid=mod+'_'+key;
     m.sections.forEach(s=>{
+      const epiA=s.epi?s.epi.a:'(1)',epiB=s.epi?s.epi.b:'(2)';
       const rows=s.items.map(it=>{
-        const ids=miniAsFieldIds(mid,it);
-        const vals=ids.map(v).map(x=>x.trim());
+        const vals=miniAsFieldIds(mid,it).map(v).map(x=>x.trim());
         if(vals.every(x=>x===''))return null;
-        return it.kind==='yn2'?`${it.code}: (1) ${vals[0]||'—'}  (2) ${vals[1]||'—'}`:`${it.code}: ${vals[0]}`;
+        return it.kind==='yn2'
+          ? `${it.code}: ${epiA} ${vals[0]||'—'} / ${epiB} ${vals[1]||'—'}`
+          : `${it.code}: ${vals[0]}`;
       }).filter(Boolean);
-      if(!rows.length)return;
+      const promptRows=[];
+      s.items.forEach(it=>{
+        (it.prompts||[]).forEach(p=>{
+          const val=v(`mini_${mid}_${it.id}_p_${p.id}`).trim();
+          if(val) promptRows.push(`${it.code} — ${p.q} ${val}`);
+        });
+      });
+      const dxRows=[];
+      (s.dx||[]).forEach(d=>{
+        const parts=d.tfs.map(t=>{
+          const val=v(`mini_${mid}_dx_${s.code}_${d.id}_${t.id}`).trim();
+          return val?`${t.label}: ${val}`:null;
+        }).filter(Boolean);
+        if(parts.length) dxRows.push(`${d.name}${d.icd?' ('+d.icd+')':''} — ${parts.join('; ')}`);
+      });
+      (s.dxExtra||[]).forEach(e=>{
+        const val=v(`mini_${mid}_dxe_${s.code}_${e.id}`).trim();
+        if(val) dxRows.push(`${e.label}: ${val}`);
+      });
+      const dxNote=v(`mini_${mid}_dxnote_${s.code}`).trim();
+      if(!rows.length&&!promptRows.length&&!dxRows.length&&!dxNote)return;
       w.writeLine(`${s.code} — ${s.label}:`,{size:9,style:'italic',indent:6});
-      w.writeLine(rows.join('   '),{size:9,indent:12});
+      if(rows.length) w.writeMultiline(rows.join('   '),{size:9,indent:12});
+      promptRows.forEach(r=>w.writeLine(r,{size:9,indent:14}));
+      if(dxRows.length){
+        w.writeLine('Meets criteria:',{size:9,style:'italic',indent:12});
+        dxRows.forEach(r=>w.writeLine(r,{size:9,indent:16}));
+      }
+      if(dxNote) w.writeMultiline('Notes: '+dxNote,{size:9,indent:12});
       w.writeBlank(3);
     });
     w.writeBlank(4);
@@ -5960,8 +6142,22 @@ function writeMeasureBodyTemplate(w,mod,key){
   if(m.type==='answersheet'){
     m.sections.forEach(s=>{
       w.writeLine(`${s.code} — ${s.label}:`,{size:9,style:'italic',indent:6});
-      const codes=s.items.map(it=>it.kind==='yn2'?`${it.code} (1)__ (2)__`:`${it.code} __`).join('   ');
-      w.writeLine(codes,{size:9,indent:12});
+      const epiA=s.epi?s.epi.a:'(1)',epiB=s.epi?s.epi.b:'(2)';
+      const codes=s.items.map(it=>it.kind==='yn2'?`${it.code} ${epiA}__ ${epiB}__`:`${it.code} __`).join('   ');
+      w.writeMultiline(codes,{size:9,indent:12});
+      s.items.forEach(it=>{
+        (it.prompts||[]).forEach(p=>w.writeLine(`${it.code} — ${p.q}  Y / N`,{size:8,indent:14}));
+      });
+      if((s.dx&&s.dx.length)||s.dxExtra){
+        w.writeLine('Meets criteria:',{size:9,style:'italic',indent:12});
+        (s.dx||[]).forEach(d=>{
+          w.writeLine(`${d.name}${d.icd?' ('+d.icd+')':''} — `+d.tfs.map(t=>`${t.label}: ____`).join('   '),{size:8,indent:16});
+        });
+        (s.dxExtra||[]).forEach(e=>w.writeLine(`${e.label}: ____`,{size:8,indent:16}));
+        w.writeLine('Notes:',{size:8,indent:12});
+        w.writeBlank(10);
+        w.writeHr();
+      }
       w.writeBlank(3);
     });
     w.writeBlank(4);
@@ -6120,11 +6316,15 @@ function buildMeasurePayload(mod,key){
   }
   if(m.type==='answersheet'){
     const mid=mod+'_'+key;
-    const items={};
-    m.sections.forEach(s=>s.items.forEach(it=>{
-      items[it.id]=miniAsFieldIds(mid,it).map(v);
-    }));
-    return {mod,key,mtype:'answersheet',items};
+    const items={},prompts={},dx={};
+    m.sections.forEach(s=>{
+      s.items.forEach(it=>{
+        items[it.id]=miniAsFieldIds(mid,it).map(v);
+        if(it.prompts&&it.prompts.length) prompts[it.id]=miniPromptFieldIds(mid,it).map(v);
+      });
+      dx[s.code]=miniDxFieldIds(mid,s).map(v);
+    });
+    return {mod,key,mtype:'answersheet',items,prompts,dx};
   }
   if(m.type==='diva5'){
     const mid=mod+'_'+key;
@@ -6221,14 +6421,20 @@ function importMeasurePayload(mod,key,payload){
   }
   if(payload.mtype==='answersheet'&&m.type==='answersheet'){
     const mid=mod+'_'+key;
-    m.sections.forEach(s=>s.items.forEach(it=>{
-      const vals=payload.items&&payload.items[it.id];
+    const apply=(ids,vals)=>{
       if(!Array.isArray(vals))return;
-      miniAsFieldIds(mid,it).forEach((id,i)=>{
+      ids.forEach((id,i)=>{
         const el=document.getElementById(id);
         if(el&&vals[i]!==undefined) el.value=vals[i];
       });
-    }));
+    };
+    m.sections.forEach(s=>{
+      s.items.forEach(it=>{
+        apply(miniAsFieldIds(mid,it),payload.items&&payload.items[it.id]);
+        apply(miniPromptFieldIds(mid,it),payload.prompts&&payload.prompts[it.id]);
+      });
+      apply(miniDxFieldIds(mid,s),payload.dx&&payload.dx[s.code]);
+    });
     return true;
   }
   if(payload.mtype==='diva5'&&m.type==='diva5'){
@@ -6378,19 +6584,45 @@ function buildMsg(){
       if(m.type!=='answersheet') continue;
       const mid=mod+'_'+key;
       const sections=m.sections.map(s=>{
+        const epiA=s.epi?s.epi.a:'(1)',epiB=s.epi?s.epi.b:'(2)';
         const rows=s.items.map(it=>{
-          const ids=miniAsFieldIds(mid,it);
-          const vals=ids.map(v);
+          const vals=miniAsFieldIds(mid,it).map(v);
           if(it.kind==='yn2'){
             if(vals[0]!=='Y'&&vals[1]!=='Y')return null;
-            return `${it.code}: (1) ${vals[0]||'—'} (2) ${vals[1]||'—'}`;
+            return `${it.code}: ${epiA} ${vals[0]||'—'} / ${epiB} ${vals[1]||'—'}`;
           }
           if(it.kind==='yn') return vals[0]==='Y'?`${it.code}: Y`:null;
           return vals[0]?`${it.code}: ${vals[0]}`:null;
         }).filter(Boolean);
-        return rows.length?`${s.code} — ${s.label}: ${rows.join(', ')}`:null;
+        // Qualifier probes — include whichever were answered either way.
+        s.items.forEach(it=>{
+          (it.prompts||[]).forEach(p=>{
+            const val=v(`mini_${mid}_${it.id}_p_${p.id}`);
+            if(val) rows.push(`${it.code} — ${p.q} ${val}`);
+          });
+        });
+        // End-of-module diagnostic outcome.
+        const dxRows=[];
+        (s.dx||[]).forEach(d=>{
+          const parts=d.tfs.map(t=>{
+            const val=v(`mini_${mid}_dx_${s.code}_${d.id}_${t.id}`);
+            return val?`${t.label}: ${val}`:null;
+          }).filter(Boolean);
+          if(parts.length) dxRows.push(`${d.name}${d.icd?' ('+d.icd+')':''} — ${parts.join('; ')}`);
+        });
+        (s.dxExtra||[]).forEach(e=>{
+          const val=v(`mini_${mid}_dxe_${s.code}_${e.id}`);
+          if(val) dxRows.push(`${e.label}: ${val}`);
+        });
+        const dxNote=v(`mini_${mid}_dxnote_${s.code}`);
+        if(!rows.length&&!dxRows.length&&!dxNote)return null;
+        let out=`${s.code} — ${s.label}:`;
+        if(rows.length) out+=` ${rows.join(', ')}`;
+        if(dxRows.length) out+=`\n  Meets criteria: ${dxRows.join(' | ')}`;
+        if(dxNote) out+=`\n  Notes: ${dxNote}`;
+        return out;
       }).filter(Boolean);
-      if(sections.length) msg+=`\n${m.name} (positive/notable items only):\n${sections.join('\n')}\n`;
+      if(sections.length) msg+=`\n${m.name} (positive/notable items and module outcomes):\n${sections.join('\n')}\n`;
     }
     // Collect DIVA-5 responses — endorsed symptoms with their checked examples,
     // impairment domains, and the score-form/diagnosis conclusion.
