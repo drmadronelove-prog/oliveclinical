@@ -348,7 +348,9 @@ body::before{display:none;}
   --surface-raised:#FBF6EE;
   --surface-sunken:#E5AF8F;
   --surface-deep:#C98A6E;
-  --input-bg:#F8F1E5;
+  /* Fill boxes (inputs, selects, textareas and the instruction panels)
+     share one bright near-white so every bronze card reads the same. */
+  --input-bg:#FDFBF7;
   --clay:#FFDCAA;
 
   flex:1;min-width:0;
@@ -445,6 +447,11 @@ body::before{display:none;}
 .content-main .measure-card .item-num{color:#4A2F12;}
 .content-main .measure-card .part-div{color:#3A2408;border-bottom-color:rgba(36,21,5,0.2);}
 .content-main .measure-card .d5-note{color:#4A2F12;}
+/* Instruction panels and the M.I.N.I. answer-sheet controls are fill boxes
+   too — match them to --input-bg so no bronze card mixes two shades. */
+.content-main .measure-instruction,
+.content-main .mini-as-yn,
+.content-main .mini-as-text{background:var(--input-bg);}
 .content-main .measure-card .d5-table,
 .content-main .measure-card .d5-footnote{color:#241505;}
 .content-main .measure-card .d5-table th{color:#3A2408;}
