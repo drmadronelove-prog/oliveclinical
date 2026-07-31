@@ -444,6 +444,7 @@ body::before{display:none;}
 .content-main .measure-card .d5-q{color:#241505;}
 .content-main .measure-card .item-num{color:#4A2F12;}
 .content-main .measure-card .part-div{color:#3A2408;border-bottom-color:rgba(36,21,5,0.2);}
+.content-main .measure-card .d5-note{color:#4A2F12;}
 
 /* ── Module buttons ────────────────────────────── */
 .module-grid{display:flex;flex-wrap:wrap;gap:10px;}
@@ -2357,6 +2358,8 @@ function makeDiva5(){
   return {
     name:"DIVA-5 — Diagnostic Interview for ADHD in Adults",abbr:"DIVA-5",type:"diva5",primary:true,reporter:"self",
     note:"Kooij, Francken & Bron (3rd ed., DIVA Foundation, 2019) — free for clinical use. Ask each question, working through the adulthood and childhood example lists together with the patient (and partner/family member if present), then judge whether the symptom is present in each period. Criterion-A symptom totals below are tallied automatically from your Yes/No judgments.",
+    intro:"Explanation to be given beforehand to the patient: This interview will be used to ask about the presence of ADHD symptoms that you experienced during your childhood and adulthood. The questions are based on the official criteria for ADHD in the DSM-5. For each question I will ask you whether you recognise the problem. To help you during the interview I will provide some examples of each symptom, that describe the way that children and adults often experience difficulties related to each of the symptoms of ADHD. First of all, you will be asked the questions, then your partner and family members (if present) will be asked the same questions. Your partner will most likely have known you only since adulthood and will be asked questions about the period of your life that he or she knew you for; your family will have a better idea of your behaviour during childhood. Both stages of your life need to be investigated in order to be able to establish the diagnosis of ADHD.",
+    partInstructions:"Instructions: the symptoms in adulthood have to have been present for at least 6 months. The symptoms in childhood relate to the age of 5-12 years. For a symptom to be ascribed to ADHD it should have a chronic trait-like course and should not be episodic.",
     items:DIVA5_ITEMS,domains:DIVA5_DOMAINS,extra:DIVA5_EXTRA
   };
 }
@@ -4579,6 +4582,7 @@ function buildDiva5Card(mod,key,m){
     </div>
     <div class="measure-body" id="mb_${mid}">`;
   if(m.note) h+=`<div class="measure-instruction">${m.note}</div>`;
+  if(m.intro) h+=`<div class="measure-instruction" style="font-style:italic;">${m.intro}</div>`;
 
   h+=`<div class="d5-summary" id="d5_${mid}_sum">
     <span class="d5-summary-item">Attention — Adult: <span id="d5_${mid}_sum_a_adult">0</span>/9</span>
@@ -4588,8 +4592,10 @@ function buildDiva5Card(mod,key,m){
   </div>`;
 
   h+=`<div class="d5-part-label">Part 1: Symptoms of Attention Deficit (DSM-5 Criterion A1)</div>`;
+  if(m.partInstructions) h+=`<div class="d5-note" style="margin-bottom:12px;">${m.partInstructions}</div>`;
   m.items.filter(it=>it.domain==='attn').forEach(it=>{h+=diva5ItemHTML(mod,key,mid,it);});
   h+=`<div class="d5-part-label">Part 2: Symptoms of Hyperactivity-Impulsivity (DSM-5 Criterion A2)</div>`;
+  if(m.partInstructions) h+=`<div class="d5-note" style="margin-bottom:12px;">${m.partInstructions}</div>`;
   m.items.filter(it=>it.domain==='hi').forEach(it=>{h+=diva5ItemHTML(mod,key,mid,it);});
 
   h+=`<div class="d5-part-label">Part 3: Impairment on Account of the Symptoms (DSM-5 Criteria B, C and D)</div>`;
