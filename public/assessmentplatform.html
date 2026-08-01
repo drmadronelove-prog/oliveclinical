@@ -287,7 +287,8 @@ body::before{display:none;}
   gap:10px;position:relative;margin:0;
   padding:18px 14px;
   border:none;list-style:none;
-  background:var(--surface-raised);
+  /* Same white → coral → rose → fuchsia sweep as the main content card. */
+  background:linear-gradient(150deg,#FFFFFF 0%,#F7C9B4 34%,#E098A6 68%,#C4568F 100%);
   border-radius:28px;
   box-shadow:8px 8px 18px rgba(25,32,40,0.28),-8px -8px 18px rgba(255,255,255,0.35),inset 0 1px 0 rgba(255,255,255,0.4);
 }
@@ -342,25 +343,19 @@ body::before{display:none;}
   /* Three-tier stack: cards (bronze, below) sit on this marbled cream/
      blush panel — the sidebar placard's cream (#F4F2EE) blended with
      pale blush in soft organic blobs rather than a clean linear sweep —
-     fillable pills inside those cards are cream (--surface / --input-bg),
-     and the layer between card and pill — sunken chips/rows — is coral. */
-  --surface:#F8F1E5;
-  --surface-raised:#FBF6EE;
+     the layer between card and pill (sunken chips/rows) is coral, and
+     every pill and fill box inside a bronze card is white, so nothing
+     nested in the brass reads as a second cream tone. */
+  --surface:#FFFFFF;
+  --surface-raised:#FFFFFF;
   --surface-sunken:#E5AF8F;
   --surface-deep:#C98A6E;
-  /* Fill boxes (inputs, selects, textareas and the instruction panels)
-     share one bright near-white so every bronze card reads the same. */
-  --input-bg:#FDFBF7;
+  --input-bg:#FFFFFF;
   --clay:#FFDCAA;
 
   flex:1;min-width:0;
-  background:
-    radial-gradient(ellipse 55% 40% at 15% 15%,#F4F2EE 0%,transparent 65%),
-    radial-gradient(ellipse 45% 55% at 85% 10%,#FBEAE0 0%,transparent 60%),
-    radial-gradient(ellipse 60% 45% at 75% 75%,#F4F2EE 0%,transparent 65%),
-    radial-gradient(ellipse 50% 50% at 10% 85%,#FBEAE0 0%,transparent 60%),
-    radial-gradient(ellipse 40% 60% at 50% 45%,#F4F2EE 0%,transparent 70%),
-    linear-gradient(150deg,#FBEAE0,#F4F2EE 50%,#FBEAE0);
+  /* Smooth white → coral → rose → fuchsia sweep (no marbling). */
+  background:linear-gradient(150deg,#FFFFFF 0%,#F7C9B4 34%,#E098A6 68%,#C4568F 100%);
   border:none;
   border-radius:22px;
   padding:36px 36px 64px;
@@ -458,6 +453,8 @@ body::before{display:none;}
 .content-main .measure-card .mini-dx .mini-dx-name,
 .content-main .measure-card .mini-dx .mini-dx-tf,
 .content-main .measure-card .mini-dx .field > label{color:var(--ink);}
+/* Prompt/example panels are light boxes — keep their text dark. */
+.content-main .measure-card .ci-prompts{color:var(--ink);}
 /* Instruction panels and the M.I.N.I. answer-sheet controls are fill boxes
    too — match them to --input-bg so no bronze card mixes two shades. */
 .content-main .measure-instruction,
@@ -719,6 +716,37 @@ body::before{display:none;}
   border:none;border-radius:5px;padding:2px 6px;
   width:84px;background:var(--surface);color:var(--ink);
 }
+/* Interview prompts / examples shown above their fill box */
+.ci-prompts{
+  margin:0 0 8px;padding:10px 14px;
+  background:var(--surface-raised);border-radius:10px;
+  box-shadow:var(--neu-in-sm);
+  font-size:12.5px;line-height:1.5;
+}
+.ci-prompt{margin:1px 0;}
+.ci-prompt-head{font-weight:700;}
+.ci-prompt-gap{height:7px;}
+
+/* Y-BOCS symptom checklist — current / past columns */
+.ck-group{margin:0 0 14px;}
+.ck-group-head{
+  font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+  font-family:var(--font-display);font-weight:700;margin-bottom:4px;
+}
+.ck-col-head,.ck-row{display:grid;grid-template-columns:1fr 72px 72px;gap:8px;align-items:center;}
+.ck-col-head{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:0.06em;
+  text-transform:uppercase;font-weight:700;padding:0 10px 3px;
+}
+.ck-col-head span:nth-child(2),.ck-col-head span:nth-child(3),
+.ck-row .ck-box{text-align:center;}
+.ck-row{
+  background:var(--surface-raised);border-radius:8px;
+  padding:5px 10px;margin-bottom:4px;box-shadow:var(--neu-in-sm);
+  font-size:12.5px;
+}
+.ck-q{line-height:1.35;}
+
 .mini-module{margin-bottom:22px;}
 .mini-module-head{
   font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
@@ -2940,7 +2968,107 @@ OCD:{
   },
   ybocs:{
     name:"Yale-Brown Obsessive Compulsive Scale",abbr:"Y-BOCS",type:"clinician",
-    note:"Clinician-administered semi-structured interview. Rate each item based on the past week.",
+    note:"Clinician-administered semi-structured interview. Work through the Symptom Checklist first to establish which obsessions and compulsions are present, mark the principal ones, then rate severity on the ten items below based on the past week.",
+    // Y-BOCS Symptom Checklist — completed before the severity ratings.
+    // Each symptom is marked Current and/or Past, per the instrument.
+    checklist:[
+      {id:"agg",label:"Aggressive Obsessions",items:[
+        {id:"harm_self",q:"Fear might harm self"},
+        {id:"harm_other",q:"Fear might harm others"},
+        {id:"violent_img",q:"Violent or horrific images"},
+        {id:"blurt",q:"Fear of blurting out obscenities or insults"},
+        {id:"embarrass",q:"Fear of doing something else embarrassing"},
+        {id:"impulses",q:"Fear will act on unwanted impulses"},
+        {id:"steal",q:"Fear will steal things"},
+        {id:"careless",q:"Fear will harm others because not careful enough"},
+        {id:"responsible",q:"Fear will be responsible for something else terrible happening"}
+      ]},
+      {id:"contam",label:"Contamination Obsessions",items:[
+        {id:"waste",q:"Concern or disgust with bodily waste or secretions"},
+        {id:"dirt",q:"Concern with dirt or germs"},
+        {id:"environ",q:"Excessive concern with environmental contaminants"},
+        {id:"household",q:"Excessive concern with household items"},
+        {id:"animals",q:"Excessive concern with animals"},
+        {id:"sticky",q:"Bothered by sticky substances or residues"},
+        {id:"get_ill",q:"Concerned will get ill because of contaminant"},
+        {id:"spread",q:"Concerned will get others ill by spreading contaminant"}
+      ]},
+      {id:"sexual",label:"Sexual Obsessions",items:[
+        {id:"forbidden",q:"Forbidden or perverse sexual thoughts, images, or impulses"},
+        {id:"toward_others",q:"Sexual behavior toward others (aggressive)"}
+      ]},
+      {id:"hoard_obs",label:"Hoarding / Saving Obsessions",items:[
+        {id:"hoard",q:"Hoarding or saving obsessions (distinct from hobbies or items of monetary/sentimental value)"}
+      ]},
+      {id:"relig",label:"Religious Obsessions (Scrupulosity)",items:[
+        {id:"sacrilege",q:"Concerned with sacrilege and blasphemy"},
+        {id:"morality",q:"Excess concern with right/wrong, morality"}
+      ]},
+      {id:"symm",label:"Obsession with Need for Symmetry or Exactness",items:[
+        {id:"magical",q:"Accompanied by magical thinking"},
+        {id:"nonmagical",q:"Not accompanied by magical thinking"}
+      ]},
+      {id:"misc_obs",label:"Miscellaneous Obsessions",items:[
+        {id:"know",q:"Need to know or remember"},
+        {id:"say_things",q:"Fear of saying certain things"},
+        {id:"right_thing",q:"Fear of not saying just the right thing"},
+        {id:"lose",q:"Fear of losing things"},
+        {id:"images",q:"Intrusive (non-violent) images"},
+        {id:"sounds",q:"Intrusive nonsense sounds, words, or music"},
+        {id:"noises",q:"Bothered by certain sounds or noises"},
+        {id:"numbers",q:"Lucky or unlucky numbers"},
+        {id:"colors",q:"Colors with special significance"},
+        {id:"superstition",q:"Superstitious fears"}
+      ]},
+      {id:"somatic",label:"Somatic Obsessions",items:[
+        {id:"illness",q:"Concern with illness or disease"},
+        {id:"appearance",q:"Excessive concern with body part or aspect of appearance"}
+      ]},
+      {id:"clean",label:"Cleaning / Washing Compulsions",items:[
+        {id:"handwash",q:"Excessive or ritualized handwashing"},
+        {id:"grooming",q:"Excessive or ritualized showering, bathing, toothbrushing, grooming, or toilet routine"},
+        {id:"household_clean",q:"Cleaning of household items or other inanimate objects"},
+        {id:"prevent_contact",q:"Other measures to prevent or remove contact with contaminants"}
+      ]},
+      {id:"check",label:"Checking Compulsions",items:[
+        {id:"locks",q:"Checking locks, stove, appliances, etc."},
+        {id:"harm_others_ck",q:"Checking that did not/will not harm others"},
+        {id:"harm_self_ck",q:"Checking that did not/will not harm self"},
+        {id:"terrible",q:"Checking that nothing terrible did/will happen"},
+        {id:"mistake",q:"Checking that did not make a mistake"},
+        {id:"somatic_ck",q:"Checking tied to somatic obsessions"}
+      ]},
+      {id:"repeat",label:"Repeating Rituals",items:[
+        {id:"reread",q:"Re-reading or re-writing"},
+        {id:"routine",q:"Need to repeat routine activities"}
+      ]},
+      {id:"count",label:"Counting Compulsions",items:[
+        {id:"counting",q:"Counting compulsions"}
+      ]},
+      {id:"order",label:"Ordering / Arranging Compulsions",items:[
+        {id:"ordering",q:"Ordering or arranging compulsions"}
+      ]},
+      {id:"hoard_comp",label:"Hoarding / Collecting Compulsions",items:[
+        {id:"hoarding",q:"Hoarding or collecting compulsions"}
+      ]},
+      {id:"misc_comp",label:"Miscellaneous Compulsions",items:[
+        {id:"mental",q:"Mental rituals (other than checking/counting)"},
+        {id:"lists",q:"Excessive list making"},
+        {id:"confess",q:"Need to tell, ask, or confess"},
+        {id:"touch",q:"Need to touch, tap, or rub"},
+        {id:"blink",q:"Rituals involving blinking or staring"},
+        {id:"prevent_harm",q:"Measures (not checking) to prevent harm to self, others, or terrible consequences"},
+        {id:"eating",q:"Ritualized eating behaviors"},
+        {id:"superstitious",q:"Superstitious behaviors"},
+        {id:"trich",q:"Trichotillomania"},
+        {id:"self_damage",q:"Other self-damaging or self-mutilating behaviors"}
+      ]}
+    ],
+    checklistNotes:[
+      {id:"principal_obs",l:"Principal obsessions",h:"the ones the severity ratings refer to"},
+      {id:"principal_comp",l:"Principal compulsions",h:"the ones the severity ratings refer to"},
+      {id:"avoidance",l:"Avoidance",h:"situations, objects, or activities being avoided"}
+    ],
     parts:[
       {l:"Obsessions",items:[
         {q:"Time occupied by obsessive thoughts",a:["0 — None","1 — <1 hr/day","2 — 1–3 hrs/day","3 — 3–8 hrs/day","4 — >8 hrs/day"]},
@@ -4604,6 +4732,21 @@ function buildMCard(mod,key,m){
   return h;
 }
 
+// Renders a newline-separated prompt/example block as visible lines above a
+// fill box. Blank lines become spacing; lines ending in ':' read as sub-heads.
+function miniPromptListHTML(text){
+  const raw=String(text||'');
+  if(!raw.trim()) return '';
+  let h=`<div class="ci-prompts">`;
+  raw.split('\n').forEach(line=>{
+    const t=line.trim();
+    if(t===''){ h+=`<div class="ci-prompt-gap"></div>`; return; }
+    const cls=t.endsWith(':')?'ci-prompt ci-prompt-head':'ci-prompt';
+    h+=`<div class="${cls}">${escapeHtml(t)}</div>`;
+  });
+  return h+`</div>`;
+}
+
 function buildInterviewCard(mod,key,m){
   const mid=mod+'_'+key;
   let h=`<div class="measure-card" id="mc_${mid}">
@@ -4632,7 +4775,11 @@ function buildInterviewCard(mod,key,m){
         </div>`;
       });
     } else {
-      h+=`<textarea style="font-size:14px;min-height:120px;" id="ci_${mid}_${s.id}" placeholder="${s.ph}"></textarea>`;
+      // Legacy sections carried their prompts in the textarea placeholder,
+      // which disappears the moment the clinician starts typing. Render the
+      // prompt list above the box instead so it stays readable while writing.
+      h+=miniPromptListHTML(s.ph);
+      h+=`<textarea style="font-size:14px;min-height:120px;" id="ci_${mid}_${s.id}" placeholder="Notes…"></textarea>`;
     }
     h+=`</div>`;
   });
@@ -5070,6 +5217,32 @@ function buildClinicianCard(mod,key,m){
     </div>
     <div class="measure-body" id="mb_${mid}">
       <div class="measure-instruction">${m.note}</div>`;
+
+  // Symptom checklist (Y-BOCS) — completed before the severity ratings.
+  if(m.checklist&&m.checklist.length){
+    h+=`<div class="part-div">Symptom Checklist</div>
+      <div class="ci-prompts">Mark each symptom Current and/or Past, then record the principal obsessions and compulsions below — those are what the severity ratings refer to.</div>`;
+    m.checklist.forEach(g=>{
+      h+=`<div class="ck-group">
+        <div class="ck-group-head">${escapeHtml(g.label)}</div>
+        <div class="ck-col-head"><span></span><span>Current</span><span>Past</span></div>`;
+      g.items.forEach(it=>{
+        h+=`<div class="ck-row">
+          <span class="ck-q">${escapeHtml(it.q)}</span>
+          <span class="ck-box"><input type="checkbox" id="ck_${mid}_${g.id}_${it.id}_c" aria-label="${escapeHtml(it.q)} — current"></span>
+          <span class="ck-box"><input type="checkbox" id="ck_${mid}_${g.id}_${it.id}_p" aria-label="${escapeHtml(it.q)} — past"></span>
+        </div>`;
+      });
+      h+=`</div>`;
+    });
+    (m.checklistNotes||[]).forEach(f=>{
+      h+=`<div class="field" style="margin-bottom:10px;">
+        <label>${escapeHtml(f.l)}</label>${f.h?`<div class="hint">${escapeHtml(f.h)}</div>`:''}
+        <textarea id="ckn_${mid}_${f.id}" style="min-height:56px;font-size:14px;"></textarea>
+      </div>`;
+    });
+    h+=`<div class="part-div">Severity Ratings</div>`;
+  }
 
   let gi=0;
   m.parts.forEach(part=>{
@@ -5800,6 +5973,32 @@ function miniAsFieldIds(mid,it){
   const base=`mini_${mid}_${it.id}`;
   return it.kind==='yn2'?[base+'_1',base+'_2']:[base];
 }
+// ── Symptom checklist attached to a clinician-rated measure (Y-BOCS) ──
+function checklistFieldIds(mid,m){
+  const ids=[];
+  (m.checklist||[]).forEach(g=>g.items.forEach(it=>{
+    ids.push(`ck_${mid}_${g.id}_${it.id}_c`,`ck_${mid}_${g.id}_${it.id}_p`);
+  }));
+  return ids;
+}
+function checklistNoteIds(mid,m){
+  return (m.checklistNotes||[]).map(f=>`ckn_${mid}_${f.id}`);
+}
+// Groups with at least one marked symptom, as "<symptom> (current, past)".
+function checklistMarks(mid,m){
+  const chk=id=>!!document.getElementById(id)?.checked;
+  const out=[];
+  (m.checklist||[]).forEach(g=>{
+    const rows=g.items.map(it=>{
+      const c=chk(`ck_${mid}_${g.id}_${it.id}_c`),p=chk(`ck_${mid}_${g.id}_${it.id}_p`);
+      if(!c&&!p)return null;
+      return `${it.q} (${[c?'current':null,p?'past':null].filter(Boolean).join(', ')})`;
+    }).filter(Boolean);
+    if(rows.length) out.push({label:g.label,rows});
+  });
+  return out;
+}
+
 // Yes/No field ids for an item's short clinical qualifier probes.
 function miniPromptFieldIds(mid,it){
   return (it.prompts||[]).map(p=>`mini_${mid}_${it.id}_p_${p.id}`);
@@ -5838,6 +6037,11 @@ function measureHasData(mod,key){
       ||d.child.some((_,i)=>checked(`d5_${mid}_dom_${d.id}_ec_${i}`))
       ||v(`d5_${mid}_dom_${d.id}_oa`)!==''||v(`d5_${mid}_dom_${d.id}_oc`)!=='';
     return m.items.some(itemHas)||m.domains.some(domHas)||m.extra.some(f=>v(`d5_${mid}_${f.id}`)!=='');
+  }
+  if(m.checklist){
+    const mid=mod+'_'+key;
+    const chk=id=>!!document.getElementById(id)?.checked;
+    if(checklistFieldIds(mid,m).some(chk)||checklistNoteIds(mid,m).some(id=>v(id)!=='')) return true;
   }
   const r=responses[mod]&&responses[mod][key];
   return !!(r&&r.some(x=>x!==null));
@@ -5971,6 +6175,25 @@ function writeMeasureBody(w,mod,key){
   // scored self/other-report measure, or clinician-rated
   const r=(responses[mod]&&responses[mod][key])||[];
   const isClinician=m.type==='clinician';
+  if(m.checklist){
+    const mid=mod+'_'+key;
+    const marks=checklistMarks(mid,m);
+    if(marks.length){
+      w.writeLine('Symptom Checklist:',{size:9,style:'italic',indent:6});
+      marks.forEach(g=>{
+        w.writeLine(g.label+':',{size:9,indent:12});
+        g.rows.forEach(row=>w.writeLine('• '+row,{size:9,indent:16}));
+      });
+      w.writeBlank(3);
+    }
+    (m.checklistNotes||[]).forEach(f=>{
+      const val=v(`ckn_${mid}_${f.id}`).trim();
+      if(!val)return;
+      w.writeLine(f.l+':',{size:9,style:'italic',indent:6});
+      w.writeMultiline(val,{size:9,indent:12});
+    });
+    if(marks.length||(m.checklistNotes||[]).some(f=>v(`ckn_${mid}_${f.id}`).trim())) w.writeBlank(4);
+  }
   const items=isClinician?[].concat(...m.parts.map(p=>p.items)):m.items;
   items.forEach((item,i)=>{
     if(r[i]===undefined||r[i]===null)return;
@@ -6187,6 +6410,18 @@ function writeMeasureBodyTemplate(w,mod,key){
   }
   // scored self/other-report measure, or clinician-rated
   const isClinician=m.type==='clinician';
+  if(m.checklist){
+    w.writeLine('Symptom Checklist — mark Current (C) and/or Past (P):',{size:9,style:'italic',indent:6});
+    m.checklist.forEach(g=>{
+      w.writeLine(g.label,{size:9,indent:10});
+      g.items.forEach(it=>w.writeLine('C __  P __   '+it.q,{size:8,indent:14}));
+    });
+    (m.checklistNotes||[]).forEach(f=>{
+      w.writeLine(f.l+(f.h?' ('+f.h+')':'')+':',{size:9,indent:6});
+      w.writeBlank(12); w.writeHr();
+    });
+    w.writeBlank(4);
+  }
   const items=isClinician?[].concat(...m.parts.map(p=>p.items)):m.items;
   items.forEach((item,i)=>{
     const q=typeof item==='string'?item:item.q;
@@ -6355,7 +6590,13 @@ function buildMeasurePayload(mod,key){
     return {mod,key,mtype:'diva5',items,domains,extra};
   }
   const r=(responses[mod]&&responses[mod][key])||[];
-  return {mod,key,mtype:m.type==='clinician'?'clinician':'scored',responses:r};
+  const payload={mod,key,mtype:m.type==='clinician'?'clinician':'scored',responses:r};
+  if(m.checklist){
+    const mid=mod+'_'+key;
+    payload.checklist=checklistFieldIds(mid,m).map(id=>!!document.getElementById(id)?.checked);
+    payload.checklistNotes=checklistNoteIds(mid,m).map(v);
+  }
+  return payload;
 }
 
 function buildUniversalPayload(key){
@@ -6470,6 +6711,21 @@ function importMeasurePayload(mod,key,payload){
     const expectedLen=m.type==='clinician'?[].concat(...m.parts.map(p=>p.items)).length:m.items.length;
     const src=Array.isArray(payload.responses)?payload.responses:[];
     for(let i=0;i<expectedLen;i++) setR(mod,key,i,i<src.length?src[i]:null);
+    if(m.checklist){
+      const mid=mod+'_'+key;
+      if(Array.isArray(payload.checklist)){
+        checklistFieldIds(mid,m).forEach((id,i)=>{
+          const el=document.getElementById(id);
+          if(el&&payload.checklist[i]!==undefined) el.checked=!!payload.checklist[i];
+        });
+      }
+      if(Array.isArray(payload.checklistNotes)){
+        checklistNoteIds(mid,m).forEach((id,i)=>{
+          const el=document.getElementById(id);
+          if(el&&payload.checklistNotes[i]!==undefined) el.value=payload.checklistNotes[i];
+        });
+      }
+    }
     return true;
   }
   return false;
@@ -6563,6 +6819,19 @@ function buildMsg(){
         const sc=m.score(responses[mod][key]);
         msg+=`${m.abbr}:\n`;
         for(let l in sc)msg+=`  ${l}: ${sc[l]}\n`;
+      }
+      // Symptom checklist (Y-BOCS) — endorsed symptoms and principal targets.
+      if(m.checklist){
+        const mid=mod+'_'+key;
+        const marks=checklistMarks(mid,m);
+        const notes=(m.checklistNotes||[]).map(f=>{
+          const val=v(`ckn_${mid}_${f.id}`);return val?`${f.l}: ${val}`:null;
+        }).filter(Boolean);
+        if(marks.length||notes.length){
+          msg+=`${m.abbr} Symptom Checklist:\n`;
+          marks.forEach(g=>msg+=`  ${g.label}: ${g.rows.join('; ')}\n`);
+          notes.forEach(n=>msg+=`  ${n}\n`);
+        }
       }
     }
     // Collect interview notes
