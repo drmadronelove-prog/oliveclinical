@@ -287,8 +287,8 @@ body::before{display:none;}
   gap:10px;position:relative;margin:0;
   padding:18px 14px;
   border:none;list-style:none;
-  /* Same white → coral → rose → fuchsia sweep as the main content card. */
-  background:linear-gradient(150deg,#FFFFFF 0%,#F7C9B4 34%,#E098A6 68%,#C4568F 100%);
+  /* Same white → coral → rose → plum sweep as the main content card. */
+  background:linear-gradient(150deg,#FFFFFF 0%,#F7C9B4 34%,#E098A6 68%,#7A4F6E 100%);
   border-radius:28px;
   box-shadow:8px 8px 18px rgba(25,32,40,0.28),-8px -8px 18px rgba(255,255,255,0.35),inset 0 1px 0 rgba(255,255,255,0.4);
 }
@@ -354,8 +354,8 @@ body::before{display:none;}
   --clay:#FFDCAA;
 
   flex:1;min-width:0;
-  /* Smooth white → coral → rose → fuchsia sweep (no marbling). */
-  background:linear-gradient(150deg,#FFFFFF 0%,#F7C9B4 34%,#E098A6 68%,#C4568F 100%);
+  /* Smooth white → coral → rose → plum sweep (no marbling). */
+  background:linear-gradient(150deg,#FFFFFF 0%,#F7C9B4 34%,#E098A6 68%,#7A4F6E 100%);
   border:none;
   border-radius:22px;
   padding:36px 36px 64px;
@@ -546,6 +546,13 @@ body::before{display:none;}
 }
 .chevron.open{transform:rotate(180deg);}
 .dlup-controls{display:inline-flex;align-items:center;gap:4px;}
+.btn-icon{position:relative;}
+.btn-icon-tag{
+  position:absolute;bottom:-1px;right:-1px;
+  font-family:var(--font-mono);font-size:6.5px;font-weight:700;
+  letter-spacing:0.02em;line-height:1;padding:1px 2px;border-radius:3px;
+  background:var(--ink);color:#fff;pointer-events:none;
+}
 .field-required{color:var(--danger);font-weight:700;}
 .btn-icon{
   width:26px;height:26px;padding:0;
@@ -2157,6 +2164,18 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
     </button>
   </div>
   <div class="section">
+    <button class="btn-generate" id="printDataBtn" onclick="printAssessmentData()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/></svg>
+      Print Assessment Data
+    </button>
+  </div>
+  <div class="section">
+    <button class="btn-generate" id="printTemplateBtn" onclick="printAssessmentTemplate()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/></svg>
+      Print Blank Assessment Template
+    </button>
+  </div>
+  <div class="section">
     <a class="btn-generate" href="https://www.openevidence.com/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
       OpenEvidence
@@ -3584,6 +3603,8 @@ function buildScreeningCardHTML(key){
     h+=`<div class="scores-out" id="sso_${key}"><div class="sc-note" id="ssn_${key}">Complete items to see scores.</div></div>`;
     h+=`<div class="screening-actions">
       <button class="btn-sm btn-word" onclick="downloadScreeningToolPDF('${key}')">&#8595; Download PDF</button>
+      <button class="btn-sm btn-word" onclick="printScreeningTool('${key}',false)">&#9113; Print</button>
+      <button class="btn-sm btn-word" onclick="printScreeningTool('${key}',true)">&#9113; Print blank</button>
     </div>`;
     h+=`<div class="screening-history" id="sh_${key}">
       <div class="screening-history-head">
@@ -3891,32 +3912,12 @@ function renderMeasureHistory(key){
 // ----------------------------------------------------------------
 // Step 8: Screening Tools — PDF download
 // ----------------------------------------------------------------
-function downloadScreeningToolPDF(measureKey){
+// Screening-measure export body, written into any writer (PDF or printable
+// HTML). `blank` renders an unanswered form for printing and filling by hand.
+function buildScreeningBody(w,measureKey,blank){
   const m=SCREENING_MEASURES[measureKey];
-  if(!m){ alert('Unknown measure.'); return; }
-  if(!m.items.length){ alert('No items configured for this measure.'); return; }
-  const r=screeningResponses[measureKey]||[];
-
-  const { jsPDF } = window.jspdf;
-  const doc=new jsPDF({unit:'pt',format:'letter'});
-  const pageW=doc.internal.pageSize.getWidth();
-  const pageH=doc.internal.pageSize.getHeight();
-  const margin=54;
-  const contentW=pageW-2*margin;
-  let y=margin;
-
-  const ensure=needed=>{ if(y+needed>pageH-margin){doc.addPage();y=margin;} };
-  const writeLine=(text,opts={})=>{
-    const size=opts.size||10, style=opts.style||'normal', indent=opts.indent||0;
-    doc.setFont('helvetica',style);
-    doc.setFontSize(size);
-    if(opts.color) doc.setTextColor(opts.color); else doc.setTextColor(0);
-    const lineH=size*1.3;
-    const lines=doc.splitTextToSize(String(text),contentW-indent);
-    lines.forEach(l=>{ ensure(lineH); doc.text(l,margin+indent,y); y+=lineH; });
-  };
-  const writeBlank=(h=8)=>{ y+=h; };
-  const writeHr=()=>{ ensure(10); doc.setDrawColor(180); doc.line(margin,y,pageW-margin,y); y+=10; };
+  const r=blank?[]:(screeningResponses[measureKey]||[]);
+  const writeLine=w.writeLine, writeBlank=w.writeBlank, writeHr=w.writeHr;
 
   // Header
   writeLine(m.name+' ('+m.abbr+')',{size:16,style:'bold'});
@@ -3947,9 +3948,12 @@ function downloadScreeningToolPDF(measureKey){
   m.items.forEach((item,i)=>{
     const q=typeof item==='string'?item:item.q;
     writeLine((i+1)+'. '+q,{size:10});
-    const resp=r[i];
-    const respText=resp==null?'(no response)':String(resp);
-    writeLine('Response: '+respText,{size:10,style:'italic',indent:18});
+    if(blank){
+      writeLine('Response: '+m.scale.v.join('   '),{size:10,style:'italic',indent:18});
+    } else {
+      const resp=r[i];
+      writeLine('Response: '+(resp==null?'(no response)':String(resp)),{size:10,style:'italic',indent:18});
+    }
     writeBlank(2);
   });
 
@@ -3957,7 +3961,7 @@ function downloadScreeningToolPDF(measureKey){
   writeBlank(6);
   writeLine('SCORES',{size:11,style:'bold'});
   writeHr();
-  const sc=calculateMeasureScore(measureKey,r);
+  const sc=blank?null:calculateMeasureScore(measureKey,r);
   if(sc){
     for(const lbl in sc){
       if(lbl==='_note') continue;
@@ -3968,8 +3972,25 @@ function downloadScreeningToolPDF(measureKey){
     writeLine('No scoring available — complete more items.',{size:10,style:'italic'});
   }
 
+}
+
+function downloadScreeningToolPDF(measureKey){
+  const m=SCREENING_MEASURES[measureKey];
+  if(!m){ alert('Unknown measure.'); return; }
+  if(!m.items.length){ alert('No items configured for this measure.'); return; }
+  const w=newPDFWriter();
+  buildScreeningBody(w,measureKey,false);
   const safeName=m.abbr.replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||measureKey;
-  doc.save(`${safeName}_${todayISO}.pdf`);
+  w.doc.save(`${safeName}_${new Date().toISOString().split('T')[0]}.pdf`);
+}
+
+function printScreeningTool(measureKey,blank){
+  const m=SCREENING_MEASURES[measureKey];
+  if(!m){ alert('Unknown measure.'); return; }
+  if(!m.items.length){ alert('No items configured for this measure yet.'); return; }
+  const w=newHTMLWriter();
+  buildScreeningBody(w,measureKey,!!blank);
+  openPrintWindow(m.name,w.html());
 }
 
 const intakeFormState={
@@ -4677,6 +4698,13 @@ function dlUploadControls(mod,key){
   return `<span class="dlup-controls" onclick="event.stopPropagation()">
     <button type="button" class="btn-icon" title="Download this measure as a PDF" onclick="downloadMeasurePDF('${mod}','${key}')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+    </button>
+    <button type="button" class="btn-icon" title="Print this measure with the responses entered" onclick="printMeasure('${mod}','${key}',false)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/></svg>
+    </button>
+    <button type="button" class="btn-icon" title="Print a blank copy of this measure" onclick="printMeasure('${mod}','${key}',true)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/><path d="M14 11l6 6m0-6l-6 6" stroke-width="1.4" opacity="0"/></svg>
+      <span class="btn-icon-tag">blank</span>
     </button>
     <button type="button" class="btn-icon" title="Upload a previously-downloaded PDF to restore responses" onclick="document.getElementById('upl_${mid}').click()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V8m0 0l-4 4m4-4l4 4M5 3h14"/></svg>
@@ -5960,6 +5988,90 @@ function newPDFWriter(){
   return {doc,ensure,writeLine,writeBlank,writeMultiline,writeHr,sectionHeader,subHeader,titleBlock};
 }
 
+// ================================================================
+// PRINT — mirrors newPDFWriter's interface so every writeMeasureBody /
+// writeMeasureBodyTemplate / writeUniversalBody path can render to a clean
+// printable page with no duplicated per-measure-type logic, and with no
+// dependency on the jsPDF CDN bundle.
+// ================================================================
+function newHTMLWriter(){
+  const parts=[];
+  const esc=s=>String(s==null?'':s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const writeLine=(text,opts={})=>{
+    const size=(opts.size||10)+2, style=opts.style||'normal', indent=opts.indent||0;
+    let css=`margin-left:${indent}px;font-size:${size}px;line-height:1.45;`;
+    if(style==='bold')css+='font-weight:700;';
+    if(style==='italic')css+='font-style:italic;';
+    parts.push(`<div style="${css}">${esc(text)||'&nbsp;'}</div>`);
+  };
+  const writeBlank=(h=8)=>parts.push(`<div style="height:${h}px"></div>`);
+  const writeMultiline=(text,opts={})=>{
+    String(text==null?'':text).split('\n').forEach(l=>{
+      if(l.trim()==='')writeBlank(4); else writeLine(l,opts);
+    });
+  };
+  const writeHr=()=>parts.push('<hr style="border:none;border-top:1px solid #c9c9c9;margin:7px 0">');
+  const sectionHeader=t=>{
+    writeBlank(10);
+    parts.push(`<h2 style="font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px">${esc(t)}</h2>`);
+    writeHr();
+  };
+  const subHeader=t=>{
+    writeBlank(6);
+    parts.push(`<h3 style="font-size:12.5px;font-weight:700;margin:0 0 3px">${esc(t)}</h3>`);
+  };
+  const titleBlock=t=>{
+    parts.push(`<h1 style="font-size:19px;font-weight:700;margin:0 0 6px">${esc(t)}</h1>`);
+    [CLINICIAN_INFO.practice,
+     CLINICIAN_INFO.name+' — License '+CLINICIAN_INFO.license,
+     CLINICIAN_INFO.location].forEach(l=>writeLine(l,{size:10}));
+    writeBlank(4);
+    writeLine('Exported: '+new Date().toLocaleString(),{size:10});
+    const c=(document.getElementById('clientName')?.value||'').trim();
+    if(c)writeLine('Client: '+c,{size:10});
+    writeHr();
+  };
+  return {parts,writeLine,writeBlank,writeMultiline,writeHr,sectionHeader,subHeader,titleBlock,
+    html(){return parts.join('');}};
+}
+
+// Opens the rendered content in its own window and triggers the print dialog.
+function openPrintWindow(title,bodyHTML){
+  const win=window.open('','_blank');
+  if(!win){alert('Please allow pop-ups for this site to print.');return;}
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8">
+    <title>${String(title).replace(/[<>]/g,'')}</title>
+    <style>
+      @page{margin:0.6in;}
+      body{font-family:Helvetica,Arial,sans-serif;color:#111;margin:0;padding:24px;}
+      h1,h2,h3{font-family:Helvetica,Arial,sans-serif;}
+      hr{page-break-after:avoid;}
+      h2,h3{page-break-after:avoid;}
+      @media print{body{padding:0;}}
+    </style></head><body>${bodyHTML}</body></html>`);
+  win.document.close();
+  win.focus();
+  // Give the new document a tick to lay out before the dialog opens.
+  setTimeout(()=>{try{win.print();}catch(e){}},250);
+}
+
+// Print one measure — filled responses when blank=false, an empty form when true.
+function printMeasure(mod,key,blank){
+  const isUniversal=mod==='UNIVERSAL';
+  const m=isUniversal?UNIVERSAL[key]:M[mod][key];
+  if(!m)return;
+  const w=newHTMLWriter();
+  w.titleBlock(m.name+' ('+m.abbr+')'+(blank?' — blank form':''));
+  w.writeBlank(4);
+  if(isUniversal){
+    if(blank)writeUniversalBodyTemplate(w,key); else writeUniversalBody(w,key);
+  } else {
+    if(blank)writeMeasureBodyTemplate(w,mod,key); else writeMeasureBody(w,mod,key);
+  }
+  openPrintWindow(m.name,w.html());
+}
+
 function safeFileToken(s,fallback){
   return (s||'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||fallback;
 }
@@ -6246,13 +6358,13 @@ function writeUniversalBody(w,key){
   }
 }
 
-function downloadAssessmentDataPDF(){
+// Builds the whole-assessment export into any writer (PDF or printable HTML).
+function buildAssessmentDataBody(w){
   const v=id=>document.getElementById(id)?.value||'';
   const clientNameRaw=v('clientName').trim();
   const dob=v('dob');let age='';
   if(dob){const d=Date.now()-new Date(dob).getTime();age=Math.abs(new Date(d).getUTCFullYear()-1970);}
 
-  const w=newPDFWriter();
   w.titleBlock('Assessment Data Export');
 
   let anyDataAtAll=false;
@@ -6327,8 +6439,20 @@ function downloadAssessmentDataPDF(){
     w.writeLine('No assessment data has been entered yet.',{size:11,style:'italic'});
   }
 
+  return clientNameRaw;
+}
+
+function downloadAssessmentDataPDF(){
+  const w=newPDFWriter();
+  const clientNameRaw=buildAssessmentDataBody(w);
   const todayISO=new Date().toISOString().split('T')[0];
   w.doc.save(`Assessment_Data_${safeFileToken(clientNameRaw,'Client')}_${todayISO}.pdf`);
+}
+
+function printAssessmentData(){
+  const w=newHTMLWriter();
+  buildAssessmentDataBody(w);
+  openPrintWindow('Assessment Data',w.html());
 }
 
 // ================================================================
@@ -6457,8 +6581,7 @@ function writeUniversalBodyTemplate(w,key){
   }
 }
 
-function downloadAssessmentTemplatePDF(){
-  const w=newPDFWriter();
+function buildAssessmentTemplateBody(w){
   w.titleBlock('Assessment Template');
   w.writeBlank(4);
   w.writeLine('Blank template for the currently selected modules — print and fill in by hand, or use as an intake worksheet.',{size:9,style:'italic'});
@@ -6506,8 +6629,19 @@ function downloadAssessmentTemplatePDF(){
   w.writeBlank(20);
   w.writeHr();
 
+}
+
+function downloadAssessmentTemplatePDF(){
+  const w=newPDFWriter();
+  buildAssessmentTemplateBody(w);
   const todayISO=new Date().toISOString().split('T')[0];
   w.doc.save(`Assessment_Template_${todayISO}.pdf`);
+}
+
+function printAssessmentTemplate(){
+  const w=newHTMLWriter();
+  buildAssessmentTemplateBody(w);
+  openPrintWindow('Assessment Template',w.html());
 }
 
 // ================================================================
