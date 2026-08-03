@@ -546,13 +546,6 @@ body::before{display:none;}
 }
 .chevron.open{transform:rotate(180deg);}
 .dlup-controls{display:inline-flex;align-items:center;gap:4px;}
-.btn-icon{position:relative;}
-.btn-icon-tag{
-  position:absolute;bottom:-1px;right:-1px;
-  font-family:var(--font-mono);font-size:6.5px;font-weight:700;
-  letter-spacing:0.02em;line-height:1;padding:1px 2px;border-radius:3px;
-  background:var(--ink);color:#fff;pointer-events:none;
-}
 .field-required{color:var(--danger);font-weight:700;}
 .btn-icon{
   width:26px;height:26px;padding:0;
@@ -2170,12 +2163,6 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
     </button>
   </div>
   <div class="section">
-    <button class="btn-generate" id="printTemplateBtn" onclick="printAssessmentTemplate()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/></svg>
-      Print Blank Assessment Template
-    </button>
-  </div>
-  <div class="section">
     <a class="btn-generate" href="https://www.openevidence.com/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
       OpenEvidence
@@ -3603,8 +3590,7 @@ function buildScreeningCardHTML(key){
     h+=`<div class="scores-out" id="sso_${key}"><div class="sc-note" id="ssn_${key}">Complete items to see scores.</div></div>`;
     h+=`<div class="screening-actions">
       <button class="btn-sm btn-word" onclick="downloadScreeningToolPDF('${key}')">&#8595; Download PDF</button>
-      <button class="btn-sm btn-word" onclick="printScreeningTool('${key}',false)">&#9113; Print</button>
-      <button class="btn-sm btn-word" onclick="printScreeningTool('${key}',true)">&#9113; Print blank</button>
+      <button class="btn-sm btn-word" onclick="printScreeningTool('${key}')">&#9113; Print</button>
     </div>`;
     h+=`<div class="screening-history" id="sh_${key}">
       <div class="screening-history-head">
@@ -3984,12 +3970,12 @@ function downloadScreeningToolPDF(measureKey){
   w.doc.save(`${safeName}_${new Date().toISOString().split('T')[0]}.pdf`);
 }
 
-function printScreeningTool(measureKey,blank){
+function printScreeningTool(measureKey){
   const m=SCREENING_MEASURES[measureKey];
   if(!m){ alert('Unknown measure.'); return; }
   if(!m.items.length){ alert('No items configured for this measure yet.'); return; }
   const w=newHTMLWriter();
-  buildScreeningBody(w,measureKey,!!blank);
+  buildScreeningBody(w,measureKey,false);
   openPrintWindow(m.name,w.html());
 }
 
@@ -4699,12 +4685,8 @@ function dlUploadControls(mod,key){
     <button type="button" class="btn-icon" title="Download this measure as a PDF" onclick="downloadMeasurePDF('${mod}','${key}')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
     </button>
-    <button type="button" class="btn-icon" title="Print this measure with the responses entered" onclick="printMeasure('${mod}','${key}',false)">
+    <button type="button" class="btn-icon" title="Print this measure with the responses entered" onclick="printMeasure('${mod}','${key}')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/></svg>
-    </button>
-    <button type="button" class="btn-icon" title="Print a blank copy of this measure" onclick="printMeasure('${mod}','${key}',true)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/><path d="M14 11l6 6m0-6l-6 6" stroke-width="1.4" opacity="0"/></svg>
-      <span class="btn-icon-tag">blank</span>
     </button>
     <button type="button" class="btn-icon" title="Upload a previously-downloaded PDF to restore responses" onclick="document.getElementById('upl_${mid}').click()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V8m0 0l-4 4m4-4l4 4M5 3h14"/></svg>
@@ -6056,19 +6038,15 @@ function openPrintWindow(title,bodyHTML){
   setTimeout(()=>{try{win.print();}catch(e){}},250);
 }
 
-// Print one measure — filled responses when blank=false, an empty form when true.
-function printMeasure(mod,key,blank){
+// Print one measure with the responses entered.
+function printMeasure(mod,key){
   const isUniversal=mod==='UNIVERSAL';
   const m=isUniversal?UNIVERSAL[key]:M[mod][key];
   if(!m)return;
   const w=newHTMLWriter();
-  w.titleBlock(m.name+' ('+m.abbr+')'+(blank?' — blank form':''));
+  w.titleBlock(m.name+' ('+m.abbr+')');
   w.writeBlank(4);
-  if(isUniversal){
-    if(blank)writeUniversalBodyTemplate(w,key); else writeUniversalBody(w,key);
-  } else {
-    if(blank)writeMeasureBodyTemplate(w,mod,key); else writeMeasureBody(w,mod,key);
-  }
+  if(isUniversal) writeUniversalBody(w,key); else writeMeasureBody(w,mod,key);
   openPrintWindow(m.name,w.html());
 }
 
@@ -6638,11 +6616,6 @@ function downloadAssessmentTemplatePDF(){
   w.doc.save(`Assessment_Template_${todayISO}.pdf`);
 }
 
-function printAssessmentTemplate(){
-  const w=newHTMLWriter();
-  buildAssessmentTemplateBody(w);
-  openPrintWindow('Assessment Template',w.html());
-}
 
 // ================================================================
 // PER-MEASURE DOWNLOAD / UPLOAD — round-trips a single measure's
