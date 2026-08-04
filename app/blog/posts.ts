@@ -11,6 +11,12 @@ export const posts: BlogPost[] = [
     date: "July 2026",
     blocks: [
       {
+        type: "image",
+        src: "/images/friendship-taxonomy.svg",
+        alt: "A taxonomy of friendship styles: depth of exchange on the vertical axis, commitment and continuity on the horizontal, with thirteen friendship positions sorted into four quadrants.",
+        caption: "A taxonomy of friendship styles — depth × continuity, with motivational signature and attachment-style home ground.",
+      },
+      {
         type: "paragraph",
         dropCap: true,
         text: "A client told me recently that she had eleven friends and was lonely, and that she could not work out whether that made her ungrateful or broken. She listed them for me. A woman she texts every day. Two people from graduate school she sees twice a year and loves. A neighbor she has had four extraordinary conversations with on the front steps and never once seen indoors. Her sister-in-law. A running group.",
@@ -93,12 +99,6 @@ export const posts: BlogPost[] = [
       {
         type: "paragraph",
         text: "Which is to say: depth is what supplies the pleasure. Commitment is only what makes obligation structurally possible. You cannot feel obligated to someone you have no ongoing tie to. You also cannot get pleasure out of continuity alone. Drain the depth from a committed friendship and keep the structure, and you have manufactured a duty friend.",
-      },
-      {
-        type: "image",
-        src: "/images/friendship-taxonomy.svg",
-        alt: "A taxonomy of friendship styles: depth of exchange on the vertical axis, commitment and continuity on the horizontal, with thirteen friendship positions sorted into four quadrants.",
-        caption: "A taxonomy of friendship styles — depth × continuity, with motivational signature and attachment-style home ground.",
       },
       { type: "heading", text: "Two fuels, and they do not substitute" },
       {
