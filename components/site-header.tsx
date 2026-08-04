@@ -6,8 +6,12 @@ import { OliveLockup } from "@/components/olive-logo"
 export function SiteHeader() {
   return (
     <header
-      className="no-print w-full border-b border-[rgba(11,37,69,0.10)]"
-      style={{ background: "var(--paper)" }}
+      className="no-print w-full border-b border-[rgba(11,37,69,0.10)] sticky top-0 z-50"
+      style={{
+        background: "rgba(239,234,224,0.72)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+      }}
     >
       <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 py-4 sm:py-5 flex items-center gap-4">
         {/* Left: lockup */}

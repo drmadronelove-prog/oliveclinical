@@ -1,4 +1,5 @@
 import React from "react"
+import { ExpandableImage } from "@/components/blog/expandable-image"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -9,6 +10,7 @@ export type Block =
   | { type: "footer-note"; text: string }
   | { type: "callout"; heading: string; text: string }
   | { type: "list"; items: string[] }
+  | { type: "image"; src: string; alt?: string; caption?: string }
 
 export type BlogPost = {
   slug: string
@@ -220,6 +222,16 @@ export function BlogPostArticle({ post }: { post: BlogPost }) {
                     </li>
                   ))}
                 </ul>
+              )
+
+            case "image":
+              return (
+                <ExpandableImage
+                  key={i}
+                  src={block.src}
+                  alt={block.alt}
+                  caption={block.caption}
+                />
               )
 
             default:
