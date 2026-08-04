@@ -376,7 +376,41 @@ body::before{display:none;}
   }
   .tab-btn.active::before{display:none;}
   .content-main{margin-top:0;border-radius:var(--radius);}
+  .side-panel{width:100%;position:static;max-height:none;}
 }
+
+/* ── Persistent right-side panel: Notes / Progress / Timer ─────── */
+.side-panel{
+  width:280px;flex-shrink:0;
+  position:sticky;top:120px;
+  align-self:flex-start;
+  display:flex;flex-direction:column;gap:16px;
+  max-height:calc(100vh - 140px);
+  overflow-y:auto;
+  padding:0 0 40px 0;
+  z-index:4;
+}
+@media(max-width:1100px){
+  .side-panel{width:240px;}
+}
+.side-widget{
+  background:var(--surface,#fff);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:4px 4px 10px rgba(25,32,40,0.18),-4px -4px 10px rgba(255,255,255,0.5);
+  flex-shrink:0;
+}
+.side-widget h4{
+  margin:0 0 10px;
+  font-family:var(--font-display);
+  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--primary);
+}
+.side-widget textarea{width:100%;min-height:130px;resize:vertical;font-size:13px;}
+.side-widget-incomplete{list-style:none;margin:8px 0 0;padding:0;font-size:11px;color:var(--ink-muted);max-height:140px;overflow-y:auto;}
+.side-widget-incomplete li{padding:3px 0;border-bottom:1px solid rgba(0,0,0,0.08);}
+.timer-value{font-family:var(--font-mono);font-size:24px;font-weight:700;color:var(--ink);}
+.timer-sub{font-size:11px;color:var(--ink-muted);margin-top:4px;}
 
 /* ── Placeholder cards ─────────────────────────── */
 .placeholder-card{text-align:center;padding:48px 24px;}
@@ -598,7 +632,9 @@ body::before{display:none;}
   box-shadow:var(--neu-in-sm);
   padding:4px;
   gap:4px;
+  position:sticky;top:130px;z-index:6;
 }
+@media(max-width:840px){.scale-legend{position:static;}}
 .scale-leg{
   flex:1;text-align:center;
   padding:8px 4px;font-size:11px;
@@ -1522,6 +1558,16 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
         <div class="field"><label>First Name</label><input type="text" id="ci_firstname" placeholder="First name"></div>
         <div class="field"><label>Date of Birth</label><input type="date" id="ci_dob"></div>
         <div class="field"><label>Pronouns</label><input type="text" id="ci_pronouns" placeholder="she/her, they/them..."></div>
+        <div class="field"><label>Gender</label>
+          <select id="ci_gender">
+            <option value="">—</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Trans male">Trans male</option>
+            <option value="Trans female">Trans female</option>
+            <option value="Nonbinary">Nonbinary</option>
+          </select>
+        </div>
         <div class="field"><label>Email</label><input type="email" id="ci_email" placeholder="email@example.com"></div>
         <div class="field"><label>Phone Number</label><input type="tel" id="ci_phone" placeholder="(555) 123-4567"></div>
         <div class="field span-2" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
@@ -2086,6 +2132,18 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 
 <div class="tab-pane" id="tab-diagnostic">
   <div class="section">
+    <div class="section-label">Assessment Introduction</div>
+    <div class="card">
+      <p class="bt-intro">Before we begin, I want to explain what you can expect today.</p>
+      <p class="bt-intro">I will be asking you a number of personal questions. Please answer as openly and accurately as you can. You do not need to be certain about every answer, and it is okay to ask for clarification. The more complete the information you provide, the more accurate and useful the final report is likely to be.</p>
+      <p class="bt-intro">Some parts of the assessment may feel uncomfortable because of the topics we discuss and because the process requires sustained concentration over several hours. We have scheduled breaks, but please let me know at any point if you need an additional break.</p>
+      <p class="bt-intro">You are welcome to drink water, eat snacks, change positions, stand, or use a fidget during the assessment. Please do what helps you feel comfortable and able to participate, within reasonable limits.</p>
+      <p class="bt-intro">The assessment will take approximately four hours. Your report will be returned within seven business days. It will include a diagnostic evaluation focused on ADHD and autism symptoms. It will also consider whether other conditions may better explain your symptoms or may be occurring alongside them.</p>
+      <p class="bt-intro">This is a diagnostic evaluation, not a comprehensive neuropsychological assessment.</p>
+      <p class="bt-intro"><strong>Do you have any questions before we begin?</strong></p>
+    </div>
+  </div>
+  <div class="section">
     <div class="section-label">Diagnostic Categories</div>
     <div class="card">
       <div class="field">
@@ -2126,6 +2184,16 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
         <div class="field"><label>Date of Evaluation</label><input type="date" id="evalDate"></div>
         <div class="field"><label>Date of Birth</label><input type="date" id="dob"></div>
         <div class="field"><label>Pronouns</label><input type="text" id="pronouns" placeholder="she/her, they/them..."></div>
+        <div class="field"><label>Gender</label>
+          <select id="gender">
+            <option value="">—</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Trans male">Trans male</option>
+            <option value="Trans female">Trans female</option>
+            <option value="Nonbinary">Nonbinary</option>
+          </select>
+        </div>
         <div class="field"><label>Referral Source</label><input type="text" id="referralSource" placeholder="Self-referred, therapist..."></div>
         <div class="field"><label>Language Preference</label>
           <select id="languagePref">
@@ -2167,6 +2235,13 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
       OpenEvidence
     </a>
+  </div>
+  <div class="section" id="reportGateSection" style="margin-top:36px;display:none;">
+    <div class="section-label">Required Measures Incomplete</div>
+    <div class="card">
+      <p class="bt-intro">The report cannot be generated until every required self-report measure below has been completed on the Diagnostic Assessment tab.</p>
+      <ul class="side-widget-incomplete" id="reportGateList" style="font-size:13px;"></ul>
+    </div>
   </div>
   <div class="section" style="margin-top:36px;">
     <button class="btn-generate" id="generateBtn" onclick="generateReport()">
@@ -2389,6 +2464,27 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 </div>
 
 </main>
+
+<aside class="side-panel">
+  <div class="side-widget">
+    <h4>Notes</h4>
+    <textarea id="notesWidget" placeholder="Notes while completing the assessment…"></textarea>
+  </div>
+  <div class="side-widget">
+    <h4>Assessment Progress</h4>
+    <div class="progress-bar"><div class="progress-fill" id="spwFill" style="width:0%"></div></div>
+    <div class="bt-progress-label" id="spwLabel">Select modules to begin</div>
+    <ul class="side-widget-incomplete" id="spwIncomplete"></ul>
+  </div>
+  <div class="side-widget">
+    <h4>Timer</h4>
+    <div class="timer-value" id="timerElapsed">0:00</div>
+    <div class="timer-sub" id="timerStatus">Paused</div>
+    <div class="timer-sub" id="timerRemaining">Est. remaining: —</div>
+    <button type="button" class="btn-cancel" style="margin-top:8px;font-size:11px;padding:6px 12px;" onclick="resetTimer()">Reset timer</button>
+  </div>
+</aside>
+
 </div><!-- /.app-layout -->
 </div><!-- /.wrap -->
 
@@ -2427,6 +2523,76 @@ function makeMiniAnswerSheet(){
     name:"M.I.N.I. — Structured Interview Answer Sheet",abbr:"MINI",type:"answersheet",category:"mini_as",
     note:"Scoring sheet — item codes with N/Y response fields, current- and past-episode columns where the instrument uses them, short clinical qualifier probes, and a meets-criteria outcome block at the end of each module. Administer using your own licensed copy of the M.I.N.I. (Sheehan et al., DSM-5), which contains the actual item wording, skip logic, and scoring rules; the qualifier probes here are standard clinical differentiators in plain language, not transcriptions of the instrument.",
     sections:MINI_AS_SECTIONS
+  };
+}
+
+// Columbia Suicide Severity Rating Scale (Posner et al.; NIMH-funded, public
+// domain, free for clinical use). Rendered first in every assessment stack,
+// ahead of Developmental History, so risk is screened before anything else.
+function makeCSSRS(){
+  return {
+    name:"Columbia Suicide Severity Rating Scale",abbr:"C-SSRS",type:"interview",category:"cssrs",
+    primary:true,reporter:"other",
+    note:"Clinician-administered. Ask each ideation question in order; if a question is answered No, you may skip to the next section as clinically indicated. Rate intensity for the most severe ideation type endorsed. Ask about lifetime history and, separately, the past 3 months for the behavior section.",
+    sections:[
+      {id:"ideation",label:"Suicidal Ideation",items:[
+        {id:"wish",q:"1. Wish to be Dead — Have you wished you were dead or wished you could go to sleep and not wake up? Yes/No — if yes, describe:"},
+        {id:"nonspecific",q:"2. Non-Specific Active Suicidal Thoughts — Have you actually had any thoughts of killing yourself? Yes/No — if yes, describe:"},
+        {id:"method_no_plan",q:"3. Active Suicidal Ideation with Any Methods (Not Plan) without Intent to Act — Have you been thinking about how you might do this, e.g. taken pills, jumped from a height? Yes/No — if yes, describe method, confirm no intent to act:"},
+        {id:"some_intent",q:"4. Active Suicidal Ideation with Some Intent to Act, without Specific Plan — Have you had these thoughts and had some intention of acting on them? Yes/No — if yes, describe:"},
+        {id:"plan_intent",q:"5. Active Suicidal Ideation with Specific Plan and Intent — Have you started to work out or worked out the details of how to kill yourself, and do you intend to carry out this plan? Yes/No — if yes, describe plan and intent:"}
+      ]},
+      {id:"intensity",label:"Intensity of Ideation (rate for the most severe type endorsed above)",items:[
+        {id:"frequency",q:"Frequency — 1 Less than once a week / 2 Once a week / 3 2–5 times a week / 4 Daily or almost daily / 5 Many times each day. Rating and detail:"},
+        {id:"duration",q:"Duration — 1 Fleeting, few seconds/minutes / 2 Less than 1 hour/some of the time / 3 1–4 hours/a lot of time / 4 4–8 hours/most of day / 5 More than 8 hours/persistent or continuous. Rating and detail:"},
+        {id:"controllability",q:"Controllability — 0 Does not attempt to control thoughts / 1 Easily able to control / 2 Little difficulty / 3 Some difficulty / 4 A lot of difficulty / 5 Unable to control thoughts. Rating and detail:"},
+        {id:"deterrents",q:"Deterrents (e.g., family, religion, pain of death) — 0 Does not apply / 1 Definitely stopped / 2 Probably stopped / 3 Uncertain / 4 Most likely did not stop / 5 Definitely did not stop. Rating and detail:"},
+        {id:"reasons",q:"Reasons for Ideation — to end/stop the pain vs. to get attention/revenge/reaction from others — 0 Does not apply / 1 Completely attention-revenge-reaction / 2 Mostly attention-revenge-reaction / 3 Equally both / 4 Mostly to end/stop pain / 5 Completely to end/stop pain. Rating and detail:"}
+      ]},
+      {id:"behavior",label:"Suicidal Behavior — Lifetime and Past 3 Months",items:[
+        {id:"actual_attempt",q:"Actual Attempt — potentially self-injurious act committed with at least some intent to die (intent need not be 100%). Lifetime: Yes/No. Past 3 months: Yes/No. Describe (method, medical outcome, interrupted by self or other):"},
+        {id:"interrupted",q:"Interrupted Attempt — outside circumstance stopped the person from starting the potentially self-injurious act. Lifetime: Yes/No. Past 3 months: Yes/No. Describe:"},
+        {id:"aborted",q:"Aborted or Self-Interrupted Attempt — person began steps toward an attempt but stopped themselves before any self-destructive behavior occurred. Lifetime: Yes/No. Past 3 months: Yes/No. Describe:"},
+        {id:"preparatory",q:"Preparatory Acts or Behavior — e.g., collecting pills, obtaining a means, giving away possessions, writing a note. Lifetime: Yes/No. Past 3 months: Yes/No. Describe:"},
+        {id:"totals_dates",q:"Total number of lifetime attempts / attempts in past 3 months. Date of most recent attempt / most lethal attempt / first (initial) attempt:"}
+      ]},
+      {id:"lethality",label:"Lethality of Suicidal Behavior (most lethal lifetime attempt)",items:[
+        {id:"actual_lethality",q:"Actual Lethality/Medical Damage — 0 No/very minor physical damage / 1 Minor (e.g., surface scratches, mild bleeding) / 2 Moderate, medical attention needed / 3 Moderately severe, hospitalization/intensive care likely / 4 Severe, hospitalization with intensive care required / 5 Death. Rating and detail:"},
+        {id:"potential_lethality",q:"Potential Lethality — rate only if actual lethality = 0 — 0 Behavior not likely to result in injury / 1 Likely to result in injury but not death / 2 Likely to result in death despite available medical care. Rating and detail:"}
+      ]},
+      {id:"risk_summary",label:"Clinician Risk Summary",items:[
+        {id:"risk_level",q:"Overall Risk Level (Low / Moderate / High) and clinical rationale, integrating ideation severity/intensity, behavior history, protective factors, and access to means:"},
+        {id:"protective",q:"Protective factors identified:"},
+        {id:"disposition",q:"Safety plan / disposition (e.g., safety plan created, means-restriction counseling, higher level of care, outpatient follow-up):"}
+      ]}
+    ]
+  };
+}
+
+// Mental Status Exam — standard clinical-observation domains. Rendered last in
+// every assessment stack, after all self/other-report measures, so it reflects
+// the clinician's observations across the full assessment.
+function makeMSE(){
+  return {
+    name:"Mental Status Exam",abbr:"MSE",type:"interview",category:"mse",
+    primary:true,reporter:"other",
+    note:"Clinician observation, completed at the conclusion of the assessment based on presentation across the full session.",
+    sections:[
+      {id:"observations",label:"Mental Status Observations",items:[
+        {id:"appearance",q:"Appearance — grooming, hygiene, dress, apparent vs. stated age, distinguishing features:"},
+        {id:"behavior",q:"Behavior / Psychomotor Activity — eye contact, cooperation, activity level, abnormal movements, gait:"},
+        {id:"speech",q:"Speech — rate, volume, tone, fluency, articulation, spontaneity:"},
+        {id:"mood",q:"Mood (client's stated internal emotional state, in their own words):"},
+        {id:"affect",q:"Affect — range, appropriateness, congruence with mood, intensity, stability:"},
+        {id:"thought_process",q:"Thought Process — linear/goal-directed, tangential, circumstantial, flight of ideas, loose associations, thought blocking, perseveration:"},
+        {id:"thought_content",q:"Thought Content — preoccupations, delusions, obsessions, suicidal/homicidal ideation (cross-reference C-SSRS), overvalued ideas:"},
+        {id:"perception",q:"Perceptual Disturbances — hallucinations (auditory/visual/other), illusions, depersonalization/derealization:"},
+        {id:"cognition",q:"Cognition — orientation (person/place/time/situation), attention/concentration, memory (immediate/recent/remote), fund of knowledge, abstract reasoning:"},
+        {id:"insight",q:"Insight — awareness of symptoms/condition and need for treatment:"},
+        {id:"judgment",q:"Judgment — decision-making capacity, ability to anticipate consequences, impulse control:"},
+        {id:"rapport",q:"Rapport and Reliability — quality of clinical rapport established, estimated reliability of self-report:"}
+      ]}
+    ]
   };
 }
 
@@ -2526,7 +2692,9 @@ function makeDiva5(){
 
 const M = {
 ADHD:{
+  cssrs:makeCSSRS(),
   mini_as:makeMiniAnswerSheet(),
+  mse:makeMSE(),
   caars:{
     name:"Conners Adult ADHD Rating Scales (CAARS)",abbr:"CAARS",type:"entry",
     note:"MHS licensed measure. Administered pre-session. Enter T-scores from Self-Report form and Observer form if available. T ≥65 elevated (>1.5 SD); T ≥70 markedly elevated (>2 SD).",
@@ -2610,7 +2778,9 @@ ADHD:{
   }
 },
 Autism:{
+  cssrs:makeCSSRS(),
   mini_as:makeMiniAnswerSheet(),
+  mse:makeMSE(),
   rmet:{
     name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:true,reporter:"self",rowColor:"red",manualComplete:true,
     note:"Baron-Cohen et al. (2001), Autism Research Centre, University of Cambridge. The RMET's 36 items are copyrighted photographic stimuli (black-and-white photographs of the eye region, each with 4 forced-choice mental-state words) — the images themselves are the licensed test content and cannot be reproduced here. Administer the official stimulus set/booklet or licensed digital version separately, then enter the resulting score. Adult norms: general population mean ≈26/36; autistic-sample mean ≈21/36. No single validated clinical cutoff — interpret relative to population norms and convergent evidence.",
@@ -2628,8 +2798,7 @@ Autism:{
     fields:[
       {id:"srs2SelfTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
       {id:"srs2SelfSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
-      {id:"srs2SelfRRB",l:"Restricted Interests & Repetitive Behavior",h:"subscale T-score"},
-      {id:"srs2SelfDMC",l:"DSM-5 Compatible Score",h:"if reported"}
+      {id:"srs2SelfRRB",l:"Restricted Interests & Repetitive Behavior",h:"subscale T-score"}
     ]
   },
   pai:{
@@ -2927,7 +3096,9 @@ Autism:{
   }
 },
 OCD:{
+  cssrs:makeCSSRS(),
   mini_as:makeMiniAnswerSheet(),
+  mse:makeMSE(),
   ocd_ci:{
     name:"OCD Clinical Interview",abbr:"OCD CI",type:"interview",
     sections:[
@@ -3101,7 +3272,9 @@ OCD:{
   }
 },
 GAD:{
+  cssrs:makeCSSRS(),
   mini_as:makeMiniAnswerSheet(),
+  mse:makeMSE(),
   gad_ci:{
     name:"GAD Clinical Interview",abbr:"GAD CI",type:"interview",
     sections:[
@@ -3162,7 +3335,9 @@ GAD:{
   }
 },
 PTSD:{
+  cssrs:makeCSSRS(),
   mini_as:makeMiniAnswerSheet(),
+  mse:makeMSE(),
   caps5:{
     name:"Clinician-Administered PTSD Scale for DSM-5",abbr:"CAPS-5",type:"clinician",
     note:"National Center for PTSD — free for clinical use. Rate each item 0–4 based on severity over the past month, combining frequency and intensity. 0=Absent, 1=Mild/subthreshold, 2=Moderate/threshold, 3=Severe, 4=Extreme/incapacitating. Threshold: total ≥25 probable PTSD.",
@@ -4303,8 +4478,9 @@ function switchTab(tab,btn){
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
-  if(tab==='report')renderReportModules();
+  if(tab==='report'){renderReportModules();if(typeof refreshReportGateStatus==='function')refreshReportGateStatus();}
   rebuildRightNav();
+  if(typeof scheduleProgressUpdate==='function') scheduleProgressUpdate();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -4379,7 +4555,7 @@ function toggleUniversal(btn){
 let CLIENTS=[]; // [{id, lastname, firstname, dob, pronouns, email, phone}]
 let ACTIVE_CLIENT_ID=null;
 
-const CI_FIELDS=['ci_lastname','ci_firstname','ci_dob','ci_pronouns','ci_email','ci_phone'];
+const CI_FIELDS=['ci_lastname','ci_firstname','ci_dob','ci_pronouns','ci_gender','ci_email','ci_phone'];
 
 function loadClients(){
   try{
@@ -4421,7 +4597,7 @@ function updateActiveClientHeader(){
   else{el.textContent='No client selected';el.classList.add('empty');}
 }
 function fillClientForm(c){
-  const map={ci_lastname:'lastname',ci_firstname:'firstname',ci_dob:'dob',ci_pronouns:'pronouns',ci_email:'email',ci_phone:'phone'};
+  const map={ci_lastname:'lastname',ci_firstname:'firstname',ci_dob:'dob',ci_pronouns:'pronouns',ci_gender:'gender',ci_email:'email',ci_phone:'phone'};
   Object.entries(map).forEach(([id,key])=>{
     const el=document.getElementById(id);
     if(el)el.value=c?(c[key]||''):'';
@@ -4433,6 +4609,7 @@ function readClientForm(){
     firstname:document.getElementById('ci_firstname').value.trim(),
     dob:document.getElementById('ci_dob').value,
     pronouns:document.getElementById('ci_pronouns').value.trim(),
+    gender:document.getElementById('ci_gender').value,
     email:document.getElementById('ci_email').value.trim(),
     phone:document.getElementById('ci_phone').value.trim()
   };
@@ -4504,7 +4681,15 @@ function initClientInfo(){
       if(dst&&id==='ci_dob')dst.value=el.value;
       const pdst=document.getElementById('pronouns');
       if(pdst&&id==='ci_pronouns')pdst.value=el.value;
+      const gdst=document.getElementById('gender');
+      if(gdst&&id==='ci_gender')gdst.value=el.value;
     });
+    if(id==='ci_gender'){
+      el.addEventListener('change',()=>{
+        const gdst=document.getElementById('gender');
+        if(gdst)gdst.value=el.value;
+      });
+    }
   });
 }
 
@@ -4576,6 +4761,232 @@ function onDxToggle(cb){
     renderMeasures();
   }
   updateDxMsLabel();
+  scheduleProgressUpdate();
+}
+
+// ----------------------------------------------------------------
+// Right-side panel — Notes / Assessment Progress / Timer
+// ----------------------------------------------------------------
+
+// Estimated completion minutes for one measure. Uses an explicit m.estMin
+// when a measure defines one; otherwise estimates from item/field/section
+// counts using typical per-item administration time, so every measure —
+// including ones added later — contributes proportionally to progress
+// without needing to be hand-annotated.
+function estMeasureMinutes(m){
+  if(typeof m.estMin==='number') return m.estMin;
+  if(m.type==='diva5') return 60;
+  if(m.type==='answersheet') return 45;
+  if(m.category==='cssrs') return 15;
+  if(m.category==='mse') return 10;
+  if(m.type==='interview'){
+    const n=(m.sections||[]).reduce((s,sec)=>s+(sec.items?sec.items.length:1),0);
+    return Math.max(5,Math.round(n*1.5));
+  }
+  if(m.type==='entry'){
+    return Math.max(3,(m.fields||[]).length);
+  }
+  if(m.type==='clinician'){
+    let n=(m.parts||m.items||[]).length;
+    if(m.checklist) n+=m.checklist.reduce((s,g)=>s+((g.items||[]).length*0.3),0);
+    return Math.max(10,Math.round(n*0.6));
+  }
+  const n=(m.items||[]).length;
+  return Math.max(3,Math.round(n*0.3));
+}
+
+function universalMeasureComplete(key){
+  const v=id=>(document.getElementById(id)?.value||'').trim();
+  if(key==='scl90r'){
+    const scl=UNIVERSAL.scl90r;
+    return [...scl.subscales,...scl.globals].some(f=>v(`uni_scl90r_${f.id}`)!=='');
+  }
+  return UNIVERSAL.mini.sections.some(s=>v(`uni_mini_${s.id}`)!=='');
+}
+
+// Mirrors the dedup logic in renderMeasures() so shared measures (C-SSRS,
+// MSE, Developmental History, MINI) are only counted once even though every
+// selected module carries its own copy of the object.
+function getStackMeasureEntries(){
+  const out=[];
+  const dedupCats=['developmental','mini_as','cssrs','mse'];
+  const seen=new Set();
+  DEV_HX_MODULE_ORDER.filter(mod=>selectedModules.includes(mod)).forEach(mod=>{
+    Object.keys(M[mod]).forEach(key=>{
+      const m=M[mod][key];
+      if(dedupCats.includes(m.category)){
+        const dedKey=m.category+'::'+key;
+        if(seen.has(dedKey))return;
+        seen.add(dedKey);
+        out.push({mod,key,m});
+      }
+    });
+  });
+  selectedModules.forEach(mod=>{
+    Object.keys(M[mod]).forEach(key=>{
+      const m=M[mod][key];
+      if(dedupCats.includes(m.category))return;
+      out.push({mod,key,m});
+    });
+  });
+  const universalOn=!!document.querySelector('input[value="UNIVERSAL"]')?.checked;
+  if(universalOn){
+    out.push({mod:'UNIVERSAL',key:'scl90r',m:UNIVERSAL.scl90r});
+    out.push({mod:'UNIVERSAL',key:'mini',m:UNIVERSAL.mini});
+  }
+  return out;
+}
+
+function measureCompleteFor(mod,key){
+  if(mod==='UNIVERSAL') return universalMeasureComplete(key);
+  return measureHasData(mod,key);
+}
+
+function computeStackProgress(){
+  const entries=getStackMeasureEntries();
+  let totalMin=0,doneMin=0;const incomplete=[];
+  entries.forEach(({mod,key,m})=>{
+    const est=estMeasureMinutes(m);
+    totalMin+=est;
+    if(measureCompleteFor(mod,key)) doneMin+=est;
+    else incomplete.push(m.name||m.abbr||key);
+  });
+  const pct=totalMin?Math.min(100,Math.round(doneMin/totalMin*100)):0;
+  return {totalMin,doneMin,pct,incomplete,entries};
+}
+
+let PROGRESS_DEBOUNCE=null;
+function scheduleProgressUpdate(){
+  clearTimeout(PROGRESS_DEBOUNCE);
+  PROGRESS_DEBOUNCE=setTimeout(updateProgressWidget,400);
+}
+
+function updateProgressWidget(){
+  const bar=document.getElementById('spwFill');
+  if(!bar) return;
+  const {pct,doneMin,totalMin,incomplete}=computeStackProgress();
+  bar.style.width=pct+'%';
+  const label=document.getElementById('spwLabel');
+  if(label) label.textContent=totalMin?`${pct}% complete (~${doneMin} of ${totalMin} min)`:'Select modules to begin';
+  const listEl=document.getElementById('spwIncomplete');
+  if(listEl){
+    listEl.innerHTML=incomplete.length
+      ?incomplete.map(n=>`<li>${escapeHtml(n)}</li>`).join('')
+      :(totalMin?'<li style="color:var(--success);border:none;">All measures complete</li>':'');
+  }
+  renderTimerWidget(timerState());
+  if(typeof refreshReportGateStatus==='function') refreshReportGateStatus();
+}
+
+// Notes widget — plain localStorage autosave.
+function initNotesWidget(){
+  const el=document.getElementById('notesWidget');
+  if(!el) return;
+  try{el.value=localStorage.getItem('ntc_notes')||'';}catch{}
+  el.addEventListener('input',()=>{ try{localStorage.setItem('ntc_notes',el.value);}catch{} });
+}
+
+// Timer widget — elapsed time for the current assessment, pausing after a
+// period of inactivity and persisting across page reloads/navigation via
+// localStorage (a single-page app already preserves in-memory state across
+// tab switches, so this covers the reload/return-later case too).
+const TIMER_INACTIVITY_MS=2*60*1000;
+let TIMER_LAST_ACTIVITY=Date.now();
+let TIMER_INTERVAL=null;
+
+function timerState(){
+  try{return JSON.parse(localStorage.getItem('ntc_timer')||'{}');}catch{return {};}
+}
+function saveTimerState(s){ try{localStorage.setItem('ntc_timer',JSON.stringify(s));}catch{} }
+
+function fmtDuration(ms){
+  const totalSec=Math.max(0,Math.floor(ms/1000));
+  const h=Math.floor(totalSec/3600),m=Math.floor((totalSec%3600)/60),s=totalSec%60;
+  return h>0?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${m}:${String(s).padStart(2,'0')}`;
+}
+
+function renderTimerWidget(s){
+  const el=document.getElementById('timerElapsed');
+  if(!el) return;
+  el.textContent=fmtDuration(s.accumMs||0);
+  const statusEl=document.getElementById('timerStatus');
+  if(statusEl) statusEl.textContent=s.running?'Running':'Paused';
+  const remEl=document.getElementById('timerRemaining');
+  if(remEl){
+    const {totalMin}=computeStackProgress();
+    if(!totalMin){ remEl.textContent='Est. remaining: —'; }
+    else{
+      const remainMin=Math.max(0,Math.round(totalMin-(s.accumMs||0)/60000));
+      remEl.textContent=`Est. remaining: ${remainMin} min`;
+    }
+  }
+}
+
+function tickTimer(){
+  const s=timerState();
+  const now=Date.now();
+  const idle=(now-TIMER_LAST_ACTIVITY)>TIMER_INACTIVITY_MS;
+  if(!idle) s.accumMs=(s.accumMs||0)+(now-(s.lastTick||now));
+  s.lastTick=now;
+  s.running=!idle;
+  saveTimerState(s);
+  renderTimerWidget(s);
+}
+
+function resetTimer(){
+  const s={accumMs:0,lastTick:Date.now(),running:false};
+  saveTimerState(s);
+  renderTimerWidget(s);
+}
+
+function initTimer(){
+  const s=timerState();
+  if(typeof s.accumMs!=='number') s.accumMs=0;
+  s.lastTick=Date.now();
+  saveTimerState(s);
+  ['mousemove','keydown','click','scroll','touchstart','input'].forEach(evt=>{
+    document.addEventListener(evt,()=>{TIMER_LAST_ACTIVITY=Date.now();},{passive:true});
+  });
+  if(TIMER_INTERVAL) clearInterval(TIMER_INTERVAL);
+  TIMER_INTERVAL=setInterval(tickTimer,1000);
+  renderTimerWidget(s);
+}
+
+// Required self-report measures — primary-tier, self-reporter — must all be
+// complete before a report can be generated (item 12 of the workflow spec).
+function getRequiredSelfReportEntries(){
+  return getStackMeasureEntries().filter(({m})=>m.reporter==='self'&&m.primary===true);
+}
+
+function refreshReportGateStatus(){
+  const gateSection=document.getElementById('reportGateSection');
+  const btn=document.getElementById('generateBtn');
+  if(!gateSection||!btn) return;
+  const required=getRequiredSelfReportEntries();
+  const incomplete=required.filter(({mod,key})=>!measureCompleteFor(mod,key));
+  if(required.length&&incomplete.length){
+    gateSection.style.display='';
+    const listEl=document.getElementById('reportGateList');
+    if(listEl) listEl.innerHTML=incomplete.map(({m})=>`<li>${escapeHtml(m.name||m.abbr)}</li>`).join('');
+    btn.disabled=true;
+    btn.title='Complete all required self-report measures first';
+  } else {
+    gateSection.style.display='none';
+    btn.disabled=false;
+    btn.removeAttribute('title');
+  }
+}
+
+function initSidePanel(){
+  initNotesWidget();
+  initTimer();
+  updateProgressWidget();
+  document.addEventListener('input',e=>{
+    if(e.target && e.target.closest && (e.target.closest('#measuresContainer')||e.target.closest('#universalContainer'))) scheduleProgressUpdate();
+  });
+  document.addEventListener('change',e=>{
+    if(e.target && e.target.closest && (e.target.closest('#measuresContainer')||e.target.closest('#universalContainer'))) scheduleProgressUpdate();
+  });
 }
 function updateDxMsLabel(){
   const lbl=document.getElementById('dxMsLabel');
@@ -4614,6 +5025,26 @@ function renderMeasures(){
   const c=document.getElementById('measuresContainer');
   if(!selectedModules.length){c.innerHTML='<div style="color:var(--text-muted);font-style:italic;padding:16px 0;">Select one or more modules above to begin.</div>';return;}
   let h='';
+
+  // C-SSRS renders first of all, ahead of Developmental History — every
+  // assessment stack opens with a suicide-risk screen. Deduped across
+  // modules the same way as the shared MINI/dev-hx questionnaires below.
+  const cssrsSeen=new Set();
+  let cssrsHTML='';
+  DEV_HX_MODULE_ORDER.filter(mod=>selectedModules.includes(mod)).forEach(mod=>{
+    Object.keys(M[mod]).forEach(key=>{
+      const m=M[mod][key];
+      if(m.category==='cssrs'&&!cssrsSeen.has(key)){
+        cssrsSeen.add(key);
+        cssrsHTML+=buildMCard(mod,key,m);
+      }
+    });
+  });
+  if(cssrsHTML){
+    h+=`<div class="section"><div class="section-label">Suicide Risk Screening</div>
+      <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin:-8px 0 12px;text-transform:none;letter-spacing:normal;font-family:var(--font-sans,inherit);font-weight:400;">Administer before any other assessment content.</div>
+      ${cssrsHTML}</div>`;
+  }
 
   // Developmental History questionnaires render first, above the scored/self-other measures.
   // Deduped by key so a questionnaire shared across modules (e.g. the AuDHD combined form)
@@ -4654,8 +5085,9 @@ function renderMeasures(){
       ${miniHTML}</div>`;
   }
 
+  const excludedCategories=['developmental','mini_as','cssrs','mse'];
   selectedModules.forEach(mod=>{
-    const keys=Object.keys(M[mod]).filter(key=>M[mod][key].category!=='developmental'&&M[mod][key].category!=='mini_as');
+    const keys=Object.keys(M[mod]).filter(key=>!excludedCategories.includes(M[mod][key].category));
     const grouped=keys.some(key=>M[mod][key].reporter);
     if(!grouped){
       keys.forEach(key=>h+=buildMCard(mod,key,M[mod][key]));
@@ -4670,6 +5102,25 @@ function renderMeasures(){
       h+=`</div>`;
     });
   });
+
+  // Mental Status Exam renders last of all — a clinician observation
+  // capping every assessment stack, deduped across modules like the C-SSRS.
+  const mseSeen=new Set();
+  let mseHTML='';
+  DEV_HX_MODULE_ORDER.filter(mod=>selectedModules.includes(mod)).forEach(mod=>{
+    Object.keys(M[mod]).forEach(key=>{
+      const m=M[mod][key];
+      if(m.category==='mse'&&!mseSeen.has(key)){
+        mseSeen.add(key);
+        mseHTML+=buildMCard(mod,key,m);
+      }
+    });
+  });
+  if(mseHTML){
+    h+=`<div class="section"><div class="section-label">Mental Status Exam</div>
+      <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin:-8px 0 12px;text-transform:none;letter-spacing:normal;font-family:var(--font-sans,inherit);font-weight:400;">Complete at the conclusion of the assessment.</div>
+      ${mseHTML}</div>`;
+  }
   c.innerHTML=h;
 }
 
@@ -6351,6 +6802,7 @@ function buildAssessmentDataBody(w){
   const clientFields=[
     ['Name',clientNameRaw],
     ['Date of Birth',dob?dob+(age?` (Age ${age})`:''):''],
+    ['Gender',v('gender').trim()],
     ['Pronouns',v('pronouns').trim()],
     ['Date of Evaluation',v('evalDate').trim()],
     ['Referral Source',v('referralSource').trim()],
@@ -6899,7 +7351,7 @@ function buildMsg(){
   const dob=v('dob');let age='';
   if(dob){const d=Date.now()-new Date(dob).getTime();age=Math.abs(new Date(d).getUTCFullYear()-1970);}
   let msg=`Generate a complete psychological evaluation report.\n\n`;
-  msg+=`CLIENT:\nName: ${v('clientName')||'[not provided]'}\nDOB: ${dob||'[not provided]'}${age?' (Age: '+age+')':''}\nPronouns: ${v('pronouns')||'[not specified]'}\nLanguage preference: ${v('languagePref')}\nDate of Evaluation: ${v('evalDate')||'today'}\nReferral: ${v('referralSource')||'[not provided]'}\nReason: ${v('reasonForReferral')||'[not provided]'}\nHistory: ${v('relevantHistory')||'[not provided]'}\n\n`;
+  msg+=`CLIENT:\nName: ${v('clientName')||'[not provided]'}\nDOB: ${dob||'[not provided]'}${age?' (Age: '+age+')':''}\nGender: ${v('gender')||'[not specified]'}\nPronouns: ${v('pronouns')||'[not specified]'}\nLanguage preference: ${v('languagePref')}\nDate of Evaluation: ${v('evalDate')||'today'}\nReferral: ${v('referralSource')||'[not provided]'}\nReason: ${v('reasonForReferral')||'[not provided]'}\nHistory: ${v('relevantHistory')||'[not provided]'}\n\n`;
   msg+=`MODULES: ${selectedModules.join(', ')}\n\n`;
 
   // Legacy quick-entry fields on the Report Generator tab — checked first, falling back to the
@@ -7073,6 +7525,14 @@ async function generateReport(){
   if(!key){showErr('Configure API key in Settings first.');openSettings();return;}
   if(!selectedModules.length){showErr('Select at least one module.');return;}
   if(!document.getElementById('clientName')?.value){showErr('Enter client name before generating.');return;}
+  if(typeof getRequiredSelfReportEntries==='function'){
+    const incomplete=getRequiredSelfReportEntries().filter(({mod,key})=>!measureCompleteFor(mod,key));
+    if(incomplete.length){
+      showErr('Complete all required self-report measures before generating: '+incomplete.map(({m})=>m.name||m.abbr).join(', '));
+      if(typeof refreshReportGateStatus==='function') refreshReportGateStatus();
+      return;
+    }
+  }
   hideErr();
   const btn=document.getElementById('generateBtn');
   btn.disabled=true;
@@ -8575,6 +9035,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   initDxMultiselect();
   initScreeningSelector();
   rebuildRightNav();
+  initSidePanel();
   if(!localStorage.getItem('ntc_api_key'))openSettings();
 });
 </script>
