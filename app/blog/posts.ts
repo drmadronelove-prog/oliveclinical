@@ -19,15 +19,15 @@ export const posts: BlogPost[] = [
       {
         type: "paragraph",
         dropCap: true,
-        text: "A client told me recently that she had eleven friends and was lonely, and that she could not work out whether that made her ungrateful or broken. She listed them for me. A woman she texts every day. Two people from graduate school she sees twice a year and loves. A neighbor she has had four extraordinary conversations with on the front steps and never once seen indoors. Her sister-in-law. A running group.",
+        text: "Consider a fairly ordinary situation. Someone counts up their friends and arrives at eleven, and is lonely anyway, and cannot work out whether that makes them ungrateful or broken. The list is not padded. A person they text every day. Two from graduate school they see twice a year and love. A neighbor they have had four extraordinary conversations with on the front steps and never once seen indoors. A sibling-in-law. A running group.",
       },
       {
         type: "paragraph",
-        text: "Nothing on that list was fake. That was what made it hard to talk about. If the friendships had been hollow, there would have been an obvious problem and an obvious direction. Instead she had something more confusing: a set of real relationships that were not adding up to the thing she wanted, and no vocabulary for describing the gap.",
+        text: "Nothing on that list is fake, and that is exactly what makes it hard to talk about. If the friendships were hollow there would be an obvious problem and an obvious direction. What is actually happening is more confusing: a set of real relationships that are not adding up to the thing the person wanted, and no vocabulary for describing the gap.",
       },
       {
         type: "paragraph",
-        text: "We have gotten quite good, culturally, at talking about romantic attachment. Most people I meet can tell me their style within the first session, sometimes within the first ten minutes. Friendship gets almost none of that resolution. We have \"friend,\" which covers a person you would donate a kidney to and a person whose last name you are not certain of, and we have \"best friend,\" which is a ranking rather than a description. When something is wrong, people reach for the romantic vocabulary because it is the only precise vocabulary available, and it does not fit. Friendships are not usually exclusive, rarely involve cohabitation, and almost never end with a conversation. They end by not being continued.",
+        text: "We have gotten quite good, culturally, at talking about romantic attachment. A great many people can name their style in a sentence. Friendship gets almost none of that resolution. We have \"friend,\" which covers a person you would donate a kidney to and a person whose last name you are not certain of, and we have \"best friend,\" which is a ranking rather than a description. When something is wrong, people reach for the romantic vocabulary because it is the only precise vocabulary available, and it does not fit. Friendships are not usually exclusive, rarely involve cohabitation, and almost never end with a conversation. They end by not being continued.",
       },
       {
         type: "paragraph",
@@ -35,7 +35,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "So I started sketching. What follows is a map I have found useful in my own practice: two axes, four quadrants, thirteen recognizable positions. It is not a diagnostic instrument and I would be suspicious of anyone who tried to make it one. It is a way of getting specific enough to say what is actually missing.",
+        text: "So here is an attempt at more resolution: two axes, four quadrants, thirteen recognizable positions. It is not a diagnostic instrument and I would be suspicious of anyone who tried to make it one. It is a way of getting specific enough to say what is actually missing.",
       },
       { type: "heading", text: "Two axes, not one" },
       {
@@ -48,7 +48,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "The reason two axes matter is that these vary independently, and most of our confusion comes from assuming they do not. My client had assumed that depth and durability were the same measurement, so a friendship with a great deal of one and none of the other read to her as a failure of both. It was not. It was a specific, describable kind of relationship with a specific, describable limit.",
+        text: "The reason two axes matter is that these vary independently, and most of our confusion comes from assuming they do not. Treat depth and durability as one measurement and a friendship with a great deal of one and none of the other reads as a failure of both. It is not. It is a specific, describable kind of relationship with a specific, describable limit.",
       },
       {
         type: "paragraph",
@@ -81,16 +81,36 @@ export const posts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "That last quadrant deserves its own paragraph, because it is where the word \"friend\" does the most damage. A duty friendship looks, from the outside and often from the inside, exactly like a close one. It has history, frequency, and continuity. What it does not have is depth, and because we mostly measure friendship by the visible markers, the loss is very hard to name. People come into my office describing a full calendar and a specific, unlocatable hunger.",
+        text: "That last quadrant deserves its own paragraph, because it is where the word \"friend\" does the most damage. A duty friendship looks, from the outside and often from the inside, exactly like a close one. It has history, frequency, and continuity. What it does not have is depth, and because we mostly measure friendship by the visible markers, the loss is very hard to name. A full calendar and a specific, unlocatable hunger do not look like they belong together, so the person experiencing both tends to assume the problem must be somewhere else.",
       },
       { type: "heading", text: "What is actually keeping it running" },
       {
         type: "paragraph",
-        text: "Here is where the map earns its keep, and where I depart from the usual sorting. If you look at any given friendship and ask what is actually keeping it in motion, you get five recognizably different answers.",
+        text: "Here is where the map earns its keep, and where I depart from the usual sorting.",
       },
       {
         type: "paragraph",
-        text: "Sometimes the answer is intrinsic: you want the person's company for its own sake. There is pleasure in it, or chemistry, or the specific relief of being read accurately by someone. Nothing outside the friendship is holding it up. Sometimes it is mixed: genuinely rewarding and genuinely owed, at the same time, in a proportion that shifts by the month. The decades-long friendship where you love them and also dread the call. Both are true and neither cancels the other. Sometimes it is avoidance: the friendship is maintained to prevent something — guilt, an awkward conversation, the discomfort of being the one who let it lapse. Sometimes it is extrinsic: the relationship has a real, non-trivial motive that simply sits outside the friendship itself. Proximity at work. Professional utility. The fact that they are married to your brother. And sometimes there is no particular drive at all: an acquaintance, pleasant enough, nothing much at stake in either direction.",
+        text: "If you look at any given friendship and ask what is actually keeping it in motion, you get five recognizably different answers.",
+      },
+      {
+        type: "paragraph",
+        text: "Sometimes the answer is intrinsic: you want the person's company for its own sake. There is pleasure in it, or chemistry, or the specific relief of being read accurately by someone. Nothing outside the friendship is holding it up.",
+      },
+      {
+        type: "paragraph",
+        text: "Sometimes it is mixed: genuinely rewarding and genuinely owed, at the same time, in a proportion that shifts by the month. The decades-long friendship where you love them and also dread the call. Both are true and neither cancels the other.",
+      },
+      {
+        type: "paragraph",
+        text: "Sometimes it is avoidance: the friendship is maintained to prevent something — guilt, an awkward conversation, the discomfort of being the one who let it lapse. The motive is real, but it is a motive to avoid a cost rather than obtain a good.",
+      },
+      {
+        type: "paragraph",
+        text: "Sometimes it is extrinsic: the relationship has a real, non-trivial motive that simply sits outside the friendship itself. Proximity at work. Professional utility. The fact that they are married to your brother. This is not cynicism; extrinsic friendships can be warm and pleasant. The motive just is not the person.",
+      },
+      {
+        type: "paragraph",
+        text: "And sometimes there is no particular drive at all: an acquaintance, pleasant enough, nothing much at stake in either direction.",
       },
       {
         type: "paragraph",
@@ -169,7 +189,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "Start with the peripheral quadrant, which the standard advice treats as the easy one. Small talk, ambient warmth, low-stakes contact. For a lot of autistic adults this is the most expensive real estate on the map, not the cheapest. Surface exchange runs on inference — reading the unstated, tracking the subtext, calibrating in real time — and doing that consciously rather than automatically is exhausting in a way that depth is not. I have worked with many clients who can sustain a four-hour conversation about something that matters and cannot survive twenty minutes of a work happy hour. That is not a social skills deficit. Those are two genuinely different tasks, and the map treats one as easier only because it is easier for most people.",
+        text: "Start with the peripheral quadrant, which the standard advice treats as the easy one. Small talk, ambient warmth, low-stakes contact. For a lot of autistic adults this is the most expensive real estate on the map, not the cheapest. Surface exchange runs on inference — reading the unstated, tracking the subtext, calibrating in real time — and doing that consciously rather than automatically is exhausting in a way that depth is not. It is entirely coherent to sustain a four-hour conversation about something that matters and be unable to survive twenty minutes of a work happy hour. That is not a social skills deficit. Those are two genuinely different tasks, and the map treats one as easier only because it is easier for most people.",
       },
       {
         type: "paragraph",
@@ -177,11 +197,11 @@ export const posts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "Continuity itself is where ADHD makes the map hardest. Moving right on the horizontal axis is almost entirely an executive function task — remembering, initiating, following through on something that has no deadline and produces no consequence for being skipped. Friendship maintenance is possibly the purest example of a task that is important, non-urgent, and entirely self-initiated, which is precisely the category that an interest-based nervous system handles worst. My ADHD clients frequently have abundant chemistry and enormous difficulty with continuity, and they read the result as evidence that they are a bad friend. It is usually better described as a nervous system that does not convert intention into recurrence without external scaffolding.",
+        text: "Continuity itself is where ADHD makes the map hardest. Moving right on the horizontal axis is almost entirely an executive function task — remembering, initiating, following through on something that has no deadline and produces no consequence for being skipped. Friendship maintenance is possibly the purest example of a task that is important, non-urgent, and entirely self-initiated, which is precisely the category that an interest-based nervous system handles worst. Abundant chemistry alongside enormous difficulty with continuity is a common ADHD pattern, and it gets read from the inside as evidence of being a bad friend. It is better described as a nervous system that does not convert intention into recurrence without external scaffolding.",
       },
       {
         type: "paragraph",
-        text: "Then there is masking, which shows up on this map in a specific way. Masking is expensive, and its cost scales with how much surface performance a relationship requires. Which means the duty and ritual quadrant — high continuity, low depth, sustained pleasantness — is the single most costly quadrant for a masking adult to occupy. A neurotypical person leaves an obligatory dinner mildly bored. A masking autistic adult can leave the same dinner needing two days to recover. When such a client tells me they only have capacity for a few friendships, I have stopped hearing that as avoidance. It is often an accurate energy budget.",
+        text: "Then there is masking, which shows up on this map in a specific way. Masking is expensive, and its cost scales with how much surface performance a relationship requires. Which means the duty and ritual quadrant — high continuity, low depth, sustained pleasantness — is the single most costly quadrant for a masking adult to occupy. A neurotypical person leaves an obligatory dinner mildly bored. A masking autistic adult can leave the same dinner needing two days to recover. Which means that \"I only have capacity for a few friendships\" is often not avoidance at all. It is an accurate energy budget, arrived at honestly, and usually disbelieved.",
       },
       {
         type: "paragraph",
@@ -198,7 +218,7 @@ export const posts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "Take the list my client made and do the version that is actually useful: not counting, but sorting. For each person, two questions. How much of your interior life actually moves between you? And what is holding this in place — is it wanted, or is it owed, or is it running on something that sits outside the friendship entirely?",
+        text: "Go back to the list of eleven and do the version that is actually useful: not counting, but sorting. For each person, two questions. How much of your interior life actually moves between you? And what is holding this in place — is it wanted, or is it owed, or is it running on something that sits outside the friendship entirely?",
       },
       {
         type: "paragraph",
@@ -210,11 +230,11 @@ export const posts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "What I hope the map mostly does is give people permission to be specific. My client was not ungrateful and she was not broken. She had a great deal of free-flowing intimacy, a well-populated peripheral layer, two relationships in the bottom-right she had been carrying without noticing, and almost nothing in the top-right. That is not a character problem. It is a shape, and shapes can be worked with.",
+        text: "What I hope the map mostly does is give people permission to be specific. Run the eleven through it and a shape appears: a great deal of free-flowing intimacy, a well-populated peripheral layer, one or two relationships in the bottom-right being carried without much notice, and almost nothing in the top-right. Ungrateful and broken are not the available diagnoses. That is a shape, and shapes can be worked with.",
       },
       {
         type: "paragraph",
-        text: "Cohen has a line that I have thought about often since reading it: \"It can be confusing to live in the gulf between the life you have and the life you believe you're supposed to be living.\" She is writing about people whose central relationship is a friendship and who have no cultural script for saying so. But the sentence describes my client too, from the other direction — someone whose life looked correct from outside and did not feel correct from inside, and who had no language for the difference. Most of the suffering was in the gulf, not in the friendships.",
+        text: "Cohen has a line I have thought about often since reading it: \"It can be confusing to live in the gulf between the life you have and the life you believe you're supposed to be living.\" She is writing about people whose central relationship is a friendship and who have no cultural script for saying so. But it describes the opposite case just as well — a life that looks correct from outside, does not feel correct from inside, and has no language for the difference. Most of the suffering tends to sit in that gulf rather than in any of the friendships.",
       },
       {
         type: "paragraph",
