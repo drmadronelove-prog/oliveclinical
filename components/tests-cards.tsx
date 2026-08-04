@@ -9,6 +9,8 @@ import { AQ50 } from "@/components/assessments/aq50"
 import { VVIQ } from "@/components/assessments/vviq"
 import { TAS20 } from "@/components/assessments/tas20"
 import { CATQ } from "@/components/assessments/catq"
+import { RAADSR } from "@/components/assessments/raadsr"
+import { EQ } from "@/components/assessments/eq"
 import { MDS16 } from "@/components/assessments/mds16"
 import { GSQ } from "@/components/assessments/gsq"
 import { OEQ2 } from "@/components/assessments/oeq2"
@@ -199,6 +201,24 @@ const SCREENERS: FeatureCard[] = [
     modalTitle: "CAT-Q: Camouflaging Autistic Traits Questionnaire",
     modalSubtitle: "25 items across compensation, masking, and assimilation.",
     content: <CATQ />,
+  },
+  {
+    kind: "modal",
+    title: "RAADS-R",
+    category: "Autism diagnostic screen",
+    footerLabel: "Take screen",
+    modalTitle: "RAADS-R: Ritvo Autism Asperger Diagnostic Scale — Revised",
+    modalSubtitle: "80 items · Ritvo et al., 2011.",
+    content: <RAADSR />,
+  },
+  {
+    kind: "modal",
+    title: "EQ",
+    category: "Empathy quotient",
+    footerLabel: "Take screen",
+    modalTitle: "EQ: Empathy Quotient",
+    modalSubtitle: "60 items · Baron-Cohen & Wheelwright, 2004.",
+    content: <EQ />,
   },
   {
     kind: "modal",

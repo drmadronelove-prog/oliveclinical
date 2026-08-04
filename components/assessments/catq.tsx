@@ -163,6 +163,7 @@ function SubscaleRow({ label, abbr, items, max, answers }: SubscaleRowProps) {
 export function CATQ() {
   const [open, setOpen] = useState(true)
   const [answers, setAnswers] = useState<Answers>({})
+  const [copied, setCopied] = useState(false)
 
   function select(itemNum: number, value: number) {
     setAnswers((prev) => ({ ...prev, [itemNum]: value }))
@@ -176,6 +177,27 @@ export function CATQ() {
   const score = totalScore(answers)
   const complete = answered === 25
   const significant = complete && score > 100
+  const compensation = subscaleScore(COMPENSATION_ITEMS, answers)
+  const assimilation = subscaleScore(ASSIMILATION_ITEMS, answers)
+  const masking = subscaleScore(MASKING_ITEMS, answers)
+
+  async function copySummary() {
+    const text = [
+      "CAT-Q (Camouflaging Autistic Traits Questionnaire) — results",
+      `Total: ${score} / 175${complete ? "" : " (incomplete)"}`,
+      `Compensation: ${compensation ?? "—"} / 63`,
+      `Assimilation: ${assimilation ?? "—"} / 63`,
+      `Masking: ${masking ?? "—"} / 49`,
+      `Items answered: ${answered} / 25`,
+    ].join("\n")
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // clipboard unavailable — no-op, Print/Save remains available
+    }
+  }
 
   return (
     <div className="border border-border rounded-lg overflow-hidden bg-card">
@@ -344,6 +366,13 @@ export function CATQ() {
               className="px-4 py-2 text-sm font-medium bg-foreground text-background rounded-md hover:opacity-90 transition-opacity"
             >
               Print / Save as PDF
+            </button>
+            <button
+              onClick={copySummary}
+              disabled={answered === 0}
+              className="px-4 py-2 text-sm font-medium border border-border rounded-md hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {copied ? "Copied!" : "Copy Results Summary"}
             </button>
           </div>
         </div>
