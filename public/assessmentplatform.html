@@ -489,6 +489,10 @@ body::before{display:none;}
 .content-main .measure-card .mini-dx .field > label{color:var(--ink);}
 /* Prompt/example panels are light boxes — keep their text dark. */
 .content-main .measure-card .ci-prompts{color:var(--ink);}
+/* The score-entry box (T-score / manual-entry measures) is a white panel too —
+   its field labels and hints must stay dark, not the cream used on the bronze fill. */
+.content-main .measure-card .score-entry-box .field > label{color:var(--ink);}
+.content-main .measure-card .score-entry-box .field .hint{color:var(--ink-muted);}
 /* Instruction panels and the M.I.N.I. answer-sheet controls are fill boxes
    too — match them to --input-bg so no bronze card mixes two shades. */
 .content-main .measure-instruction,
