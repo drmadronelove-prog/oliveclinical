@@ -891,6 +891,16 @@ body::before{display:none;}
 .d5-table select{width:auto;min-width:88px;font-size:12px;padding:6px 10px;}
 
 /* ── Form ──────────────────────────────────────── */
+.report-client-summary{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  font-size:14px;color:var(--ink);
+  background:var(--surface);
+  border-radius:var(--radius-sm);
+  box-shadow:var(--neu-in-sm);
+  padding:12px 16px;
+  margin-bottom:20px;
+}
+.content-main .card .report-client-summary{color:var(--ink);}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .form-grid.cols-3{grid-template-columns:1fr 1fr 1fr;}
 .form-grid.cols-1{grid-template-columns:1fr;}
@@ -2183,21 +2193,13 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
   <div class="section">
     <div class="section-label">Client Information</div>
     <div class="card">
+      <div class="report-client-summary" id="reportClientSummary">No client selected. <button type="button" class="btn-sm" onclick="goToClientInfoTab()">Go to Client Information →</button></div>
+      <input type="hidden" id="clientName">
+      <input type="hidden" id="dob">
+      <input type="hidden" id="pronouns">
+      <input type="hidden" id="gender">
       <div class="form-grid">
-        <div class="field"><label>Client Name</label><input type="text" id="clientName" placeholder="Full name"></div>
         <div class="field"><label>Date of Evaluation</label><input type="date" id="evalDate"></div>
-        <div class="field"><label>Date of Birth</label><input type="date" id="dob"></div>
-        <div class="field"><label>Pronouns</label><input type="text" id="pronouns" placeholder="she/her, they/them..."></div>
-        <div class="field"><label>Gender</label>
-          <select id="gender">
-            <option value="">—</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Trans male">Trans male</option>
-            <option value="Trans female">Trans female</option>
-            <option value="Nonbinary">Nonbinary</option>
-          </select>
-        </div>
         <div class="field"><label>Referral Source</label><input type="text" id="referralSource" placeholder="Self-referred, therapist..."></div>
         <div class="field"><label>Language Preference</label>
           <select id="languagePref">
@@ -4437,11 +4439,53 @@ function readClientForm(){
     phone:document.getElementById('ci_phone').value.trim()
   };
 }
+// The Report Generator tab no longer asks for name/DOB/pronouns/gender itself
+// (item 14: don't repeat questions already asked on Client Information) — it
+// reads them from hidden clientName/dob/pronouns/gender inputs kept in sync
+// with the Client Information tab by this function, called on every edit,
+// client switch, or client-record load so the two tabs can never drift apart.
+function syncReportClientFields(){
+  const cn=document.getElementById('clientName');
+  if(cn){
+    const ln=(document.getElementById('ci_lastname')?.value||'').trim();
+    const fn=(document.getElementById('ci_firstname')?.value||'').trim();
+    cn.value=[fn,ln].filter(Boolean).join(' ');
+  }
+  const dst=document.getElementById('dob');
+  if(dst)dst.value=document.getElementById('ci_dob')?.value||'';
+  const pdst=document.getElementById('pronouns');
+  if(pdst)pdst.value=document.getElementById('ci_pronouns')?.value||'';
+  const gdst=document.getElementById('gender');
+  if(gdst)gdst.value=document.getElementById('ci_gender')?.value||'';
+  updateReportClientSummary();
+}
+
+function goToClientInfoTab(){
+  const btn=document.querySelector("button[onclick*=\"'client'\"]");
+  if(btn)switchTab('client',btn);
+}
+
+function updateReportClientSummary(){
+  const el=document.getElementById('reportClientSummary');
+  if(!el)return;
+  const name=(document.getElementById('clientName')?.value||'').trim();
+  const dob=document.getElementById('dob')?.value||'';
+  const pronouns=(document.getElementById('pronouns')?.value||'').trim();
+  const gender=document.getElementById('gender')?.value||'';
+  if(!name&&!dob&&!pronouns&&!gender){
+    el.innerHTML='No client selected. <button type="button" class="btn-sm" onclick="goToClientInfoTab()">Go to Client Information →</button>';
+    return;
+  }
+  const parts=[name,dob,pronouns,gender].filter(Boolean).map(escapeHtml);
+  el.innerHTML=`<strong>${parts.join(' &nbsp;·&nbsp; ')}</strong> <button type="button" class="btn-sm" onclick="goToClientInfoTab()">Edit on Client Information →</button>`;
+}
+
 function onClientSelect(id){
   if(id==='__new__'){newClient();return;}
   ACTIVE_CLIENT_ID=id;
   const c=CLIENTS.find(x=>x.id===id);
   fillClientForm(c);
+  syncReportClientFields();
   persistClients();
   updateActiveClientHeader();
   if(typeof tpLoadForActiveClient==='function')tpLoadForActiveClient();
@@ -4449,6 +4493,7 @@ function onClientSelect(id){
 function newClient(){
   ACTIVE_CLIENT_ID=null;
   fillClientForm(null);
+  syncReportClientFields();
   const sel=document.getElementById('client_selector');
   if(sel)sel.value='__new__';
   persistClients();
@@ -4478,6 +4523,7 @@ function deleteClient(){
   persistClients();
   rebuildClientSelector();
   fillClientForm(null);
+  syncReportClientFields();
   updateActiveClientHeader();
 }
 function initClientInfo(){
@@ -4489,31 +4535,13 @@ function initClientInfo(){
     else ACTIVE_CLIENT_ID=null;
   }
   updateActiveClientHeader();
-  // mirror first+last to legacy clientName/dob/pronouns fields if they exist on report tab
   CI_FIELDS.forEach(id=>{
     const el=document.getElementById(id);
     if(!el)return;
-    el.addEventListener('input',()=>{
-      const cn=document.getElementById('clientName');
-      if(cn){
-        const ln=document.getElementById('ci_lastname').value.trim();
-        const fn=document.getElementById('ci_firstname').value.trim();
-        cn.value=[fn,ln].filter(Boolean).join(' ');
-      }
-      const dst=document.getElementById('dob');
-      if(dst&&id==='ci_dob')dst.value=el.value;
-      const pdst=document.getElementById('pronouns');
-      if(pdst&&id==='ci_pronouns')pdst.value=el.value;
-      const gdst=document.getElementById('gender');
-      if(gdst&&id==='ci_gender')gdst.value=el.value;
-    });
-    if(id==='ci_gender'){
-      el.addEventListener('change',()=>{
-        const gdst=document.getElementById('gender');
-        if(gdst)gdst.value=el.value;
-      });
-    }
+    el.addEventListener('input',syncReportClientFields);
+    if(id==='ci_gender')el.addEventListener('change',syncReportClientFields);
   });
+  syncReportClientFields();
 }
 
 // ----------------------------------------------------------------
@@ -7348,7 +7376,7 @@ async function generateReport(){
   const key=localStorage.getItem('ntc_api_key');
   if(!key){showErr('Configure API key in Settings first.');openSettings();return;}
   if(!selectedModules.length){showErr('Select at least one module.');return;}
-  if(!document.getElementById('clientName')?.value){showErr('Enter client name before generating.');return;}
+  if(!document.getElementById('clientName')?.value){showErr('Enter the client\'s name on the Client Information tab before generating.');return;}
   if(typeof getRequiredSelfReportEntries==='function'){
     const incomplete=getRequiredSelfReportEntries().filter(({mod,key})=>!measureCompleteFor(mod,key));
     if(incomplete.length){
