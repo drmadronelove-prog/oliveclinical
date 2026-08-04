@@ -2905,42 +2905,51 @@ Autism:{
   },
   catq:{
     name:"Camouflaging Autistic Traits Questionnaire",abbr:"CAT-Q",warn:true,primary:true,reporter:"self",rowColor:"blue",
-    note:"Clients can take this at the link below and either email you their results (Print/Save as PDF, or the Copy Results Summary button) or read them off with you — then enter the total and subscale scores here.",
+    note:"Item wording, order, subscale key, and reverse-scoring here match the client-facing CAT-Q at the link below exactly, so a client's answers there transcribe item-for-item. Clients can take it there and either email you their results (Print/Save as PDF, or the Copy Results Summary button) or read them off with you — then enter each item's rating here.",
     link:{url:"https://www.oliveclinical.com/tests",label:"Send clients to the self-report form at oliveclinical.com/tests"},
-    instr:"The following statements describe ways that people interact with others. Please indicate how much each statement applies to you.",
+    instr:"Rate how strongly each statement applies to you on a scale from 1 (Strongly Disagree) to 7 (Strongly Agree). Think about how you generally behave in social situations.",
     scale:{l:["Strongly Disagree","2","3","4","5","6","Strongly Agree"],v:[1,2,3,4,5,6,7]},
-    subs:{C:[0,2,4,6,11,18,19,20,24],A:[1,3,5,9,12,15,21],K:[7,8,10,13,14,16,17,22,23]},
+    subs:{C:[0,2,4,6,10,15,18,20,21],A:[1,7,8,9,11,12,13,17,23],K:[3,5,14,16,19,22,24]},
+    rev:[3,14,16,19,24],
     items:[
-      "Before I enter a social situation, I prepare topics and questions to talk about.",
-      "I have missed out on movies, TV shows, or music that others were interested in, so I learned about them to connect with people.",
-      "I adjust my body language or facial expressions so that I appear interested in the conversation.",
-      "When I was younger, I learned what emotions I was supposed to express in different situations.",
-      "I monitor my own conversations so that I can ensure they follow a logical order.",
-      "I have learned what people's facial expressions mean through observation or instruction.",
-      "I am always aware of what others could be thinking about me.",
-      "My behavior seems natural and easy to most people.",
-      "I hide the fact that I have spent time memorizing how to act in social situations.",
-      "I know I am different from other people, but I try to appear normal in social situations.",
-      "I try to act normally around other people, and I am not sure what it feels like to be 'just me.'",
+      "I adjust my body language or facial expressions so that I seem interested in the conversation, even when I'm not.",
       "I have developed a script to follow in social situations.",
-      "I behave differently in social situations compared to how I act when I am alone.",
-      "I am good at fitting into social events and am able to talk and interact with others while I am there.",
-      "When talking to other people, I act differently from how I feel inside.",
-      "I learn what is normal from the people around me.",
-      "I always find it easy to engage in conversation with others.",
-      "I feel free to be myself around others.",
-      "I am always aware of whether my behavior is appropriate in social situations.",
-      "I am always monitoring how I am coming across to others.",
-      "I have developed strategies so that I seem sociable.",
-      "I work to understand what others see when they look at me.",
-      "I notice when others in a group are uncomfortable and adjust my behavior to make them comfortable.",
-      "I act very differently in different social situations.",
-      "I have developed strategies to appear more comfortable in social situations than I actually am."
+      "I monitor my own body language or facial expressions to try to fit in.",
+      "I rarely feel the need to put on an act in order to get through a social situation.",
+      "I think about what my face is doing so that I appear interested in the person I'm talking to.",
+      "I notice when others are uncomfortable and try to make them feel better, even if I'm not sure what to do.",
+      "I know I can use smiling and eye contact to make people feel comfortable around me, even when I don't feel comfortable myself.",
+      "I change my personality depending on who I am with.",
+      "I have spent time learning social skills from TV shows, books, or by watching other people.",
+      "I have memorized scripts from TV shows or films to use in conversation.",
+      "I naturally mimic the behaviors of the people I spend time with.",
+      "When talking to other people, I feel like I am performing rather than being myself.",
+      "I hide my true self when with other people.",
+      "In social situations, I feel like I'm going through the motions.",
+      "I am always myself in social situations.",
+      "I adjust my language or vocabulary depending on who I am with.",
+      "I don't feel the need to make eye contact with others to seem interested.",
+      "I try hard to fit in with the people around me.",
+      "I force myself to make eye contact with people, even when it feels uncomfortable.",
+      "I have always been good at making conversation.",
+      "I often observe people and learn how to socialize from them.",
+      "I sometimes copy the way other people talk, even without meaning to.",
+      "I use humor, sarcasm, or wit to fit in.",
+      "I act like a different person at work or school compared to at home.",
+      "I feel free to be myself in social situations."
     ],
     score(r){
+      const rev=new Set(this.rev);
       let t=0,c=0,a=0,k=0;
-      r.forEach((v,i)=>{ if(v===null)return; t+=v; if(this.subs.C.includes(i))c+=v; if(this.subs.A.includes(i))a+=v; if(this.subs.K.includes(i))k+=v; });
-      return {"CAT-Q Total":t+"/175"+(t>=100?" ⚑ high":""),"Compensation":c+"/63","Assimilation":a+"/49","Masking":k+"/63"};
+      r.forEach((v,i)=>{
+        if(v===null)return;
+        const sv=rev.has(i)?8-v:v;
+        t+=sv;
+        if(this.subs.C.includes(i))c+=sv;
+        if(this.subs.A.includes(i))a+=sv;
+        if(this.subs.K.includes(i))k+=sv;
+      });
+      return {"CAT-Q Total":t+"/175"+(t>=100?" ⚑ high":""),"Compensation":c+"/63","Assimilation":a+"/63","Masking":k+"/49"};
     }
   },
   raadsr:{
