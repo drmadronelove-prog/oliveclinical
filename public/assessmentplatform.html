@@ -2825,229 +2825,35 @@ Autism:{
     ]
   },
   eq:{
-    name:"Cambridge Behaviour Scale (Empathy Quotient)",abbr:"EQ",warn:true,primary:true,reporter:"self",rowColor:"green",
-    note:"Empathy Quotient (Baron-Cohen & Wheelwright, 2004; © MRC-SBC/SJW 1999), developed by the Autism Research Centre, University of Cambridge. 60 items — 40 scored, 20 unscored filler items included to reduce response bias. All 60 must be answered for the scale to be valid. General population mean ≈42; autistic-sample mean ≈20 (0–80 range; lower scores associated with autism). Clients can take this at the link below and either email you their results (Print/Save as PDF, or the Copy Results Summary button) or read them off with you — then enter the total here.",
-    link:{url:"https://www.oliveclinical.com/tests",label:"Send clients to the self-report form at oliveclinical.com/tests"},
-    instr:"Please read each statement very carefully and rate how strongly you agree or disagree with it. There are no right or wrong answers, or trick questions. In order for the scale to be valid, you must answer every question.",
-    scale:{l:["Strongly Agree","Slightly Agree","Slightly Disagree","Strongly Disagree"],v:[1,2,3,4]},
-    items:[
-      {q:"I can easily tell if someone else wants to enter a conversation.",d:"pos"},
-      {q:"I prefer animals to humans.",d:"fil"},
-      {q:"I try to keep up with the current trends and fashions.",d:"fil"},
-      {q:"I find it difficult to explain to others things that I understand easily, when they don't understand it first time.",d:"neg"},
-      {q:"I dream most nights.",d:"fil"},
-      {q:"I really enjoy caring for other people.",d:"pos"},
-      {q:"I try to solve my own problems rather than discussing them with others.",d:"fil"},
-      {q:"I find it hard to know what to do in a social situation.",d:"neg"},
-      {q:"I am at my best first thing in the morning.",d:"fil"},
-      {q:"People often tell me that I went too far in driving my point home in a discussion.",d:"neg"},
-      {q:"It doesn't bother me too much if I am late meeting a friend.",d:"neg"},
-      {q:"Friendships and relationships are just too difficult, so I tend not to bother with them.",d:"neg"},
-      {q:"I would never break a law, no matter how minor.",d:"fil"},
-      {q:"I often find it difficult to judge if something is rude or polite.",d:"neg"},
-      {q:"In a conversation, I tend to focus on my own thoughts rather than on what my listener might be thinking.",d:"neg"},
-      {q:"I prefer practical jokes to verbal humour.",d:"fil"},
-      {q:"I live life for today rather than the future.",d:"fil"},
-      {q:"When I was a child, I enjoyed cutting up worms to see what would happen.",d:"neg"},
-      {q:"I can pick up quickly if someone says one thing but means another.",d:"pos"},
-      {q:"I tend to have very strong opinions about morality.",d:"fil"},
-      {q:"It is hard for me to see why some things upset people so much.",d:"neg"},
-      {q:"I find it easy to put myself in somebody else's shoes.",d:"pos"},
-      {q:"I think that good manners are the most important thing a parent can teach their child.",d:"fil"},
-      {q:"I like to do things on the spur of the moment.",d:"fil"},
-      {q:"I am good at predicting how someone will feel.",d:"pos"},
-      {q:"I am quick to spot when someone in a group is feeling awkward or uncomfortable.",d:"pos"},
-      {q:"If I say something that someone else is offended by, I think that that's their problem, not mine.",d:"neg"},
-      {q:"If anyone asked me if I liked their haircut, I would reply truthfully, even if I didn't like it.",d:"neg"},
-      {q:"I can't always see why someone should have felt offended by a remark.",d:"neg"},
-      {q:"People often tell me that I am very unpredictable.",d:"fil"},
-      {q:"I enjoy being the centre of attention at any social gathering.",d:"fil"},
-      {q:"Seeing people cry doesn't really upset me.",d:"neg"},
-      {q:"I enjoy having discussions about politics.",d:"fil"},
-      {q:"I am very blunt, which some people take to be rudeness, even though this is unintentional.",d:"neg"},
-      {q:"I don't tend to find social situations confusing.",d:"pos"},
-      {q:"Other people tell me I am good at understanding how they are feeling and what they are thinking.",d:"pos"},
-      {q:"When I talk to people, I tend to talk about their experiences rather than my own.",d:"pos"},
-      {q:"It upsets me to see an animal in pain.",d:"pos"},
-      {q:"I am able to make decisions without being influenced by people's feelings.",d:"neg"},
-      {q:"I can't relax until I have done everything I had planned to do that day.",d:"fil"},
-      {q:"I can easily tell if someone else is interested or bored with what I am saying.",d:"pos"},
-      {q:"I get upset if I see people suffering on news programmes.",d:"pos"},
-      {q:"Friends usually talk to me about their problems as they say that I am very understanding.",d:"pos"},
-      {q:"I can sense if I am intruding, even if the other person doesn't tell me.",d:"pos"},
-      {q:"I often start new hobbies but quickly become bored with them and move on to something else.",d:"fil"},
-      {q:"People sometimes tell me that I have gone too far with teasing.",d:"neg"},
-      {q:"I would be too nervous to go on a big rollercoaster.",d:"fil"},
-      {q:"Other people often say that I am insensitive, though I don't always see why.",d:"neg"},
-      {q:"If I see a stranger in a group, I think that it is up to them to make an effort to join in.",d:"neg"},
-      {q:"I usually stay emotionally detached when watching a film.",d:"neg"},
-      {q:"I like to be very organised in day to day life and often make lists of the chores I have to do.",d:"fil"},
-      {q:"I can tune into how someone else feels rapidly and intuitively.",d:"pos"},
-      {q:"I don't like to take risks.",d:"fil"},
-      {q:"I can easily work out what another person might want to talk about.",d:"pos"},
-      {q:"I can tell if someone is masking their true emotion.",d:"pos"},
-      {q:"Before making a decision I always weigh up the pros and cons.",d:"fil"},
-      {q:"I don't consciously work out the rules of social situations.",d:"pos"},
-      {q:"I am good at predicting what someone will do.",d:"pos"},
-      {q:"I tend to get emotionally involved with a friend's problems.",d:"pos"},
-      {q:"I can usually appreciate the other person's viewpoint, even if I don't agree with it.",d:"pos"}
-    ],
-    score(r){
-      let t=0,ans=0;
-      this.items.forEach((item,i)=>{
-        if(r[i]===null)return;
-        ans++;
-        if(item.d==='pos'){ if(r[i]===1)t+=2; else if(r[i]===2)t+=1; }
-        else if(item.d==='neg'){ if(r[i]===4)t+=2; else if(r[i]===3)t+=1; }
-      });
-      return {"EQ Total":t+"/80"+(t<=30?" ⚑ ≤30 (low; autism-consistent range)":"")};
-    }
+    name:"Cambridge Behaviour Scale (Empathy Quotient)",abbr:"EQ",type:"entry",primary:true,reporter:"self",rowColor:"green",manualComplete:true,
+    note:"Empathy Quotient (Baron-Cohen & Wheelwright, 2004; © MRC-SBC/SJW 1999), Autism Research Centre, University of Cambridge. 60 items — 40 scored, 20 unscored filler items. General population mean ≈42; autistic-sample mean ≈20 (0–80 range; lower scores associated with autism).",
+    link:{url:"https://www.oliveclinical.com/tests",label:"Client self-report form at oliveclinical.com/tests"},
+    fields:[
+      {id:"eqTotal",l:"Total Score",h:"0–80; ≤30 low, autism-consistent range"}
+    ]
   },
   catq:{
-    name:"Camouflaging Autistic Traits Questionnaire",abbr:"CAT-Q",warn:true,primary:true,reporter:"self",rowColor:"blue",
-    note:"Item wording, order, subscale key, and reverse-scoring here match the client-facing CAT-Q at the link below exactly, so a client's answers there transcribe item-for-item. Clients can take it there and either email you their results (Print/Save as PDF, or the Copy Results Summary button) or read them off with you — then enter each item's rating here.",
-    link:{url:"https://www.oliveclinical.com/tests",label:"Send clients to the self-report form at oliveclinical.com/tests"},
-    instr:"Rate how strongly each statement applies to you on a scale from 1 (Strongly Disagree) to 7 (Strongly Agree). Think about how you generally behave in social situations.",
-    scale:{l:["Strongly Disagree","2","3","4","5","6","Strongly Agree"],v:[1,2,3,4,5,6,7]},
-    subs:{C:[0,2,4,6,10,15,18,20,21],A:[1,7,8,9,11,12,13,17,23],K:[3,5,14,16,19,22,24]},
-    rev:[3,14,16,19,24],
-    items:[
-      "I adjust my body language or facial expressions so that I seem interested in the conversation, even when I'm not.",
-      "I have developed a script to follow in social situations.",
-      "I monitor my own body language or facial expressions to try to fit in.",
-      "I rarely feel the need to put on an act in order to get through a social situation.",
-      "I think about what my face is doing so that I appear interested in the person I'm talking to.",
-      "I notice when others are uncomfortable and try to make them feel better, even if I'm not sure what to do.",
-      "I know I can use smiling and eye contact to make people feel comfortable around me, even when I don't feel comfortable myself.",
-      "I change my personality depending on who I am with.",
-      "I have spent time learning social skills from TV shows, books, or by watching other people.",
-      "I have memorized scripts from TV shows or films to use in conversation.",
-      "I naturally mimic the behaviors of the people I spend time with.",
-      "When talking to other people, I feel like I am performing rather than being myself.",
-      "I hide my true self when with other people.",
-      "In social situations, I feel like I'm going through the motions.",
-      "I am always myself in social situations.",
-      "I adjust my language or vocabulary depending on who I am with.",
-      "I don't feel the need to make eye contact with others to seem interested.",
-      "I try hard to fit in with the people around me.",
-      "I force myself to make eye contact with people, even when it feels uncomfortable.",
-      "I have always been good at making conversation.",
-      "I often observe people and learn how to socialize from them.",
-      "I sometimes copy the way other people talk, even without meaning to.",
-      "I use humor, sarcasm, or wit to fit in.",
-      "I act like a different person at work or school compared to at home.",
-      "I feel free to be myself in social situations."
-    ],
-    score(r){
-      const rev=new Set(this.rev);
-      let t=0,c=0,a=0,k=0;
-      r.forEach((v,i)=>{
-        if(v===null)return;
-        const sv=rev.has(i)?8-v:v;
-        t+=sv;
-        if(this.subs.C.includes(i))c+=sv;
-        if(this.subs.A.includes(i))a+=sv;
-        if(this.subs.K.includes(i))k+=sv;
-      });
-      return {"CAT-Q Total":t+"/175"+(t>=100?" ⚑ high":""),"Compensation":c+"/63","Assimilation":a+"/63","Masking":k+"/49"};
-    }
+    name:"Camouflaging Autistic Traits Questionnaire",abbr:"CAT-Q",type:"entry",primary:true,reporter:"self",rowColor:"blue",manualComplete:true,
+    note:"Hull, Petrides, Mandy et al. (2019). 25 items across three subscales. Item wording, order, and scoring on the client-facing form at the link below match the published instrument.",
+    link:{url:"https://www.oliveclinical.com/tests",label:"Client self-report form at oliveclinical.com/tests"},
+    fields:[
+      {id:"catqTotal",l:"Total Score",h:"0–175; ≥100 high camouflaging"},
+      {id:"catqCompensation",l:"Compensation",h:"0–63"},
+      {id:"catqAssimilation",l:"Assimilation",h:"0–63"},
+      {id:"catqMasking",l:"Masking",h:"0–49"}
+    ]
   },
   raadsr:{
-    name:"Ritvo Autism Asperger Diagnostic Scale — Revised (RAADS-R)",abbr:"RAADS-R",warn:true,primary:true,reporter:"self",rowColor:"purple",
-    note:"© Riva Ariella Ritvo, Ph.D. and Edward Ritvo, M.D., 2007 (Ritvo et al., 2011, J Autism Dev Disord 41:1076–1089). 80 items; 17 items (marked * below) are reverse-scored normative items per the official scoring key. Total range 0–240; ≥65 consistent with autism, ≥90 strongly consistent. Subscale breakdown (Social Relatedness /88, Language /28, Sensory-Motor /60, Circumscribed Interests /64) requires the original publication's item-to-subscale key and is entered separately below if computed via a validated scoring tool. Clients can take this at the link below and either email you their results (Print/Save as PDF, or the Copy Results Summary button) or read them off with you — then enter the total here.",
-    link:{url:"https://www.oliveclinical.com/tests",label:"Send clients to the self-report form at oliveclinical.com/tests"},
-    instr:"Some life experiences and personality characteristics that may apply to you. For each statement, check the single column that best applies. There are no right or wrong answers.",
-    scale:{l:["True now and when I was young","True only now","True only when I was younger than 16","Never true"],v:[3,2,1,0]},
-    items:[
-      {q:"I am a sympathetic person.",d:"rev"},
-      {q:"I often use words and phrases from movies and television in conversations.",d:"std"},
-      {q:"I am often surprised when others tell me I have been rude.",d:"std"},
-      {q:"Sometimes I talk too loudly or too softly, and I am not aware of it.",d:"std"},
-      {q:"I often don't know how to act in social situations.",d:"std"},
-      {q:"I can \"put myself in other people's shoes.\"",d:"rev"},
-      {q:"I have a hard time figuring out what some phrases mean, like \"you are the apple of my eye.\"",d:"std"},
-      {q:"I only like to talk to people who share my special interests.",d:"std"},
-      {q:"I focus on details rather than the overall idea.",d:"std"},
-      {q:"I always notice how food feels in my mouth. This is more important to me than how it tastes.",d:"std"},
-      {q:"I miss my best friends or family when we are apart for a long time.",d:"rev"},
-      {q:"Sometimes I offend others by saying what I am thinking, even if I don't mean to.",d:"std"},
-      {q:"I only like to think and talk about a few things that interest me.",d:"std"},
-      {q:"I'd rather go out to eat in a restaurant by myself than with someone I know.",d:"std"},
-      {q:"I cannot imagine what it would be like to be someone else.",d:"std"},
-      {q:"I have been told that I am clumsy or uncoordinated.",d:"std"},
-      {q:"Others consider me odd or different.",d:"std"},
-      {q:"I understand when friends need to be comforted.",d:"rev"},
-      {q:"I am very sensitive to the way my clothes feel when I touch them. How they feel is more important to me than how they look.",d:"std"},
-      {q:"I like to copy the way certain people speak and act. It helps me appear more normal.",d:"std"},
-      {q:"It can be very intimidating for me to talk to more than one person at the same time.",d:"std"},
-      {q:"I have to \"act normal\" to please other people and make them like me.",d:"std"},
-      {q:"Meeting new people is usually easy for me.",d:"rev"},
-      {q:"I get highly confused when someone interrupts me when I am talking about something I am very interested in.",d:"std"},
-      {q:"It is difficult for me to understand how other people are feeling when we are talking.",d:"std"},
-      {q:"I like having a conversation with several people, for instance around a dinner table, at school or at work.",d:"rev"},
-      {q:"I take things too literally, so I often miss what people are trying to say.",d:"std"},
-      {q:"It is very difficult for me to understand when someone is embarrassed or jealous.",d:"std"},
-      {q:"Some ordinary textures that do not bother others feel very offensive when they touch my skin.",d:"std"},
-      {q:"I get extremely upset when the way I like to do things is suddenly changed.",d:"std"},
-      {q:"I have never wanted or needed to have what other people call an \"intimate relationship.\"",d:"std"},
-      {q:"It is difficult for me to start and stop a conversation. I need to keep going until I am finished.",d:"std"},
-      {q:"I speak with a normal rhythm.",d:"rev"},
-      {q:"The same sound, color or texture can suddenly change from very sensitive to very dull.",d:"std"},
-      {q:"The phrase \"I've got you under my skin\" makes me very uncomfortable.",d:"std"},
-      {q:"Sometimes the sound of a word or a high-pitched noise can be painful to my ears.",d:"std"},
-      {q:"I am an understanding type of person.",d:"rev"},
-      {q:"I do not connect with characters in movies and cannot feel what they feel.",d:"std"},
-      {q:"I cannot tell when someone is flirting with me.",d:"std"},
-      {q:"I can see in my mind in exact detail things that I am interested in.",d:"std"},
-      {q:"I keep lists of things that interest me, even when they have no practical use (for example sports statistics, train schedules, calendar dates, historical facts and dates).",d:"std"},
-      {q:"When I feel overwhelmed by my senses, I have to isolate myself to shut them down.",d:"std"},
-      {q:"I like to talk things over with my friends.",d:"rev"},
-      {q:"I cannot tell if someone is interested or bored with what I am saying.",d:"std"},
-      {q:"It can be very hard to read someone's face, hand and body movements when they are talking.",d:"std"},
-      {q:"The same thing (like clothes or temperatures) can feel very different to me at different times.",d:"std"},
-      {q:"I feel very comfortable with dating or being in social situations with others.",d:"rev"},
-      {q:"I try to be as helpful as I can when other people tell me their personal problems.",d:"rev"},
-      {q:"I have been told that I have an unusual voice (for example flat, monotone, childish, or high-pitched).",d:"std"},
-      {q:"Sometimes a thought or a subject gets stuck in my mind and I have to talk about it even if no one is interested.",d:"std"},
-      {q:"I do certain things with my hands over and over again (like flapping, twirling sticks or strings, waving things by my eyes).",d:"std"},
-      {q:"I have never been interested in what most of the people I know consider interesting.",d:"std"},
-      {q:"I am considered a compassionate type of person.",d:"rev"},
-      {q:"I get along with other people by following a set of specific rules that help me look normal.",d:"std"},
-      {q:"It is very difficult for me to work and function in groups.",d:"std"},
-      {q:"When I am talking to someone, it is hard to change the subject. If the other person does so, I can get very upset and confused.",d:"std"},
-      {q:"Sometimes I have to cover my ears to block out painful noises (like vacuum cleaners or people talking too much or too loudly).",d:"std"},
-      {q:"I can chat and make small talk with people.",d:"rev"},
-      {q:"Sometimes things that should feel painful are not (for instance when I hurt myself or burn my hand on a stove).",d:"std"},
-      {q:"When talking to someone, I have a hard time telling when it is my turn to talk or to listen.",d:"std"},
-      {q:"I am considered a loner by those who know me best.",d:"std"},
-      {q:"I usually speak in a normal tone.",d:"rev"},
-      {q:"I like things to be exactly the same day after day and even small changes in my routines upset me.",d:"std"},
-      {q:"How to make friends and socialize is a mystery to me.",d:"std"},
-      {q:"It calms me to spin around or to rock in a chair when I am feeling stressed.",d:"std"},
-      {q:"The phrase, \"He wears his heart on his sleeve,\" does not make sense to me.",d:"std"},
-      {q:"If I am in a place where there are many smells, textures to feel, noises or bright lights, I feel anxious or frightened.",d:"std"},
-      {q:"I can tell when someone says one thing but means something else.",d:"rev"},
-      {q:"I like to be by myself as much as I can.",d:"std"},
-      {q:"I keep my thoughts stacked in my memory like they are on filing cards, and I pick out the ones I need by looking through the stack and finding the right one (or another unique way).",d:"std"},
-      {q:"The same sound sometimes seems very loud or very soft, even though I know it has not changed.",d:"std"},
-      {q:"I enjoy spending time eating and talking with my family and friends.",d:"rev"},
-      {q:"I can't tolerate things I dislike (like smells, textures, sounds or colors).",d:"std"},
-      {q:"I don't like to be hugged or held.",d:"std"},
-      {q:"When I go somewhere, I have to follow a familiar route or I can get very confused and upset.",d:"std"},
-      {q:"It is difficult to figure out what other people expect of me.",d:"std"},
-      {q:"I like to have close friends.",d:"rev"},
-      {q:"People tell me that I give too much detail.",d:"std"},
-      {q:"I am often told that I ask embarrassing questions.",d:"std"},
-      {q:"I tend to point out other people's mistakes.",d:"std"}
-    ],
-    score(r){
-      let t=0;
-      this.items.forEach((item,i)=>{
-        if(r[i]===null)return;
-        t += item.d==='rev' ? (3-r[i]) : r[i];
-      });
-      return {"RAADS-R Total":t+"/240"+(t>=65?" ⚑ ≥65 (consistent with autism)":"")+(t>=90?" ⚑⚑ ≥90 strongly consistent":"")};
-    }
+    name:"Ritvo Autism Asperger Diagnostic Scale — Revised (RAADS-R)",abbr:"RAADS-R",type:"entry",primary:true,reporter:"self",rowColor:"purple",manualComplete:true,
+    note:"© Riva Ariella Ritvo, Ph.D. and Edward Ritvo, M.D., 2007 (Ritvo et al., 2011, J Autism Dev Disord 41:1076–1089). 80 items. Total range 0–240; ≥65 consistent with autism, ≥90 strongly consistent. Subscale scores are optional — enter only if computed via a validated scoring tool.",
+    link:{url:"https://www.oliveclinical.com/tests",label:"Client self-report form at oliveclinical.com/tests"},
+    fields:[
+      {id:"raadsrTotal",l:"Total Score",h:"0–240; ≥65 consistent, ≥90 strongly consistent"},
+      {id:"raadsrSR",l:"Social Relatedness",h:"0–88 (optional)"},
+      {id:"raadsrLang",l:"Language",h:"0–28 (optional)"},
+      {id:"raadsrSM",l:"Sensory-Motor",h:"0–60 (optional)"},
+      {id:"raadsrCI",l:"Circumscribed Interests",h:"0–64 (optional)"}
+    ]
   },
   srs2_other:{
     name:"Social Responsiveness Scale — Second Edition (SRS-2), Relative/Other Report",abbr:"SRS-2 Other",type:"entry",primary:true,reporter:"other",
