@@ -8,7 +8,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "Relationships & Inner Life",
-    date: "2026",
+    date: "July 2026",
     blocks: [
       {
         type: "paragraph",
@@ -242,7 +242,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "Film & OCD",
-    date: "2026",
+    date: "June 2026",
     blocks: [
       {
         type: "paragraph",
@@ -424,7 +424,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "Technology & Inner Life",
-    date: "2026",
+    date: "May 2026",
     blocks: [
       {
         type: "paragraph",
@@ -615,7 +615,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "OCD & Neurodivergence",
-    date: "2025",
+    date: "November 2025",
     blocks: [
       {
         type: "paragraph",
@@ -699,7 +699,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "OCD & the Imagination",
-    date: "2025",
+    date: "October 2025",
     blocks: [
       {
         type: "paragraph",
@@ -783,7 +783,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "Neurodivergence & Self-Understanding",
-    date: "2025",
+    date: "September 2025",
     blocks: [
       {
         type: "paragraph",
@@ -1002,7 +1002,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "Neurodivergence & Self-Understanding",
-    date: "2025",
+    date: "August 2025",
     blocks: [
       {
         type: "paragraph",
@@ -1154,7 +1154,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "Relationships & Neurodivergence",
-    date: "2025",
+    date: "July 2025",
     blocks: [
       {
         type: "paragraph",
@@ -1370,7 +1370,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "Relationships & Inner Life",
-    date: "2025",
+    date: "June 2025",
     blocks: [
       {
         type: "paragraph",
@@ -1541,7 +1541,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "Neurodivergence & Culture",
-    date: "2025",
+    date: "May 2025",
     blocks: [
       {
         type: "paragraph",
@@ -1803,7 +1803,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "OCD & Clinical Insight",
-    date: "2026",
+    date: "April 2026",
     blocks: [
       {
         type: "paragraph",
@@ -1966,7 +1966,7 @@ export const posts: BlogPost[] = [
     author: "Madrone Love",
     credential: "PsyD",
     category: "Relationships & Neurodivergence",
-    date: "2026",
+    date: "March 2026",
     blocks: [
       {
         type: "paragraph",

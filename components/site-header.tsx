@@ -7,7 +7,7 @@ export function SiteHeader() {
   return (
     <header
       className="no-print w-full border-b border-[rgba(11,37,69,0.10)]"
-      style={{ background: "var(--paper)" }}
+      style={{ background: "var(--linen)" }}
     >
       <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 py-4 sm:py-5 flex items-center gap-4">
         {/* Left: lockup */}
