@@ -11,7 +11,7 @@ export default function BlogPage() {
   return (
     <ToolPageLayout title="Blog" color="text-ink">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-        {posts.map((post, i) => (
+        {[...posts].reverse().map((post, i) => (
           <BlogHeroCard
             key={post.slug}
             post={{

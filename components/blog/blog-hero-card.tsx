@@ -79,16 +79,18 @@ export function BlogHeroCard({
             >
               {post.category ?? "Essay"}
             </span>
-            <span
-              className="text-[0.66rem] shrink-0 tabular-nums"
-              style={{
-                fontFamily: "var(--font-mono)",
-                color: "rgba(11,37,69,0.4)",
-                letterSpacing: "0.1em",
-              }}
-            >
-              {String(index + 1).padStart(2, "0")}
-            </span>
+            {post.date && (
+              <span
+                className="text-[0.66rem] shrink-0"
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  color: "rgba(11,37,69,0.4)",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                {post.date}
+              </span>
+            )}
           </div>
 
           <h3
@@ -133,18 +135,6 @@ export function BlogHeroCard({
                 <path d="M5 12h14M13 5l7 7-7 7" />
               </svg>
             </span>
-            {post.date && (
-              <span
-                className="text-[0.62rem] shrink-0"
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  color: "rgba(11,37,69,0.4)",
-                  letterSpacing: "0.08em",
-                }}
-              >
-                {post.date}
-              </span>
-            )}
           </div>
         </div>
       </motion.div>
