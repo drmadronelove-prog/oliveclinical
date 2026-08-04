@@ -2,6 +2,240 @@ import type { BlogPost } from "@/components/blog/blog-post"
 
 export const posts: BlogPost[] = [
   {
+    slug: "a-taxonomy-of-friendship-styles",
+    title: "A Taxonomy of Friendship Styles: Depth, Continuity, and What Actually Keeps a Friendship Running",
+    subtitle: "We have precise language for romantic attachment and almost none for friendship. So we borrow the wrong words, and end up unable to say what is actually missing.",
+    author: "Madrone Love",
+    credential: "PsyD",
+    category: "Relationships & Inner Life",
+    date: "2026",
+    blocks: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "A client told me recently that she had eleven friends and was lonely, and that she could not work out whether that made her ungrateful or broken. She listed them for me. A woman she texts every day. Two people from graduate school she sees twice a year and loves. A neighbor she has had four extraordinary conversations with on the front steps and never once seen indoors. Her sister-in-law. A running group.",
+      },
+      {
+        type: "paragraph",
+        text: "Nothing on that list was fake. That was what made it hard to talk about. If the friendships had been hollow, there would have been an obvious problem and an obvious direction. Instead she had something more confusing: a set of real relationships that were not adding up to the thing she wanted, and no vocabulary for describing the gap.",
+      },
+      {
+        type: "paragraph",
+        text: "We have gotten quite good, culturally, at talking about romantic attachment. Most people I meet can tell me their style within the first session, sometimes within the first ten minutes. Friendship gets almost none of that resolution. We have \"friend,\" which covers a person you would donate a kidney to and a person whose last name you are not certain of, and we have \"best friend,\" which is a ranking rather than a description. When something is wrong, people reach for the romantic vocabulary because it is the only precise vocabulary available, and it does not fit. Friendships are not usually exclusive, rarely involve cohabitation, and almost never end with a conversation. They end by not being continued.",
+      },
+      {
+        type: "paragraph",
+        text: "The journalist Rhaina Cohen puts the cost of this asymmetry more precisely than I have managed to: \"While we weaken friendships by expecting too little of them, we undermine romantic relationships by expecting too much of them.\" Her book The Other Significant Others profiles people who have, in her phrase, \"redrawn the borders of friendship, moving the lines further and further outward to encompass more space in each other's lives\" — and much of what makes their arrangements legible as remarkable is simply that most of us have never been offered a way to describe them.",
+      },
+      {
+        type: "paragraph",
+        text: "So I started sketching. What follows is a map I have found useful in my own practice: two axes, four quadrants, thirteen recognizable positions. It is not a diagnostic instrument and I would be suspicious of anyone who tried to make it one. It is a way of getting specific enough to say what is actually missing.",
+      },
+      { type: "heading", text: "Two axes, not one" },
+      {
+        type: "paragraph",
+        text: "The first axis is depth of exchange. How much of your interior life moves between you? At the shallow end, information passes: schedules, logistics, weather, the plot of things. At the deep end, something more costly moves: uncertainty, shame, the half-formed thought you have not said out loud, the thing you are afraid is true about yourself.",
+      },
+      {
+        type: "paragraph",
+        text: "The second axis is commitment, or continuity. Does this relationship persist across contexts and across time, independent of the circumstance that produced it? A friendship with high continuity survives a job change, a move, a year of silence. A friendship with low continuity is real while its context holds and evaporates when the context does.",
+      },
+      {
+        type: "paragraph",
+        text: "The reason two axes matter is that these vary independently, and most of our confusion comes from assuming they do not. My client had assumed that depth and durability were the same measurement, so a friendship with a great deal of one and none of the other read to her as a failure of both. It was not. It was a specific, describable kind of relationship with a specific, describable limit.",
+      },
+      {
+        type: "paragraph",
+        text: "Cross the two axes and you get four regions, and the regions turn out to correspond, roughly and imperfectly, to something Aristotle noticed twenty-four centuries ago in the Nicomachean Ethics. He distinguished friendships of utility, friendships of pleasure, and friendships of virtue, and argued that only the last kind is fully durable, because the first two dissolve the moment their reason does. The bottom-left of the map is close to utility. The top-left is close to pleasure. The top-right is close to virtue. I do not think he was entirely right — I will come back to the bottom-right, which he did not really have a category for — but the structure has held up remarkably well for something written before the invention of the personal calendar.",
+      },
+      {
+        type: "pull-quote",
+        text: "Depth and durability are different measurements. Most of the confusion about friendship comes from treating them as one.",
+      },
+      { type: "heading", text: "The four quadrants" },
+      {
+        type: "paragraph",
+        text: "Free-flowing intimacy (deep, low continuity) is the quadrant most people underestimate. This is the friend you talk to about everything and see once a year. The stranger on the overnight flight. The person you were extraordinarily close to during one specific eighteen months and have not spoken to since. Nothing here is fraudulent. The depth was real. It simply was not attached to a mechanism for persisting.",
+      },
+      {
+        type: "paragraph",
+        text: "Anchor (deep, high continuity) is what most people mean when they say they want more friends. These are the relationships that survive the context that made them. They are also, statistically, the smallest category most people have. Robin Dunbar's work on the layered structure of human social networks puts the innermost support layer at around five people, and the next layer out at around fifteen. Five. If you have three, you are not behind.",
+      },
+      {
+        type: "paragraph",
+        text: "What makes this quadrant structurally difficult is not that people fail to want it. It is that friendship supplies no machinery for producing it. Cohen describes the people in her book as \"friends who have become a we, despite having no scripts, no ceremonies, and precious few models to guide them toward long-term platonic commitment.\" Marriage comes with an entire apparatus for converting depth into continuity — a date, a legal status, a set of obligations everyone recognizes. Friendship comes with nothing. Whatever continuity it has, someone built by hand.",
+      },
+      {
+        type: "paragraph",
+        text: "Peripheral (surface, low continuity) is where most of a life's social contact actually happens, and where the least harm is done. Acquaintances, the people at work you like, the barista, the loose acquaintance of an acquaintance. This quadrant has a bad reputation it has not earned. It is not failed friendship. It is the ambient social texture that makes a neighborhood feel like a place.",
+      },
+      {
+        type: "paragraph",
+        text: "Duty and ritual (surface, high continuity) is the one Aristotle skipped, and it is the one that causes the most private distress. These are the relationships that have kept every structural feature of closeness — the standing dinner, the yearly trip, the group thread, the family-adjacent friend you inherited and never chose — while the actual exchange has thinned to logistics and nostalgia. Nothing is wrong. Everyone is polite. You leave the dinner feeling worse than when you arrived and cannot say why.",
+      },
+      {
+        type: "paragraph",
+        text: "That last quadrant deserves its own paragraph, because it is where the word \"friend\" does the most damage. A duty friendship looks, from the outside and often from the inside, exactly like a close one. It has history, frequency, and continuity. What it does not have is depth, and because we mostly measure friendship by the visible markers, the loss is very hard to name. People come into my office describing a full calendar and a specific, unlocatable hunger.",
+      },
+      { type: "heading", text: "What is actually keeping it running" },
+      {
+        type: "paragraph",
+        text: "Here is where the map earns its keep, and where I depart from the usual sorting. If you look at any given friendship and ask what is actually keeping it in motion, you get five recognizably different answers.",
+      },
+      {
+        type: "paragraph",
+        text: "Sometimes the answer is intrinsic: you want the person's company for its own sake. There is pleasure in it, or chemistry, or the specific relief of being read accurately by someone. Nothing outside the friendship is holding it up. Sometimes it is mixed: genuinely rewarding and genuinely owed, at the same time, in a proportion that shifts by the month. The decades-long friendship where you love them and also dread the call. Both are true and neither cancels the other. Sometimes it is avoidance: the friendship is maintained to prevent something — guilt, an awkward conversation, the discomfort of being the one who let it lapse. Sometimes it is extrinsic: the relationship has a real, non-trivial motive that simply sits outside the friendship itself. Proximity at work. Professional utility. The fact that they are married to your brother. And sometimes there is no particular drive at all: an acquaintance, pleasant enough, nothing much at stake in either direction.",
+      },
+      {
+        type: "paragraph",
+        text: "Sorting a friendship by its fuel rather than by its closeness tends to produce more information than people expect. Two relationships can look identical on a calendar — same frequency, same duration, same visible warmth — and be running on completely different engines. When you plot the fuel onto the map, a pattern comes out that I did not expect when I started drawing it: every intrinsic friendship sits in the top half, and every obligated one sits on the right.",
+      },
+      {
+        type: "paragraph",
+        text: "Which is to say: depth is what supplies the pleasure. Commitment is only what makes obligation structurally possible. You cannot feel obligated to someone you have no ongoing tie to. You also cannot get pleasure out of continuity alone. Drain the depth from a committed friendship and keep the structure, and you have manufactured a duty friend.",
+      },
+      { type: "heading", text: "Two fuels, and they do not substitute" },
+      {
+        type: "paragraph",
+        text: "The thing I most want people to take from this map is that movement across it runs on two different kinds of energy, and neither one can do the other's job.",
+      },
+      {
+        type: "paragraph",
+        text: "Chemistry moves you up. It is what turns an acquaintance into someone you actually talk to. It is largely not chosen — you meet someone and something in the exchange is unusually easy, and there is no amount of good intention that manufactures it where it is absent.",
+      },
+      {
+        type: "paragraph",
+        text: "Continuity moves you right. It is almost entirely chosen, and it is unglamorous. It is the recurring calendar entry, the text you send with no occasion, the decision to keep going after the shared context ends. Jeffrey Hall's research at the University of Kansas put rough numbers on this: something like fifty hours together to move from acquaintance to casual friend, ninety to reach friend, more than two hundred before most people apply the word close. Those are not romantic numbers. They are the arithmetic of showing up.",
+      },
+      {
+        type: "paragraph",
+        text: "Run the two independently and you can see exactly what each produces alone. Chemistry with no continuity gives you the extraordinary stranger — deep, memorable, and gone. Continuity with no chemistry gives you the duty friend — durable, dependable, and quietly depleting. The anchor friendship requires both, which is why it is rare, and why it is the only position on the map you cannot arrive at by drifting into it.",
+      },
+      {
+        type: "pull-quote",
+        text: "Chemistry moves you up. Continuity moves you right. Neither substitutes for the other, and the anchor friendship is the only cell on the map you cannot reach by accident.",
+      },
+      {
+        type: "paragraph",
+        text: "There is one more asymmetry worth sitting with, because it explains a lot of quiet grief. Drift downward is free. It requires no decision, no conversation, no rupture. You simply keep the dinner and stop bringing anything real to it, and the structure holds long enough that neither person notices the depth has gone. Moving back up requires somebody to deliberately break the script — to say a true thing at a dinner that has not held a true thing in four years, and to risk that it lands badly.",
+      },
+      {
+        type: "paragraph",
+        text: "That asymmetry is why so many long friendships hollow out without anyone doing anything wrong. Decay is the default direction. Repair is a decision.",
+      },
+      {
+        type: "paragraph",
+        text: "It is also, I think, culturally produced rather than inevitable. Talking with Manoush Zomorodi on the TED Radio Hour, Cohen described how we currently hold friendship: as something \"basically disposable,\" something \"you think of as maybe temporary, or it's something that you stuff to the side of life.\" A relationship you have been taught to think of as temporary is one you will not fight for when it starts to thin. The drift is not only a failure of individual attention. It is what happens when a whole category of relationship is understood, in advance, as the thing that gives way when something more official needs the room.",
+      },
+      { type: "heading", text: "Where the attachment styles live" },
+      {
+        type: "paragraph",
+        text: "Attachment theory was built to describe infants and then extended to romantic partners, and it maps onto friendship imperfectly. But the four-category model that Kim Bartholomew and Leonard Horowitz described in 1991 — organized around whether a person holds a positive or negative working model of the self and of others — does something useful here. It predicts which quadrant will feel like home.",
+      },
+      {
+        type: "paragraph",
+        text: "Secure attachment is comfortable in the anchor quadrant, which is the only region asking for depth and continuity at once. That combination requires trusting that ruptures can be repaired, because over a long enough friendship there will be ruptures. Secure attachment is essentially the capacity to hold both without needing to collapse one.",
+      },
+      {
+        type: "paragraph",
+        text: "Dismissive-avoidant attachment — positive model of self, negative model of others — is genuinely at home in free-flowing intimacy. This surprises people, because we tend to assume avoidant means shallow. It does not. Dismissive-avoidant people are often superb at depth, provided the depth makes no claim on the future. The exit stays visible the whole time, and its visibility is what makes the depth tolerable. An intense four-hour conversation with someone you will never see again is not a compromise for this attachment style. It is close to ideal.",
+      },
+      {
+        type: "paragraph",
+        text: "Anxious or preoccupied attachment — negative model of self, positive model of others — tends to over-function in the duty and ritual quadrant. Not because it wants to be there; it wants the anchor quadrant badly. But it over-invests in continuity specifically, because continuity is the part you can control. Presence gets maintained as evidence of the bond. The dinner keeps happening long after the dinner stopped being nourishing, because cancelling would mean something.",
+      },
+      {
+        type: "paragraph",
+        text: "Fearful-avoidant attachment — negative models of both self and others — does not get a quadrant, and I think that is the accurate description rather than a gap in the map. It has the approach drive fully online and the alarm system fully online at the same time, so it pursues the depth and flees the continuity. The pattern is the oscillation. If you want the clean diagnostic question that separates it from dismissive-avoidance: notice what happens after distance is achieved. Dismissive-avoidance gets relief and stays. Fearful-avoidance gets relief that curdles into longing within a week and starts moving back in.",
+      },
+      {
+        type: "paragraph",
+        text: "And the peripheral quadrant belongs to nobody, which is worth stating directly. Too little is at stake there to activate anyone's attachment system. Everyone looks secure at the low-stakes end. This is why acquaintanceship tells you almost nothing about how a person attaches, and why the first real test of a friendship is usually the first time it costs something.",
+      },
+      {
+        type: "paragraph",
+        text: "I want to be careful here. These are descriptions of strategies, not fixed types. Most people move between them depending on who they are with, how much sleep they have had, and what the last relationship taught them. Dismissive-avoidance in particular often has anxious material underneath it that surfaces under enough stress, which is why two people can look identical in a crisis and be running on opposite logic the rest of the time.",
+      },
+      { type: "heading", text: "Neurodivergence changes which quadrants are cheap" },
+      {
+        type: "paragraph",
+        text: "Everything above assumes a fairly level playing field across the map, and for neurodivergent adults it is not level at all. Some quadrants cost considerably more to occupy, and some are unexpectedly easy, and the mismatch generates a great deal of unearned shame.",
+      },
+      {
+        type: "paragraph",
+        text: "Start with the peripheral quadrant, which the standard advice treats as the easy one. Small talk, ambient warmth, low-stakes contact. For a lot of autistic adults this is the most expensive real estate on the map, not the cheapest. Surface exchange runs on inference — reading the unstated, tracking the subtext, calibrating in real time — and doing that consciously rather than automatically is exhausting in a way that depth is not. I have worked with many clients who can sustain a four-hour conversation about something that matters and cannot survive twenty minutes of a work happy hour. That is not a social skills deficit. Those are two genuinely different tasks, and the map treats one as easier only because it is easier for most people.",
+      },
+      {
+        type: "paragraph",
+        text: "Free-flowing intimacy, meanwhile, is often the most natural quadrant for monotropic minds. Dinah Murray, Wenn Lawson, and Mike Lesser described monotropism as a tendency for attention to flow deeply through a small number of channels at a time. Applied to friendship, that produces exactly what this quadrant describes: intense, absorbed, high-depth connection that does not distribute itself across a wide network and does not always come with a mechanism for continuity. A friendship formed inside a shared interest can go extraordinarily deep very fast, and then have no structure to survive the interest ending.",
+      },
+      {
+        type: "paragraph",
+        text: "Continuity itself is where ADHD makes the map hardest. Moving right on the horizontal axis is almost entirely an executive function task — remembering, initiating, following through on something that has no deadline and produces no consequence for being skipped. Friendship maintenance is possibly the purest example of a task that is important, non-urgent, and entirely self-initiated, which is precisely the category that an interest-based nervous system handles worst. My ADHD clients frequently have abundant chemistry and enormous difficulty with continuity, and they read the result as evidence that they are a bad friend. It is usually better described as a nervous system that does not convert intention into recurrence without external scaffolding.",
+      },
+      {
+        type: "paragraph",
+        text: "Then there is masking, which shows up on this map in a specific way. Masking is expensive, and its cost scales with how much surface performance a relationship requires. Which means the duty and ritual quadrant — high continuity, low depth, sustained pleasantness — is the single most costly quadrant for a masking adult to occupy. A neurotypical person leaves an obligatory dinner mildly bored. A masking autistic adult can leave the same dinner needing two days to recover. When such a client tells me they only have capacity for a few friendships, I have stopped hearing that as avoidance. It is often an accurate energy budget.",
+      },
+      {
+        type: "paragraph",
+        text: "And rejection sensitivity complicates the repair move specifically. Reclaiming a hollowed-out friendship requires saying a true thing and risking that it lands badly. For someone who experiences perceived rejection with the intensity that William Dodson has described in adults with ADHD, that risk is not a small ask. It is the hardest available move, attempted with the least favorable odds. The friendship does not decay because the person did not care. It decays because the repair attempt costs more than most people are being asked to spend.",
+      },
+      {
+        type: "pull-quote",
+        text: "The map is not level. Some quadrants are cheap for one nervous system and ruinously expensive for another, and most of the shame around friendship comes from being measured against the wrong budget.",
+      },
+      { type: "heading", text: "What to do with this" },
+      {
+        type: "paragraph",
+        text: "I am wary of turning a descriptive map into a set of instructions, so I will keep this short and modest.",
+      },
+      {
+        type: "paragraph",
+        text: "Take the list my client made and do the version that is actually useful: not counting, but sorting. For each person, two questions. How much of your interior life actually moves between you? And what is holding this in place — is it wanted, or is it owed, or is it running on something that sits outside the friendship entirely?",
+      },
+      {
+        type: "paragraph",
+        text: "Most people find their answers are more concentrated than expected. A few relationships doing the real work, a larger number that are pleasant and structurally shallow, and often one or two in the bottom-right that have been quietly draining the budget for years while looking, on paper, like close friendships.",
+      },
+      {
+        type: "paragraph",
+        text: "That is enough to work with. If the top-right is thin, the question is not \"how do I meet more people\" but \"which existing depth am I failing to give continuity to\" — because chemistry is the harder input to manufacture and you may already have it somewhere. If the bottom-right is crowded, the question is whether each of those relationships wants reclaiming or releasing, and both are legitimate answers. Not every duty friendship should be repaired. Some of them have simply finished, and the honest thing is to let the structure follow the substance.",
+      },
+      {
+        type: "paragraph",
+        text: "What I hope the map mostly does is give people permission to be specific. My client was not ungrateful and she was not broken. She had a great deal of free-flowing intimacy, a well-populated peripheral layer, two relationships in the bottom-right she had been carrying without noticing, and almost nothing in the top-right. That is not a character problem. It is a shape, and shapes can be worked with.",
+      },
+      {
+        type: "paragraph",
+        text: "Cohen has a line that I have thought about often since reading it: \"It can be confusing to live in the gulf between the life you have and the life you believe you're supposed to be living.\" She is writing about people whose central relationship is a friendship and who have no cultural script for saying so. But the sentence describes my client too, from the other direction — someone whose life looked correct from outside and did not feel correct from inside, and who had no language for the difference. Most of the suffering was in the gulf, not in the friendships.",
+      },
+      {
+        type: "paragraph",
+        text: "Loneliness inside a full calendar is not a contradiction and it is not ingratitude. It usually means the friendships you have are real, and they are the wrong shape for what you need — which is a much more tractable problem than the one people usually think they have.",
+      },
+      { type: "heading", text: "References" },
+      {
+        type: "list",
+        items: [
+          "Aristotle. Nicomachean Ethics, Books VIII–IX (c. 340 BCE).",
+          "Bartholomew, K., & Horowitz, L. M. (1991). Attachment styles among young adults: A test of a four-category model. Journal of Personality and Social Psychology, 61(2), 226–244.",
+          "Cohen, R. (2024). The Other Significant Others: Reimagining Life with Friendship at the Center. St. Martin's Press.",
+          "Cohen, R., interviewed by Manoush Zomorodi. \"The case for building your life around friendships.\" TED Radio Hour, NPR, February 7, 2025.",
+          "Dodson, W. (2016). Emotion regulation and rejection sensitivity. Attention magazine (CHADD).",
+          "Dunbar, R. I. M. (2020). Structure and function in human and primate social networks: Implications for diffusion, network stability and health. Proceedings of the Royal Society A, 476(2240).",
+          "Hall, J. A. (2019). How many hours does it take to make a friend? Journal of Social and Personal Relationships, 36(4), 1278–1296.",
+          "Milton, D. E. M. (2012). On the ontological status of autism: The \"double empathy problem.\" Disability & Society, 27(6), 883–887.",
+          "Murray, D., Lesser, M., & Lawson, W. (2005). Attention, monotropism and the diagnostic criteria for autism. Autism, 9(2), 139–156.",
+        ],
+      },
+      {
+        type: "footer-note",
+        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
+      },
+    ],
+  },
+  {
     slug: "watching-charlie-unravel",
     title: "Watching Charlie Unravel: \"The Drama\" as a Portrait of Relationship OCD",
     subtitle: "Most films that try to depict OCD show someone washing their hands. Kristoffer Borgli's film does something rarer — and renders, with uncomfortable accuracy, the closed loop of relationship-themed OCD.",
