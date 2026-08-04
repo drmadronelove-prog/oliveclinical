@@ -1,0 +1,170 @@
+<svg viewBox="0 0 2450 1490" xmlns="http://www.w3.org/2000/svg" font-family="'DM Sans','Helvetica Neue',Arial,sans-serif">
+<defs><style>.display{font-family:'Cormorant Garamond',Georgia,serif}.body{font-family:'DM Sans','Helvetica Neue',Arial,sans-serif}</style>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect width="2450" height="1490" fill="#FBF7F1"/>
+<text x="70" y="58" class="display" font-size="36" font-weight="600" fill="#3A2E28">A Taxonomy of Friendship Styles</text>
+<text x="70" y="88" class="body" font-size="14.5" fill="#6B5A4E">depth of exchange (vertical) &#215; commitment / continuity (horizontal) &#8212; with the fuel that moves you between quadrants</text>
+<text x="70" y="110" class="body" font-size="12" fill="#8A7264">fill = social motivation level &#183; border = felt experience (solid = security &#183; dashed = obligation) &#183; glyph = motivational signature &#183; tinted panels = attachment-style home ground</text>
+<rect x="150" y="226" width="1350" height="1140" rx="14" fill="#F7F2EA"/>
+<line x1="150" y1="780" x2="1500" y2="780" stroke="#C9BCAC" stroke-width="2"/>
+<line x1="825" y1="226" x2="825" y2="1366" stroke="#C9BCAC" stroke-width="2"/>
+<text x="172" y="252" class="body" font-size="12.5" font-weight="700" fill="#8A7264" letter-spacing="1" text-anchor="start">FREE-FLOWING INTIMACY</text>
+<text x="1478" y="252" class="body" font-size="12.5" font-weight="700" fill="#8A7264" letter-spacing="1" text-anchor="end">ANCHOR &#183; VIRTUE</text>
+<text x="172" y="1340" class="body" font-size="12.5" font-weight="700" fill="#8A7264" letter-spacing="1" text-anchor="start">PERIPHERAL &#183; UTILITY</text>
+<text x="1478" y="1340" class="body" font-size="12.5" font-weight="700" fill="#8A7264" letter-spacing="1" text-anchor="end">DUTY &amp; RITUAL</text>
+<rect x="172" y="268" width="640" height="58" rx="8" fill="#EFE0CB" stroke="#C9A98A" stroke-width="1.5"/>
+<rect x="172" y="268" width="5" height="58" fill="#C9A98A"/>
+<text x="190" y="292" class="body" font-size="12.5" font-weight="700" fill="#6B4A2E">Where dismissive-avoidant attachment shines</text>
+<text x="190" y="312" class="body" font-size="11" fill="#6B5A4E">real depth, no claim on the future &#8212; the exit stays visible throughout</text>
+<rect x="838" y="268" width="640" height="58" rx="8" fill="#EFE0CB" stroke="#C9A98A" stroke-width="1.5"/>
+<rect x="838" y="268" width="5" height="58" fill="#C9A98A"/>
+<text x="856" y="292" class="body" font-size="12.5" font-weight="700" fill="#6B4A2E">Where secure attachment shines</text>
+<text x="856" y="312" class="body" font-size="11" fill="#6B5A4E">the only quadrant asking for depth and continuity at once, trusting repair to hold both</text>
+<rect x="172" y="1252" width="640" height="58" rx="8" fill="#EFE0CB" stroke="#C9A98A" stroke-width="1.5"/>
+<rect x="172" y="1252" width="5" height="58" fill="#C9A98A"/>
+<text x="190" y="1276" class="body" font-size="12.5" font-weight="700" fill="#6B4A2E">Where no attachment style is activated</text>
+<text x="190" y="1296" class="body" font-size="11" fill="#6B5A4E">too little at stake to trigger the system &#8212; everyone looks secure in this corner</text>
+<rect x="838" y="1252" width="640" height="58" rx="8" fill="#EFE0CB" stroke="#C9A98A" stroke-width="1.5"/>
+<rect x="838" y="1252" width="5" height="58" fill="#C9A98A"/>
+<text x="856" y="1276" class="body" font-size="12.5" font-weight="700" fill="#6B4A2E">Where anxious attachment over-functions</text>
+<text x="856" y="1296" class="body" font-size="11" fill="#6B5A4E">keeps the structure alive past the warmth; presence maintained as proof of the bond</text>
+<rect x="280" y="348" width="380" height="112" rx="10" fill="#FFFFFF" stroke="#3A2E28" stroke-width="2"/>
+<text x="470.0" y="396.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Independent deep-talker</text>
+<text x="470.0" y="421.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">intrinsic &#8212; wanted for itself</text>
+<circle cx="630" cy="374" r="6.5" fill="#3A2E28"/>
+<rect x="280" y="478" width="380" height="112" rx="10" fill="#FFFFFF" stroke="#3A2E28" stroke-width="2"/>
+<text x="470.0" y="526.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Situational confidant</text>
+<text x="470.0" y="551.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">intrinsic &#8212; wanted for itself</text>
+<circle cx="630" cy="504" r="6.5" fill="#3A2E28"/>
+<rect x="280" y="608" width="380" height="112" rx="10" fill="#FFFFFF" stroke="#3A2E28" stroke-width="2"/>
+<text x="470.0" y="656.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Instant-intimacy stranger</text>
+<text x="470.0" y="681.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">intrinsic &#8212; wanted for itself</text>
+<circle cx="630" cy="634" r="6.5" fill="#3A2E28"/>
+<rect x="990" y="348" width="380" height="88" rx="10" fill="#E8CDB8" stroke="#3A2E28" stroke-width="2"/>
+<text x="1180.0" y="384.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Platonic life partner</text>
+<text x="1180.0" y="409.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">intrinsic &#8212; wanted for itself</text>
+<circle cx="1340" cy="374" r="6.5" fill="#3A2E28"/>
+<rect x="990" y="442" width="380" height="88" rx="10" fill="#E8CDB8" stroke="#3A2E28" stroke-width="2"/>
+<text x="1180.0" y="478.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Core confidant</text>
+<text x="1180.0" y="503.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">intrinsic &#8212; wanted for itself</text>
+<circle cx="1340" cy="468" r="6.5" fill="#3A2E28"/>
+<rect x="990" y="536" width="380" height="88" rx="10" fill="#E8CDB8" stroke="#A4472E" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="1180.0" y="572.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Decades-long bestie</text>
+<text x="1180.0" y="597.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">mixed &#8212; rewarding and owed at once</text>
+<circle cx="1340" cy="562" r="6" fill="none" stroke="#3A2E28" stroke-width="2"/><path d="M 1340 556 A 6 6 0 0 0 1340 568 Z" fill="#3A2E28"/>
+<rect x="990" y="630" width="380" height="88" rx="10" fill="#E8CDB8" stroke="#3A2E28" stroke-width="2"/>
+<text x="1180.0" y="666.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Crisis friend</text>
+<text x="1180.0" y="691.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">mixed &#8212; rewarding and owed at once</text>
+<circle cx="1340" cy="656" r="6" fill="none" stroke="#3A2E28" stroke-width="2"/><path d="M 1340 650 A 6 6 0 0 0 1340 662 Z" fill="#3A2E28"/>
+<rect x="280" y="840" width="380" height="112" rx="10" fill="#FFFFFF" stroke="#3A2E28" stroke-width="2"/>
+<text x="470.0" y="888.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Acquaintance</text>
+<text x="470.0" y="913.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">low stakes &#8212; little registers</text>
+<line x1="623" y1="866" x2="637" y2="866" stroke="#3A2E28" stroke-width="2" stroke-linecap="round"/>
+<rect x="280" y="980" width="380" height="112" rx="10" fill="#FFFFFF" stroke="#3A2E28" stroke-width="2"/>
+<text x="470.0" y="1028.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Coworker / utility friend</text>
+<text x="470.0" y="1053.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">extrinsic &#8212; motive sits outside it</text>
+<path d="M 630 999 L 636.5 1011 L 623.5 1011 Z" fill="#3A2E28"/>
+<rect x="280" y="1120" width="380" height="112" rx="10" fill="#FFFFFF" stroke="#3A2E28" stroke-width="2"/>
+<text x="470.0" y="1168.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Networking contact</text>
+<text x="470.0" y="1193.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">extrinsic &#8212; motive sits outside it</text>
+<path d="M 630 1139 L 636.5 1151 L 623.5 1151 Z" fill="#3A2E28"/>
+<rect x="990" y="840" width="380" height="112" rx="10" fill="#E8CDB8" stroke="#A4472E" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="1180.0" y="888.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Ritual / reunion friend</text>
+<text x="1180.0" y="913.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">mixed &#8212; rewarding and owed at once</text>
+<circle cx="1340" cy="866" r="6" fill="none" stroke="#3A2E28" stroke-width="2"/><path d="M 1340 860 A 6 6 0 0 0 1340 872 Z" fill="#3A2E28"/>
+<rect x="990" y="980" width="380" height="112" rx="10" fill="#FFFFFF" stroke="#A4472E" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="1180.0" y="1028.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Family-adjacent friend</text>
+<text x="1180.0" y="1053.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">extrinsic &#8212; motive sits outside it</text>
+<path d="M 1340 999 L 1346.5 1011 L 1333.5 1011 Z" fill="#3A2E28"/>
+<rect x="990" y="1120" width="380" height="112" rx="10" fill="#FFFFFF" stroke="#A4472E" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="1180.0" y="1168.0" class="body" font-size="16" font-weight="700" fill="#3A2E28" text-anchor="middle">Duty friend</text>
+<text x="1180.0" y="1193.0" class="body" font-size="11.5" font-style="italic" fill="#6B5A4E" text-anchor="middle">avoidance &#8212; kept to prevent loss</text>
+<circle cx="1340" cy="1146" r="6" fill="none" stroke="#3A2E28" stroke-width="2"/>
+<rect x="668" y="726" width="314" height="50" rx="8" fill="#EFE0CB" stroke="#C9A98A" stroke-width="1.5"/>
+<rect x="668" y="726" width="5" height="50" fill="#C9A98A"/>
+<text x="686" y="750" class="body" font-size="11.5" font-weight="700" fill="#6B4A2E">Fearful-avoidant settles nowhere</text>
+<text x="686" y="770" class="body" font-size="10.5" fill="#6B5A4E">pursues the depth, flees the continuity</text>
+<text x="825" y="208" class="body" font-size="13" font-weight="700" fill="#6B5A4E" letter-spacing="1.5" text-anchor="middle">DEEP / VULNERABLE</text>
+<text x="825" y="1404" class="body" font-size="13" font-weight="700" fill="#6B5A4E" letter-spacing="1.5" text-anchor="middle">SITUATIONAL / SURFACE</text>
+<text x="172" y="772" class="body" font-size="13" font-weight="700" fill="#6B5A4E" letter-spacing="1.5">INDEPENDENT</text>
+<text x="1478" y="772" class="body" font-size="13" font-weight="700" fill="#6B5A4E" letter-spacing="1.5" text-anchor="end">COMMITTED / CONTINUITY</text>
+<line x1="470" y1="835" x2="470" y2="726" stroke="#A4472E" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="492" y="756" class="body" font-size="12.5" font-weight="700" fill="#A4472E">deepening</text>
+<text x="492" y="773" class="body" font-size="11" fill="#6B5A4E">no commitment added</text>
+<line x1="665" y1="534" x2="985" y2="534" stroke="#A4472E" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="825" y="500" class="body" font-size="12.5" font-weight="700" fill="#A4472E" text-anchor="middle">committing</text>
+<text x="825" y="517" class="body" font-size="11" fill="#6B5A4E" text-anchor="middle">continuity added to depth</text>
+<line x1="1060" y1="723" x2="1060" y2="835" stroke="#A4472E" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#ah)"/>
+<text x="1046" y="790" class="body" font-size="12.5" font-weight="700" fill="#A4472E" text-anchor="end">drift</text>
+<line x1="1200" y1="835" x2="1200" y2="723" stroke="#A4472E" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="1214" y="790" class="body" font-size="12.5" font-weight="700" fill="#A4472E">reclaiming</text>
+<rect x="1560" y="230" width="840" height="150" rx="10" fill="#F5EFE7" stroke="#E0D3C2" stroke-width="1.5"/>
+<text x="1582" y="262" class="body" font-size="10.5" font-weight="700" fill="#8A7264" letter-spacing="1.5">MOTIVATIONAL SIGNATURE &#8212; WHAT ACTUALLY KEEPS THE FRIENDSHIP RUNNING</text>
+<circle cx="1590" cy="292" r="6.5" fill="#3A2E28"/>
+<text x="1610" y="296" class="body" font-size="11.5" fill="#6B5A4E">intrinsic &#8212; pleasure, chemistry, flow; wanted for itself</text>
+<circle cx="1590" cy="322" r="6" fill="none" stroke="#3A2E28" stroke-width="2"/><path d="M 1590 316 A 6 6 0 0 0 1590 328 Z" fill="#3A2E28"/>
+<text x="1610" y="326" class="body" font-size="11.5" fill="#6B5A4E">mixed &#8212; genuinely rewarding and genuinely owed</text>
+<circle cx="1590" cy="352" r="6" fill="none" stroke="#3A2E28" stroke-width="2"/>
+<text x="1610" y="356" class="body" font-size="11.5" fill="#6B5A4E">avoidance &#8212; maintained to prevent guilt or loss</text>
+<path d="M 2010 285 L 2016.5 297 L 2003.5 297 Z" fill="#3A2E28"/>
+<text x="2030" y="296" class="body" font-size="11.5" fill="#6B5A4E">extrinsic &#8212; real motive, but it sits outside the tie</text>
+<line x1="2003" y1="322" x2="2017" y2="322" stroke="#3A2E28" stroke-width="2" stroke-linecap="round"/>
+<text x="2030" y="326" class="body" font-size="11.5" fill="#6B5A4E">drive absent &#8212; nothing much registers either way</text>
+<rect x="1560" y="400" width="400" height="256" rx="10" fill="#FFFFFF" stroke="#D9CDBF" stroke-width="1.5"/>
+<text x="1580" y="432" class="body" font-size="13.5" font-weight="700" fill="#3A2E28">DEEPENING &#8212; peripheral &#8594; free-flowing intimacy</text>
+<text x="1580" y="462" class="body" font-size="9.5" font-weight="700" fill="#8A7264" letter-spacing="1.2">MOVES WHEN</text>
+<text x="1580" y="482" class="body" font-size="11" fill="#6B5A4E">&#8226; a context strips out the small talk &#8212; travel, crisis, late hours</text>
+<text x="1580" y="500" class="body" font-size="11" fill="#6B5A4E">&#8226; one person discloses first and it is not punished</text>
+<text x="1580" y="530" class="body" font-size="9.5" font-weight="700" fill="#8A7264" letter-spacing="1.2">HELD BACK BY</text>
+<text x="1580" y="550" class="body" font-size="11" fill="#6B5A4E">&#8226; no privacy; the setting rewards surface only</text>
+<text x="1580" y="568" class="body" font-size="11" fill="#6B5A4E">&#8226; a role is attached &#8212; boss, client, in-law, patient</text>
+<text x="1580" y="598" class="body" font-size="9.5" font-weight="700" fill="#A4472E" letter-spacing="1.2">INTRINSIC PULL</text>
+<text x="1580" y="618" class="body" font-size="11" fill="#6B5A4E">&#8226; chemistry &#8212; the specific pleasure of being read accurately</text>
+<text x="1580" y="636" class="body" font-size="11" fill="#6B5A4E">&#8226; disclosure is rewarding in itself, before any payoff</text>
+<rect x="1990" y="400" width="400" height="256" rx="10" fill="#FFFFFF" stroke="#D9CDBF" stroke-width="1.5"/>
+<text x="2010" y="432" class="body" font-size="13.5" font-weight="700" fill="#3A2E28">COMMITTING &#8212; free-flowing &#8594; anchor</text>
+<text x="2010" y="462" class="body" font-size="9.5" font-weight="700" fill="#8A7264" letter-spacing="1.2">MOVES WHEN</text>
+<text x="2010" y="482" class="body" font-size="11" fill="#6B5A4E">&#8226; the depth recurs across unrelated contexts, not one</text>
+<text x="2010" y="500" class="body" font-size="11" fill="#6B5A4E">&#8226; a rupture gets repaired instead of quietly dropped</text>
+<text x="2010" y="530" class="body" font-size="9.5" font-weight="700" fill="#8A7264" letter-spacing="1.2">HELD BACK BY</text>
+<text x="2010" y="550" class="body" font-size="11" fill="#6B5A4E">&#8226; no low-effort touchpoint once the context ends</text>
+<text x="2010" y="568" class="body" font-size="11" fill="#6B5A4E">&#8226; motivation is one-sided; only one person reaches</text>
+<text x="2010" y="598" class="body" font-size="9.5" font-weight="700" fill="#A4472E" letter-spacing="1.2">INTRINSIC PULL</text>
+<text x="2010" y="618" class="body" font-size="11" fill="#6B5A4E">&#8226; being known over time compounds; history rewards itself</text>
+<text x="2010" y="636" class="body" font-size="11" fill="#6B5A4E">&#8226; wanting continuity, rather than fearing its absence</text>
+<rect x="1560" y="700" width="400" height="256" rx="10" fill="#FFFFFF" stroke="#D9CDBF" stroke-width="1.5"/>
+<text x="1580" y="732" class="body" font-size="13.5" font-weight="700" fill="#3A2E28">DRIFT &#8212; anchor &#8594; duty &amp; ritual</text>
+<text x="1580" y="762" class="body" font-size="9.5" font-weight="700" fill="#8A7264" letter-spacing="1.2">MOVES WHEN</text>
+<text x="1580" y="782" class="body" font-size="11" fill="#6B5A4E">&#8226; lives diverge and depth stops being replenished</text>
+<text x="1580" y="800" class="body" font-size="11" fill="#6B5A4E">&#8226; conflict gets avoided rather than repaired; topics narrow</text>
+<text x="1580" y="830" class="body" font-size="9.5" font-weight="700" fill="#8A7264" letter-spacing="1.2">HELD BACK BY</text>
+<text x="1580" y="850" class="body" font-size="11" fill="#6B5A4E">&#8226; almost nothing &#8212; this is the default direction</text>
+<text x="1580" y="868" class="body" font-size="11" fill="#6B5A4E">&#8226; structure outlives depth, so the loss stays invisible</text>
+<text x="1580" y="898" class="body" font-size="9.5" font-weight="700" fill="#A4472E" letter-spacing="1.2">INTRINSIC PULL</text>
+<text x="1580" y="918" class="body" font-size="11" fill="#6B5A4E">&#8226; it inverts: the pleasure drains, the calendar entry stays</text>
+<text x="1580" y="936" class="body" font-size="11" fill="#6B5A4E">&#8226; what was chemistry becomes a standing obligation</text>
+<rect x="1990" y="700" width="400" height="256" rx="10" fill="#FFFFFF" stroke="#D9CDBF" stroke-width="1.5"/>
+<text x="2010" y="732" class="body" font-size="13.5" font-weight="700" fill="#3A2E28">RECLAIMING &#8212; duty &amp; ritual &#8594; anchor</text>
+<text x="2010" y="762" class="body" font-size="9.5" font-weight="700" fill="#8A7264" letter-spacing="1.2">MOVES WHEN</text>
+<text x="2010" y="782" class="body" font-size="11" fill="#6B5A4E">&#8226; someone breaks the script &#8212; real disclosure at the ritual</text>
+<text x="2010" y="800" class="body" font-size="11" fill="#6B5A4E">&#8226; a crisis makes the surface arrangement untenable</text>
+<text x="2010" y="830" class="body" font-size="9.5" font-weight="700" fill="#8A7264" letter-spacing="1.2">HELD BACK BY</text>
+<text x="2010" y="850" class="body" font-size="11" fill="#6B5A4E">&#8226; the ritual is comfortable; keeping it costs nothing</text>
+<text x="2010" y="868" class="body" font-size="11" fill="#6B5A4E">&#8226; years of surface set a strong precedent to defect from</text>
+<text x="2010" y="898" class="body" font-size="9.5" font-weight="700" fill="#A4472E" letter-spacing="1.2">INTRINSIC PULL</text>
+<text x="2010" y="918" class="body" font-size="11" fill="#6B5A4E">&#8226; the old chemistry is often still there, and recoverable</text>
+<text x="2010" y="936" class="body" font-size="11" fill="#6B5A4E">&#8226; shared history is the asset the depth rebuilds on</text>
+<rect x="1560" y="1010" width="840" height="300" rx="10" fill="#F5EFE7" stroke="#E0D3C2" stroke-width="1.5"/>
+<text x="1582" y="1046" class="body" font-size="11.5" font-weight="700" fill="#A4472E">Two fuels, not one.</text>
+<text x="1582" y="1065" class="body" font-size="11.5" font-weight="400" fill="#6B5A4E">Chemistry moves you up. Continuity moves you right. Neither substitutes for the other.</text>
+<text x="1582" y="1084" class="body" font-size="11.5" font-weight="400" fill="#6B5A4E">Chemistry alone gives you the instant-intimacy stranger: deep and undurable. Continuity alone gives</text>
+<text x="1582" y="1103" class="body" font-size="11.5" font-weight="400" fill="#6B5A4E">you the duty friend: durable and undeep. Core confidant needs both &#8212; which is why it is the one cell</text>
+<text x="1582" y="1122" class="body" font-size="11.5" font-weight="400" fill="#6B5A4E">on this map you cannot arrive at by drifting.</text>
+<text x="1582" y="1151" class="body" font-size="11.5" font-weight="700" fill="#A4472E">Obligation only lives on the committed side.</text>
+<text x="1582" y="1170" class="body" font-size="11.5" font-weight="400" fill="#6B5A4E">Every open and half-filled glyph sits right of centre. Commitment is what makes obligation possible;</text>
+<text x="1582" y="1189" class="body" font-size="11.5" font-weight="400" fill="#6B5A4E">depth is what makes it bearable. Drain the depth, keep the structure, and you get the bottom-right.</text>
+<text x="1582" y="1218" class="body" font-size="11.5" font-weight="700" fill="#A4472E">The asymmetry worth noticing.</text>
+<text x="1582" y="1237" class="body" font-size="11.5" font-weight="400" fill="#6B5A4E">Drift downward is free and needs no decision. Reclaiming upward requires someone to break the script</text>
+<text x="1582" y="1256" class="body" font-size="11.5" font-weight="400" fill="#6B5A4E">on purpose. That is why the drift card is the only one with no real hurdle to list.</text>
+<text x="70" y="1450" class="body" font-size="11" fill="#A99A8D">Aristotle&#8217;s lens: bottom-left &#8776; utility &#183; middle &#8776; pleasure &#183; top-right &#8776; virtue. Attachment placements mark where each style is most comfortable, not where it is confined. Illustrative, not diagnostic.</text>
+</svg>

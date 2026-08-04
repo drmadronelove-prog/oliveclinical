@@ -9,6 +9,7 @@ export type Block =
   | { type: "footer-note"; text: string }
   | { type: "callout"; heading: string; text: string }
   | { type: "list"; items: string[] }
+  | { type: "image"; src: string; alt?: string; caption?: string }
 
 export type BlogPost = {
   slug: string
@@ -220,6 +221,29 @@ export function BlogPostArticle({ post }: { post: BlogPost }) {
                     </li>
                   ))}
                 </ul>
+              )
+
+            case "image":
+              return (
+                <figure key={i} className="my-10 overflow-x-auto">
+                  <img
+                    src={block.src}
+                    alt={block.alt ?? ""}
+                    style={{ width: "100%", display: "block", borderRadius: 6 }}
+                  />
+                  {block.caption && (
+                    <figcaption
+                      className="mt-3 text-center text-[0.78rem]"
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        color: C.inkMute,
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      {block.caption}
+                    </figcaption>
+                  )}
+                </figure>
               )
 
             default:

@@ -94,6 +94,12 @@ export const posts: BlogPost[] = [
         type: "paragraph",
         text: "Which is to say: depth is what supplies the pleasure. Commitment is only what makes obligation structurally possible. You cannot feel obligated to someone you have no ongoing tie to. You also cannot get pleasure out of continuity alone. Drain the depth from a committed friendship and keep the structure, and you have manufactured a duty friend.",
       },
+      {
+        type: "image",
+        src: "/images/friendship-taxonomy.svg",
+        alt: "A taxonomy of friendship styles: depth of exchange on the vertical axis, commitment and continuity on the horizontal, with thirteen friendship positions sorted into four quadrants.",
+        caption: "A taxonomy of friendship styles — depth × continuity, with motivational signature and attachment-style home ground.",
+      },
       { type: "heading", text: "Two fuels, and they do not substitute" },
       {
         type: "paragraph",
