@@ -474,6 +474,7 @@ body::before{display:none;}
 .content-main .measure-card .item-text,
 .content-main .measure-card .d5-q{color:#241505;}
 .content-main .measure-card .item-num{color:#4A2F12;}
+.content-main .measure-card .wnl-master{color:#F9F1E4;}
 .content-main .measure-card .part-div{color:#3A2408;border-bottom-color:rgba(36,21,5,0.2);}
 .content-main .measure-card .d5-note{color:#4A2F12;}
 /* M.I.N.I. text that sits directly on the bronze fill */
@@ -2584,7 +2585,7 @@ function makeMSE(){
     primary:true,reporter:"other",
     note:"Clinician observation, completed at the conclusion of the assessment based on presentation across the full session.",
     sections:[
-      {id:"observations",label:"Mental Status Observations",items:[
+      {id:"observations",label:"Mental Status Observations",wnl:true,items:[
         {id:"appearance",q:"Appearance — grooming, hygiene, dress, apparent vs. stated age, distinguishing features:"},
         {id:"behavior",q:"Behavior / Psychomotor Activity — eye contact, cooperation, activity level, abnormal movements, gait:"},
         {id:"speech",q:"Speech — rate, volume, tone, fluency, articulation, spontaneity:"},
@@ -5081,10 +5082,20 @@ function buildInterviewCard(mod,key,m){
     h+=`<div style="margin-bottom:14px;">
       <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);font-family:var(--font-display);margin-bottom:6px;">${s.label}</div>`;
     if(s.items){
+      if(s.wnl){
+        h+=`<label class="wnl-master" style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;margin-bottom:10px;cursor:pointer;">
+          <input type="checkbox" id="ci_${mid}_${s.id}_all_wnl" onchange="toggleSectionWNL('${mod}','${key}','${s.id}',this)">
+          All within normative range
+        </label>`;
+      }
       s.items.forEach(it=>{
+        const wnlId=`ci_${mid}_${s.id}_${it.id}_wnl`;
         h+=`<div class="field" style="margin-bottom:10px;">
-          <label style="font-size:13px;">${it.q}</label>
-          <textarea style="font-size:14px;min-height:60px;" id="ci_${mid}_${s.id}_${it.id}" placeholder="Response..."></textarea>
+          <label style="font-size:13px;${s.wnl?'display:flex;align-items:center;gap:8px;':''}">
+            ${s.wnl?`<input type="checkbox" class="wnl-item" id="${wnlId}" data-sid="${s.id}" onchange="onItemWNLChange('${mod}','${key}','${s.id}')">`:''}
+            ${it.q}
+          </label>
+          <textarea style="font-size:14px;min-height:60px;" id="ci_${mid}_${s.id}_${it.id}" placeholder="${s.wnl?'Findings, if not within normal limits...':'Response...'}"></textarea>
         </div>`;
       });
     } else {
@@ -5098,6 +5109,30 @@ function buildInterviewCard(mod,key,m){
   });
   h+=`</div></div>`;
   return h;
+}
+
+// Within-normal-limits checkboxes on interview sections (e.g. the Mental
+// Status Exam): a master checkbox that checks/unchecks every item at once,
+// and per-item checkboxes that stay individually toggleable — checking or
+// unchecking all of them by hand keeps the master in sync too.
+function toggleSectionWNL(mod,key,sid,masterCb){
+  const mid=mod+'_'+key;
+  const scope=document.getElementById(`mb_${mid}`);
+  if(!scope)return;
+  scope.querySelectorAll(`.wnl-item[data-sid="${sid}"]`).forEach(cb=>{cb.checked=masterCb.checked;});
+  if(typeof scheduleProgressUpdate==='function')scheduleProgressUpdate();
+}
+function syncSectionWNLMaster(mod,key,sid){
+  const mid=mod+'_'+key;
+  const scope=document.getElementById(`mb_${mid}`);
+  if(!scope)return;
+  const items=[...scope.querySelectorAll(`.wnl-item[data-sid="${sid}"]`)];
+  const master=document.getElementById(`ci_${mid}_${sid}_all_wnl`);
+  if(master&&items.length) master.checked=items.every(cb=>cb.checked);
+}
+function onItemWNLChange(mod,key,sid){
+  syncSectionWNLMaster(mod,key,sid);
+  if(typeof scheduleProgressUpdate==='function')scheduleProgressUpdate();
 }
 
 function miniYnSelect(id){
@@ -6408,9 +6443,10 @@ function miniDxFieldIds(mid,s){
 function measureHasData(mod,key){
   const m=M[mod][key];
   const v=id=>(document.getElementById(id)?.value||'').trim();
+  const chk=id=>!!document.getElementById(id)?.checked;
   if(m.type==='entry') return m.fields.some(f=>v(`entry_${mod}_${f.id}`)!=='');
   if(m.type==='interview') return m.sections.some(s=>s.items
-    ? s.items.some(it=>v(`ci_${mod}_${key}_${s.id}_${it.id}`)!=='')
+    ? s.items.some(it=>v(`ci_${mod}_${key}_${s.id}_${it.id}`)!==''||(s.wnl&&chk(`ci_${mod}_${key}_${s.id}_${it.id}_wnl`)))
     : v(`ci_${mod}_${key}_${s.id}`)!=='');
   if(m.type==='answersheet'){
     const mid=mod+'_'+key;
@@ -6454,15 +6490,19 @@ function writeMeasureBody(w,mod,key){
     return;
   }
   if(m.type==='interview'){
+    const chk=id=>!!document.getElementById(id)?.checked;
     m.sections.forEach(s=>{
       if(s.items){
-        const answered=s.items.filter(it=>v(`ci_${mod}_${key}_${s.id}_${it.id}`).trim()!=='');
+        const isWnl=it=>!!(s.wnl&&chk(`ci_${mod}_${key}_${s.id}_${it.id}_wnl`));
+        const answered=s.items.filter(it=>v(`ci_${mod}_${key}_${s.id}_${it.id}`).trim()!==''||isWnl(it));
         if(!answered.length)return;
         w.writeLine(s.label+':',{size:9,style:'italic',indent:6});
         answered.forEach(it=>{
           const val=v(`ci_${mod}_${key}_${s.id}_${it.id}`).trim();
-          w.writeLine(it.q+':',{size:9,indent:12});
-          w.writeMultiline(val,{size:10,indent:18});
+          const wnl=isWnl(it);
+          const label=it.q.endsWith(':')?it.q.slice(0,-1):it.q;
+          w.writeLine(label+(wnl?' — Within normal limits':'')+':',{size:9,indent:12});
+          if(val) w.writeMultiline(val,{size:10,indent:18});
         });
         w.writeBlank(3);
         return;
@@ -6952,11 +6992,16 @@ function buildMeasurePayload(mod,key){
     return payload;
   }
   if(m.type==='interview'){
+    const checked=id=>!!document.getElementById(id)?.checked;
     const sections={};
     m.sections.forEach(s=>{
       if(s.items){
         const itemVals={};
-        s.items.forEach(it=>itemVals[it.id]=v(`ci_${mod}_${key}_${s.id}_${it.id}`));
+        s.items.forEach(it=>{
+          itemVals[it.id]=s.wnl
+            ?{text:v(`ci_${mod}_${key}_${s.id}_${it.id}`),wnl:checked(`ci_${mod}_${key}_${s.id}_${it.id}_wnl`)}
+            :v(`ci_${mod}_${key}_${s.id}_${it.id}`);
+        });
         sections[s.id]=itemVals;
       } else {
         sections[s.id]=v(`ci_${mod}_${key}_${s.id}`);
@@ -7064,9 +7109,18 @@ function importMeasurePayload(mod,key,payload){
       if(s.items){
         if(secVal&&typeof secVal==='object'){
           s.items.forEach(it=>{
+            if(!Object.prototype.hasOwnProperty.call(secVal,it.id))return;
+            const raw=secVal[it.id];
             const el=document.getElementById(`ci_${mod}_${key}_${s.id}_${it.id}`);
-            if(el&&Object.prototype.hasOwnProperty.call(secVal,it.id)) el.value=secVal[it.id];
+            if(raw&&typeof raw==='object'){
+              if(el)el.value=raw.text||'';
+              const cb=document.getElementById(`ci_${mod}_${key}_${s.id}_${it.id}_wnl`);
+              if(cb)cb.checked=!!raw.wnl;
+            } else if(el){
+              el.value=raw;
+            }
           });
+          if(s.wnl)syncSectionWNLMaster(mod,key,s.id);
         }
       } else if(typeof secVal==='string'){
         const el=document.getElementById(`ci_${mod}_${key}_${s.id}`);
@@ -7253,6 +7307,8 @@ function buildMsg(){
         if(s.items){
           const answers=s.items.map(it=>{
             const val=v(`ci_${mod}_${key}_${s.id}_${it.id}`);
+            const wnl=s.wnl&&!!document.getElementById(`ci_${mod}_${key}_${s.id}_${it.id}_wnl`)?.checked;
+            if(wnl){ const label=it.q.endsWith(':')?it.q.slice(0,-1):it.q; return `${label}: Within normal limits${val?' — '+val:''}`; }
             return val?`${it.q}: ${val}`:null;
           }).filter(Boolean);
           return answers.length?`${s.label}:\n${answers.join('\n')}`:null;
