@@ -2715,6 +2715,23 @@ ADHD:{
       {id:"collateralHyper",l:"Observer Hyper-Impulsive T-score",h:"optional — from CAARS-O"}
     ]
   },
+  cpt3:{
+    name:"Conners Continuous Performance Test — Third Edition (CPT-3)",abbr:"CPT-3",type:"entry",
+    note:"MHS licensed measure. Computerized continuous-performance test administered under supervision. Enter the Confidence Index and T-scores from the CPT-3 report. T ≥60 atypical; T ≥65 markedly atypical (higher = more impaired, except Detectability where lower indicates poorer discrimination).",
+    link:{url:"https://assess.mhs.com/Account/Login.aspx",label:"Administer via MHS Assess"},
+    fields:[
+      {id:"cpt3Confidence",l:"Confidence Index",h:"% probability of a clinical/ADHD-consistent profile"},
+      {id:"cpt3Omissions",l:"Omissions T-score",h:"missed targets — inattention; ≥60 atypical"},
+      {id:"cpt3Commissions",l:"Commissions T-score",h:"false alarms — impulsivity; ≥60 atypical"},
+      {id:"cpt3Perseverations",l:"Perseverations T-score",h:"overly fast/random responses; ≥60 atypical"},
+      {id:"cpt3HitRT",l:"Hit RT T-score",h:"mean reaction time; ≥60 atypical"},
+      {id:"cpt3HitRTSE",l:"Hit RT Std. Error T-score",h:"response variability/consistency; ≥60 atypical"},
+      {id:"cpt3HitRTBlock",l:"Hit RT Block Change T-score",h:"vigilance decline over time; ≥60 atypical"},
+      {id:"cpt3HitRTISI",l:"Hit RT ISI Change T-score",h:"response to inter-stimulus interval changes; ≥60 atypical"},
+      {id:"cpt3Detectability",l:"Detectability (d') T-score",h:"target/non-target discrimination; ≥60 atypical"},
+      {id:"cpt3ResponseStyle",l:"Response Style (Beta) T-score",h:"risk-taking response bias; ≥60 atypical"}
+    ]
+  },
   diva5:makeDiva5(),
   collateral_adhd:{
     name:"Collateral Informant Interview — ADHD",abbr:"Collateral",type:"interview",
