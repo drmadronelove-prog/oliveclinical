@@ -2876,6 +2876,38 @@ Autism:{
       {id:"raadsrCI",l:"Circumscribed Interests",h:"0–64 (optional)"}
     ]
   },
+  rbq2a:{
+    name:"Repetitive Behaviours Questionnaire-2 for Adults (RBQ-2A)",abbr:"RBQ-2A",type:"entry",primary:true,reporter:"self",manualComplete:true,
+    note:"Barrett, Uljarević, Baker, Richdale, Jones & Leekam (2015). 20 items rated 0–3 (never/occasionally/often/always). Two subscales: Insistence on Sameness (IS, 9 items, max 27) and Repetitive Sensory Motor (RSM, 11 items, max 33). Total range 0–60; higher scores indicate more repetitive/restricted behavior.",
+    fields:[
+      {id:"rbq2aTotal",l:"Total Score",h:"0–60"},
+      {id:"rbq2aIS",l:"Insistence on Sameness",h:"0–27"},
+      {id:"rbq2aRSM",l:"Repetitive Sensory Motor",h:"0–33"}
+    ]
+  },
+  gqasc:{
+    name:"Girls Questionnaire for Autism Spectrum Condition (GQ-ASC)",abbr:"GQ-ASC",type:"entry",primary:true,reporter:"self",manualComplete:true,
+    note:"Brown, Attwood, Garnett & Ashworth (2020). Developed to capture female-typical and camouflaged autism presentations (social coping strategies, internalizing behavior, special interests) that measures normed on male presentations may underweight. Enter the total per the scoring manual for the version administered — subscale structure and cutoffs vary by source, so confirm against that version.",
+    fields:[
+      {id:"gqascTotal",l:"Total Score",h:"per the administered version's scoring manual"},
+      {id:"gqascNotes",l:"Scoring Notes",h:"e.g., version used, subscale scores if computed"}
+    ]
+  },
+  gad7:{
+    name:"Generalized Anxiety Disorder 7-item (GAD-7)",abbr:"GAD-7",type:"entry",primary:true,reporter:"self",manualComplete:true,
+    note:"Spitzer, Kroenke, Williams & Löwe (2006). Co-occurring anxiety screen. 0–21 range; 5 mild, 10 moderate, 15 severe. ≥10 warrants further evaluation.",
+    fields:[
+      {id:"gad7Total",l:"Total Score",h:"0–21; ≥10 warrants further evaluation"}
+    ]
+  },
+  phq9:{
+    name:"Patient Health Questionnaire 9-item (PHQ-9)",abbr:"PHQ-9",type:"entry",primary:true,reporter:"self",manualComplete:true,
+    note:"Kroenke, Spitzer & Williams (2001). Co-occurring depression screen. 0–27 range; 5 mild, 10 moderate, 15 moderately severe, 20 severe. Item 9 (thoughts of self-harm) — any score above 0 warrants direct follow-up; cross-reference the C-SSRS.",
+    fields:[
+      {id:"phq9Total",l:"Total Score",h:"0–27; ≥10 moderate or greater"},
+      {id:"phq9Item9",l:"Item 9 — Suicidal/Self-Harm Ideation",h:"0–3; any score >0 warrants follow-up"}
+    ]
+  },
   srs2_other:{
     name:"Social Responsiveness Scale — Second Edition (SRS-2), Relative/Other Report",abbr:"SRS-2 Other",type:"entry",primary:true,reporter:"other",
     note:"WPS-licensed. Enter T-scores from the Adult Relative/Other-Report form, completed by someone who knows the client well.",
