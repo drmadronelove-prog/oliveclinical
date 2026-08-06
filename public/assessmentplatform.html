@@ -1493,10 +1493,9 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
   <button class="tab-btn active" onclick="switchTab('clinic',this)">Clinic Information</button>
   <button class="tab-btn tab-parent" onclick="switchTab('client',this)">Client Information</button>
   <button class="tab-btn tab-child" onclick="switchTab('intake',this)">Intake Forms</button>
+  <button class="tab-btn tab-child" onclick="switchTab('referrals',this)">Referrals</button>
   <button class="tab-btn tab-child" onclick="switchTab('diagnostic',this)">Diagnostic Assessment</button>
-  <button class="tab-btn tab-child" onclick="switchTab('report',this)">Report Generator</button>
   <button class="tab-btn tab-child" onclick="switchTab('treatment',this)">Treatment Plan &amp; Progress</button>
-  <button class="tab-btn tab-child" onclick="switchTab('training',this)">Training Library</button>
 </div>
 </aside>
 
@@ -1517,6 +1516,14 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
       </div>
     </div>
     <div id="ccChecklist"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Training Library</div>
+    <div class="card placeholder-card">
+      <div class="placeholder-title">Coming soon</div>
+      <div class="placeholder-body">Curated training resources — recorded talks, articles, demonstrations, and supervision references — organized by clinical topic and skill.</div>
+    </div>
   </div>
 
 </div>
@@ -1944,6 +1951,16 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
   </div>
 </div>
 
+<div class="tab-pane" id="tab-referrals">
+  <div class="section">
+    <div class="section-label">Referrals</div>
+    <div class="card placeholder-card">
+      <div class="placeholder-title">Coming soon</div>
+      <div class="placeholder-body">Content to be completed later.</div>
+    </div>
+  </div>
+</div>
+
 <div class="tab-pane" id="tab-diagnostic">
   <div class="section">
     <div class="section-label">Assessment Introduction</div>
@@ -2011,9 +2028,6 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
       OpenEvidence
     </a>
   </div>
-</div>
-
-<div class="tab-pane" id="tab-report">
   <div class="section">
     <div class="section-label">Client Information</div>
     <div class="card">
@@ -2214,16 +2228,6 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
       <div id="tp_save_status" style="margin-top:12px;font-size:13px;color:var(--ink-muted);font-style:italic;"></div>
     </div>
 
-  </div>
-</div>
-
-<div class="tab-pane" id="tab-training">
-  <div class="section">
-    <div class="section-label">Training Library</div>
-    <div class="card placeholder-card">
-      <div class="placeholder-title">Coming soon</div>
-      <div class="placeholder-body">Curated training resources — recorded talks, articles, demonstrations, and supervision references — organized by clinical topic and skill.</div>
-    </div>
   </div>
 </div>
 
@@ -3514,7 +3518,7 @@ function switchTab(tab,btn){
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
-  if(tab==='report'){renderReportModules();if(typeof refreshReportGateStatus==='function')refreshReportGateStatus();}
+  if(tab==='diagnostic'){renderReportModules();if(typeof refreshReportGateStatus==='function')refreshReportGateStatus();}
   rebuildRightNav();
   if(typeof scheduleProgressUpdate==='function') scheduleProgressUpdate();
   window.scrollTo({top:0,behavior:'smooth'});
@@ -3650,10 +3654,11 @@ function readClientForm(){
     phone:document.getElementById('ci_phone').value.trim()
   };
 }
-// The Report Generator tab no longer asks for name/DOB/pronouns/gender itself
-// (item 14: don't repeat questions already asked on Client Information) — it
-// reads them from hidden clientName/dob/pronouns/gender inputs kept in sync
-// with the Client Information tab by this function, called on every edit,
+// The report-generation section (bottom of Diagnostic Assessment) no longer
+// asks for name/DOB/pronouns/gender itself (don't repeat questions already
+// asked on Client Information) — it reads them from hidden clientName/dob/
+// pronouns/gender inputs kept in sync with the Client Information tab by
+// this function, called on every edit,
 // client switch, or client-record load so the two tabs can never drift apart.
 function syncReportClientFields(){
   const cn=document.getElementById('clientName');
@@ -6529,7 +6534,7 @@ function buildMsg(){
   msg+=`CLIENT:\nName: ${v('clientName')||'[not provided]'}\nDOB: ${dob||'[not provided]'}${age?' (Age: '+age+')':''}\nGender: ${v('gender')||'[not specified]'}\nPronouns: ${v('pronouns')||'[not specified]'}\nLanguage preference: ${v('languagePref')}\nDate of Evaluation: ${v('evalDate')||'today'}\nReferral: ${v('referralSource')||'[not provided]'}\nReason: ${v('reasonForReferral')||'[not provided]'}\nHistory: ${v('relevantHistory')||'[not provided]'}\n\n`;
   msg+=`MODULES: ${selectedModules.join(', ')}\n\n`;
 
-  // Legacy quick-entry fields on the Report Generator tab — checked first, falling back to the
+  // Legacy quick-entry fields in the report-generation section — checked first, falling back to the
   // matching Diagnostic Assessment entry field of the same measure.
   const RPT_FALLBACK={
     ADHD:{caarsInatt:'rpt_caarsI',caarsHyper:'rpt_caarsH',caarsTotal:'rpt_caarsX',collateralInatt:'rpt_collat'}
