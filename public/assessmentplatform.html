@@ -287,8 +287,8 @@ body::before{display:none;}
   gap:10px;position:relative;margin:0;
   padding:18px 14px;
   border:none;list-style:none;
-  /* Same white → coral → rose → plum sweep as the main content card. */
-  background:linear-gradient(150deg,#FFFFFF 0%,#F7C9B4 34%,#E098A6 68%,#7A4F6E 100%);
+  /* Same flat greyish-white as the main content card. */
+  background:#ECEEF1;
   border-radius:28px;
   box-shadow:8px 8px 18px rgba(25,32,40,0.28),-8px -8px 18px rgba(255,255,255,0.35),inset 0 1px 0 rgba(255,255,255,0.4);
 }
@@ -340,12 +340,9 @@ body::before{display:none;}
 
 /* ── Content area — raised panel ────────────────── */
 .content-main{
-  /* Three-tier stack: cards (bronze, below) sit on this marbled cream/
-     blush panel — the sidebar placard's cream (#F4F2EE) blended with
-     pale blush in soft organic blobs rather than a clean linear sweep —
-     the layer between card and pill (sunken chips/rows) is coral, and
-     every pill and fill box inside a bronze card is white, so nothing
-     nested in the brass reads as a second cream tone. */
+  /* Flat greyish-white panel — cards (bronze, below) sit on top of it;
+     every pill and fill box inside a bronze card stays white so nothing
+     nested in the brass reads as a second neutral tone. */
   --surface:#FFFFFF;
   --surface-raised:#FFFFFF;
   --surface-sunken:#E5AF8F;
@@ -354,8 +351,7 @@ body::before{display:none;}
   --clay:#FFDCAA;
 
   flex:1;min-width:0;
-  /* Smooth white → coral → rose → plum sweep (no marbling). */
-  background:linear-gradient(150deg,#FFFFFF 0%,#F7C9B4 34%,#E098A6 68%,#7A4F6E 100%);
+  background:#ECEEF1;
   border:none;
   border-radius:22px;
   padding:36px 36px 64px;
@@ -788,11 +784,26 @@ body::before{display:none;}
 }
 .ck-q{line-height:1.35;}
 
-.mini-module{margin-bottom:22px;}
+.mini-module{margin-bottom:12px;}
 .mini-module-head{
   font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--clay);font-family:var(--font-display);margin-bottom:8px;
+  color:var(--clay);font-family:var(--font-display);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  cursor:pointer;user-select:none;
+  padding:10px 4px;
+  border-bottom:1px solid rgba(255,255,255,0.18);
 }
+.mini-module-head:hover{color:#FFDCAA;}
+.mini-module-head-label{display:flex;align-items:center;gap:8px;}
+.mini-module-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--success,#2A9D6F);flex-shrink:0;
+}
+.mini-module-chevron{
+  font-size:10px;transition:transform 180ms ease;flex-shrink:0;
+}
+.mini-module-chevron.open{transform:rotate(90deg);}
+.mini-module-body{padding-top:10px;}
 /* Current vs past episode — explicit two-column block */
 .mini-epi{margin-top:10px;}
 .mini-epi-head,.mini-epi-row{
@@ -4355,9 +4366,20 @@ function buildAnswerSheetCard(mod,key,m){
     </div>
     <div class="measure-body" id="mb_${mid}">`;
   if(m.note) h+=`<div class="measure-instruction">${m.note}</div>`;
-  m.sections.forEach(s=>{
+  if(m.sections.length>1){
+    h+=`<div style="display:flex;gap:10px;margin-bottom:10px;">
+      <button type="button" class="btn-sm" onclick="event.stopPropagation();setAllMiniModules('${mid}',true)">Expand all</button>
+      <button type="button" class="btn-sm" onclick="event.stopPropagation();setAllMiniModules('${mid}',false)">Collapse all</button>
+    </div>`;
+  }
+  m.sections.forEach((s,secIdx)=>{
+    const modId=`mmod_${mid}_${secIdx}`;
     h+=`<div class="mini-module">
-      <div class="mini-module-head">${s.code} — ${escapeHtml(s.label)}</div>`;
+      <div class="mini-module-head" onclick="event.stopPropagation();toggleMiniModule('${modId}')">
+        <span class="mini-module-head-label"><span class="mini-module-dot" id="${modId}_dot" style="visibility:hidden;"></span>${s.code} — ${escapeHtml(s.label)}</span>
+        <span class="mini-module-chevron" id="${modId}_chev">▸</span>
+      </div>
+      <div class="mini-module-body" id="${modId}" style="display:none;">`;
 
     // Paired-column modules (current vs past episode) get their own two-column
     // block with explicit headers, so the (1)/(2) fields aren't ambiguous.
@@ -4408,10 +4430,57 @@ function buildAnswerSheetCard(mod,key,m){
       h+=`<div class="field" style="margin-top:8px;"><label>Notes for this module</label><input type="text" id="mini_${mid}_dxnote_${s.code}"></div>`;
       h+=`</div>`;
     }
-    h+=`</div>`;
+    h+=`</div></div>`;
   });
   h+=`</div></div>`;
   return h;
+}
+
+// Collapsible M.I.N.I. modules — each disorder section opens/closes
+// independently so a clinician can jump straight to, say, just Depression
+// or just Substance Use without scrolling through all 17 sections.
+function toggleMiniModule(modId){
+  const body=document.getElementById(modId);
+  const chev=document.getElementById(modId+'_chev');
+  if(!body)return;
+  const opening=body.style.display==='none';
+  body.style.display=opening?'':'none';
+  if(chev)chev.classList.toggle('open',opening);
+}
+function setAllMiniModules(mid,expand){
+  document.querySelectorAll(`[id^="mmod_${mid}_"]`).forEach(el=>{
+    if(!el.id.endsWith('_dot')&&!el.id.endsWith('_chev')){
+      el.style.display=expand?'':'none';
+      const chev=document.getElementById(el.id+'_chev');
+      if(chev)chev.classList.toggle('open',expand);
+    }
+  });
+}
+// Lights up a module's header dot if anything inside it has a value —
+// lets a clinician see at a glance which sections already have data
+// without opening each one.
+function initMiniModuleDots(){
+  const handler=e=>{
+    const body=e.target.closest&&e.target.closest('.mini-module-body');
+    if(!body)return;
+    const card=body.closest('.measure-card');
+    if(!card)return;
+    const mid=card.id.replace(/^mc_/,'');
+    refreshMiniModuleDots(mid);
+  };
+  document.addEventListener('input',handler);
+  document.addEventListener('change',handler);
+}
+function refreshMiniModuleDots(mid){
+  document.querySelectorAll(`.measure-card[id="mc_${mid}"] .mini-module-body`).forEach(body=>{
+    const dot=document.getElementById(body.id+'_dot');
+    if(!dot)return;
+    const hasData=[...body.querySelectorAll('input,select,textarea')].some(el=>{
+      if(el.type==='checkbox'||el.type==='radio')return el.checked;
+      return (el.value||'').trim()!=='';
+    });
+    dot.style.visibility=hasData?'visible':'hidden';
+  });
 }
 
 function miniItemRowHTML(mid,it){
@@ -6344,6 +6413,7 @@ function importMeasurePayload(mod,key,payload){
       });
       apply(miniDxFieldIds(mid,s),payload.dx&&payload.dx[s.code]);
     });
+    if(typeof refreshMiniModuleDots==='function')refreshMiniModuleDots(mid);
     return true;
   }
   if(payload.mtype==='diva5'&&m.type==='diva5'){
@@ -8023,6 +8093,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   initDxMultiselect();
   rebuildRightNav();
   initSidePanel();
+  initMiniModuleDots();
   if(!localStorage.getItem('ntc_api_key'))openSettings();
 });
 </script>
