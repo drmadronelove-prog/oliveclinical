@@ -1481,16 +1481,10 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
   <button class="tab-btn" onclick="switchTab('buildout',this)">Buildout Todo List</button>
   <button class="tab-btn active" onclick="switchTab('clinic',this)">Clinic Information</button>
   <button class="tab-btn tab-parent" onclick="switchTab('client',this)">Client Information</button>
-  <button class="tab-btn tab-child" onclick="switchTab('appointments',this)">Appointments</button>
-  <button class="tab-btn tab-child" onclick="switchTab('billing',this)">Billing</button>
   <button class="tab-btn tab-child" onclick="switchTab('intake',this)">Intake Forms</button>
-  <button class="tab-btn tab-child" onclick="switchTab('measures',this)">Measures</button>
   <button class="tab-btn tab-child" onclick="switchTab('diagnostic',this)">Diagnostic Assessment</button>
   <button class="tab-btn tab-child" onclick="switchTab('report',this)">Report Generator</button>
   <button class="tab-btn tab-child" onclick="switchTab('treatment',this)">Treatment Plan &amp; Progress</button>
-  <button class="tab-btn tab-child" onclick="switchTab('notes',this)">Clinical Notes</button>
-  <button class="tab-btn tab-child" onclick="switchTab('worksheets',this)">New Harbinger CBT Worksheets</button>
-  <button class="tab-btn tab-child" onclick="switchTab('games',this)">CBT Games</button>
   <button class="tab-btn tab-child" onclick="switchTab('training',this)">Training Library</button>
 </div>
 </aside>
@@ -1590,36 +1584,6 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
           <button class="btn-cancel" onclick="newClient()">+ New Client</button>
           <button class="btn-cancel" onclick="deleteClient()" style="color:var(--danger);">Delete</button>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="tab-pane" id="tab-billing">
-  <div class="section">
-    <div class="section-label">Billing</div>
-    <div class="card placeholder-card">
-      <div class="placeholder-title">Coming soon</div>
-      <div class="placeholder-body">Superbill generation, CPT/ICD-10 coding helpers, payment tracking, insurance authorizations, and invoicing exports.</div>
-    </div>
-  </div>
-</div>
-
-<div class="tab-pane" id="tab-appointments">
-  <div class="section">
-    <div class="section-label">Appointments</div>
-    <div class="card">
-      <div class="field" style="margin-bottom:14px;">
-        <label>Google Calendar Embed URL</label>
-        <div class="hint">Paste the full embed URL from Google Calendar &rarr; Settings &rarr; Integrate calendar &rarr; "Embed code". Saved locally.</div>
-        <input type="text" id="gcal_url" placeholder="https://calendar.google.com/calendar/embed?src=...">
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
-        <button class="btn-sm btn-copy" onclick="loadGCal()">Load Calendar</button>
-        <button class="btn-sm" onclick="window.open('https://calendar.google.com','_blank')">Open Google Calendar</button>
-      </div>
-      <div id="gcal_wrapper" style="border-radius:var(--radius);overflow:hidden;box-shadow:var(--neu-in-sm);background:var(--surface);min-height:600px;display:flex;align-items:center;justify-content:center;color:var(--ink-muted);font-style:italic;">
-        Paste embed URL above and click "Load Calendar".
       </div>
     </div>
   </div>
@@ -1969,182 +1933,6 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
   </div>
 </div>
 
-<div class="tab-pane" id="tab-measures">
-  <!-- Sub-tabs -->
-  <div style="display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid var(--border,#e2e8f0);">
-    <button id="msub-screening" onclick="switchMeasuresSubTab('screening')" style="padding:8px 16px;font-size:13px;font-weight:600;border:none;border-bottom:2px solid var(--primary,#688E93);background:none;cursor:pointer;color:var(--primary,#688E93);font-family:var(--font-body);margin-bottom:-1px;">Screening Tools</button>
-    <button id="msub-submitted" onclick="switchMeasuresSubTab('submitted')" style="padding:8px 16px;font-size:13px;font-weight:600;border:none;border-bottom:2px solid transparent;background:none;cursor:pointer;color:var(--ink-muted,#888);font-family:var(--font-body);margin-bottom:-1px;">Submitted Measures</button>
-  </div>
-
-  <!-- Screening Tools sub-tab -->
-  <div id="msub-pane-screening">
-    <div class="section">
-      <div class="section-label">Screening Tools</div>
-      <div class="card">
-        <div class="field">
-          <label>Select Measures</label>
-          <div class="ms-select" id="screeningMultiselect">
-            <button type="button" class="ms-trigger" onclick="toggleMsMenu('screeningMultiselect')">
-              <span class="ms-trigger-label" id="screeningMsLabel">Choose one or more measures…</span>
-              <span class="ms-chevron">▾</span>
-            </button>
-            <div class="ms-menu" id="screeningMsMenu"></div>
-          </div>
-          <div class="hint">Pick one or more measures to administer. Items are registered in <code>SCREENING_MEASURES</code>; measures shown without items still render their metadata so the form is ready to populate.</div>
-        </div>
-      </div>
-      <div class="intake-accordion" id="screeningContainer">
-        <div class="intake-accordion-empty" id="screeningEmpty">No measures selected. Use the dropdown above to choose one or more.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Submitted Measures sub-tab -->
-  <div id="msub-pane-submitted" style="display:none;">
-    <div class="section">
-      <div class="section-label">Submitted Measures</div>
-      <p style="font-size:13px;color:var(--ink-muted,#666);margin:0 0 20px;">Upload PDFs of measures submitted by clients. Files are stored in this browser session only.</p>
-
-      <!-- Drop zone -->
-      <div id="sm-dropzone"
-        ondragover="event.preventDefault();document.getElementById('sm-dropzone').classList.add('sm-drag')"
-        ondragleave="document.getElementById('sm-dropzone').classList.remove('sm-drag')"
-        ondrop="smHandleDrop(event)"
-        onclick="document.getElementById('sm-file-input').click()"
-        style="border:2px dashed #ccc;border-radius:10px;padding:36px 24px;text-align:center;cursor:pointer;margin-bottom:24px;transition:border-color .15s,background .15s;">
-        <input id="sm-file-input" type="file" accept="application/pdf" multiple style="display:none" onchange="smHandleInput(this)">
-        <div style="font-size:32px;margin-bottom:10px;">📄</div>
-        <p style="font-size:14px;font-weight:600;margin:0 0 4px;color:var(--ink);">Drop PDFs here, or click to browse</p>
-        <p style="font-size:12px;color:var(--ink-muted,#888);margin:0;">Select multiple files at once · PDF only</p>
-      </div>
-
-      <!-- File list -->
-      <div id="sm-file-list"></div>
-      <p id="sm-empty-msg" style="text-align:center;font-size:13px;color:#aaa;">No measures uploaded yet.</p>
-
-      <!-- Inline viewer -->
-      <div id="sm-viewer" style="display:none;margin-top:24px;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#f8fafc;border-bottom:1px solid #e2e8f0;">
-          <span id="sm-viewer-name" style="font-size:13px;font-weight:600;color:var(--ink);"></span>
-          <button onclick="smCloseViewer()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#666;line-height:1;padding:2px 4px;">×</button>
-        </div>
-        <iframe id="sm-viewer-frame" src="" style="width:100%;height:600px;border:none;display:block;"></iframe>
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
-#sm-dropzone.sm-drag{border-color:#688E93;background:#688E9308;}
-.sm-file-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:8px;background:#fff;}
-.sm-file-row.sm-active{background:#f0f7f8;}
-.sm-btn{font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:600;font-family:var(--font-body);}
-</style>
-
-<script>
-(function(){
-  var smFiles=[];
-  var smViewingId=null;
-
-  window.switchMeasuresSubTab=function(tab){
-    var tabs=['screening','submitted'];
-    tabs.forEach(function(t){
-      document.getElementById('msub-pane-'+t).style.display=t===tab?'':'none';
-      var btn=document.getElementById('msub-'+t);
-      btn.style.borderBottomColor=t===tab?'var(--primary,#688E93)':'transparent';
-      btn.style.color=t===tab?'var(--primary,#688E93)':'var(--ink-muted,#888)';
-    });
-  };
-
-  window.smHandleDrop=function(e){
-    e.preventDefault();
-    document.getElementById('sm-dropzone').classList.remove('sm-drag');
-    smAddFiles(e.dataTransfer.files);
-  };
-
-  window.smHandleInput=function(input){
-    smAddFiles(input.files);
-    input.value='';
-  };
-
-  function smAddFiles(fileList){
-    Array.from(fileList).filter(function(f){return f.type==='application/pdf';}).forEach(function(f){
-      var entry={id:Date.now()+'-'+Math.random(),name:f.name,url:URL.createObjectURL(f),size:f.size,b64:null};
-      smFiles.push(entry);
-      var reader=new FileReader();
-      reader.onload=function(e){
-        var arr=new Uint8Array(e.target.result);
-        var bin='';for(var i=0;i<arr.length;i++)bin+=String.fromCharCode(arr[i]);
-        entry.b64=btoa(bin);
-        smRender();
-      };
-      reader.readAsArrayBuffer(f);
-    });
-    smRender();
-  }
-
-  // Expose smFiles so generateReport can access them
-  window.smGetFiles=function(){return smFiles;};
-
-  function smFmtBytes(b){
-    if(b<1024)return b+' B';
-    if(b<1048576)return (b/1024).toFixed(1)+' KB';
-    return (b/1048576).toFixed(1)+' MB';
-  }
-
-  function smRender(){
-    var list=document.getElementById('sm-file-list');
-    var empty=document.getElementById('sm-empty-msg');
-    empty.style.display=smFiles.length?'none':'';
-    list.innerHTML='';
-    smFiles.forEach(function(f){
-      var row=document.createElement('div');
-      row.className='sm-file-row'+(smViewingId===f.id?' sm-active':'');
-      var readyBadge=f.b64
-        ?'<span style="font-size:10px;background:#d1fae5;color:#065f46;border-radius:4px;padding:1px 6px;font-weight:600;margin-left:6px;">ready</span>'
-        :'<span style="font-size:10px;background:#fef3c7;color:#92400e;border-radius:4px;padding:1px 6px;font-weight:600;margin-left:6px;">loading…</span>';
-      row.innerHTML='<span style="font-size:20px;flex-shrink:0;">📄</span>'
-        +'<div style="flex:1;min-width:0;">'
-        +'<p style="margin:0 0 2px;font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+f.name+readyBadge+'</p>'
-        +'<p style="margin:0;font-size:11px;color:var(--ink-muted,#888);">'+smFmtBytes(f.size)+'</p>'
-        +'</div>'
-        +'<button class="sm-btn" onclick="smToggleView(\''+f.id+'\')" style="border:1px solid #688E93;background:'+(smViewingId===f.id?'#688E93':'transparent')+';color:'+(smViewingId===f.id?'#fff':'#688E93')+';">'+(smViewingId===f.id?'Hide':'View')+'</button>'
-        +'<a href="'+f.url+'" download="'+f.name+'" class="sm-btn" style="border:1px solid #e2e8f0;background:transparent;color:#555;text-decoration:none;">Download</a>'
-        +'<button class="sm-btn" onclick="smRemove(\''+f.id+'\')" style="border:1px solid #fecaca;background:transparent;color:#dc2626;">✕</button>';
-      list.appendChild(row);
-    });
-  }
-
-  window.smToggleView=function(id){
-    var f=smFiles.find(function(x){return x.id===id;});
-    if(!f)return;
-    if(smViewingId===id){smCloseViewer();}
-    else{
-      smViewingId=id;
-      document.getElementById('sm-viewer').style.display='';
-      document.getElementById('sm-viewer-name').textContent=f.name;
-      document.getElementById('sm-viewer-frame').src=f.url;
-      smRender();
-    }
-  };
-
-  window.smCloseViewer=function(){
-    smViewingId=null;
-    document.getElementById('sm-viewer').style.display='none';
-    document.getElementById('sm-viewer-frame').src='';
-    smRender();
-  };
-
-  window.smRemove=function(id){
-    var f=smFiles.find(function(x){return x.id===id;});
-    if(f){URL.revokeObjectURL(f.url);}
-    if(smViewingId===id)smCloseViewer();
-    smFiles=smFiles.filter(function(x){return x.id!==id;});
-    smRender();
-  };
-})();
-</script>
-
 <div class="tab-pane" id="tab-diagnostic">
   <div class="section">
     <div class="section-label">Assessment Introduction</div>
@@ -2188,6 +1976,30 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
     <div class="section-label">Module-Specific Measures</div>
     <div id="measuresContainer"></div>
   </div>
+  <div class="section">
+    <button class="btn-generate" id="downloadDataBtn" onclick="downloadAssessmentDataPDF()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v13m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+      Download Assessment Data (PDF)
+    </button>
+  </div>
+  <div class="section">
+    <button class="btn-generate" id="downloadTemplateBtn" onclick="downloadAssessmentTemplatePDF()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6M9 9h1"/></svg>
+      Download Assessment Template (PDF)
+    </button>
+  </div>
+  <div class="section">
+    <button class="btn-generate" id="printDataBtn" onclick="printAssessmentData()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/></svg>
+      Print Assessment Data
+    </button>
+  </div>
+  <div class="section">
+    <a class="btn-generate" href="https://www.openevidence.com/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
+      OpenEvidence
+    </a>
+  </div>
 </div>
 
 <div class="tab-pane" id="tab-report">
@@ -2218,30 +2030,6 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
   <div class="section">
     <div class="section-label">General Session Observations</div>
     <div class="card"><div class="field"><label>Behavioral Observations</label><div class="hint">Presentation, demeanor, rapport, affect, communication style, accommodations used</div><textarea class="tall" id="generalObservations"></textarea></div></div>
-  </div>
-  <div class="section">
-    <button class="btn-generate" id="downloadDataBtn" onclick="downloadAssessmentDataPDF()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v13m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
-      Download Assessment Data (PDF)
-    </button>
-  </div>
-  <div class="section">
-    <button class="btn-generate" id="downloadTemplateBtn" onclick="downloadAssessmentTemplatePDF()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6M9 9h1"/></svg>
-      Download Assessment Template (PDF)
-    </button>
-  </div>
-  <div class="section">
-    <button class="btn-generate" id="printDataBtn" onclick="printAssessmentData()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/></svg>
-      Print Assessment Data
-    </button>
-  </div>
-  <div class="section">
-    <a class="btn-generate" href="https://www.openevidence.com/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
-      OpenEvidence
-    </a>
   </div>
   <div class="section" id="reportGateSection" style="margin-top:36px;display:none;">
     <div class="section-label">Required Measures Incomplete</div>
@@ -2415,48 +2203,6 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
       <div id="tp_save_status" style="margin-top:12px;font-size:13px;color:var(--ink-muted);font-style:italic;"></div>
     </div>
 
-  </div>
-</div>
-
-<div class="tab-pane" id="tab-notes">
-  <div class="section">
-    <div class="section-label">Clinical Notes</div>
-    <div class="card placeholder-card">
-      <div class="placeholder-title">Coming soon</div>
-      <div class="placeholder-body">Session notes with structured templates (SOAP, DAP, BIRP), AI-assisted drafting from session transcripts, and quick-link to active treatment goals.</div>
-    </div>
-  </div>
-</div>
-
-<div class="tab-pane" id="tab-worksheets">
-  <div class="section">
-    <div class="section-label">New Harbinger CBT Worksheets</div>
-    <div class="card placeholder-card">
-      <div class="placeholder-title">Coming soon</div>
-      <div class="placeholder-body">Library of cognitive-behavioral worksheets — thought records, behavioral experiments, exposure ladders, activity scheduling — assignable to clients and printable as branded handouts.</div>
-    </div>
-  </div>
-</div>
-
-<div class="tab-pane" id="tab-games">
-  <div class="section">
-    <div class="section-label">CBT Games</div>
-    <div class="card" style="margin-bottom:16px;">
-      <div class="form-grid cols-1">
-        <div class="field">
-          <label>Skills to Practice</label>
-          <div class="hint">Select one or more psychological skills. Games for each selected skill appear below.</div>
-          <div class="ms-select" id="gamesSkillSelect">
-            <button class="ms-trigger" type="button" onclick="toggleMsMenu('gamesSkillSelect')">
-              <span class="ms-trigger-label" id="gamesSkillLabel">Select skills…</span>
-              <span class="ms-chevron">▾</span>
-            </button>
-            <div class="ms-menu" id="gamesSkillMenu"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="gamesResults"></div>
   </div>
 </div>
 
@@ -3432,603 +3178,6 @@ function renderUniversal(){
 // ================================================================
 let selectedModules=[];
 let responses={};
-
-// ----------------------------------------------------------------
-// Screening Tools — single-measure selector (Step 6)
-// ----------------------------------------------------------------
-// Registry of stand-alone screening measures. Items are intentionally
-// empty; populate `items` (and adjust `scale` if a measure uses a
-// non-default anchor set) with validated text from your reference set.
-const SCREENING_MEASURES = {
-  arm5: {
-    name:"Agnew Relationship Measure (5-item)", abbr:"ARM-5",
-    instr:"Indicate how much you agree with each statement about your relationship with your therapist.",
-    scale:{l:["Strongly Disagree","Disagree","Slightly Disagree","Neutral","Slightly Agree","Agree","Strongly Agree"],v:[1,2,3,4,5,6,7]},
-    items:[]
-  },
-  asrs: {
-    name:"Adult ADHD Self-Report Scale v1.1", abbr:"ASRS-v1.1",
-    instr:"Rate how often you have experienced each behavior over the past 6 months.",
-    scale:{l:["Never","Rarely","Sometimes","Often","Very Often"],v:[0,1,2,3,4]},
-    items:[]
-  },
-  audit: {
-    name:"Alcohol Use Disorders Identification Test", abbr:"AUDIT",
-    instr:"Indicate the response that best describes your alcohol use over the past year. Anchors vary by item; default 0–4 shown.",
-    scale:{l:["0","1","2","3","4"],v:[0,1,2,3,4]},
-    items:[]
-  },
-  auditcPlus3: {
-    name:"AUDIT-C Plus 3", abbr:"AUDIT-C+3",
-    instr:"Three AUDIT-C items plus three additional items. Default 0–4 anchors shown; per-item anchors vary.",
-    scale:{l:["0","1","2","3","4"],v:[0,1,2,3,4]},
-    items:[]
-  },
-  cssrs: {
-    name:"Columbia Suicide Severity Rating Scale", abbr:"C-SSRS",
-    instr:"Clinician-administered. Mixed yes/no and severity items; configure per-item anchors when populating.",
-    scale:{l:["No","Yes"],v:[0,1]},
-    items:[]
-  },
-  hrqolPlus1: {
-    name:"CDC Health-Related Quality of Life (4) Plus 1", abbr:"HRQOL-4+1",
-    instr:"Four CDC HRQOL core items plus one additional item. Anchors vary by item; configure per-item when populating.",
-    scale:{l:["0","1","2","3","4"],v:[0,1,2,3,4]},
-    items:[]
-  },
-  dass21: {
-    name:"Depression Anxiety Stress Scales (21-item)", abbr:"DASS-21",
-    instr:"Rate how much each statement applied to you over the past week.",
-    scale:{l:["Did not apply at all","Applied to some degree","Applied considerably","Applied very much"],v:[0,1,2,3]},
-    items:[]
-  },
-  dssb: {
-    name:"Dissociative Symptoms Scale — Brief", abbr:"DSS-B",
-    instr:"Indicate how often you experience each item over the past week.",
-    scale:{l:["Not at all","A little","Moderately","Quite a bit","Extremely"],v:[0,1,2,3,4]},
-    items:[]
-  },
-  fs: {
-    name:"Flourishing Scale", abbr:"FS",
-    instr:"Indicate your agreement with each statement about your life and well-being.",
-    scale:{l:["Strongly Disagree","Disagree","Slightly Disagree","Neutral","Slightly Agree","Agree","Strongly Agree"],v:[1,2,3,4,5,6,7]},
-    items:[]
-  },
-  gad7: {
-    name:"Generalized Anxiety Disorder 7-item", abbr:"GAD-7",
-    instr:"Over the last 2 weeks, how often have you been bothered by the following problems?",
-    scale:{l:["Not at all","Several days","More than half the days","Nearly every day"],v:[0,1,2,3]},
-    items:[]
-  },
-  icg: {
-    name:"Inventory of Complicated Grief", abbr:"ICG",
-    instr:"Indicate how often you have experienced each item over the past month, regarding your loss.",
-    scale:{l:["Never","Rarely","Sometimes","Often","Always"],v:[0,1,2,3,4]},
-    items:[]
-  },
-  ocir: {
-    name:"Obsessive-Compulsive Inventory — Revised", abbr:"OCI-R",
-    instr:"Indicate how much each experience has distressed or bothered you during the past month.",
-    scale:{l:["Not at all","A little","Moderately","A lot","Extremely"],v:[0,1,2,3,4]},
-    items:[]
-  },
-  pcl5: {
-    name:"PTSD Checklist for DSM-5", abbr:"PCL-5",
-    instr:"Indicate how much you have been bothered by each problem in the past month.",
-    scale:{l:["Not at all","A little bit","Moderately","Quite a bit","Extremely"],v:[0,1,2,3,4]},
-    items:[]
-  },
-  peg: {
-    name:"Pain, Enjoyment, General Activity (3-item)", abbr:"PEG",
-    instr:"Rate each on a 0–10 scale. 0 = no pain / no interference; 10 = pain as bad as you can imagine / complete interference.",
-    scale:{l:["0","1","2","3","4","5","6","7","8","9","10"],v:[0,1,2,3,4,5,6,7,8,9,10]},
-    items:[]
-  },
-  phq9: {
-    name:"Patient Health Questionnaire 9-item", abbr:"PHQ-9",
-    instr:"Over the last 2 weeks, how often have you been bothered by any of the following problems?",
-    scale:{l:["Not at all","Several days","More than half the days","Nearly every day"],v:[0,1,2,3]},
-    items:[]
-  },
-  phq15: {
-    name:"Patient Health Questionnaire 15-item (somatic)", abbr:"PHQ-15",
-    instr:"During the past 4 weeks, how much have you been bothered by any of the following problems?",
-    scale:{l:["Not bothered","Bothered a little","Bothered a lot"],v:[0,1,2]},
-    items:[]
-  },
-  sf20: {
-    name:"Short-Form Health Survey (20-item)", abbr:"SF-20",
-    instr:"Mixed-format health survey. Anchors vary by item; configure per-item when populating.",
-    scale:{l:["1","2","3","4","5"],v:[1,2,3,4,5]},
-    items:[]
-  },
-  spgam: {
-    name:"SP-GAM", abbr:"SP-GAM",
-    instr:"Configure full title, instructions, and anchors when populating items.",
-    scale:{l:["1","2","3","4","5"],v:[1,2,3,4,5]},
-    items:[]
-  },
-  swls: {
-    name:"Satisfaction With Life Scale", abbr:"SWLS",
-    instr:"Indicate your agreement with each statement using the 1–7 scale below.",
-    scale:{l:["Strongly Disagree","Disagree","Slightly Disagree","Neutral","Slightly Agree","Agree","Strongly Agree"],v:[1,2,3,4,5,6,7]},
-    items:[]
-  },
-  whodas: {
-    name:"WHO Disability Assessment Schedule 2.0", abbr:"WHODAS 2.0",
-    instr:"Indicate how much difficulty you have had with each in the past 30 days.",
-    scale:{l:["None","Mild","Moderate","Severe","Extreme / cannot do"],v:[1,2,3,4,5]},
-    items:[]
-  },
-  wsas: {
-    name:"Work and Social Adjustment Scale", abbr:"WSAS",
-    instr:"Rate how much your problems impair each area of your life.",
-    scale:{l:["0","1","2","3","4","5","6","7","8"],v:[0,1,2,3,4,5,6,7,8]},
-    items:[]
-  },
-  ybocs: {
-    name:"Yale-Brown Obsessive Compulsive Scale", abbr:"Y-BOCS",
-    instr:"Clinician-rated. Each item rates 0–4 with item-specific anchors; configure per-item when populating.",
-    scale:{l:["0","1","2","3","4"],v:[0,1,2,3,4]},
-    items:[]
-  }
-};
-
-let screeningResponses={};
-let selectedScreeningMeasures=[];
-
-function initScreeningSelector(){
-  const menu=document.getElementById('screeningMsMenu');
-  if(!menu) return;
-  const keys=Object.keys(SCREENING_MEASURES).sort((a,b)=>
-    SCREENING_MEASURES[a].abbr.localeCompare(SCREENING_MEASURES[b].abbr));
-  let h='';
-  keys.forEach(k=>{
-    const m=SCREENING_MEASURES[k];
-    h+=`<label><input type="checkbox" value="${k}" onchange="onScreeningToggle(this)"> ${m.abbr} — ${m.name}</label>`;
-  });
-  menu.innerHTML=h;
-  updateScreeningMsLabel();
-  updateScreeningEmpty();
-}
-
-function buildScreeningCardHTML(key){
-  const m=SCREENING_MEASURES[key];
-  if(!m) return '';
-  const n=m.items.length;
-  if(!screeningResponses[key]) screeningResponses[key]=new Array(n).fill(null);
-  else if(screeningResponses[key].length!==n){
-    const old=screeningResponses[key];
-    screeningResponses[key]=new Array(n).fill(null).map((_,i)=>i<old.length?old[i]:null);
-  }
-  const resp=screeningResponses[key];
-  const answered=resp.filter(v=>v!==null&&v!==undefined).length;
-  const pct=n?(answered/n*100):0;
-
-  let h=`<div class="measure-card" id="smc_${key}">
-    <div class="measure-header" onclick="tog('s_${key}')">
-      <div class="measure-header-left">
-        <span class="measure-abbr">${m.abbr}</span>
-        <span class="measure-name">${m.name}</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="score-badge${n&&answered===n?' complete':''}" id="ssb_${key}">${n?answered+'/'+n:'no items'}</span>
-        <span class="chevron open" id="cv_s_${key}">▼</span>
-      </div>
-    </div>
-    <div class="measure-body open" id="mb_s_${key}">
-      <div class="progress-bar"><div class="progress-fill" id="spf_${key}" style="width:${pct}%"></div></div>
-      <div class="measure-instruction">${m.instr}</div>`;
-
-  if(!n){
-    h+=`<div style="padding:18px;text-align:center;color:var(--text-muted);font-style:italic;border:1px dashed var(--border);border-radius:var(--radius-sm);background:var(--bg-input);">
-      Items not yet configured. Add validated item text to <code>SCREENING_MEASURES.${key}.items</code> to render the questionnaire.
-    </div>`;
-  } else {
-    h+=`<div class="scale-legend">`;
-    m.scale.l.forEach((l,i)=>h+=`<div class="scale-leg"><strong>${m.scale.v[i]}</strong>${l}</div>`);
-    h+=`</div><div class="items-list">`;
-    m.items.forEach((item,i)=>{
-      const q=typeof item==='string'?item:item.q;
-      const cur=resp[i];
-      h+=`<div class="item-row${cur!==null&&cur!==undefined?' answered':''}" id="sir_${key}_${i}">
-        <div class="item-q"><span class="item-num">${i+1}.</span><span class="item-text">${q}</span></div>
-        <div class="item-options">`;
-      m.scale.v.forEach(v=>h+=`<button class="opt-btn${cur===v?' selected':''}" onclick="setScreeningR('${key}',${i},${v})">${v}</button>`);
-      h+=`</div></div>`;
-    });
-    h+=`</div>`;
-    h+=`<div class="scores-out" id="sso_${key}"><div class="sc-note" id="ssn_${key}">Complete items to see scores.</div></div>`;
-    h+=`<div class="screening-actions">
-      <button class="btn-sm btn-word" onclick="downloadScreeningToolPDF('${key}')">&#8595; Download PDF</button>
-      <button class="btn-sm btn-word" onclick="printScreeningTool('${key}')">&#9113; Print</button>
-    </div>`;
-    h+=`<div class="screening-history" id="sh_${key}">
-      <div class="screening-history-head">
-        <h4>Score History</h4>
-        <button class="btn-sm" id="ssave_${key}" onclick="saveCurrentMeasureScore('${key}')" disabled>Save to history</button>
-      </div>
-      <div class="history-list" id="shl_${key}"></div>
-    </div>`;
-  }
-  h+=`</div></div>`;
-  return h;
-}
-
-function onScreeningToggle(cb){
-  const key=cb.value;
-  const container=document.getElementById('screeningContainer');
-  const empty=document.getElementById('screeningEmpty');
-  if(cb.checked){
-    if(!selectedScreeningMeasures.includes(key)) selectedScreeningMeasures.push(key);
-    if(!document.getElementById('smc_'+key)){
-      const wrap=document.createElement('div');
-      wrap.innerHTML=buildScreeningCardHTML(key);
-      const card=wrap.firstElementChild;
-      if(empty && empty.parentNode===container) container.insertBefore(card,empty);
-      else container.appendChild(card);
-      const m=SCREENING_MEASURES[key];
-      if(m && m.items.length){
-        updateMeasureScores(key);
-        renderMeasureHistory(key);
-      }
-    }
-  } else {
-    selectedScreeningMeasures=selectedScreeningMeasures.filter(k=>k!==key);
-    const card=document.getElementById('smc_'+key);
-    if(card && card.parentNode) card.parentNode.removeChild(card);
-  }
-  updateScreeningMsLabel();
-  updateScreeningEmpty();
-}
-
-function updateScreeningMsLabel(){
-  const lbl=document.getElementById('screeningMsLabel');
-  const ms=document.getElementById('screeningMultiselect');
-  if(!lbl||!ms) return;
-  const checked=[...ms.querySelectorAll('input[type="checkbox"]:checked')];
-  lbl.textContent=checked.length?(checked.length===1?'1 measure selected':checked.length+' measures selected'):'Choose one or more measures…';
-}
-
-function updateScreeningEmpty(){
-  const empty=document.getElementById('screeningEmpty');
-  if(!empty) return;
-  empty.style.display=selectedScreeningMeasures.length?'none':'';
-}
-
-function setScreeningR(key,idx,val){
-  if(!screeningResponses[key]) screeningResponses[key]=[];
-  screeningResponses[key][idx]=val;
-  const row=document.getElementById('sir_'+key+'_'+idx);
-  if(row){
-    row.classList.add('answered');
-    const m=SCREENING_MEASURES[key];
-    row.querySelectorAll('.opt-btn').forEach((b,i)=>{
-      const bv=m.scale.v[i];
-      b.classList.toggle('selected',bv===val);
-    });
-  }
-  updateScreeningProgress(key);
-  updateMeasureScores(key);
-}
-
-function updateScreeningProgress(key){
-  const r=screeningResponses[key];
-  const m=SCREENING_MEASURES[key];
-  if(!r||!m) return;
-  const n=m.items.length;
-  const answered=r.filter(v=>v!==null&&v!==undefined).length;
-  const pct=n?(answered/n*100):0;
-  const fill=document.getElementById('spf_'+key);
-  if(fill) fill.style.width=pct+'%';
-  const badge=document.getElementById('ssb_'+key);
-  if(badge){
-    badge.textContent=n?answered+'/'+n:'no items';
-    badge.classList.toggle('complete',n>0&&answered===n);
-  }
-}
-
-// ----------------------------------------------------------------
-// Step 7: Auto-scoring and history
-// ----------------------------------------------------------------
-const sumOf=r=>r.reduce((a,v)=>a+(v==null?0:v),0);
-
-const SCORERS = {
-  phq9(r){
-    const sum=sumOf(r);
-    let sev='Minimal';
-    if(sum>=20)sev='Severe'; else if(sum>=15)sev='Mod-Severe'; else if(sum>=10)sev='Moderate'; else if(sum>=5)sev='Mild';
-    const out={Total:sum+'/27', Severity:sev};
-    const item9=r[8];
-    if(item9!=null && item9>=1){
-      out['Item 9']='Endorsed ⚑';
-      out._note=`Severity: ${sev}. Item 9 (self-harm/suicidality) endorsed — assess safety. Cutoffs: 0-4 minimal, 5-9 mild, 10-14 moderate, 15-19 mod-severe, 20-27 severe.`;
-    } else {
-      out._note=`Severity: ${sev}. Cutoffs: 0-4 minimal, 5-9 mild, 10-14 moderate, 15-19 mod-severe, 20-27 severe.`;
-    }
-    return out;
-  },
-  gad7(r){
-    const sum=sumOf(r);
-    let sev='Minimal';
-    if(sum>=15)sev='Severe'; else if(sum>=10)sev='Moderate'; else if(sum>=5)sev='Mild';
-    return {Total:sum+'/21', Severity:sev,
-      _note:`Severity: ${sev}. Cutoffs: 0-4 minimal, 5-9 mild, 10-14 moderate, 15-21 severe.`};
-  },
-  wsas(r){
-    const sum=sumOf(r);
-    let imp='Sub-clinical';
-    if(sum>=20)imp='Severe'; else if(sum>=10)imp='Significant';
-    return {Total:sum+'/40', Impairment:imp,
-      _note:`Impairment: ${imp}. Cutoffs: 0-9 sub-clinical, 10-19 significant, 20-40 severe functional impairment.`};
-  },
-  swls(r){
-    const sum=sumOf(r);
-    let cat='Neutral';
-    if(sum>=31)cat='Extremely Satisfied'; else if(sum>=26)cat='Satisfied'; else if(sum>=21)cat='Slightly Satisfied'; else if(sum===20)cat='Neutral'; else if(sum>=15)cat='Slightly Dissatisfied'; else if(sum>=10)cat='Dissatisfied'; else cat='Extremely Dissatisfied';
-    return {Total:sum+'/35', Category:cat,
-      _note:`Category: ${cat}. Higher = greater life satisfaction. Bands: 5-9 extremely dissat, 10-14 dissat, 15-19 slightly dissat, 20 neutral, 21-25 slightly sat, 26-30 sat, 31-35 extremely sat.`};
-  },
-  fs(r){
-    const sum=sumOf(r);
-    return {Total:sum+'/56',
-      _note:`Range 8-56. Higher reflects greater psychological flourishing (Diener et al., 2010). No fixed cutoffs; population mean ≈ 45.`};
-  },
-  audit(r){
-    const sum=sumOf(r);
-    let risk='Low risk';
-    if(sum>=20)risk='Likely dependence ⚑'; else if(sum>=16)risk='High risk ⚑'; else if(sum>=8)risk='Hazardous use';
-    return {Total:sum+'/40', Risk:risk,
-      _note:`Risk: ${risk}. Cutoffs: ≥8 hazardous, ≥16 high risk / brief intervention, ≥20 likely alcohol dependence — consider further evaluation.`};
-  },
-  pcl5(r){
-    const total=sumOf(r);
-    const cluster=(s,e)=>{ let v=0; for(let i=s;i<=e;i++) v+=(r[i]==null?0:r[i]); return v; };
-    const B=cluster(0,4), C=cluster(5,6), D=cluster(7,13), E=cluster(14,19);
-    const probable=total>=33;
-    const out={Total:total+'/80', B, C, D, E};
-    if(probable){ out['PTSD'] = 'Probable ⚑'; out._note = `Total ${total} ≥ 33 — provisional PTSD threshold met. Consider CAPS-5 or structured interview. Cluster sums (B/C/D/E) shown.`; }
-    else out._note = `Total ${total} < 33 (provisional PTSD cutoff). Cluster sums shown for symptom pattern review.`;
-    return out;
-  },
-  phq15(r){
-    const sum=sumOf(r);
-    let sev='Minimal';
-    if(sum>=15)sev='High'; else if(sum>=10)sev='Medium'; else if(sum>=5)sev='Low';
-    return {Total:sum+'/30', Severity:sev,
-      _note:`Somatic symptom severity: ${sev}. Cutoffs: 0-4 minimal, 5-9 low, 10-14 medium, 15-30 high.`};
-  },
-  whodas(r){
-    const sum=sumOf(r);
-    return {Total:sum+'/60',
-      _note:`12-item simple sum. Range 12-60; higher = greater disability. WHO recommends complex (item-response) scoring for population comparison; simple sum is acceptable for clinical monitoring.`};
-  },
-  icg(r){
-    const sum=sumOf(r);
-    const cg=sum>=25;
-    const out={Total:sum+'/76'};
-    if(cg){ out['Complicated Grief']='Yes ⚑'; out._note=`Total ${sum} ≥ 25 — meets ICG threshold for complicated/prolonged grief. Consider grief-focused intervention.`; }
-    else out._note=`Total ${sum} < 25. Below ICG complicated grief threshold (Prigerson et al., 1995).`;
-    return out;
-  },
-  ocir(r){
-    const sum=sumOf(r);
-    const probable=sum>=21;
-    const out={Total:sum+'/72'};
-    if(probable){ out['Probable OCD']='Yes ⚑'; out._note=`Total ${sum} ≥ 21 — at or above OCI-R cutoff for probable OCD. Recommend Y-BOCS interview for diagnostic confirmation.`; }
-    else out._note=`Total ${sum} < 21. Below OCI-R probable-OCD cutoff (Foa et al., 2002).`;
-    return out;
-  },
-  dass21(r){
-    const D=[2,4,9,12,15,16,20], A=[1,3,6,8,14,18,19], S=[0,5,7,10,11,13,17];
-    const subSum=ix=>ix.reduce((a,i)=>a+(r[i]==null?0:r[i]),0)*2;
-    const d=subSum(D), a=subSum(A), s=subSum(S);
-    const dSev=d>=28?'Extremely Severe':d>=21?'Severe':d>=14?'Moderate':d>=10?'Mild':'Normal';
-    const aSev=a>=20?'Extremely Severe':a>=15?'Severe':a>=10?'Moderate':a>=8?'Mild':'Normal';
-    const sSev=s>=34?'Extremely Severe':s>=26?'Severe':s>=19?'Moderate':s>=15?'Mild':'Normal';
-    return {Depression:d, Anxiety:a, Stress:s,
-      _note:`Depression ${dSev}, Anxiety ${aSev}, Stress ${sSev}. Subscale totals are doubled to align with DASS-42 norms (Lovibond & Lovibond, 1995).`};
-  },
-  asrs(r){
-    let a=0,t=0,sc=0;
-    r.forEach((v,i)=>{ if(v==null)return; t+=v; if(i<6)a+=v; if(i<3&&v>=2)sc++; if(i>=3&&i<6&&v>=3)sc++; });
-    const positive=sc>=4;
-    return {'Part A Raw':a+'/24', 'Part A Screen':sc+'/6'+(positive?' ⚑':''), 'Total Raw':t+'/72',
-      _note: positive
-        ? 'Part A screen positive (≥4 of 6 shaded). Symptoms highly consistent with adult ADHD; full diagnostic evaluation indicated.'
-        : 'Part A screen below threshold (4 of 6 needed for positive screen).'};
-  },
-  arm5(r){
-    const sum=sumOf(r);
-    return {Total:sum+'/35',
-      _note:`Therapeutic alliance composite (range 5-35). Higher = stronger alliance. Compare across sessions; clinically meaningful change ≈ 5+ points.`};
-  },
-  peg(r){
-    const ans=r.filter(v=>v!=null);
-    const avg=ans.length?(ans.reduce((a,v)=>a+v,0)/ans.length):0;
-    return {Average:avg.toFixed(1)+'/10',
-      _note:`Pain (P) + Enjoyment interference (E) + General activity interference (G) average. ≥3 point change considered clinically meaningful.`};
-  },
-  dssb(r){
-    const ans=r.filter(v=>v!=null);
-    const avg=ans.length?(ans.reduce((a,v)=>a+v,0)/ans.length):0;
-    return {Average:avg.toFixed(2)+'/4',
-      _note:`Brief Dissociative Symptoms Scale mean. Confirm cutoff against your reference (DSS-B/MID Brief literature).`};
-  },
-  ybocs(r){
-    const sum=sumOf(r);
-    const sev=sum>=32?'Extreme':sum>=24?'Severe':sum>=16?'Moderate':sum>=8?'Mild':'Sub-clinical';
-    return {Total:sum+'/40', Severity:sev,
-      _note:`Y-BOCS total severity: ${sev}. Cutoffs: 0-7 sub-clinical, 8-15 mild, 16-23 moderate, 24-31 severe, 32-40 extreme. Clinician-rated; verify item-specific anchors when populating.`};
-  },
-  // Generic placeholder for measures whose scoring is licensed,
-  // mixed-format, or otherwise needs custom configuration.
-  _placeholder(r){
-    const sum=sumOf(r);
-    return {'Raw Sum':String(sum),
-      _note:'Default raw-sum scoring — replace with the validated scoring algorithm for this measure (subscale composition, item-specific anchors, and clinical cutoffs).'};
-  }
-};
-// Fallback wiring for the measures we haven't given a dedicated scorer.
-['auditcPlus3','cssrs','hrqolPlus1','sf20','spgam'].forEach(k=>{ if(!SCORERS[k]) SCORERS[k]=SCORERS._placeholder; });
-
-const measureHistory={};
-
-function calculateMeasureScore(key,responses){
-  const m=SCREENING_MEASURES[key];
-  if(!m||!m.items.length||!responses||responses.length===0) return null;
-  const ans=responses.filter(v=>v!=null).length;
-  if(ans===0) return null;
-  const scorer=SCORERS[key];
-  if(!scorer) return null;
-  return scorer(responses,m);
-}
-
-function updateMeasureScores(key){
-  const so=document.getElementById('sso_'+key);
-  const saveBtn=document.getElementById('ssave_'+key);
-  if(!so) return;
-  const m=SCREENING_MEASURES[key];
-  const r=screeningResponses[key]||[];
-  const ans=r.filter(v=>v!=null).length;
-  const complete=m && m.items.length>0 && ans===m.items.length;
-  if(saveBtn) saveBtn.disabled=!complete;
-
-  if(ans===0){
-    so.innerHTML='<div class="sc-note">Complete items to see scores.</div>';
-    return;
-  }
-  const sc=calculateMeasureScore(key,r);
-  if(!sc){
-    so.innerHTML='<div class="sc-note">No scoring configured for this measure.</div>';
-    return;
-  }
-  let h='';
-  let note='';
-  for(const lbl in sc){
-    if(lbl==='_note'){ note=String(sc[lbl]); continue; }
-    const v=String(sc[lbl]), elev=v.includes('⚑');
-    h+=`<div class="sc-item"><div class="sc-val${elev?' elevated':''}">${v.replace(' ⚑','')}</div><div class="sc-lbl">${lbl}</div></div><div class="sc-div"></div>`;
-  }
-  if(ans<r.length) h+=`<div class="sc-note">${ans}/${r.length} answered — partial scores</div>`;
-  else if(note) h+=`<div class="sc-note">${note}</div>`;
-  so.innerHTML=h;
-}
-
-function saveMeasureScore(measureKey,score){
-  if(!measureHistory[measureKey]) measureHistory[measureKey]=[];
-  measureHistory[measureKey].push({timestamp:new Date().toISOString(), score});
-  renderMeasureHistory(measureKey);
-}
-
-function saveCurrentMeasureScore(key){
-  const r=screeningResponses[key]||[];
-  const sc=calculateMeasureScore(key,r);
-  if(!sc) return;
-  // strip _note from the persisted snapshot so history rows stay compact
-  const snap={};
-  for(const lbl in sc) if(lbl!=='_note') snap[lbl]=sc[lbl];
-  saveMeasureScore(key,snap);
-}
-
-function renderMeasureHistory(key){
-  const list=document.getElementById('shl_'+key);
-  if(!list) return;
-  const hist=measureHistory[key]||[];
-  if(!hist.length){ list.innerHTML='<div class="empty">No saved scores yet.</div>'; return; }
-  let h='';
-  hist.slice().reverse().forEach(entry=>{
-    const d=new Date(entry.timestamp);
-    const stamp=d.toLocaleString();
-    const summary=Object.entries(entry.score).map(([k,v])=>`${k} ${String(v).replace(' ⚑','')}`).join(' · ');
-    h+=`<div class="history-row"><span class="history-time">${stamp}</span><span class="history-score">${summary}</span></div>`;
-  });
-  list.innerHTML=h;
-}
-
-// ----------------------------------------------------------------
-// Step 8: Screening Tools — PDF download
-// ----------------------------------------------------------------
-// Screening-measure export body, written into any writer (PDF or printable
-// HTML). `blank` renders an unanswered form for printing and filling by hand.
-function buildScreeningBody(w,measureKey,blank){
-  const m=SCREENING_MEASURES[measureKey];
-  const r=blank?[]:(screeningResponses[measureKey]||[]);
-  const writeLine=w.writeLine, writeBlank=w.writeBlank, writeHr=w.writeHr;
-
-  // Header
-  writeLine(m.name+' ('+m.abbr+')',{size:16,style:'bold'});
-  writeBlank(2);
-  writeLine(CLINICIAN_INFO.practice,{size:10});
-  writeLine(CLINICIAN_INFO.name+' — License '+CLINICIAN_INFO.license,{size:10});
-  writeLine(CLINICIAN_INFO.location,{size:10});
-  writeBlank(4);
-  const today=new Date();
-  const todayISO=today.toISOString().split('T')[0];
-  writeLine('Date: '+today.toLocaleDateString(),{size:10});
-  const clientNameRaw=(document.getElementById('clientName')?.value||'').trim();
-  if(clientNameRaw) writeLine('Client: '+clientNameRaw,{size:10});
-
-  writeBlank(6);
-  writeLine('INSTRUCTIONS',{size:11,style:'bold'});
-  writeHr();
-  writeLine(m.instr,{size:10,style:'italic'});
-
-  writeBlank(6);
-  writeLine('SCALE ANCHORS',{size:11,style:'bold'});
-  writeHr();
-  m.scale.l.forEach((l,i)=>writeLine(m.scale.v[i]+' — '+l,{size:10,indent:12}));
-
-  writeBlank(6);
-  writeLine('ITEMS & RESPONSES',{size:11,style:'bold'});
-  writeHr();
-  m.items.forEach((item,i)=>{
-    const q=typeof item==='string'?item:item.q;
-    writeLine((i+1)+'. '+q,{size:10});
-    if(blank){
-      writeLine('Response: '+m.scale.v.join('   '),{size:10,style:'italic',indent:18});
-    } else {
-      const resp=r[i];
-      writeLine('Response: '+(resp==null?'(no response)':String(resp)),{size:10,style:'italic',indent:18});
-    }
-    writeBlank(2);
-  });
-
-  // Scores
-  writeBlank(6);
-  writeLine('SCORES',{size:11,style:'bold'});
-  writeHr();
-  const sc=blank?null:calculateMeasureScore(measureKey,r);
-  if(sc){
-    for(const lbl in sc){
-      if(lbl==='_note') continue;
-      writeLine(lbl+': '+String(sc[lbl]).replace(' ⚑',' (elevated)'),{size:10});
-    }
-    if(sc._note){ writeBlank(3); writeLine(sc._note,{size:9,style:'italic'}); }
-  } else {
-    writeLine('No scoring available — complete more items.',{size:10,style:'italic'});
-  }
-
-}
-
-function downloadScreeningToolPDF(measureKey){
-  const m=SCREENING_MEASURES[measureKey];
-  if(!m){ alert('Unknown measure.'); return; }
-  if(!m.items.length){ alert('No items configured for this measure.'); return; }
-  const w=newPDFWriter();
-  buildScreeningBody(w,measureKey,false);
-  const safeName=m.abbr.replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||measureKey;
-  w.doc.save(`${safeName}_${new Date().toISOString().split('T')[0]}.pdf`);
-}
-
-function printScreeningTool(measureKey){
-  const m=SCREENING_MEASURES[measureKey];
-  if(!m){ alert('Unknown measure.'); return; }
-  if(!m.items.length){ alert('No items configured for this measure yet.'); return; }
-  const w=newHTMLWriter();
-  buildScreeningBody(w,measureKey,false);
-  openPrintWindow(m.name,w.html());
-}
 
 const intakeFormState={
   chiefComplaint:'',
@@ -7767,25 +6916,6 @@ function cyclePalette(){
   applyPalette(PALETTE_ORDER[(i+1)%PALETTE_ORDER.length]);
 }
 
-function loadGCal(){
-  const url=document.getElementById('gcal_url').value.trim();
-  const w=document.getElementById('gcal_wrapper');
-  if(!url){w.innerHTML='Paste embed URL above and click "Load Calendar".';return;}
-  if(!/^https:\/\/calendar\.google\.com\//.test(url)){
-    w.innerHTML='<div style="padding:24px;color:var(--danger);">URL must start with https://calendar.google.com/</div>';
-    return;
-  }
-  try{localStorage.setItem('ntc_gcal_url',url);}catch{}
-  w.innerHTML='<iframe src="'+url+'" style="border:0;width:100%;height:700px;display:block;" frameborder="0" scrolling="no"></iframe>';
-}
-
-function initGCal(){
-  try{
-    const saved=localStorage.getItem('ntc_gcal_url');
-    if(saved){document.getElementById('gcal_url').value=saved;loadGCal();}
-  }catch{}
-}
-
 // ================================================================
 // BUILDOUT TODO LIST — practice setup checklist
 // ================================================================
@@ -8218,119 +7348,6 @@ function initClinicInfo(){
   });
 }
 
-// ----------------------------------------------------------------
-// Real game library — maps skills/interventions to real game files
-// ----------------------------------------------------------------
-const REAL_GAMES={
-  // Keys are skill/intervention names; each entry is a list of {title,desc,url,theme,retroTitle}
-  'Emotion regulation skills':[
-    {title:"Don't Make It Worse",retroTitle:"DON'T MAKE<br>IT WORSE!",desc:"Practice noticing the gap between primary emotion and the secondary reactions that escalate distress.",url:"dont_make_it_worse.html",theme:"pink"}
-  ],
-  'Mindfulness':[
-    {title:"Thought, Emotion, or Sensation?",desc:"OCD-edition sorting game. Distinguish thoughts from emotions and bodily sensations to weaken fusion.",url:"tes-game-ocd.html"}
-  ],
-  'Interpersonal effectiveness skills':[
-    {title:"SPARK",retroTitle:"SPARK",desc:"Protect your inner spark across social situations. Practice noticing depleting yeses, boundary-setting, and recovering after interpersonal hits.",url:"spark.html",theme:"blue"}
-  ]
-};
-
-// ----------------------------------------------------------------
-// CBT Games — skill multi-select + hero card placeholders
-// ----------------------------------------------------------------
-const CBT_SKILLS=[
-  'Psychoeducation','Assessing motivation to change','Cost-benefit analysis',
-  'Identifying values','Behavioral activation','Behavioral contingencies',
-  'Cognitive restructuring','Schema change','Behavioral experiments',
-  'Attention training techniques','Situational attention retraining',
-  'Postponement strategies','Exposure (behavioral, cognitive, emotional, and interoceptive)',
-  'Compassionate mind training','Distress tolerance skills','Emotion regulation skills',
-  'Interpersonal effectiveness skills','Problem analysis','Self-monitoring',
-  'Mindfulness','Detached mindfulness','Acceptance and validation','Cognitive defusion',
-  'Breathing retraining','Progressive muscle relaxation','Applied relaxation',
-  'Guided imagery','Anger management','Problem solving','Organization and planning',
-  'Time management','Sleep management','Strategies for eating problems',
-  'Strategies for body-focused repetitive behaviors'
-];
-const SELECTED_GAME_SKILLS=new Set();
-
-function initGamesSkills(){
-  const menu=document.getElementById('gamesSkillMenu');
-  if(!menu)return;
-  menu.innerHTML=CBT_SKILLS.map((s,i)=>
-    `<label><input type="checkbox" data-skill="${s.replace(/"/g,'&quot;')}" onchange="toggleGameSkill(this)"> ${s}</label>`
-  ).join('');
-  // restore from localStorage
-  try{
-    const raw=localStorage.getItem('ntc_game_skills');
-    if(raw){
-      JSON.parse(raw).forEach(s=>SELECTED_GAME_SKILLS.add(s));
-      menu.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
-        if(SELECTED_GAME_SKILLS.has(cb.dataset.skill))cb.checked=true;
-      });
-    }
-  }catch{}
-  renderGamesLabel();
-  renderGamesResults();
-}
-function toggleGameSkill(cb){
-  const s=cb.dataset.skill;
-  if(cb.checked)SELECTED_GAME_SKILLS.add(s);
-  else SELECTED_GAME_SKILLS.delete(s);
-  try{localStorage.setItem('ntc_game_skills',JSON.stringify([...SELECTED_GAME_SKILLS]));}catch{}
-  renderGamesLabel();
-  renderGamesResults();
-}
-function renderGamesLabel(){
-  const lbl=document.getElementById('gamesSkillLabel');
-  if(!lbl)return;
-  const n=SELECTED_GAME_SKILLS.size;
-  lbl.textContent=n===0?'Select skills…':n===1?[...SELECTED_GAME_SKILLS][0]:`${n} skills selected`;
-}
-function renderGamesResults(){
-  const out=document.getElementById('gamesResults');
-  if(!out)return;
-  if(SELECTED_GAME_SKILLS.size===0){
-    out.innerHTML='<div class="card games-empty">Select one or more skills above to see games.</div>';
-    return;
-  }
-  const blocks=[...SELECTED_GAME_SKILLS].map(skill=>{
-    const real=REAL_GAMES[skill]||[];
-    const realCards=real.map(g=>{
-      if(g.theme){
-        return `
-          <a class="hero-card theme-${g.theme}" href="${g.url}" target="_blank" rel="noopener">
-            <div class="hero-card-retro-title">${g.retroTitle||g.title}</div>
-          </a>
-        `;
-      }
-      return `
-        <a class="hero-card" href="${g.url}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
-          <span class="hero-card-tag">Game</span>
-          <div class="hero-card-title">${g.title}</div>
-          <div class="hero-card-desc">${g.desc}</div>
-          <span class="hero-card-status" style="color:var(--success);">Open ↗</span>
-        </a>
-      `;
-    }).join('');
-    const phCount=Math.max(0,3-real.length);
-    const phCards=Array.from({length:phCount},(_,i)=>`
-      <div class="hero-card" onclick="alert('Placeholder game ${real.length+i+1} — coming soon.')">
-        <span class="hero-card-tag">Game ${real.length+i+1}</span>
-        <div class="hero-card-title">${skill}</div>
-        <div class="hero-card-desc">Placeholder for an interactive game teaching this skill.</div>
-        <span class="hero-card-status">Coming soon</span>
-      </div>
-    `).join('');
-    return `
-      <div class="games-skill-block">
-        <div class="games-skill-title">${skill}</div>
-        <div class="hero-grid">${realCards}${phCards}</div>
-      </div>
-    `;
-  }).join('');
-  out.innerHTML=blocks;
-}
-
 function initPalette(){
   let saved='clinic';
   try{ saved=localStorage.getItem('lq.palette')||'clinic'; }catch{}
@@ -8723,6 +7740,21 @@ function toggleTpIntervention(cb,iv){
   renderTpMaterials();
 }
 
+// Real game library — maps interventions to real game files, used by the
+// Treatment Plan tab's recommended-materials list.
+const REAL_GAMES={
+  // Keys are skill/intervention names; each entry is a list of {title,desc,url,theme,retroTitle}
+  'Emotion regulation skills':[
+    {title:"Don't Make It Worse",retroTitle:"DON'T MAKE<br>IT WORSE!",desc:"Practice noticing the gap between primary emotion and the secondary reactions that escalate distress.",url:"dont_make_it_worse.html",theme:"pink"}
+  ],
+  'Mindfulness':[
+    {title:"Thought, Emotion, or Sensation?",desc:"OCD-edition sorting game. Distinguish thoughts from emotions and bodily sensations to weaken fusion.",url:"tes-game-ocd.html"}
+  ],
+  'Interpersonal effectiveness skills':[
+    {title:"SPARK",retroTitle:"SPARK",desc:"Protect your inner spark across social situations. Practice noticing depleting yeses, boundary-setting, and recovering after interpersonal hits.",url:"spark.html",theme:"blue"}
+  ]
+};
+
 function renderTpMaterials(){
   const out=document.getElementById('tp_materials_container');
   if(!out)return;
@@ -8986,12 +8018,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   initClinicInfo();
   renderBuildoutChecklist();
   renderCompetenceChecklist();
-  initGCal();
-  initGamesSkills();
   initTreatmentPlan();
   initIntakeMultiselect();
   initDxMultiselect();
-  initScreeningSelector();
   rebuildRightNav();
   initSidePanel();
   if(!localStorage.getItem('ntc_api_key'))openSettings();
