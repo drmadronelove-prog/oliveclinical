@@ -9,8 +9,6 @@ import { AQ50 } from "@/components/assessments/aq50"
 import { VVIQ } from "@/components/assessments/vviq"
 import { TAS20 } from "@/components/assessments/tas20"
 import { CATQ } from "@/components/assessments/catq"
-import { RAADSR } from "@/components/assessments/raadsr"
-import { EQ } from "@/components/assessments/eq"
 import { MDS16 } from "@/components/assessments/mds16"
 import { GSQ } from "@/components/assessments/gsq"
 import { OEQ2 } from "@/components/assessments/oeq2"
@@ -177,33 +175,6 @@ const TOOLS: FeatureCard[] = [
 const SCREENERS: FeatureCard[] = [
   {
     kind: "modal",
-    title: "CAT-Q",
-    category: "Camouflaging traits",
-    footerLabel: "Take screen",
-    modalTitle: "CAT-Q: Camouflaging Autistic Traits Questionnaire",
-    modalSubtitle: "25 items across compensation, masking, and assimilation.",
-    content: <CATQ />,
-  },
-  {
-    kind: "modal",
-    title: "RAADS-R",
-    category: "Autism diagnostic screen",
-    footerLabel: "Take screen",
-    modalTitle: "RAADS-R: Ritvo Autism Asperger Diagnostic Scale — Revised",
-    modalSubtitle: "80 items · Ritvo et al., 2011.",
-    content: <RAADSR />,
-  },
-  {
-    kind: "modal",
-    title: "EQ",
-    category: "Empathy quotient",
-    footerLabel: "Take screen",
-    modalTitle: "EQ: Empathy Quotient",
-    modalSubtitle: "60 items · Baron-Cohen & Wheelwright, 2004.",
-    content: <EQ />,
-  },
-  {
-    kind: "modal",
     title: "ADHD Symptom Checklist",
     category: "DSM-5 + community",
     footerLabel: "Take checklist",
@@ -219,6 +190,15 @@ const SCREENERS: FeatureCard[] = [
     modalTitle: "AQ-50: Autism Spectrum Quotient",
     modalSubtitle: "50-item screening questionnaire · Baron-Cohen et al., 2001.",
     content: <AQ50 />,
+  },
+  {
+    kind: "modal",
+    title: "CAT-Q",
+    category: "Camouflaging traits",
+    footerLabel: "Take screen",
+    modalTitle: "CAT-Q: Camouflaging Autistic Traits Questionnaire",
+    modalSubtitle: "25 items across compensation, masking, and assimilation.",
+    content: <CATQ />,
   },
   {
     kind: "modal",
@@ -309,6 +289,55 @@ const SCREENERS: FeatureCard[] = [
     modalTitle: "DSS: Dissociative Symptoms Scale",
     modalSubtitle: "20-item self-report measure · Carlson et al., 2018.",
     content: <DSS />,
+  },
+  {
+    kind: "link",
+    title: "AUDIT",
+    category: "Alcohol use · fillable PDF",
+    footerLabel: "Open & download",
+    href: "/AUDIT_Fillable.pdf",
+  },
+  {
+    kind: "link",
+    title: "DAST-10",
+    category: "Drug use · fillable PDF",
+    footerLabel: "Open & download",
+    href: "/DAST10_Fillable.pdf",
+  },
+  {
+    kind: "link",
+    title: "GQASC — Adult Women",
+    category: "Gender & autism · fillable PDF",
+    footerLabel: "Open & download",
+    href: "/GQASC_Adult_Women_Fillable.pdf",
+  },
+  {
+    kind: "link",
+    title: "RBQ-3",
+    category: "Repetitive behaviors · fillable PDF",
+    footerLabel: "Open & download",
+    href: "/RBQ3_Self_Fillable.pdf",
+  },
+  {
+    kind: "link",
+    title: "ADHD Health History",
+    category: "Intake form · fillable PDF",
+    footerLabel: "Open & download",
+    href: "/ADHD_Health_History_Fillable.pdf",
+  },
+  {
+    kind: "link",
+    title: "PHQ-9",
+    category: "Depression screen · fillable PDF",
+    footerLabel: "Open & download",
+    href: "/PHQ9_Fillable.pdf",
+  },
+  {
+    kind: "link",
+    title: "GAD-7",
+    category: "Anxiety screen · fillable PDF",
+    footerLabel: "Open & download",
+    href: "/GAD7_Fillable.pdf",
   },
 ]
 
