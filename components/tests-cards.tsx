@@ -339,6 +339,13 @@ const SCREENERS: FeatureCard[] = [
     footerLabel: "Open & download",
     href: "/GAD7_Fillable.pdf",
   },
+  {
+    kind: "link",
+    title: "MMS",
+    category: "Broad psychiatric screen · fillable PDF",
+    footerLabel: "Open & download",
+    href: "/MMS_Fillable.pdf",
+  },
 ]
 
 // ── Page component ─────────────────────────────────────────────────────────────
