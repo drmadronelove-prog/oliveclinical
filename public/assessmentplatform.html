@@ -1567,6 +1567,14 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 </div>
 
 <div class="tab-pane" id="tab-client">
+  <!-- Kept in sync with ci_lastname/ci_firstname/ci_dob/ci_pronouns/ci_gender by
+       syncReportClientFields() — the single source of truth several PDF exports
+       (assessment data, measure downloads, templates) read the client's name/
+       DOB/pronouns/gender from. -->
+  <input type="hidden" id="clientName">
+  <input type="hidden" id="dob">
+  <input type="hidden" id="pronouns">
+  <input type="hidden" id="gender">
   <div class="section">
     <div class="section-label">Client Information</div>
     <div class="card" style="margin-bottom:16px;">
@@ -2017,73 +2025,10 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
     </button>
   </div>
   <div class="section">
-    <button class="btn-generate" id="printDataBtn" onclick="printAssessmentData()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/></svg>
-      Print Assessment Data
-    </button>
-  </div>
-  <div class="section">
     <a class="btn-generate" href="https://www.openevidence.com/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
       OpenEvidence
     </a>
-  </div>
-  <div class="section">
-    <div class="section-label">Client Information</div>
-    <div class="card">
-      <div class="report-client-summary" id="reportClientSummary">No client selected. <button type="button" class="btn-sm" onclick="goToClientInfoTab()">Go to Client Information →</button></div>
-      <input type="hidden" id="clientName">
-      <input type="hidden" id="dob">
-      <input type="hidden" id="pronouns">
-      <input type="hidden" id="gender">
-      <div class="form-grid">
-        <div class="field"><label>Date of Evaluation</label><input type="date" id="evalDate"></div>
-        <div class="field"><label>Referral Source</label><input type="text" id="referralSource" placeholder="Self-referred, therapist..."></div>
-        <div class="field"><label>Language Preference</label>
-          <select id="languagePref">
-            <option value="identity-first">Identity-first (autistic person, ADHDer)</option>
-            <option value="person-first">Person-first (person with autism)</option>
-            <option value="client-noted">Per client preference in notes</option>
-          </select>
-        </div>
-        <div class="field span-2"><label>Reason for Referral</label><textarea id="reasonForReferral" placeholder="Presenting concerns, why evaluation was sought..."></textarea></div>
-        <div class="field span-2"><label>Relevant Background and History</label><textarea class="tall" id="relevantHistory" placeholder="Prior diagnoses, medications, therapy, educational/occupational context, family history, developmental history, cultural and intersectional context..."></textarea></div>
-      </div>
-    </div>
-  </div>
-  <div id="reportModules"></div>
-  <div class="section">
-    <div class="section-label">General Session Observations</div>
-    <div class="card"><div class="field"><label>Behavioral Observations</label><div class="hint">Presentation, demeanor, rapport, affect, communication style, accommodations used</div><textarea class="tall" id="generalObservations"></textarea></div></div>
-  </div>
-  <div class="section" id="reportGateSection" style="margin-top:36px;display:none;">
-    <div class="section-label">Required Measures Incomplete</div>
-    <div class="card">
-      <p class="bt-intro">The report cannot be generated until every required self-report measure below has been completed on the Diagnostic Assessment tab.</p>
-      <ul class="side-widget-incomplete" id="reportGateList" style="font-size:13px;"></ul>
-    </div>
-  </div>
-  <div class="section" style="margin-top:36px;">
-    <button class="btn-generate" id="generateBtn" onclick="generateReport()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-      Generate Report
-    </button>
-    <div class="error-msg" id="errorMsg"></div>
-  </div>
-  <div class="loading" id="loadingIndicator">
-    <div>Drafting evaluation report<span class="loading-dots"></span></div>
-    <div style="margin-top:7px;font-size:14px;">Usually 30–60 seconds.</div>
-  </div>
-  <div class="report-output section report-section" id="reportOutput">
-    <div class="section-label">Generated Report — Review Before Signing</div>
-    <div class="report-toolbar">
-      <span>Draft complete. Review every statement before signing.</span>
-      <button class="btn-sm btn-word" onclick="downloadWord()">&#8595; Word Doc</button>
-      <button class="btn-sm btn-copy" onclick="copyReport()">Copy</button>
-      <button class="btn-sm btn-print" onclick="window.print()">Print</button>
-      <button class="btn-sm btn-clear" onclick="clearReport()">Clear</button>
-    </div>
-    <div class="report-text" id="reportText"></div>
   </div>
 </div>
 
@@ -2294,76 +2239,6 @@ function makeMiniAnswerSheet(){
   };
 }
 
-// Columbia Suicide Severity Rating Scale (Posner et al.; NIMH-funded, public
-// domain, free for clinical use). Rendered first in every assessment stack,
-// ahead of Developmental History, so risk is screened before anything else.
-function makeCSSRS(){
-  return {
-    name:"Columbia Suicide Severity Rating Scale",abbr:"C-SSRS",type:"interview",category:"cssrs",
-    primary:true,reporter:"other",
-    note:"Clinician-administered. Ask each ideation question in order; if a question is answered No, you may skip to the next section as clinically indicated. Rate intensity for the most severe ideation type endorsed. Ask about lifetime history and, separately, the past 3 months for the behavior section.",
-    sections:[
-      {id:"ideation",label:"Suicidal Ideation",items:[
-        {id:"wish",q:"1. Wish to be Dead — Have you wished you were dead or wished you could go to sleep and not wake up? Yes/No — if yes, describe:"},
-        {id:"nonspecific",q:"2. Non-Specific Active Suicidal Thoughts — Have you actually had any thoughts of killing yourself? Yes/No — if yes, describe:"},
-        {id:"method_no_plan",q:"3. Active Suicidal Ideation with Any Methods (Not Plan) without Intent to Act — Have you been thinking about how you might do this, e.g. taken pills, jumped from a height? Yes/No — if yes, describe method, confirm no intent to act:"},
-        {id:"some_intent",q:"4. Active Suicidal Ideation with Some Intent to Act, without Specific Plan — Have you had these thoughts and had some intention of acting on them? Yes/No — if yes, describe:"},
-        {id:"plan_intent",q:"5. Active Suicidal Ideation with Specific Plan and Intent — Have you started to work out or worked out the details of how to kill yourself, and do you intend to carry out this plan? Yes/No — if yes, describe plan and intent:"}
-      ]},
-      {id:"intensity",label:"Intensity of Ideation (rate for the most severe type endorsed above)",items:[
-        {id:"frequency",q:"Frequency — 1 Less than once a week / 2 Once a week / 3 2–5 times a week / 4 Daily or almost daily / 5 Many times each day. Rating and detail:"},
-        {id:"duration",q:"Duration — 1 Fleeting, few seconds/minutes / 2 Less than 1 hour/some of the time / 3 1–4 hours/a lot of time / 4 4–8 hours/most of day / 5 More than 8 hours/persistent or continuous. Rating and detail:"},
-        {id:"controllability",q:"Controllability — 0 Does not attempt to control thoughts / 1 Easily able to control / 2 Little difficulty / 3 Some difficulty / 4 A lot of difficulty / 5 Unable to control thoughts. Rating and detail:"},
-        {id:"deterrents",q:"Deterrents (e.g., family, religion, pain of death) — 0 Does not apply / 1 Definitely stopped / 2 Probably stopped / 3 Uncertain / 4 Most likely did not stop / 5 Definitely did not stop. Rating and detail:"},
-        {id:"reasons",q:"Reasons for Ideation — to end/stop the pain vs. to get attention/revenge/reaction from others — 0 Does not apply / 1 Completely attention-revenge-reaction / 2 Mostly attention-revenge-reaction / 3 Equally both / 4 Mostly to end/stop pain / 5 Completely to end/stop pain. Rating and detail:"}
-      ]},
-      {id:"behavior",label:"Suicidal Behavior — Lifetime and Past 3 Months",items:[
-        {id:"actual_attempt",q:"Actual Attempt — potentially self-injurious act committed with at least some intent to die (intent need not be 100%). Lifetime: Yes/No. Past 3 months: Yes/No. Describe (method, medical outcome, interrupted by self or other):"},
-        {id:"interrupted",q:"Interrupted Attempt — outside circumstance stopped the person from starting the potentially self-injurious act. Lifetime: Yes/No. Past 3 months: Yes/No. Describe:"},
-        {id:"aborted",q:"Aborted or Self-Interrupted Attempt — person began steps toward an attempt but stopped themselves before any self-destructive behavior occurred. Lifetime: Yes/No. Past 3 months: Yes/No. Describe:"},
-        {id:"preparatory",q:"Preparatory Acts or Behavior — e.g., collecting pills, obtaining a means, giving away possessions, writing a note. Lifetime: Yes/No. Past 3 months: Yes/No. Describe:"},
-        {id:"totals_dates",q:"Total number of lifetime attempts / attempts in past 3 months. Date of most recent attempt / most lethal attempt / first (initial) attempt:"}
-      ]},
-      {id:"lethality",label:"Lethality of Suicidal Behavior (most lethal lifetime attempt)",items:[
-        {id:"actual_lethality",q:"Actual Lethality/Medical Damage — 0 No/very minor physical damage / 1 Minor (e.g., surface scratches, mild bleeding) / 2 Moderate, medical attention needed / 3 Moderately severe, hospitalization/intensive care likely / 4 Severe, hospitalization with intensive care required / 5 Death. Rating and detail:"},
-        {id:"potential_lethality",q:"Potential Lethality — rate only if actual lethality = 0 — 0 Behavior not likely to result in injury / 1 Likely to result in injury but not death / 2 Likely to result in death despite available medical care. Rating and detail:"}
-      ]},
-      {id:"risk_summary",label:"Clinician Risk Summary",items:[
-        {id:"risk_level",q:"Overall Risk Level (Low / Moderate / High) and clinical rationale, integrating ideation severity/intensity, behavior history, protective factors, and access to means:"},
-        {id:"protective",q:"Protective factors identified:"},
-        {id:"disposition",q:"Safety plan / disposition (e.g., safety plan created, means-restriction counseling, higher level of care, outpatient follow-up):"}
-      ]}
-    ]
-  };
-}
-
-// Mental Status Exam — standard clinical-observation domains. Rendered last in
-// every assessment stack, after all self/other-report measures, so it reflects
-// the clinician's observations across the full assessment.
-function makeMSE(){
-  return {
-    name:"Mental Status Exam",abbr:"MSE",type:"interview",category:"mse",
-    primary:true,reporter:"other",
-    note:"Clinician observation, completed at the conclusion of the assessment based on presentation across the full session.",
-    sections:[
-      {id:"observations",label:"Mental Status Observations",wnl:true,items:[
-        {id:"appearance",q:"Appearance — grooming, hygiene, dress, apparent vs. stated age, distinguishing features:"},
-        {id:"behavior",q:"Behavior / Psychomotor Activity — eye contact, cooperation, activity level, abnormal movements, gait:"},
-        {id:"speech",q:"Speech — rate, volume, tone, fluency, articulation, spontaneity:"},
-        {id:"mood",q:"Mood (client's stated internal emotional state, in their own words):"},
-        {id:"affect",q:"Affect — range, appropriateness, congruence with mood, intensity, stability:"},
-        {id:"thought_process",q:"Thought Process — linear/goal-directed, tangential, circumstantial, flight of ideas, loose associations, thought blocking, perseveration:"},
-        {id:"thought_content",q:"Thought Content — preoccupations, delusions, obsessions, suicidal/homicidal ideation (cross-reference C-SSRS), overvalued ideas:"},
-        {id:"perception",q:"Perceptual Disturbances — hallucinations (auditory/visual/other), illusions, depersonalization/derealization:"},
-        {id:"cognition",q:"Cognition — orientation (person/place/time/situation), attention/concentration, memory (immediate/recent/remote), fund of knowledge, abstract reasoning:"},
-        {id:"insight",q:"Insight — awareness of symptoms/condition and need for treatment:"},
-        {id:"judgment",q:"Judgment — decision-making capacity, ability to anticipate consequences, impulse control:"},
-        {id:"rapport",q:"Rapport and Reliability — quality of clinical rapport established, estimated reliability of self-report:"}
-      ]}
-    ]
-  };
-}
-
 // DIVA-5 (Kooij, Francken & Bron, DIVA Foundation) — free for clinical use.
 // Full interview: 18 DSM-5 criteria (9 Attention, 9 Hyperactivity/Impulsivity),
 // each with adulthood/childhood example checklists and a symptom-present
@@ -2460,9 +2335,7 @@ function makeDiva5(){
 
 const M = {
 ADHD:{
-  cssrs:makeCSSRS(),
   mini_as:makeMiniAnswerSheet(),
-  mse:makeMSE(),
   caars:{
     name:"Conners Adult ADHD Rating Scales (CAARS)",abbr:"CAARS",type:"entry",
     note:"MHS licensed measure. Administered pre-session. Enter T-scores from Self-Report form and Observer form if available. T ≥65 elevated (>1.5 SD); T ≥70 markedly elevated (>2 SD).",
@@ -2494,79 +2367,9 @@ ADHD:{
     ]
   },
   diva5:makeDiva5(),
-  collateral_adhd:{
-    name:"Collateral Informant Interview — ADHD",abbr:"Collateral",type:"interview",
-    note:"Structured interview with trusted adult who knew client in childhood and/or observes them currently (partner, parent, sibling). Optional but clinically strengthens diagnosis.",
-    sections:[
-      {id:"informant",label:"Informant Information",ph:"Name/relationship to client:\nHow long known:\nContext of observation (lives together, worked together, etc.):\nFrequency of contact:"},
-      {id:"childhood_obs",label:"Childhood Observations",ph:"Inattentive behaviors observed in school/home:\nHyperactivity/impulsivity observed:\nAcademic history as observed:\nHow teachers or parents described them:\nAny diagnoses or interventions at the time:"},
-      {id:"current_obs",label:"Current Observations",ph:"Inattentive behaviors observed currently:\nHyperactivity/restlessness observed:\nImpact on shared home/work life:\nSpecific recent examples:\nHow client compares to peers/siblings:"},
-      {id:"other",label:"Additional Observations",ph:""}
-    ]
-  },
-  asrs:{
-    name:"Adult ADHD Self-Report Scale v1.1",abbr:"ASRS",
-    instr:"Rate how often you have experienced each of the following over the past 6 months.",
-    scale:{l:["Never","Rarely","Sometimes","Often","Very Often"],v:[0,1,2,3,4]},
-    parts:[{l:"Part A — Screening (items 1–6)",s:0,e:5},{l:"Part B — Additional Symptoms (items 7–18)",s:6,e:17}],
-    items:[
-      "How often do you have trouble wrapping up the final details of a project, once the challenging parts have been done?",
-      "How often do you have difficulty getting things in order when you have to do a task that requires organization?",
-      "How often do you have problems remembering appointments or obligations?",
-      "When you have a task that requires a lot of thought, how often do you avoid or delay getting started?",
-      "How often do you fidget or squirm with your hands or feet when you have to sit down for a long time?",
-      "How often do you feel overly active and compelled to do things, like you were driven by a motor?",
-      "How often do you make careless mistakes when you have to work on a boring or difficult project?",
-      "How often do you have difficulty keeping your attention when you are doing boring or repetitive work?",
-      "How often do you have difficulty concentrating on what people say to you, even when they are speaking to you directly?",
-      "How often do you misplace or have difficulty finding things at home or at work?",
-      "How often are you distracted by activity or noise around you?",
-      "How often do you leave your seat in meetings or other situations in which you are expected to remain seated?",
-      "How often do you feel restless or fidgety?",
-      "How often do you have difficulty unwinding and relaxing when you have time to yourself?",
-      "How often do you find yourself talking too much when you are in social situations?",
-      "When you're in a conversation, how often do you find yourself finishing the sentences of the people you are talking to, before they can finish them themselves?",
-      "How often do you have difficulty waiting your turn in situations when turn taking is required?",
-      "How often do you interrupt others when they are busy?"
-    ],
-    score(r){
-      let a=0,t=0,sc=0;
-      r.forEach((v,i)=>{ if(v===null)return; t+=v; if(i<6)a+=v; if(i<3&&v>=2)sc++; if(i>=3&&i<6&&v>=3)sc++; });
-      return {"Part A Raw":a+"/24","Part A Screen":sc+"/6"+(sc>=4?" ⚑ positive":""),"Total Raw":t+"/72"};
-    }
-  },
-  dev_hx_adhd:{
-    name:"Developmental History Questionnaire — ADHD",abbr:"ADHD Dev Hx",type:"interview",category:"developmental",
-    note:"Structured background history intake, matching the Developmental History section of the ADHD report template. Complete with the client and/or a collateral informant.",
-    sections:[
-      {id:"family",label:"Family",items:[{id:"birthplace_upbringing",q:"Where were you born, and what was your upbringing like?"},{id:"family_structure_and_relations",q:"What is your family structure, and what are your relationships with family members like?"},{id:"discipline_history",q:"What was discipline like growing up?"},{id:"developmental_context",q:"Is there anything notable about your early developmental context?"},{id:"trauma_history",q:"Do you have a history of trauma?"},{id:"current_living_situation",q:"What is your current living situation?"},{id:"relationship_status_children",q:"What is your relationship status, and do you have children?"},{id:"identity_and_pronouns",q:"What are your gender identity and pronouns?"}]},
-      {id:"home",label:"Difficulties at Home",items:[{id:"childhood_home_functioning",q:"How would you describe functioning in your childhood home?"},{id:"discipline_concerns",q:"Were there any discipline concerns growing up?"},{id:"chores",q:"How did you handle chores growing up?"},{id:"organization",q:"How would you describe your organizational skills?"},{id:"family_dynamics",q:"How would you describe your family dynamics?"},{id:"emotional_behavioral_concerns",q:"Were there any emotional or behavioral concerns?"}]},
-      {id:"school",label:"Difficulties in School",items:[{id:"elementary_middle_high_school",q:"How did you function in elementary, middle, and high school?"},{id:"attention",q:"How would you describe your attention in school?"},{id:"homework_completion",q:"How did you handle completing homework?"},{id:"grades",q:"What were your grades like?"},{id:"learning_concerns",q:"Were there any learning concerns?"},{id:"organization",q:"How would you describe your organizational skills?"},{id:"time_management",q:"How would you describe your time management?"},{id:"college_graduate_school_histor",q:"What is your college or graduate school history?"}]},
-      {id:"social",label:"Social Relationships",items:[{id:"friendships",q:"What have your friendships been like?"},{id:"peer_relationships",q:"How would you describe your peer relationships?"},{id:"social_functioning",q:"How would you describe your social functioning?"},{id:"relationship_patterns",q:"What patterns have you noticed in your relationships?"}]},
-      {id:"mental_health",label:"Mental Health",items:[{id:"depression",q:"Have you experienced depression?"},{id:"anxiety",q:"Have you experienced anxiety?"},{id:"trauma_history",q:"Do you have a history of trauma?"},{id:"mood_symptoms",q:"Have you experienced other mood symptoms?"},{id:"therapy_history",q:"What is your therapy history?"},{id:"other_relevant_diagnoses",q:"Do you have any other relevant diagnoses?"}]}
-    ]
-  },
-  dev_hx_audhd:{
-    name:"Developmental History Questionnaire — AuDHD (Combined)",abbr:"AuDHD Dev Hx",type:"interview",category:"developmental",
-    note:"For combined ADHD + Autism (AuDHD) evaluations. Merges the developmental history domains from both the ADHD and Autism report templates into a single questionnaire. Also appears in the Autism stack — complete it once; it applies to both modules.",
-    sections:[
-      {id:"family",label:"Family",items:[{id:"birthplace_upbringing",q:"Where were you born, and what was your upbringing like?"},{id:"family_structure_and_relations",q:"What is your family structure, and what are your relationships with family members like?"},{id:"discipline_history",q:"What was discipline like growing up?"},{id:"developmental_context",q:"Is there anything notable about your early developmental context?"},{id:"trauma_history",q:"Do you have a history of trauma?"},{id:"current_living_situation",q:"What is your current living situation?"},{id:"relationship_status_children",q:"What is your relationship status, and do you have children?"},{id:"identity_and_pronouns",q:"What are your gender identity and pronouns?"},{id:"family_psychiatric_development",q:"Is there a family history of psychiatric, developmental, or neurodivergent conditions?"}]},
-      {id:"medical",label:"Medical History",items:[{id:"birth_history",q:"What was your birth history like (e.g., full-term, complications)?"},{id:"hospitalizations",q:"Have you had any hospitalizations?"},{id:"surgeries",q:"Have you had any surgeries?"},{id:"significant_illnesses_injuries",q:"Have you had any significant illnesses or injuries?"},{id:"seizures",q:"Have you ever had seizures?"},{id:"medications",q:"What medications are you currently taking?"},{id:"allergies",q:"Do you have any allergies?"},{id:"developmental_motor_speech_con",q:"Were there any developmental motor or speech concerns?"}]},
-      {id:"home",label:"Difficulties at Home (Childhood)",items:[{id:"childhood_home_functioning",q:"How would you describe functioning in your childhood home?"},{id:"discipline_concerns",q:"Were there any discipline concerns growing up?"},{id:"chores",q:"How did you handle chores growing up?"},{id:"organization",q:"How would you describe your organizational skills?"},{id:"family_dynamics",q:"How would you describe your family dynamics?"},{id:"emotional_behavioral_concerns",q:"Were there any emotional or behavioral concerns?"},{id:"early_play_patterns_and",q:"What were your early play patterns like, and was there any rigidity around routines?"}]},
-      {id:"school",label:"Difficulties in School",items:[{id:"elementary_middle_high_school",q:"How did you function in elementary, middle, and high school?"},{id:"attention",q:"How would you describe your attention in school?"},{id:"homework_completion",q:"How did you handle completing homework?"},{id:"grades",q:"What were your grades like?"},{id:"learning_concerns",q:"Were there any learning concerns?"},{id:"organization",q:"How would you describe your organizational skills?"},{id:"time_management",q:"How would you describe your time management?"},{id:"college_graduate_school_histor",q:"What is your college or graduate school history?"},{id:"school_adjustment_and_peer",q:"How did you adjust to school, and what were your peer relationships like?"}]},
-      {id:"social",label:"Social Relationships",items:[{id:"friendships",q:"What have your friendships been like?"},{id:"peer_relationships",q:"How would you describe your peer relationships?"},{id:"social_functioning",q:"How would you describe your social functioning?"},{id:"relationship_patterns",q:"What patterns have you noticed in your relationships?"},{id:"masking_or_camouflaging_behavi",q:"Have you noticed yourself masking or camouflaging in social situations?"}]},
-      {id:"psychiatric",label:"Psychiatric / Mental Health History",items:[{id:"depression",q:"Have you experienced depression?"},{id:"anxiety",q:"Have you experienced anxiety?"},{id:"trauma_history",q:"Do you have a history of trauma?"},{id:"mood_symptoms",q:"Have you experienced other mood symptoms?"},{id:"therapy_history",q:"What is your therapy history?"},{id:"psychiatric_hospitalization",q:"Have you ever been psychiatrically hospitalized?"},{id:"suicide_attempts",q:"Have you ever attempted suicide?"},{id:"self_harm_history",q:"Do you have a history of self-harm?"},{id:"substance_use",q:"What is your history of substance use?"},{id:"current_substances",q:"What substances do you currently use, if any?"},{id:"other_relevant_diagnoses",q:"Do you have any other relevant diagnoses?"}]},
-      {id:"occupational",label:"Occupational History",items:[{id:"current_job",q:"What is your current job?"},{id:"longest_job_held",q:"What is the longest job you've held?"},{id:"work_related_difficulties",q:"Have you experienced any work-related difficulties?"},{id:"future_employment_plans",q:"What are your future employment plans?"}]},
-      {id:"legal",label:"Legal History",items:[{id:"legal_criminal_history_or",q:"Do you have any legal or criminal history? State 'none reported' if not applicable."}]},
-      {id:"benefits",label:"Benefits / Secondary Gain",items:[{id:"is_the_patient_seeking",q:"Are you seeking this evaluation for benefits, accommodations, disability, legal, or other secondary purposes? Describe, or state 'denies secondary gain.'"}]},
-      {id:"daily_living",label:"Current Daily Living Skills and Habits",items:[{id:"typical_day",q:"What does a typical day look like for you?"},{id:"grooming_hygiene",q:"How would you describe your grooming and hygiene habits?"},{id:"transportation",q:"How do you get around (transportation)?"},{id:"money_management",q:"How do you manage your money?"},{id:"housekeeping",q:"How do you manage housekeeping?"},{id:"cooking_eating_meal_preparatio",q:"How do you handle cooking, eating, and meal preparation?"},{id:"healthcare_management",q:"How do you manage your healthcare (appointments, medications, etc.)?"},{id:"sleep",q:"How would you describe your sleep?"},{id:"problem_solving",q:"How do you approach problem-solving in daily life?"}]}
-    ]
-  }
 },
 Autism:{
-  cssrs:makeCSSRS(),
   mini_as:makeMiniAnswerSheet(),
-  mse:makeMSE(),
   rmet:{
     name:"Reading the Mind in the Eyes Test — Revised (RMET)",abbr:"RMET",type:"entry",primary:true,reporter:"self",rowColor:"red",manualComplete:true,
     note:"Baron-Cohen et al. (2001), Autism Research Centre, University of Cambridge. The RMET's 36 items are copyrighted photographic stimuli (black-and-white photographs of the eye region, each with 4 forced-choice mental-state words) — the images themselves are the licensed test content and cannot be reproduced here. Administer the official stimulus set/booklet or licensed digital version separately, then enter the resulting score. Adult norms: general population mean ≈26/36; autistic-sample mean ≈21/36. No single validated clinical cutoff — interpret relative to population norms and convergent evidence.",
@@ -2701,41 +2504,9 @@ Autism:{
       {id:"vinelandRespondent",l:"Respondent",h:"self, caregiver, or clinician-observed form"}
     ]
   },
-  dev_hx_asd:{
-    name:"Developmental History Questionnaire — Autism",abbr:"ASD Dev Hx",type:"interview",category:"developmental",
-    note:"Structured background history intake, matching the Relevant Background Information section of the Autism report template. Complete with the client and/or a collateral informant.",
-    sections:[
-      {id:"family",label:"Family History",items:[{id:"birthplace_and_upbringing",q:"Where were you born, and what was your upbringing like?"},{id:"family_structure_and_relations",q:"What is your family structure, and what are your relationships with family members like?"},{id:"family_psychiatric_development",q:"Is there a family history of psychiatric or developmental conditions?"},{id:"relevant_trauma_or_stressors",q:"Are there any relevant trauma histories or significant life stressors?"}]},
-      {id:"medical",label:"Medical History",items:[{id:"birth_history",q:"What was your birth history like (e.g., full-term, complications)?"},{id:"hospitalizations",q:"Have you had any hospitalizations?"},{id:"surgeries",q:"Have you had any surgeries?"},{id:"significant_illnesses_injuries",q:"Have you had any significant illnesses or injuries?"},{id:"seizures",q:"Have you ever had seizures?"},{id:"medications",q:"What medications are you currently taking?"},{id:"allergies",q:"Do you have any allergies?"}]},
-      {id:"psychiatric",label:"Psychiatric History",items:[{id:"mental_health_diagnoses_sympto",q:"What mental health diagnoses or symptoms have you experienced?"},{id:"therapy_history",q:"What is your therapy history?"},{id:"psychiatric_hospitalization",q:"Have you ever been psychiatrically hospitalized?"},{id:"suicide_attempts",q:"Have you ever attempted suicide?"},{id:"self_harm_history",q:"Do you have a history of self-harm?"},{id:"substance_use",q:"What is your history of substance use?"},{id:"current_substances",q:"What substances do you currently use, if any?"}]},
-      {id:"education",label:"Education History",items:[{id:"academic_history",q:"What is your academic history?"},{id:"supports_accommodations_receiv",q:"What academic supports or accommodations have you received?"},{id:"learning_concerns",q:"Were there any learning concerns?"},{id:"grades",q:"What were your grades like?"},{id:"college_graduate_history",q:"What is your college or graduate school history?"},{id:"developmental_motor_speech_con",q:"Were there any developmental motor or speech concerns?"}]},
-      {id:"occupational",label:"Occupational History",items:[{id:"current_job",q:"What is your current job?"},{id:"longest_job_held",q:"What is the longest job you've held?"},{id:"work_related_difficulties",q:"Have you experienced any work-related difficulties?"},{id:"future_employment_plans",q:"What are your future employment plans?"}]},
-      {id:"legal",label:"Legal History",items:[{id:"legal_criminal_history_or",q:"Do you have any legal or criminal history? State 'none reported' if not applicable."}]},
-      {id:"benefits",label:"Benefits / Secondary Gain",items:[{id:"is_the_patient_seeking",q:"Are you seeking this evaluation for benefits, accommodations, disability, legal, or other secondary purposes? Describe, or state 'denies secondary gain.'"}]},
-      {id:"daily_living",label:"Current Daily Living Skills and Habits",items:[{id:"typical_day",q:"What does a typical day look like for you?"},{id:"grooming_hygiene",q:"How would you describe your grooming and hygiene habits?"},{id:"transportation",q:"How do you get around (transportation)?"},{id:"money_management",q:"How do you manage your money?"},{id:"housekeeping",q:"How do you manage housekeeping?"},{id:"cooking_eating_meal_preparatio",q:"How do you handle cooking, eating, and meal preparation?"},{id:"healthcare_management",q:"How do you manage your healthcare (appointments, medications, etc.)?"},{id:"sleep",q:"How would you describe your sleep?"},{id:"problem_solving",q:"How do you approach problem-solving in daily life?"}]}
-    ]
-  },
-  dev_hx_audhd:{
-    name:"Developmental History Questionnaire — AuDHD (Combined)",abbr:"AuDHD Dev Hx",type:"interview",category:"developmental",
-    note:"For combined ADHD + Autism (AuDHD) evaluations. Merges the developmental history domains from both the Autism and ADHD report templates into a single questionnaire. Also appears in the ADHD stack — complete it once; it applies to both modules.",
-    sections:[
-      {id:"family",label:"Family",items:[{id:"birthplace_upbringing",q:"Where were you born, and what was your upbringing like?"},{id:"family_structure_and_relations",q:"What is your family structure, and what are your relationships with family members like?"},{id:"discipline_history",q:"What was discipline like growing up?"},{id:"developmental_context",q:"Is there anything notable about your early developmental context?"},{id:"trauma_history",q:"Do you have a history of trauma?"},{id:"current_living_situation",q:"What is your current living situation?"},{id:"relationship_status_children",q:"What is your relationship status, and do you have children?"},{id:"identity_and_pronouns",q:"What are your gender identity and pronouns?"},{id:"family_psychiatric_development",q:"Is there a family history of psychiatric, developmental, or neurodivergent conditions?"}]},
-      {id:"medical",label:"Medical History",items:[{id:"birth_history",q:"What was your birth history like (e.g., full-term, complications)?"},{id:"hospitalizations",q:"Have you had any hospitalizations?"},{id:"surgeries",q:"Have you had any surgeries?"},{id:"significant_illnesses_injuries",q:"Have you had any significant illnesses or injuries?"},{id:"seizures",q:"Have you ever had seizures?"},{id:"medications",q:"What medications are you currently taking?"},{id:"allergies",q:"Do you have any allergies?"},{id:"developmental_motor_speech_con",q:"Were there any developmental motor or speech concerns?"}]},
-      {id:"home",label:"Difficulties at Home (Childhood)",items:[{id:"childhood_home_functioning",q:"How would you describe functioning in your childhood home?"},{id:"discipline_concerns",q:"Were there any discipline concerns growing up?"},{id:"chores",q:"How did you handle chores growing up?"},{id:"organization",q:"How would you describe your organizational skills?"},{id:"family_dynamics",q:"How would you describe your family dynamics?"},{id:"emotional_behavioral_concerns",q:"Were there any emotional or behavioral concerns?"},{id:"early_play_patterns_and",q:"What were your early play patterns like, and was there any rigidity around routines?"}]},
-      {id:"school",label:"Difficulties in School",items:[{id:"elementary_middle_high_school",q:"How did you function in elementary, middle, and high school?"},{id:"attention",q:"How would you describe your attention in school?"},{id:"homework_completion",q:"How did you handle completing homework?"},{id:"grades",q:"What were your grades like?"},{id:"learning_concerns",q:"Were there any learning concerns?"},{id:"organization",q:"How would you describe your organizational skills?"},{id:"time_management",q:"How would you describe your time management?"},{id:"college_graduate_school_histor",q:"What is your college or graduate school history?"},{id:"school_adjustment_and_peer",q:"How did you adjust to school, and what were your peer relationships like?"}]},
-      {id:"social",label:"Social Relationships",items:[{id:"friendships",q:"What have your friendships been like?"},{id:"peer_relationships",q:"How would you describe your peer relationships?"},{id:"social_functioning",q:"How would you describe your social functioning?"},{id:"relationship_patterns",q:"What patterns have you noticed in your relationships?"},{id:"masking_or_camouflaging_behavi",q:"Have you noticed yourself masking or camouflaging in social situations?"}]},
-      {id:"psychiatric",label:"Psychiatric / Mental Health History",items:[{id:"depression",q:"Have you experienced depression?"},{id:"anxiety",q:"Have you experienced anxiety?"},{id:"trauma_history",q:"Do you have a history of trauma?"},{id:"mood_symptoms",q:"Have you experienced other mood symptoms?"},{id:"therapy_history",q:"What is your therapy history?"},{id:"psychiatric_hospitalization",q:"Have you ever been psychiatrically hospitalized?"},{id:"suicide_attempts",q:"Have you ever attempted suicide?"},{id:"self_harm_history",q:"Do you have a history of self-harm?"},{id:"substance_use",q:"What is your history of substance use?"},{id:"current_substances",q:"What substances do you currently use, if any?"},{id:"other_relevant_diagnoses",q:"Do you have any other relevant diagnoses?"}]},
-      {id:"occupational",label:"Occupational History",items:[{id:"current_job",q:"What is your current job?"},{id:"longest_job_held",q:"What is the longest job you've held?"},{id:"work_related_difficulties",q:"Have you experienced any work-related difficulties?"},{id:"future_employment_plans",q:"What are your future employment plans?"}]},
-      {id:"legal",label:"Legal History",items:[{id:"legal_criminal_history_or",q:"Do you have any legal or criminal history? State 'none reported' if not applicable."}]},
-      {id:"benefits",label:"Benefits / Secondary Gain",items:[{id:"is_the_patient_seeking",q:"Are you seeking this evaluation for benefits, accommodations, disability, legal, or other secondary purposes? Describe, or state 'denies secondary gain.'"}]},
-      {id:"daily_living",label:"Current Daily Living Skills and Habits",items:[{id:"typical_day",q:"What does a typical day look like for you?"},{id:"grooming_hygiene",q:"How would you describe your grooming and hygiene habits?"},{id:"transportation",q:"How do you get around (transportation)?"},{id:"money_management",q:"How do you manage your money?"},{id:"housekeeping",q:"How do you manage housekeeping?"},{id:"cooking_eating_meal_preparatio",q:"How do you handle cooking, eating, and meal preparation?"},{id:"healthcare_management",q:"How do you manage your healthcare (appointments, medications, etc.)?"},{id:"sleep",q:"How would you describe your sleep?"},{id:"problem_solving",q:"How do you approach problem-solving in daily life?"}]}
-    ]
-  }
 },
 OCD:{
-  cssrs:makeCSSRS(),
   mini_as:makeMiniAnswerSheet(),
-  mse:makeMSE(),
   ocd_ci:{
     name:"OCD Clinical Interview",abbr:"OCD CI",type:"interview",
     sections:[
@@ -2909,9 +2680,7 @@ OCD:{
   }
 },
 GAD:{
-  cssrs:makeCSSRS(),
   mini_as:makeMiniAnswerSheet(),
-  mse:makeMSE(),
   gad_ci:{
     name:"GAD Clinical Interview",abbr:"GAD CI",type:"interview",
     sections:[
@@ -2972,9 +2741,7 @@ GAD:{
   }
 },
 PTSD:{
-  cssrs:makeCSSRS(),
   mini_as:makeMiniAnswerSheet(),
-  mse:makeMSE(),
   caps5:{
     name:"Clinician-Administered PTSD Scale for DSM-5",abbr:"CAPS-5",type:"clinician",
     note:"National Center for PTSD — free for clinical use. Rate each item 0–4 based on severity over the past month, combining frequency and intensity. 0=Absent, 1=Mild/subthreshold, 2=Moderate/threshold, 3=Severe, 4=Extreme/incapacitating. Threshold: total ≥25 probable PTSD.",
@@ -3518,7 +3285,6 @@ function switchTab(tab,btn){
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
-  if(tab==='diagnostic'){renderReportModules();if(typeof refreshReportGateStatus==='function')refreshReportGateStatus();}
   rebuildRightNav();
   if(typeof scheduleProgressUpdate==='function') scheduleProgressUpdate();
   window.scrollTo({top:0,behavior:'smooth'});
@@ -3942,7 +3708,6 @@ function updateProgressWidget(){
       :(totalMin?'<li style="color:var(--success);border:none;">All measures complete</li>':'');
   }
   renderTimerWidget(timerState());
-  if(typeof refreshReportGateStatus==='function') refreshReportGateStatus();
 }
 
 // Notes widget — plain localStorage autosave.
@@ -4019,31 +3784,6 @@ function initTimer(){
   renderTimerWidget(s);
 }
 
-// Required self-report measures — primary-tier, self-reporter — must all be
-// complete before a report can be generated (item 12 of the workflow spec).
-function getRequiredSelfReportEntries(){
-  return getStackMeasureEntries().filter(({m})=>m.reporter==='self'&&m.primary===true);
-}
-
-function refreshReportGateStatus(){
-  const gateSection=document.getElementById('reportGateSection');
-  const btn=document.getElementById('generateBtn');
-  if(!gateSection||!btn) return;
-  const required=getRequiredSelfReportEntries();
-  const incomplete=required.filter(({mod,key})=>!measureCompleteFor(mod,key));
-  if(required.length&&incomplete.length){
-    gateSection.style.display='';
-    const listEl=document.getElementById('reportGateList');
-    if(listEl) listEl.innerHTML=incomplete.map(({m})=>`<li>${escapeHtml(m.name||m.abbr)}</li>`).join('');
-    btn.disabled=true;
-    btn.title='Complete all required self-report measures first';
-  } else {
-    gateSection.style.display='none';
-    btn.disabled=false;
-    btn.removeAttribute('title');
-  }
-}
-
 function initSidePanel(){
   initNotesWidget();
   initTimer();
@@ -4093,47 +3833,7 @@ function renderMeasures(){
   if(!selectedModules.length){c.innerHTML='<div style="color:var(--text-muted);font-style:italic;padding:16px 0;">Select one or more modules above to begin.</div>';return;}
   let h='';
 
-  // C-SSRS renders first of all, ahead of Developmental History — every
-  // assessment stack opens with a suicide-risk screen. Deduped across
-  // modules the same way as the shared MINI/dev-hx questionnaires below.
-  const cssrsSeen=new Set();
-  let cssrsHTML='';
-  DEV_HX_MODULE_ORDER.filter(mod=>selectedModules.includes(mod)).forEach(mod=>{
-    Object.keys(M[mod]).forEach(key=>{
-      const m=M[mod][key];
-      if(m.category==='cssrs'&&!cssrsSeen.has(key)){
-        cssrsSeen.add(key);
-        cssrsHTML+=buildMCard(mod,key,m);
-      }
-    });
-  });
-  if(cssrsHTML){
-    h+=`<div class="section"><div class="section-label">Suicide Risk Screening</div>
-      <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin:-8px 0 12px;text-transform:none;letter-spacing:normal;font-family:var(--font-sans,inherit);font-weight:400;">Administer before any other assessment content.</div>
-      ${cssrsHTML}</div>`;
-  }
-
-  // Developmental History questionnaires render first, above the scored/self-other measures.
-  // Deduped by key so a questionnaire shared across modules (e.g. the AuDHD combined form)
-  // only appears once even when both of its modules are selected.
-  const devSeen=new Set();
-  let devHTML='';
-  DEV_HX_MODULE_ORDER.filter(mod=>selectedModules.includes(mod)).forEach(mod=>{
-    Object.keys(M[mod]).forEach(key=>{
-      const m=M[mod][key];
-      if(m.category==='developmental'&&!devSeen.has(key)){
-        devSeen.add(key);
-        devHTML+=buildMCard(mod,key,m);
-      }
-    });
-  });
-  if(devHTML){
-    h+=`<div class="section"><div class="section-label">Developmental History</div>
-      <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin:-8px 0 12px;text-transform:none;letter-spacing:normal;font-family:var(--font-sans,inherit);font-weight:400;">Structured background history intake — complete before or alongside the scored measures below.</div>
-      ${devHTML}</div>`;
-  }
-
-  // M.I.N.I. answer sheet renders next — identical across modules, so it's
+  // M.I.N.I. answer sheet renders first — identical across modules, so it's
   // deduped the same way as the developmental questionnaires above.
   const miniSeen=new Set();
   let miniHTML='';
@@ -4152,7 +3852,7 @@ function renderMeasures(){
       ${miniHTML}</div>`;
   }
 
-  const excludedCategories=['developmental','mini_as','cssrs','mse'];
+  const excludedCategories=['developmental','mini_as'];
   selectedModules.forEach(mod=>{
     const keys=Object.keys(M[mod]).filter(key=>!excludedCategories.includes(M[mod][key].category));
     const grouped=keys.some(key=>M[mod][key].reporter);
@@ -4170,24 +3870,6 @@ function renderMeasures(){
     });
   });
 
-  // Mental Status Exam renders last of all — a clinician observation
-  // capping every assessment stack, deduped across modules like the C-SSRS.
-  const mseSeen=new Set();
-  let mseHTML='';
-  DEV_HX_MODULE_ORDER.filter(mod=>selectedModules.includes(mod)).forEach(mod=>{
-    Object.keys(M[mod]).forEach(key=>{
-      const m=M[mod][key];
-      if(m.category==='mse'&&!mseSeen.has(key)){
-        mseSeen.add(key);
-        mseHTML+=buildMCard(mod,key,m);
-      }
-    });
-  });
-  if(mseHTML){
-    h+=`<div class="section"><div class="section-label">Mental Status Exam</div>
-      <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin:-8px 0 12px;text-transform:none;letter-spacing:normal;font-family:var(--font-sans,inherit);font-weight:400;">Complete at the conclusion of the assessment.</div>
-      ${mseHTML}</div>`;
-  }
   c.innerHTML=h;
 }
 
@@ -4563,148 +4245,187 @@ function buildDiva5Card(mod,key,m){
     <span class="d5-summary-item">Hyperactivity/Impulsivity — Childhood: <span id="d5_${mid}_sum_hi_child">0</span>/9</span>
   </div>`;
 
-  h+=`<div class="d5-part-label">Part 1: Symptoms of Attention Deficit (DSM-5 Criterion A1)</div>`;
-  if(m.partInstructions) h+=`<div class="d5-note" style="margin-bottom:12px;">${m.partInstructions}</div>`;
-  m.items.filter(it=>it.domain==='attn').forEach(it=>{h+=diva5ItemHTML(mod,key,mid,it);});
-  h+=`<div class="d5-part-label">Part 2: Symptoms of Hyperactivity-Impulsivity (DSM-5 Criterion A2)</div>`;
-  if(m.partInstructions) h+=`<div class="d5-note" style="margin-bottom:12px;">${m.partInstructions}</div>`;
-  m.items.filter(it=>it.domain==='hi').forEach(it=>{h+=diva5ItemHTML(mod,key,mid,it);});
-
-  h+=`<div class="d5-part-label">Part 3: Impairment on Account of the Symptoms (DSM-5 Criteria B, C and D)</div>`;
-  h+=`<div class="d5-item">
-    <div class="d5-q">Criterion B</div>
-    <div class="d5-q" style="font-weight:400;">Have you always had these symptoms of attention deficit and/or hyperactivity/impulsivity?</div>
-    <div class="d5-yn-row">
-      ${diva5FieldHTML(mid,{id:"critB_always",kind:"select",label:"",options:["","Yes (several symptoms were present prior to the 12th year of age)","No"]},true)}
-    </div>
-    <div class="d5-yn-row" style="margin-top:6px;">
-      <span>If no is answered above, starting as from ${diva5FieldHTML(mid,{id:"critB_onsetAge",kind:"text",label:""},true)} year of age</span>
-    </div>
+  // ── Collapsible parts — a clinician moves through the interview one
+  // section at a time, so each part starts collapsed and opens on demand
+  // rather than dumping all ~18 items + score form on screen at once.
+  h+=`<div style="display:flex;gap:10px;margin-bottom:10px;">
+    <button type="button" class="btn-sm" onclick="event.stopPropagation();setAllDiva5Modules('${mid}',true)">Expand all</button>
+    <button type="button" class="btn-sm" onclick="event.stopPropagation();setAllDiva5Modules('${mid}',false)">Collapse all</button>
   </div>`;
 
-  h+=`<div class="d5-item"><div class="d5-q">Criterion C — In which areas do you have / have you had problems with these symptoms?</div>`;
-  m.domains.forEach(d=>{
-    h+=`<div style="margin:14px 0;">
-      <div style="font-size:12px;font-weight:700;margin-bottom:8px;">${escapeHtml(d.adultLabel)} / ${escapeHtml(d.childLabel)}</div>
-      <div class="d5-cols">
-        <div>
-          <div class="d5-col-label">Adulthood — ${escapeHtml(d.adultLabel)}</div>
-          ${d.adult.map((ex,i)=>`<label class="d5-ex"><input type="checkbox" id="d5_${mid}_dom_${d.id}_ea_${i}">${escapeHtml(ex)}</label>`).join('')}
-          <div class="field d5-other"><label>Other</label><input type="text" id="d5_${mid}_dom_${d.id}_oa"></div>
-        </div>
-        <div>
-          <div class="d5-col-label">Childhood — ${escapeHtml(d.childLabel)}</div>
-          ${d.child.map((ex,i)=>`<label class="d5-ex"><input type="checkbox" id="d5_${mid}_dom_${d.id}_ec_${i}">${escapeHtml(ex)}</label>`).join('')}
-          <div class="field d5-other"><label>Other</label><input type="text" id="d5_${mid}_dom_${d.id}_oc"></div>
-        </div>
+  const d5mod=(idx,label,bodyFn)=>{
+    const modId=`d5mod_${mid}_${idx}`;
+    h+=`<div class="mini-module">
+      <div class="mini-module-head" onclick="event.stopPropagation();toggleMiniModule('${modId}')">
+        <span class="mini-module-head-label"><span class="mini-module-dot" id="${modId}_dot" style="visibility:hidden;"></span>${label}</span>
+        <span class="mini-module-chevron" id="${modId}_chev">▸</span>
+      </div>
+      <div class="mini-module-body" id="${modId}" style="display:none;">`;
+    bodyFn();
+    h+=`</div></div>`;
+  };
+
+  d5mod(0,'Part 1: Symptoms of Attention Deficit (DSM-5 Criterion A1)',()=>{
+    if(m.partInstructions) h+=`<div class="d5-note" style="margin-bottom:12px;">${m.partInstructions}</div>`;
+    m.items.filter(it=>it.domain==='attn').forEach(it=>{h+=diva5ItemHTML(mod,key,mid,it);});
+  });
+
+  d5mod(1,'Part 2: Symptoms of Hyperactivity-Impulsivity (DSM-5 Criterion A2)',()=>{
+    if(m.partInstructions) h+=`<div class="d5-note" style="margin-bottom:12px;">${m.partInstructions}</div>`;
+    m.items.filter(it=>it.domain==='hi').forEach(it=>{h+=diva5ItemHTML(mod,key,mid,it);});
+  });
+
+  d5mod(2,'Part 3: Impairment on Account of the Symptoms (DSM-5 Criteria B, C and D)',()=>{
+    h+=`<div class="d5-item">
+      <div class="d5-q">Criterion B</div>
+      <div class="d5-q" style="font-weight:400;">Have you always had these symptoms of attention deficit and/or hyperactivity/impulsivity?</div>
+      <div class="d5-yn-row">
+        ${diva5FieldHTML(mid,{id:"critB_always",kind:"select",label:"",options:["","Yes (several symptoms were present prior to the 12th year of age)","No"]},true)}
+      </div>
+      <div class="d5-yn-row" style="margin-top:6px;">
+        <span>If no is answered above, starting as from ${diva5FieldHTML(mid,{id:"critB_onsetAge",kind:"text",label:""},true)} year of age</span>
       </div>
     </div>`;
-  });
-  h+=`<div class="d5-yn-row">
-      <span>Adulthood: evidence of impairment in ≥2 areas? ${diva5FieldHTML(mid,{id:"imp2_adult",kind:"select",label:"",options:["","Yes","No"]},true)}</span>
-      <span>Childhood: evidence of impairment in ≥2 areas? ${diva5FieldHTML(mid,{id:"imp2_child",kind:"select",label:"",options:["","Yes","No"]},true)}</span>
-    </div>
-  </div>`;
 
-  h+=`<div class="field" style="margin-bottom:18px;"><label>Potential details</label><textarea id="d5_${mid}_details" style="min-height:70px;"></textarea></div>`;
+    h+=`<div class="d5-item"><div class="d5-q">Criterion C — In which areas do you have / have you had problems with these symptoms?</div>`;
+    m.domains.forEach(d=>{
+      h+=`<div style="margin:14px 0;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:8px;">${escapeHtml(d.adultLabel)} / ${escapeHtml(d.childLabel)}</div>
+        <div class="d5-cols">
+          <div>
+            <div class="d5-col-label">Adulthood — ${escapeHtml(d.adultLabel)}</div>
+            ${d.adult.map((ex,i)=>`<label class="d5-ex"><input type="checkbox" id="d5_${mid}_dom_${d.id}_ea_${i}">${escapeHtml(ex)}</label>`).join('')}
+            <div class="field d5-other"><label>Other</label><input type="text" id="d5_${mid}_dom_${d.id}_oa"></div>
+          </div>
+          <div>
+            <div class="d5-col-label">Childhood — ${escapeHtml(d.childLabel)}</div>
+            ${d.child.map((ex,i)=>`<label class="d5-ex"><input type="checkbox" id="d5_${mid}_dom_${d.id}_ec_${i}">${escapeHtml(ex)}</label>`).join('')}
+            <div class="field d5-other"><label>Other</label><input type="text" id="d5_${mid}_dom_${d.id}_oc"></div>
+          </div>
+        </div>
+      </div>`;
+    });
+    h+=`<div class="d5-yn-row">
+        <span>Adulthood: evidence of impairment in ≥2 areas? ${diva5FieldHTML(mid,{id:"imp2_adult",kind:"select",label:"",options:["","Yes","No"]},true)}</span>
+        <span>Childhood: evidence of impairment in ≥2 areas? ${diva5FieldHTML(mid,{id:"imp2_child",kind:"select",label:"",options:["","Yes","No"]},true)}</span>
+      </div>
+    </div>`;
+
+    h+=`<div class="field" style="margin-bottom:18px;"><label>Potential details</label><textarea id="d5_${mid}_details" style="min-height:70px;"></textarea></div>`;
+  });
 
   // ── Summary of Symptoms A and H/I (DIVA-5 p.18) ─────────────────
   // "Indicate which criteria were scored in parts 1 and 2 and add up" —
   // derived from the Part 1/2 judgments rather than re-entered by hand.
-  h+=`<div class="d5-part-label">Summary of Symptoms A and H/I</div>`;
-  h+=`<div class="d5-note" style="margin-bottom:10px;">Indicate which criteria were scored in parts 1 and 2 and add up.</div>`;
-  h+=`<div class="d5-table-wrap"><table class="d5-table">
-    <thead><tr>
-      <th>Criterion DSM-5</th><th>Symptom</th>
-      <th style="text-align:center;">Present during adulthood</th>
-      <th style="text-align:center;">Present during childhood</th>
-    </tr></thead><tbody>`;
-  const attnRows=m.summary.filter(s=>s.code.startsWith('A'));
-  const hiRows=m.summary.filter(s=>s.code.startsWith('HI'));
-  const sumRow=s=>`<tr>
-      <td class="d5-dsm">${s.dsm}</td>
-      <td>${escapeHtml(s.label)}</td>
-      <td class="d5-c"><span class="d5-mark" id="d5_${mid}_sm_${s.code}_a">—</span></td>
-      <td class="d5-c"><span class="d5-mark" id="d5_${mid}_sm_${s.code}_c">—</span></td>
-    </tr>`;
-  attnRows.forEach(s=>{h+=sumRow(s);});
-  h+=`<tr class="d5-total">
-      <td></td><td>Total number of criteria Attention Deficit</td>
-      <td class="d5-c"><span id="d5_${mid}_sum_a_adult2">0</span>/9</td>
-      <td class="d5-c"><span id="d5_${mid}_sum_a_child2">0</span>/9</td>
-    </tr>`;
-  hiRows.forEach(s=>{h+=sumRow(s);});
-  h+=`<tr class="d5-total">
-      <td></td><td>Total number of criteria Hyperactivity/Impulsivity</td>
-      <td class="d5-c"><span id="d5_${mid}_sum_hi_adult2">0</span>/9</td>
-      <td class="d5-c"><span id="d5_${mid}_sum_hi_child2">0</span>/9</td>
-    </tr>`;
-  h+=`</tbody></table></div>`;
+  d5mod(3,'Summary of Symptoms A and H/I',()=>{
+    h+=`<div class="d5-note" style="margin-bottom:10px;">Indicate which criteria were scored in parts 1 and 2 and add up.</div>`;
+    h+=`<div class="d5-table-wrap"><table class="d5-table">
+      <thead><tr>
+        <th>Criterion DSM-5</th><th>Symptom</th>
+        <th style="text-align:center;">Present during adulthood</th>
+        <th style="text-align:center;">Present during childhood</th>
+      </tr></thead><tbody>`;
+    const attnRows=m.summary.filter(s=>s.code.startsWith('A'));
+    const hiRows=m.summary.filter(s=>s.code.startsWith('HI'));
+    const sumRow=s=>`<tr>
+        <td class="d5-dsm">${s.dsm}</td>
+        <td>${escapeHtml(s.label)}</td>
+        <td class="d5-c"><span class="d5-mark" id="d5_${mid}_sm_${s.code}_a">—</span></td>
+        <td class="d5-c"><span class="d5-mark" id="d5_${mid}_sm_${s.code}_c">—</span></td>
+      </tr>`;
+    attnRows.forEach(s=>{h+=sumRow(s);});
+    h+=`<tr class="d5-total">
+        <td></td><td>Total number of criteria Attention Deficit</td>
+        <td class="d5-c"><span id="d5_${mid}_sum_a_adult2">0</span>/9</td>
+        <td class="d5-c"><span id="d5_${mid}_sum_a_child2">0</span>/9</td>
+      </tr>`;
+    hiRows.forEach(s=>{h+=sumRow(s);});
+    h+=`<tr class="d5-total">
+        <td></td><td>Total number of criteria Hyperactivity/Impulsivity</td>
+        <td class="d5-c"><span id="d5_${mid}_sum_hi_adult2">0</span>/9</td>
+        <td class="d5-c"><span id="d5_${mid}_sum_hi_child2">0</span>/9</td>
+      </tr>`;
+    h+=`</tbody></table></div>`;
+  });
 
   // ── Score form (DIVA-5 p.19) ────────────────────────────────────
-  h+=`<div class="d5-part-label">Score Form</div>`;
-  h+=`<div class="d5-table-wrap"><table class="d5-table"><tbody>
-    <tr>
-      <td class="d5-dsm" rowspan="4">DSM-5<br>criterion A</td>
-      <td><strong>Childhood</strong><br>Are several (3 or more) symptoms present of A and/or HI?</td>
-      <td class="d5-c"><span class="d5-mark" id="d5_${mid}_crit_a_child3">—</span></td>
-    </tr>
-    <tr><td><strong>Adulthood</strong></td><td class="d5-c"></td></tr>
-    <tr><td>Is the number of A characteristics ≥ 5?</td><td class="d5-c"><span class="d5-mark" id="d5_${mid}_crit_a_adult5">—</span></td></tr>
-    <tr><td>Is the number of H/I characteristics ≥ 5?</td><td class="d5-c"><span class="d5-mark" id="d5_${mid}_crit_hi_adult5">—</span></td></tr>
-    <tr>
-      <td class="d5-dsm">DSM-5<br>criterion B</td>
-      <td>Are there signs of a lifelong pattern of symptoms, starting before the 12th year of age?</td>
-      <td class="d5-c">${diva5FieldHTML(mid,{id:"sf_critB",kind:"select",label:"",options:["","Yes","No"]},true)}</td>
-    </tr>
-    <tr>
-      <td class="d5-dsm" rowspan="3">DSM-5<br>criterion C<br>and D</td>
-      <td>The symptoms and the impairment are expressed in at least two domains of functioning</td>
-      <td class="d5-c"></td>
-    </tr>
-    <tr><td>Adulthood</td><td class="d5-c">${diva5FieldHTML(mid,{id:"sf_critCD_adult",kind:"select",label:"",options:["","Yes","No"]},true)}</td></tr>
-    <tr><td>Childhood</td><td class="d5-c">${diva5FieldHTML(mid,{id:"sf_critCD_child",kind:"select",label:"",options:["","Yes","No"]},true)}</td></tr>
-    <tr>
-      <td class="d5-dsm">DSM-5<br>criterion E</td>
-      <td>The symptoms cannot be (better) explained by the presence of another psychiatric disorder<br>
-        <span style="display:inline-block;margin-top:6px;">Yes, by ${diva5FieldHTML(mid,{id:"critE_by",kind:"text",label:""},true)}</span></td>
-      <td class="d5-c">${diva5FieldHTML(mid,{id:"critE",kind:"select",label:"",options:["","No","Yes, by:"]},true)}</td>
-    </tr>
-  </tbody></table></div>`;
+  d5mod(4,'Score Form',()=>{
+    h+=`<div class="d5-table-wrap"><table class="d5-table"><tbody>
+      <tr>
+        <td class="d5-dsm" rowspan="4">DSM-5<br>criterion A</td>
+        <td><strong>Childhood</strong><br>Are several (3 or more) symptoms present of A and/or HI?</td>
+        <td class="d5-c"><span class="d5-mark" id="d5_${mid}_crit_a_child3">—</span></td>
+      </tr>
+      <tr><td><strong>Adulthood</strong></td><td class="d5-c"></td></tr>
+      <tr><td>Is the number of A characteristics ≥ 5?</td><td class="d5-c"><span class="d5-mark" id="d5_${mid}_crit_a_adult5">—</span></td></tr>
+      <tr><td>Is the number of H/I characteristics ≥ 5?</td><td class="d5-c"><span class="d5-mark" id="d5_${mid}_crit_hi_adult5">—</span></td></tr>
+      <tr>
+        <td class="d5-dsm">DSM-5<br>criterion B</td>
+        <td>Are there signs of a lifelong pattern of symptoms, starting before the 12th year of age?</td>
+        <td class="d5-c">${diva5FieldHTML(mid,{id:"sf_critB",kind:"select",label:"",options:["","Yes","No"]},true)}</td>
+      </tr>
+      <tr>
+        <td class="d5-dsm" rowspan="3">DSM-5<br>criterion C<br>and D</td>
+        <td>The symptoms and the impairment are expressed in at least two domains of functioning</td>
+        <td class="d5-c"></td>
+      </tr>
+      <tr><td>Adulthood</td><td class="d5-c">${diva5FieldHTML(mid,{id:"sf_critCD_adult",kind:"select",label:"",options:["","Yes","No"]},true)}</td></tr>
+      <tr><td>Childhood</td><td class="d5-c">${diva5FieldHTML(mid,{id:"sf_critCD_child",kind:"select",label:"",options:["","Yes","No"]},true)}</td></tr>
+      <tr>
+        <td class="d5-dsm">DSM-5<br>criterion E</td>
+        <td>The symptoms cannot be (better) explained by the presence of another psychiatric disorder<br>
+          <span style="display:inline-block;margin-top:6px;">Yes, by ${diva5FieldHTML(mid,{id:"critE_by",kind:"text",label:""},true)}</span></td>
+        <td class="d5-c">${diva5FieldHTML(mid,{id:"critE",kind:"select",label:"",options:["","No","Yes, by:"]},true)}</td>
+      </tr>
+    </tbody></table></div>`;
 
-  h+=`<div class="d5-table-wrap"><table class="d5-table">
-    <thead><tr><th colspan="3">Is the diagnosis supported by collateral information?</th></tr></thead>
-    <tbody>
-    <tr>
-      <td>Parent(s)/brother/sister/other, i.e. *</td>
-      <td>${diva5FieldHTML(mid,{id:"collat_parent_who",kind:"text",label:""},true)}</td>
-      <td class="d5-c">${diva5FieldHTML(mid,{id:"collat_parent",kind:"select",label:"",options:["","N/A","0","1","2"]},true)}</td>
-    </tr>
-    <tr>
-      <td>Partner/good friend/other, i.e. *</td>
-      <td>${diva5FieldHTML(mid,{id:"collat_partner_who",kind:"text",label:""},true)}</td>
-      <td class="d5-c">${diva5FieldHTML(mid,{id:"collat_partner",kind:"select",label:"",options:["","N/A","0","1","2"]},true)}</td>
-    </tr>
-    <tr>
-      <td>School reports</td>
-      <td></td>
-      <td class="d5-c">${diva5FieldHTML(mid,{id:"collat_school",kind:"select",label:"",options:["","N/A","0","1","2"]},true)}</td>
-    </tr>
-    </tbody></table></div>
-    <div class="d5-note" style="margin-bottom:6px;">0 = none/little support &nbsp;&nbsp; 1 = some support &nbsp;&nbsp; 2 = clear support</div>
-    <div class="field" style="margin-bottom:18px;"><label>Explanation</label><textarea id="d5_${mid}_collat_explain" style="min-height:60px;"></textarea></div>`;
+    h+=`<div class="d5-table-wrap"><table class="d5-table">
+      <thead><tr><th colspan="3">Is the diagnosis supported by collateral information?</th></tr></thead>
+      <tbody>
+      <tr>
+        <td>Parent(s)/brother/sister/other, i.e. *</td>
+        <td>${diva5FieldHTML(mid,{id:"collat_parent_who",kind:"text",label:""},true)}</td>
+        <td class="d5-c">${diva5FieldHTML(mid,{id:"collat_parent",kind:"select",label:"",options:["","N/A","0","1","2"]},true)}</td>
+      </tr>
+      <tr>
+        <td>Partner/good friend/other, i.e. *</td>
+        <td>${diva5FieldHTML(mid,{id:"collat_partner_who",kind:"text",label:""},true)}</td>
+        <td class="d5-c">${diva5FieldHTML(mid,{id:"collat_partner",kind:"select",label:"",options:["","N/A","0","1","2"]},true)}</td>
+      </tr>
+      <tr>
+        <td>School reports</td>
+        <td></td>
+        <td class="d5-c">${diva5FieldHTML(mid,{id:"collat_school",kind:"select",label:"",options:["","N/A","0","1","2"]},true)}</td>
+      </tr>
+      </tbody></table></div>
+      <div class="d5-note" style="margin-bottom:6px;">0 = none/little support &nbsp;&nbsp; 1 = some support &nbsp;&nbsp; 2 = clear support</div>
+      <div class="field" style="margin-bottom:18px;"><label>Explanation</label><textarea id="d5_${mid}_collat_explain" style="min-height:60px;"></textarea></div>`;
 
-  h+=`<div class="form-grid" style="margin-bottom:8px;">
-    ${diva5FieldHTML(mid,{id:"dx",kind:"select",label:"Diagnosis ADHD **",options:["","No","Yes"]})}
-    ${diva5FieldHTML(mid,{id:"dx_type",kind:"select",label:"If yes — presentation type",options:["","314.01 Combined presentation type","314.00 Predominantly inattentive presentation type","314.01 Predominantly hyperactive-impulsive presentation type","314.01 Other specified attention-deficit/hyperactivity disorder","314.01 Not specified attention-deficit/hyperactivity disorder"]})}
-    ${diva5FieldHTML(mid,{id:"dx_remission",kind:"select",label:"Partly in remission",options:["","No","Yes"]})}
-    ${diva5FieldHTML(mid,{id:"dx_severity",kind:"select",label:"Severity",options:["","Mild","Moderate","Severe"]})}
-  </div>`;
-  h+=`<div class="d5-footnote">* Indicate from whom the collateral information was taken.<br>
-    ** If the established presentation types differ in childhood and adulthood, the current adult presentation type prevails for the diagnosis.</div>`;
+    h+=`<div class="form-grid" style="margin-bottom:8px;">
+      ${diva5FieldHTML(mid,{id:"dx",kind:"select",label:"Diagnosis ADHD **",options:["","No","Yes"]})}
+      ${diva5FieldHTML(mid,{id:"dx_type",kind:"select",label:"If yes — presentation type",options:["","314.01 Combined presentation type","314.00 Predominantly inattentive presentation type","314.01 Predominantly hyperactive-impulsive presentation type","314.01 Other specified attention-deficit/hyperactivity disorder","314.01 Not specified attention-deficit/hyperactivity disorder"]})}
+      ${diva5FieldHTML(mid,{id:"dx_remission",kind:"select",label:"Partly in remission",options:["","No","Yes"]})}
+      ${diva5FieldHTML(mid,{id:"dx_severity",kind:"select",label:"Severity",options:["","Mild","Moderate","Severe"]})}
+    </div>`;
+    h+=`<div class="d5-footnote">* Indicate from whom the collateral information was taken.<br>
+      ** If the established presentation types differ in childhood and adulthood, the current adult presentation type prevails for the diagnosis.</div>`;
+  });
 
   h+=`</div></div>`;
   return h;
+}
+
+// Collapsible DIVA-5 parts share the same open/close visuals as the M.I.N.I.
+// modules (toggleMiniModule / mini-module-* CSS); only the "expand/collapse
+// all" helper needs a DIVA-5-specific id prefix (d5mod_ vs mmod_).
+function setAllDiva5Modules(mid,expand){
+  document.querySelectorAll(`[id^="d5mod_${mid}_"]`).forEach(el=>{
+    if(!el.id.endsWith('_dot')&&!el.id.endsWith('_chev')){
+      el.style.display=expand?'':'none';
+      const chev=document.getElementById(el.id+'_chev');
+      if(chev)chev.classList.toggle('open',expand);
+    }
+  });
 }
 
 function diva5FieldHTML(mid,f,inline){
@@ -4992,551 +4713,6 @@ function updateScores(mod,key){
   if(ans<r.length)h+=`<div class="sc-note">${ans}/${r.length} answered — scores updating</div>`;
   so.innerHTML=h;
 }
-
-// ================================================================
-// REPORT MODULE RENDERING
-// ================================================================
-const DIFFS={
-  ADHD:"Rule out: anxiety-driven inattention, trauma dysregulation, autism demand avoidance, sleep disorders, mood disorder",
-  Autism:"Rule out: social anxiety, OCD (vs rigidity), PTSD (vs hypervigilance), cultural factors, ADHD executive overlap",
-  OCD:"Rule out: autism (ego-syntonic routines vs ego-dystonic obsessions), ADHD intrusive thoughts, trauma hypervigilance, GAD",
-  GAD:"Rule out: ADHD rumination, autism intolerance of uncertainty, OCD intrusive worry, trauma-related anxiety, depression",
-  PTSD:"Rule out: OCD trauma-related obsessions, autism sensory hypervigilance, ADHD emotional dysregulation, complex grief"
-};
-const BADGES={ADHD:'badge-adhd',Autism:'badge-autism',OCD:'badge-ocd',GAD:'badge-gad',PTSD:'badge-ptsd'};
-
-function renderReportModules(){
-  const c=document.getElementById('reportModules');
-  if(!selectedModules.length){c.innerHTML='';return;}
-  let h='<div class="section"><div class="section-label">Session Notes — Per Module</div>';
-  selectedModules.forEach(mod=>{
-    h+=`<div class="rmod-card">
-      <div class="rmod-header"><span class="module-badge ${BADGES[mod]}">${mod}</span><span class="rmod-title">${mod} — Session Data</span></div>
-      <div class="rmod-body">
-        <div>
-          <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);font-family:var(--font-display);margin-bottom:7px;">Scores from Measures tab</div>
-          <div class="auto-scores" id="as_${mod}">`;
-
-    for(let key in M[mod]){
-      const m=M[mod][key];
-      if(m.type==='entry'){h+=`<span class="sc-pill pending">${m.abbr}: enter below</span>`;continue;}
-      if(m.score&&responses[mod]&&responses[mod][key]){
-        const sc=m.score(responses[mod][key]);
-        for(let l in sc)h+=`<span class="sc-pill">${l}: ${sc[l]}</span>`;
-      } else {
-        h+=`<span class="sc-pill pending">${m.abbr}: complete in Measures tab</span>`;
-      }
-    }
-    h+=`</div>`;
-
-    if(mod==='ADHD'){
-      h+=`<div class="form-grid" style="margin-top:10px;">
-        <div class="field"><label>CAARS Inattentive T-score</label><input type="number" id="rpt_caarsI" min="0" placeholder="—"></div>
-        <div class="field"><label>CAARS Hyper-Impulsive T-score</label><input type="number" id="rpt_caarsH" min="0" placeholder="—"></div>
-        <div class="field"><label>CAARS ADHD Index T-score</label><input type="number" id="rpt_caarsX" min="0" placeholder="—"></div>
-        <div class="field"><label>Collateral Observer T-score</label><input type="number" id="rpt_collat" min="0" placeholder="—"></div>
-      </div>`;
-    }
-    h+=`</div>
-        <div class="field"><label>${mod} Session Notes</label>
-          <textarea class="tall" id="notes_${mod}" placeholder="Key clinical observations, symptom history, functional impairment, developmental context, client's own framing of their experience..."></textarea>
-        </div>
-        <div class="field"><label>Differential Considerations</label>
-          <div class="hint">${DIFFS[mod]}</div>
-          <textarea id="diff_${mod}"></textarea>
-        </div>
-      </div></div>`;
-  });
-  h+='</div>';
-  c.innerHTML=h;
-}
-
-// ================================================================
-// SYSTEM PROMPT
-// ================================================================
-const SYS_HEADER=`You are an expert clinical assessment analyst supporting a licensed clinical psychologist. Your primary task is to perform criterion-by-criterion diagnostic analysis on the provided clinical data and generate a complete psychological evaluation report draft for the clinician's review and signature.
-
-CRITICAL FRAMING: You are not summarizing data — you are performing clinical reasoning. For each diagnostic module, you must evaluate whether DSM-5 criteria are met based on the convergent evidence from rating scales, interview findings, and behavioral observations. You will render a diagnostic conclusion for each module. The clinician will review, verify, and take professional responsibility for every statement before signing. Do not fabricate any clinical detail not present in the provided data; mark gaps as [clinician to complete].
-
-════════════════════════════════════════
-DIAGNOSTIC REASONING PROTOCOL
-════════════════════════════════════════
-
-For each active diagnostic module, you must work through the following steps IN ORDER:
-
-STEP 1 — SCORE INTERPRETATION
-For each measure administered:
-- State the obtained score and what it means clinically
-- Compare to threshold: is this score in the subclinical, borderline, elevated, or markedly elevated range?
-- Note any subscale patterns that have differential diagnostic significance
-- Flag convergence or divergence between measures (e.g., RAADS-R subclinical but high CAT-Q + low EQ = masking hypothesis)
-
-STEP 2 — CRITERION-BY-CRITERION ANALYSIS
-Work through every DSM-5 criterion for the diagnosis. For each criterion, state:
-  [MET] — evidence supports this criterion: cite specific score, item, or interview finding
-  [NOT MET] — evidence does not support: state what was absent or contradicted
-  [INSUFFICIENT DATA] — information needed to evaluate this criterion was not provided
-  [PROBABLE / CLINICIAN TO CONFIRM] — interview notes suggest this but require direct confirmation
-
-Do not skip criteria. Do not group criteria vaguely. Be specific about what evidence supports each determination.
-
-STEP 3 — DIAGNOSTIC CONCLUSION FOR THIS MODULE
-After working through all criteria, state one of:
-  ▸ CRITERIA MET — all required criteria are supported by converging evidence. Specify presentation/subtype/severity.
-  ▸ CRITERIA PARTIALLY MET — some required criteria are supported; specify which are missing or uncertain. Recommend [clinician to clarify X before finalizing].
-  ▸ CRITERIA NOT MET — explain which required criteria were not evidenced and why.
-  ▸ RULE OUT — insufficient data to determine; recommend next steps.
-
-STEP 4 — DIFFERENTIAL REASONING
-For each diagnosis that is NOT being assigned, explain why the data rules it out or reduces its likelihood. Be explicit — "client does not meet Criterion X because Y" is better than "differential includes anxiety." Address every differential listed in the interview notes.
-
-STEP 5 — CONTEXTUAL MODIFIERS
-Note any factors that affect interpretation: masking history, cultural variables, late diagnosis context, fatigue during evaluation, validity concerns on self-report, CAT-Q elevated relative to AQ (high masking hypothesis), gender/race-related diagnostic bias, developmental trauma overlay.
-
-════════════════════════════════════════
-REPORT FORMAT AND TYPOGRAPHY RULES
-════════════════════════════════════════
-
-TYPOGRAPHY: The final report will be formatted in Times New Roman, 12-point font, black text. Write all content accordingly. Do not use dashes of any kind (no em dashes, no en dashes). Use commas, semicolons, or restructure sentences instead.
-
-OUTPUT STRUCTURE: Your response must contain exactly two sections separated by the marker ===PAGE BREAK=== on its own line. The first section is the Diagnostic Summary (designed to print on one page). The second section is the Full Report. Do not include any other text before the Diagnostic Summary or after the Full Report.`;
-
-const SYS_SECTION1=`
-
-════════════════════════════════════════
-SECTION 1: DIAGNOSTIC SUMMARY (one page)
-════════════════════════════════════════
-
-Write a compact, one-page diagnostic summary using the following structure. Every line must be concise enough that this section fits on a single printed page.
-
-DIAGNOSTIC SUMMARY
-
-Client: [full name]     Date of Birth: [DOB]     Age: [age]
-Pronouns: [pronouns]     Date of Evaluation: [date]     Date of Report: [today]
-Referral Source: [source]
-
-DIAGNOSIS
-
-[DSM-5 Full Name]  ([ICD-10-CM code])
-Specifiers: [all applicable specifiers]
-Severity: [level]
-
-SUMMARY OF KEY FINDINGS
-
-[Three concise paragraphs: (1) overall clinical picture and diagnostic conclusion with convergent evidence cited briefly, (2) key measure findings and what they indicate, (3) universal screening findings and ruled-out conditions. Each paragraph 3 to 4 sentences maximum.]
-
-PRIORITY RECOMMENDATIONS
-
-[7 to 8 bullet points, one line each, naming the specific intervention and the diagnosis or finding it addresses. Concise.]
-
-[Signature line]
-
-===PAGE BREAK===`;
-
-const SYS_REFERENCE=`════════════════════════════════════════
-DSM-5 CRITERIA REFERENCE — USE THIS FOR STEP 2
-════════════════════════════════════════
-
-ADHD (314.0x / F90.x):
-Criterion A1 — Inattention (≥5 of 9 symptoms for adults, present for ≥6 months, inappropriate for developmental level):
-  A1a. Careless mistakes / poor attention to detail
-  A1b. Difficulty sustaining attention
-  A1c. Does not seem to listen when spoken to directly
-  A1d. Fails to follow through on tasks/instructions
-  A1e. Difficulty organizing tasks
-  A1f. Avoids/dislikes tasks requiring sustained mental effort
-  A1g. Loses things necessary for tasks
-  A1h. Easily distracted by extraneous stimuli
-  A1i. Forgetful in daily activities
-Criterion A2 — Hyperactivity-Impulsivity (≥5 of 9 symptoms for adults):
-  A2a. Fidgets/taps/squirms
-  A2b. Leaves seat when remaining seated expected
-  A2c. Runs/climbs inappropriately (in adults: feeling restless)
-  A2d. Unable to engage in leisure quietly
-  A2e. "On the go" / driven by motor
-  A2f. Talks excessively
-  A2g. Blurts out answer before question finished
-  A2h. Difficulty waiting turn
-  A2i. Interrupts/intrudes
-Criterion B — Several symptoms present before age 12
-Criterion C — Symptoms present in 2+ settings
-Criterion D — Symptoms interfere with or reduce quality of functioning
-Criterion E — Symptoms not better explained by another disorder
-Presentations: Predominantly Inattentive (F90.0), Predominantly Hyperactive-Impulsive (F90.1), Combined (F90.2)
-Severity: Mild (few symptoms beyond threshold, minor impairment), Moderate, Severe (many excess symptoms, marked impairment across settings)
-
-AUTISM SPECTRUM DISORDER (299.00 / F84.0):
-Criterion A — Persistent deficits in social communication/interaction across contexts (ALL THREE required):
-  A1. Deficits in social-emotional reciprocity
-  A2. Deficits in nonverbal communicative behaviors
-  A3. Deficits in developing, maintaining, understanding relationships
-Criterion B — Restricted, repetitive patterns of behavior (≥2 of 4 required):
-  B1. Stereotyped/repetitive motor movements, speech, or object use
-  B2. Insistence on sameness, inflexible adherence to routines, ritualized patterns
-  B3. Highly restricted, fixated interests abnormal in intensity or focus
-  B4. Hyper- or hyporeactivity to sensory input / unusual interest in sensory aspects
-Criterion C — Symptoms must be present in early developmental period (may not be fully manifest until social demands exceed capacity, or may be masked by learned strategies)
-Criterion D — Symptoms cause clinically significant impairment in social, occupational, or other areas
-Criterion E — Not better explained by intellectual disability or global developmental delay
-Specifiers: With/Without intellectual impairment; With/Without language impairment; Level 1/2/3 support needs
-MASKING NOTE: For high-CAT-Q presentations, Criterion A and B symptoms may be systematically underreported on self-report. Weight interview data and developmental history heavily. Elevated CAT-Q is consistent with — not evidence against — ASD diagnosis.
-
-OCD (300.3 / F42.2):
-Criterion A — Presence of obsessions, compulsions, or both:
-  Obsessions: recurrent, persistent thoughts/urges/images experienced as intrusive and unwanted; person attempts to ignore, suppress, or neutralize them
-  Compulsions: repetitive behaviors or mental acts performed in response to an obsession or rigid rules, aimed at preventing/reducing distress (not connected realistically or are excessive)
-Criterion B — Obsessions/compulsions are time-consuming (>1 hour/day) or cause significant distress or impairment
-Criterion C — Not attributable to physiological effects of substance or medical condition
-Criterion D — Not better explained by another mental disorder
-Insight specifiers: Good/Fair insight; Poor insight; Absent insight/delusional
-KEY DIFFERENTIAL: Autistic repetitive behaviors are ego-syntonic (feel right/necessary), serve a regulatory function, and are not aimed at reducing anxiety from intrusive thoughts. OCD compulsions are ego-dystonic, driven by obsessional anxiety, and feel externally imposed. This distinction is essential and must be explicitly addressed.
-
-GAD (300.02 / F41.1):
-Criterion A — Excessive anxiety and worry about multiple events/activities, more days than not for ≥6 months
-Criterion B — Difficulty controlling the worry
-Criterion C — Anxiety/worry associated with ≥3 of 6 (≥1 in children): restlessness, fatigue, concentration difficulty, irritability, muscle tension, sleep disturbance
-Criterion D — Causes clinically significant distress or functional impairment
-Criterion E — Not attributable to substance/medical condition
-Criterion F — Not better explained by another disorder
-KEY DIFFERENTIAL: Autism intolerance of uncertainty has a distinct cognitive mechanism (rigidity-based, not threat-appraisal-based) and should be identified as a separate contributor even when comorbid GAD is also present.
-
-PTSD (309.81 / F43.10):
-Criterion A — Exposure to actual/threatened death, serious injury, or sexual violence (directly, witnessing, learning of, or repeated/extreme exposure)
-Criterion B — ≥1 intrusion symptom: involuntary memories, nightmares, flashbacks/dissociative reactions, psychological distress at cues, physiological reactivity at cues
-Criterion C — ≥1 avoidance symptom: avoidance of distressing memories/thoughts/feelings; avoidance of external reminders
-Criterion D — ≥2 negative cognitions/mood symptoms: amnesia, negative beliefs about self/world, distorted blame, persistent negative emotional states, diminished interest, detachment/estrangement, inability to experience positive emotions
-Criterion E — ≥2 arousal/reactivity symptoms: irritability/outbursts, reckless behavior, hypervigilance, exaggerated startle, concentration difficulty, sleep disturbance
-Criterion F — Duration >1 month
-Criterion G — Causes clinically significant distress or functional impairment
-Criterion H — Not attributable to substance/medical condition
-Specifiers: With dissociative symptoms (depersonalization/derealization); Delayed expression
-COMPLEX TRAUMA NOTE: C-PTSD features (affect dysregulation, negative self-concept, relational difficulties) should be noted in the formulation even when standard PTSD criteria are used for diagnosis. Reference ICD-11 C-PTSD if clinically relevant.
-
-SCORING THRESHOLDS (for Step 1 interpretation):
-ASRS Part A: ≥4/6 positive (items 1–3: ≥Sometimes=2; items 4–6: ≥Often=3). Sensitivity ~68%, specificity ~99% for ADHD.
-CAARS T-scores: ≥65 clinically elevated (>1.5 SD); ≥70 markedly elevated (>2 SD).
-DIVA-5: Adult threshold ≥5 symptoms each domain; childhood onset evidence required.
-RAADS-R: ≥65 consistent; ≥90 strongly consistent. Max 240.
-Cambridge Behaviour Scale / EQ: Max 80. No hard clinical cutoff; general population mean ~42, autistic-sample mean ~20. Scores ≤30 are in the autism-consistent low range — interpret alongside RAADS-R/CAT-Q, not in isolation.
-RMET (Reading the Mind in the Eyes, Revised): Max 36 correct. No single validated clinical cutoff; general population mean ~26/36, autistic-sample mean ~21/36. Lower scores indicate reduced ability to infer mental states from the eye region.
-CAT-Q: ≥100 high camouflaging. Compensation max 63, Assimilation max 49, Masking max 63.
-OCI-R: ≥21 clinical. Subscale cutoffs: Washing ≥4, Obsessing ≥8, Hoarding ≥7, Ordering ≥9, Checking ≥9, Neutralizing ≥5.
-Y-BOCS: 0–7 subclinical; 8–15 mild; 16–23 moderate; 24–31 severe; 32–40 extreme.
-GAD-7: 5–9 mild; 10–14 moderate; ≥15 severe. ≥10 warrants formal assessment.
-PSWQ: ≥45 clinically significant; ≥62 high worry range. Max 80.
-PCL-5: ≥33 probable PTSD. Cluster maxima: B=20, C=8, D=28, E=24.
-SCL-90-R: T ≥63 elevated; T ≥70 markedly elevated. GSI is primary global index.`;
-
-const SYS_SECTION2_GENERIC=`════════════════════════════════════════
-SECTION 2: FULL REPORT
-════════════════════════════════════════
-
-[PRACTICE NAME]
-[CLINICIAN NAME], [CREDENTIALS, LICENSE #]
-Licensed Clinician, [STATE]
-[CITY, STATE]
-
-PSYCHOLOGICAL EVALUATION REPORT
-
-IDENTIFYING INFORMATION
-Write as a brief introductory paragraph. Format: "[Name] is a [age]-year-old [gender identity] ([pronouns]) who was referred for psychological evaluation by [source]." Include full name, age, date of birth, pronouns, gender identity, referral source, and 1 to 2 sentences about why they are here in their own terms.
-
-REASON FOR REFERRAL AND PRESENTING CONCERNS
-2 to 4 sentences. State the specific diagnostic questions this evaluation was designed to address. Use the client's own framing. Be concrete about what the client hopes to understand about themselves.
-
-BACKGROUND AND HISTORY
-Write in flowing prose paragraphs organized by domain. Do not use bullet points.
-
-Psychiatric and Treatment History: prior diagnoses, medications, therapy history and modalities.
-
-Developmental and Educational History: early milestones if available, school experience, peer relationships, childhood evaluations or interventions.
-
-Occupational and Functional History: current work or school, functional strengths and difficulties.
-
-Social and Relational History: living situation, key relationships, relevant relational patterns.
-
-Family History: psychiatric diagnoses in first-degree relatives, neurodevelopmental patterns in family members.
-
-Cultural and Contextual Factors: race, ethnicity, cultural background, how cultural context shapes symptom presentation and the client's understanding of their experience.
-
-Late Diagnosis and Intersectional Context: if late-identified, address explicitly including duration without diagnosis, impact on functioning and identity, and any factors contributing to diagnostic delay.
-
-Note explicitly what domains were not assessed.
-
-ASSESSMENT METHODS
-
-Pre-Session Self-Report Measures (completed prior to evaluation):
-[Full name (Abbreviation) for each measure. Always include SCL-90-R and M.I.N.I.]
-
-During-Session Clinician-Administered:
-[Full name (Abbreviation) for each interview and clinician-rated measure.]
-
-BEHAVIORAL OBSERVATIONS
-Describe the client's presentation during session in prose. Cover presentation, demeanor, affect, rapport, communication style, notable behaviors, accommodations provided. End with a validity statement.
-
-ASSESSMENT RESULTS
-
-Universal Screening:
-
-SCL-90-R:
-Report all nine subscale T-scores and the three global indices. Write an interpretive narrative covering elevated scales, what they reflect, and any profiles suggesting conditions outside the primary modules.
-
-M.I.N.I. International Neuropsychiatric Interview:
-Summarize findings module by module. Name what was ruled in and ruled out. State suicidality findings with risk level and safety planning status.
-
-[One clearly labeled subsection per active module. Report scores, clinical ranges, subscale patterns, and interview summaries descriptively. Do not render diagnostic conclusions here.]
-
-DIAGNOSTIC FORMULATION
-This is the analytic core. Write in dense clinical prose.
-
-Open with an integrative paragraph synthesizing the overall clinical picture.
-
-For each active diagnostic module, apply the Diagnostic Reasoning Protocol:
-Criterion-by-criterion analysis: for each DSM-5 criterion, write the criterion label, then [MET] or [NOT MET] or [INSUFFICIENT DATA] in brackets, then the specific evidence. Example format: A1.  [MET]  Ms. Smith reported difficulty sustaining attention across work and home settings confirmed by DIVA-5 interview and ASRS Part A score of 18/24.
-Diagnostic conclusion stating clearly whether criteria are met, partially met, not met, or rule out.
-How this diagnosis interacts with or is distinguished from other findings.
-
-Address all differential diagnoses explicitly with clinical rationale.
-
-For AuDHD presentations: include a dedicated paragraph on how ADHD and autism interact in this individual.
-
-Close with intersectional and contextual factors affecting diagnostic confidence.
-
-DIAGNOSES
-
-[DSM-5 Full Name] ([ICD-10-CM code])
-Specifiers: [all applicable]
-Severity: [mild, moderate, or severe where applicable]
-
-Include M.I.N.I.-positive findings not covered by primary modules. List deferred diagnoses as: Rule Out: [Diagnosis] — [rationale and next steps].
-
-SUMMARY AND RECOMMENDATIONS
-
-Open with 2 to 3 sentences summarizing the client and findings, written accessibly enough to read directly to or with the client.
-
-Provide 7 to 10 specific, evidence-based recommendations in order of priority. Each recommendation must name the intervention, state which diagnosis or finding it addresses, and explain the rationale for this person. Cover:
-
-1. Psychotherapy modality with rationale and diagnosis target
-2. Psychiatric consultation specifying what to discuss and for which diagnosis
-3. Workplace or academic accommodations with specific requests
-4. Neurodivergent community and peer support resources
-5. Psychoeducation resources suited to this individual
-6. Safety paragraph (required when suicidality was assessed regardless of risk level): risk level, safety plan status, means restriction, level of care, crisis resources
-7. Additional referrals as indicated
-
-_______________________________
-[CLINICIAN NAME], [CREDENTIALS]
-Licensed Clinician, [STATE LICENSE #]
-Date of Report: [date]
-
-This report is confidential and intended solely for the named client and authorized recipients. This is a draft prepared for clinician review; all diagnostic conclusions require verification and signature by the clinician before release.`;
-
-const SYS_SECTION2_AUTISM=`════════════════════════════════════════
-SECTION 2: FULL REPORT — AUTISM SPECTRUM EVALUATION
-════════════════════════════════════════
-
-Use this exact section structure and order for the Full Report. Do not omit a subsection for lack of data; write "None reported" or "[clinician to complete]" instead of deleting it. Apply the Diagnostic Reasoning Protocol (Steps 1 to 5 above) when writing the Diagnostic Criteria Review and Conclusion sections.
-
-[PRACTICE NAME]
-[CLINICIAN NAME], [CREDENTIALS, LICENSE #]
-Licensed Clinician, [STATE]
-[CITY, STATE]
-
-AUTISM SPECTRUM EVALUATION REPORT
-
-Header block, written as labeled lines (not prose):
-Assessment Type: [Autism Spectrum Disorder Evaluation; add any co-occurring focus, e.g. "and ADHD", if another module was also assessed]
-Patient: [full name]     DOB: [DOB]     Date of Evaluation: [date]     Evaluator: [clinician name, credentials]
-
-CONSENT / CONFIDENTIALITY
-One paragraph stating that confidentiality, limits of confidentiality, consent for assessment/treatment, risks and benefits, use of the medical record, office policies, and patient financial responsibilities were reviewed, and that the patient consented to assessment.
-
-TESTING PROCEDURES
-Bullet list. Always list "Clinical interview" first. Then list every measure actually administered, by full name, including any collateral/other-report measure as its own bullet. Only list what was actually used.
-
-DEMOGRAPHICS
-One paragraph: "[Patient] is a [age]-year-old [identity/demographic descriptors as clinically relevant] referred by [referral source] for evaluation of [presenting diagnostic question] to clarify diagnostic presentation and provide treatment recommendations."
-
-REASON FOR REFERRAL
-"Patient reports concerns related to:" followed by a bullet list covering: the presenting symptom/concern, functional impairment, developmental or lifelong pattern, and any collateral/provider concerns.
-
-RELEVANT BACKGROUND INFORMATION
-Write each of the following as its own labeled subsection:
-Family History: prose paragraph covering birthplace/upbringing, family structure, relationships, family psychiatric/developmental history, relevant trauma or stressors.
-Medical History: labeled short lines — Birth history: [ ]  Hospitalizations: [ ]  Surgeries: [ ]  Significant illnesses/injuries: [ ]  Seizures: [ ]  Medications: [ ]  Allergies: [ ]. Use "none reported" rather than omitting a line.
-Psychiatric History: labeled short lines — Mental health diagnoses/symptoms: [ ]  Therapy history: [ ]  Psychiatric hospitalization: [ ]  Suicide attempts: [ ]  Self-harm history: [ ]  Substance use: [ ]  Current substances: [ ].
-Education History: prose paragraph covering academic history, supports/accommodations, learning concerns, grades, college/graduate history, developmental motor/speech concerns.
-Occupational History: labeled short lines — Current job: [ ]  Longest job held: [ ]  Work-related difficulties: [ ]  Future employment plans: [ ].
-Legal History: prose stating legal/criminal history, or "none reported."
-Benefits / Secondary Gain: state whether the patient denies or reports seeking evaluation for benefits, accommodations, disability, legal, or other secondary purposes.
-Current Daily Living Skills and Habits: labeled short lines — Typical day: [ ]  Grooming/hygiene: [ ]  Transportation: [ ]  Money management: [ ]  Housekeeping: [ ]  Cooking/eating/meal preparation: [ ]  Healthcare management: [ ]  Sleep: [ ]  Problem-solving: [ ].
-
-DIAGNOSTIC CRITERIA REVIEW
-Use the [MET] / [NOT MET] / [INSUFFICIENT DATA] / [PROBABLE — CLINICIAN TO CONFIRM] format from the Diagnostic Reasoning Protocol, structured exactly as:
-Criterion A: Persistent deficits in social communication and social interaction across contexts.
-A1. Social-emotional reciprocity: [status]  [specific evidence]
-A2. Nonverbal communication: [status]  [specific evidence]
-A3. Developing/maintaining relationships: [status]  [specific evidence]
-Criterion B: Restricted, repetitive patterns of behavior, interests, or activities.
-B1. Repetitive speech/motor movements/use of objects: [status]  [specific evidence]
-B2. Routines/rituals/resistance to change: [status]  [specific evidence]
-B3. Restricted/fixated interests: [status]  [specific evidence]
-B4. Sensory reactivity/interests: [status]  [specific evidence]
-Criterion C: Symptoms present in early development: [status]  [specific evidence]
-Criterion D: Symptoms cause functional impairment: [status]  [specific evidence]
-Severity Level: Social Communication: [level]     Restricted-Repetitive Behaviors: [level]
-
-MENTAL STATUS EXAM
-Labeled short lines: Appearance: [ ]  Behavior: [ ]  Demeanor: [ ]  Speech: [ ]  Mood: [ ]  Affect: [ ]  Thought process: [ ]  Thought content: [ ]  Orientation: [ ]  Attention/concentration: [ ]  Memory: [ ]  Fund of knowledge: [ ]  Impulse control: [ ]  Insight: [ ]  Judgment: [ ].
-
-RISK ASSESSMENT
-Required regardless of risk level. Labeled short lines: Risk factors: [ ]  Protective factors: [ ]  Risk of harm to self: [ ]  Homicidal ideation: [ ]  Access to firearms: [ ]  Clinical risk judgment: [ ].
-
-CURRENT EVALUATION PROCEDURES AND RESULTS
-Write each of the following as its own labeled subsection:
-Collateral / Consultation: summarize collateral reports from spouse, caregiver, therapist, teacher, provider, or other informant. State "No collateral information obtained" if none was gathered.
-Self-Report Measures: one line per self-report measure administered: "[Measure name]: Score [value], interpretation [clinical interpretation]."
-Other-Report Measures: same one-line format for other-report/collateral measures (e.g., SRS-2 Relative/Other Report, SCQ), plus a line noting reporter reliability/limitations.
-Adaptive Functioning: for Vineland-3 or any adaptive behavior measure administered, report the Adaptive Behavior Composite and each domain score (Communication, Daily Living Skills, Socialization, and any other domain/subdomain administered) as standard scores with interpretation.
-Personality / Emotional Functioning: for PAI or any personality/psychopathology measure administered, report the validity scale summary and clinical profile (elevated scales with T-scores and interpretation).
-
-CONCLUSION
-Two paragraphs:
-"[Patient] completed an evaluation of symptoms and impairment related to [diagnostic question]. The assessment included [list the procedures actually used]. Relevant developmental, psychiatric, medical, educational, occupational, and functional history was reviewed."
-"Clinical presentation was notable for [key findings]. Based on available data, [patient] [does / does not] meet criteria for [diagnosis]. Diagnostic impressions are as follows:"
-
-DIAGNOSTIC IMPRESSIONS
-Bullet list: primary diagnosis first, written as full DSM-5 name with specifiers, severity, and ICD-10-CM code, then any rule-out/differential diagnoses as their own bullets.
-
-TREATMENT PLANNING
-Rationale: one to two sentences linking recommendations to the diagnostic findings.
-Recommended interventions: bullet list drawn from what is clinically indicated — therapy/skills training/group/coaching/medication referral/accommodations/further testing.
-Treatment goals: bullet list, specific and patient-centered.
-Next steps: bullet list — referral/follow-up/resources/treatment frequency.
-
-Time Spent: [total minutes] minutes
-
-Evaluator Signature: [clinician name, credentials]`;
-
-const SYS_SECTION2_ADHD=`════════════════════════════════════════
-SECTION 2: FULL REPORT — ADHD EVALUATION
-════════════════════════════════════════
-
-Use this exact section structure and order for the Full Report. Do not omit a subsection for lack of data; write "Not reported" or "[clinician to complete]" instead of deleting it. Apply the Diagnostic Reasoning Protocol (Steps 1 to 5 above) when writing the Adult ADHD Diagnostic Guide and Conclusions/Discussion sections.
-
-[PRACTICE NAME]
-[CLINICIAN NAME], [CREDENTIALS, LICENSE #]
-Licensed Clinician, [STATE]
-[CITY, STATE]
-
-CONFIDENTIAL ADHD EVALUATION
-
-Header block, written as labeled lines (not prose):
-Assessment Type: [ADHD Evaluation; add any co-occurring focus, e.g. "and Autism Spectrum", if another module was also assessed]
-Patient: [full name]     DOB: [DOB]     Date of Evaluation: [date]     Evaluator: [clinician name, credentials]
-
-CONFIDENTIALITY AND TREATMENT CONSENT
-One paragraph stating that confidentiality, limits of confidentiality, consent for assessment/treatment, risks and benefits, use of the medical record, and office policies were reviewed, and that the patient consented to assessment.
-
-TELEHEALTH / VIRTUAL CARE CONSENT
-If the evaluation was conducted via telehealth, state that the patient was assessed as appropriate for telehealth services; that identity, location, and emergency contact were verified; that the provider introduced themselves and reviewed the risks and limitations of telehealth including confidentiality and communication security; and that the patient verbally indicated understanding and consented to telehealth services. If the evaluation was in person, state that explicitly instead.
-
-EVALUATION PROCEDURES
-Bullet list of every procedure or measure actually used, for example: ADHD evaluation questionnaire, Adult Outcomes Questionnaire, urine drug screen, Barkley Deficits in Executive Functioning Scale (Self / Other), clinical interview, Continuous Performance Test / IVA if used, review of chart history / collateral information. Only list what was actually administered.
-
-DEVELOPMENTAL HISTORY
-Write each of the following as its own labeled subsection, in prose:
-Family: Open with "[Patient] is a [age]-year-old [demographic descriptors as clinically relevant], referred by [referral source] for ADHD evaluation." Then cover birthplace/upbringing, family structure, relationships, discipline history, developmental context, trauma history, current living situation, relationship status, children, identity, and pronouns.
-Difficulties at Home: childhood home functioning, discipline concerns, chores, organization, family dynamics, emotional/behavioral concerns.
-Difficulties in School: elementary/middle/high school functioning, attention, homework completion, grades, learning concerns, organization, time management, college/graduate school history.
-Social Relationships: friendships, peer relationships, social functioning, relationship patterns.
-Mental Health: depression, anxiety, trauma history, mood symptoms, therapy history, other relevant diagnoses.
-
-CURRENT IMPACT ON FUNCTION
-Example #1: [current attention/focus impairment at work, home, school, or relationships, with specific detail from the data.]
-Example #2: [executive functioning impairment, overwhelm, forgetfulness, task completion, emotional regulation, with specific detail from the data.]
-
-CURRENT LIFE DOMAINS AFFECTED BY ADHD SYMPTOMS
-Write five labeled subsections in this order: School, Home, Work, Relationships, Legal, Health. If a domain is genuinely not applicable (e.g., School for someone long out of school), state that briefly rather than omitting the subsection. Use the format "[item]: [yes/no] — [detail from data, or 'not reported']" for every line, using exactly these items:
-School: difficulties focusing while teacher is talking; failure to turn in projects or complete tasks on time; trouble organizing/planning projects; difficulty focusing while reading / needing to reread; lateness, poor time management, skipped class; difficulty tracking assignments/due dates; diagnosed or suspected learning disability; GPA below likely ability / GED / dropout; failed, repeated, or did not complete courses/degree.
-Home: money management problems; trouble paying bills on time; impulsive spending/decisions; difficulty with household chores; difficulty with time management/leaving home on time; forgetfulness regarding appointments; starts projects and leaves incomplete; difficulty with organization.
-Work: performance/productivity complaints; late for work, meetings, appointments; difficulty sitting still / impulsive comments / blurting out; difficulty meeting deadlines; frequent job changes / multiple careers; fired from jobs; quit jobs due to boredom.
-Relationships: frequently accused of not listening; misses/forgets plans, breaks promises, difficulty maintaining social contact; difficulty regulating emotions / emotional reactivity; several short-lived relationships; impulsive sexual encounters or risky sexual behavior.
-Legal: shoplifting, truancy, vandalism, excessive gambling; at-fault car accidents; speeding tickets or frequent speeding; unpaid parking tickets; arrests; violent behaviors.
-Health: regular substance use; nicotine history; caffeine use and amount; sleep problems; forgetting to eat, binge eating, hydration, GI concerns; history of mental health difficulties.
-
-RISK ASSESSMENT
-Required regardless of risk level. "Risk of self-harm: acutely [low/moderate/high], chronically [low/moderate/high]." Then labeled lines: Risk factors: [ ]  Protective factors: [ ]  Suicidal ideation, plan, intent, self-harm history: [ ]. Then "Risk of harm to others: acutely [low/moderate/high], chronically [low/moderate/high]." Then Homicidal ideation / violence risk: [ ].
-
-FAMILY MENTAL HEALTH HISTORY
-Labeled lines: ADHD: [diagnosed/suspected/denied/unknown]  Other psychiatric or neurodevelopmental disorders: [ ].
-
-ADULT ADHD DIAGNOSTIC GUIDE (BASED ON DSM-5)
-State: "Symptoms must be developmentally inappropriate, present before age 12, and cause clinically significant impairment in at least two life domains."
-
-Inattentive Symptoms — numbered 1 to 9, each marked [yes/no] based on the data, using exactly these items in this order:
-1. Fails to give close attention to details / careless mistakes
-2. Difficulty sustaining attention on tasks
-3. Does not seem to listen
-4. Does not follow through / fails to finish tasks / easily sidetracked
-5. Difficulty organizing tasks and activities
-6. Avoids or dislikes sustained mental effort
-7. Loses things necessary for tasks
-8. Easily distracted by extraneous stimuli or thoughts
-9. Forgetful
-Inattentive Symptoms Summary: "Currently, [number] of 9 symptoms present in [number] or more settings."
-
-Hyperactive / Impulsive Symptoms — numbered 1 to 9, each marked [yes/no] based on the data, using exactly these items in this order:
-1. Often fidgets or squirms in seat
-2. Leaves seat
-3. Feels restless
-4. Unable to engage in activities quietly
-5. "On the go" or "driven by a motor"
-6. Talks excessively
-7. Blurts out answers before questions are completed
-8. Difficulty waiting in line or waiting turn
-9. Interrupts or intrudes on others
-Hyperactive / Impulsive Symptoms Summary: "Currently, [number] of 9 symptoms present in [number] or more settings."
-
-CONTINUOUS PERFORMANCE TEST / IVA, IF USED
-Test description: [ ]  Observation: [ ]  Results: [support / do not support] ADHD.  Interpretation: [ ]. State "Not administered" if not used.
-
-BARKLEY DEFICITS IN EXECUTIVE FUNCTIONING SCALE — SELF / OTHER
-State the impairment percentile ranges for reference: Marginal 76 to 84%, Borderline 84 to 92%, Mild 93 to 95%, Moderate 96 to 98%, Severe 99% or higher.
-Self Report: ADHD-EF Index Score [score] — [severity].  Total Summary Score [score] — [severity].
-Other Report: ADHD-EF Index Score [score] — [severity].  Total Summary Score [score] — [severity]. State "Not completed" if no other-report data is available.
-
-CONCLUSIONS / DISCUSSION
-Write four paragraphs in this order:
-1. "[Patient] is a [age]-year-old [demographic descriptors as clinically relevant], referred by [referral source] for evaluation of Attention-Deficit/Hyperactivity Disorder. One objective of this evaluation was to assess whether the patient's developmental history, current symptoms, functional impairment, and test results are consistent with ADHD."
-2. "ADHD is characterized by a persistent pattern of inattention and/or hyperactivity-impulsivity that interferes with functioning across multiple contexts, with symptom onset before age 12. Adults must demonstrate at least five symptoms of inattention and/or five symptoms of hyperactivity-impulsivity."
-3. "[Patient] reported [number] of 9 inattentive symptoms and [number] of 9 hyperactive/impulsive symptoms across [his/her/their] lifespan. Symptoms or impairment were reported beginning in [childhood/adolescence/adulthood]. Results from [BDEFS / IVA / collateral / questionnaires] indicated [clinically significant / non-significant / mixed] difficulties in executive functioning, attention, concentration, and/or impulsivity."
-4. "Differential considerations include [anxiety, depression, trauma, sleep disturbance, substance use, autism spectrum disorder, learning disorder, medical contributors, or other conditions as relevant]. Based on the results of this assessment, [patient] appears to [meet / not meet] criteria for:"
-
-DIAGNOSTIC IMPRESSION
-Bullet list: primary diagnosis first (Attention-Deficit/Hyperactivity Disorder, presentation, severity, ICD-10-CM code), then any other diagnoses / rule-outs as their own bullets.
-
-TREATMENT PLANNING
-Rationale for recommended treatment options, tied to the diagnosis / clinical concern.
-
-TREATMENT INTERVENTIONS OFFERED
-Bullet list, using only what is clinically indicated, drawn from: diagnostic interview including symptoms, strengths/resources, risks, and psychosocial challenges; initial goal setting; Cognitive Behavioral Therapy; skills training such as mindfulness, communication, limit-setting, relaxation, self-care, executive-functioning strategies; medication evaluation if indicated; additional referrals/testing if indicated.
-
-TREATMENT GOALS AGREED UPON WITH PATIENT
-Bullet list, patient-centered and specific: improve concentration; improve productivity at home/work/school; improve executive functioning; improve functioning in social roles and relationships; plus any other patient-stated goals.
-
-TIMEFRAME / NEXT CONTACT
-Labeled lines: Medication: [referred / not referred / already established]  Therapy/group/class: [referred / not referred / already established]  Total time spent in care of patient: [minutes]  Recommended next step: [ ]. Then state: "Future visits and treatment frequency to be evaluated and adjusted based on treatment progress and patient participation."
-
-OTHER INTERVENTIONS RECOMMENDED
-"No additional interventions recommended at this time" or specify interventions.
-
-Evaluator Signature: [clinician name, credentials]`;
-
-const SYS=SYS_HEADER+"\n\n"+SYS_SECTION1+"\n\n"+SYS_SECTION2_GENERIC+"\n\n"+SYS_REFERENCE;
-const SYS_AUTISM=SYS_HEADER+"\n\n"+SYS_SECTION1+"\n\n"+SYS_SECTION2_AUTISM+"\n\n"+SYS_REFERENCE;
-const SYS_ADHD=SYS_HEADER+"\n\n"+SYS_SECTION1+"\n\n"+SYS_SECTION2_ADHD+"\n\n"+SYS_REFERENCE;
-
 
 // ================================================================
 // SHARED PDF WRITER — used by per-measure and full assessment exports
@@ -5968,11 +5144,7 @@ function buildAssessmentDataBody(w){
     ['Name',clientNameRaw],
     ['Date of Birth',dob?dob+(age?` (Age ${age})`:''):''],
     ['Gender',v('gender').trim()],
-    ['Pronouns',v('pronouns').trim()],
-    ['Date of Evaluation',v('evalDate').trim()],
-    ['Referral Source',v('referralSource').trim()],
-    ['Reason for Referral',v('reasonForReferral').trim()],
-    ['Relevant Background and History',v('relevantHistory').trim()]
+    ['Pronouns',v('pronouns').trim()]
   ].filter(([,val])=>val!=='');
   if(clientFields.length){
     anyDataAtAll=true;
@@ -6021,13 +5193,6 @@ function buildAssessmentDataBody(w){
     if(miniHasData){ w.subHeader('M.I.N.I. International Neuropsychiatric Interview'); writeUniversalBody(w,'mini'); }
   }
 
-  // General behavioral observations
-  const obs=v('generalObservations').trim();
-  if(obs){
-    anyDataAtAll=true;
-    w.sectionHeader('General Session Observations');
-    w.writeMultiline(obs,{size:10,indent:6});
-  }
 
   if(!anyDataAtAll){
     w.writeBlank(14);
@@ -6042,12 +5207,6 @@ function downloadAssessmentDataPDF(){
   const clientNameRaw=buildAssessmentDataBody(w);
   const todayISO=new Date().toISOString().split('T')[0];
   w.doc.save(`Assessment_Data_${safeFileToken(clientNameRaw,'Client')}_${todayISO}.pdf`);
-}
-
-function printAssessmentData(){
-  const w=newHTMLWriter();
-  buildAssessmentDataBody(w);
-  openPrintWindow('Assessment Data',w.html());
 }
 
 // ================================================================
@@ -6523,404 +5682,10 @@ async function handleMeasureUpload(mod,key,inputEl){
   }
 }
 
-// ================================================================
-// BUILD USER MSG
-// ================================================================
-function buildMsg(){
-  const v=id=>document.getElementById(id)?.value||'';
-  const dob=v('dob');let age='';
-  if(dob){const d=Date.now()-new Date(dob).getTime();age=Math.abs(new Date(d).getUTCFullYear()-1970);}
-  let msg=`Generate a complete psychological evaluation report.\n\n`;
-  msg+=`CLIENT:\nName: ${v('clientName')||'[not provided]'}\nDOB: ${dob||'[not provided]'}${age?' (Age: '+age+')':''}\nGender: ${v('gender')||'[not specified]'}\nPronouns: ${v('pronouns')||'[not specified]'}\nLanguage preference: ${v('languagePref')}\nDate of Evaluation: ${v('evalDate')||'today'}\nReferral: ${v('referralSource')||'[not provided]'}\nReason: ${v('reasonForReferral')||'[not provided]'}\nHistory: ${v('relevantHistory')||'[not provided]'}\n\n`;
-  msg+=`MODULES: ${selectedModules.join(', ')}\n\n`;
-
-  // Legacy quick-entry fields in the report-generation section — checked first, falling back to the
-  // matching Diagnostic Assessment entry field of the same measure.
-  const RPT_FALLBACK={
-    ADHD:{caarsInatt:'rpt_caarsI',caarsHyper:'rpt_caarsH',caarsTotal:'rpt_caarsX',collateralInatt:'rpt_collat'}
-  };
-
-  selectedModules.forEach(mod=>{
-    msg+=`===== ${mod} =====\n`;
-    for(let key in M[mod]){
-      const m=M[mod][key];
-      if(m.type==='entry'){
-        const fallbacks=RPT_FALLBACK[mod]||{};
-        const vals=m.fields.map(f=>{
-          const fbId=fallbacks[f.id];
-          const val=(fbId&&v(fbId))||v(`entry_${mod}_${f.id}`);
-          return val?`${f.l}: ${val}`:null;
-        }).filter(Boolean);
-        if(vals.length) msg+=`${m.name} (${m.abbr}):\n  ${vals.join('\n  ')}\n`;
-        continue;
-      }
-      if(m.score&&responses[mod]&&responses[mod][key]){
-        const sc=m.score(responses[mod][key]);
-        msg+=`${m.abbr}:\n`;
-        for(let l in sc)msg+=`  ${l}: ${sc[l]}\n`;
-      }
-      // Symptom checklist (Y-BOCS) — endorsed symptoms and principal targets.
-      if(m.checklist){
-        const mid=mod+'_'+key;
-        const marks=checklistMarks(mid,m);
-        const notes=(m.checklistNotes||[]).map(f=>{
-          const val=v(`ckn_${mid}_${f.id}`);return val?`${f.l}: ${val}`:null;
-        }).filter(Boolean);
-        if(marks.length||notes.length){
-          msg+=`${m.abbr} Symptom Checklist:\n`;
-          marks.forEach(g=>msg+=`  ${g.label}: ${g.rows.join('; ')}\n`);
-          notes.forEach(n=>msg+=`  ${n}\n`);
-        }
-      }
-    }
-    // Collect interview notes
-    for(let key in M[mod]){
-      const m=M[mod][key];
-      if(m.type!=='interview') continue;
-      const sections=m.sections.map(s=>{
-        if(s.items){
-          const answers=s.items.map(it=>{
-            const val=v(`ci_${mod}_${key}_${s.id}_${it.id}`);
-            const wnl=s.wnl&&!!document.getElementById(`ci_${mod}_${key}_${s.id}_${it.id}_wnl`)?.checked;
-            if(wnl){ const label=it.q.endsWith(':')?it.q.slice(0,-1):it.q; return `${label}: Within normal limits${val?' — '+val:''}`; }
-            return val?`${it.q}: ${val}`:null;
-          }).filter(Boolean);
-          return answers.length?`${s.label}:\n${answers.join('\n')}`:null;
-        }
-        const val=v(`ci_${mod}_${key}_${s.id}`);
-        return val?`${s.label}:\n${val}`:null;
-      }).filter(Boolean);
-      if(sections.length) msg+=`\n${m.name}:\n${sections.join('\n\n')}\n`;
-    }
-    // Collect M.I.N.I. answer-sheet endorsements (Y responses and any free-text specifiers)
-    for(let key in M[mod]){
-      const m=M[mod][key];
-      if(m.type!=='answersheet') continue;
-      const mid=mod+'_'+key;
-      const sections=m.sections.map(s=>{
-        const epiA=s.epi?s.epi.a:'(1)',epiB=s.epi?s.epi.b:'(2)';
-        const rows=s.items.map(it=>{
-          const vals=miniAsFieldIds(mid,it).map(v);
-          if(it.kind==='yn2'){
-            if(vals[0]!=='Y'&&vals[1]!=='Y')return null;
-            return `${it.code}: ${epiA} ${vals[0]||'—'} / ${epiB} ${vals[1]||'—'}`;
-          }
-          if(it.kind==='yn') return vals[0]==='Y'?`${it.code}: Y`:null;
-          return vals[0]?`${it.code}: ${vals[0]}`:null;
-        }).filter(Boolean);
-        // Qualifier probes — include whichever were answered either way.
-        s.items.forEach(it=>{
-          (it.prompts||[]).forEach(p=>{
-            const val=v(`mini_${mid}_${it.id}_p_${p.id}`);
-            if(val) rows.push(`${it.code} — ${p.q} ${val}`);
-          });
-        });
-        // End-of-module diagnostic outcome.
-        const dxRows=[];
-        (s.dx||[]).forEach(d=>{
-          const parts=d.tfs.map(t=>{
-            const val=v(`mini_${mid}_dx_${s.code}_${d.id}_${t.id}`);
-            return val?`${t.label}: ${val}`:null;
-          }).filter(Boolean);
-          if(parts.length) dxRows.push(`${d.name}${d.icd?' ('+d.icd+')':''} — ${parts.join('; ')}`);
-        });
-        (s.dxExtra||[]).forEach(e=>{
-          const val=v(`mini_${mid}_dxe_${s.code}_${e.id}`);
-          if(val) dxRows.push(`${e.label}: ${val}`);
-        });
-        const dxNote=v(`mini_${mid}_dxnote_${s.code}`);
-        if(!rows.length&&!dxRows.length&&!dxNote)return null;
-        let out=`${s.code} — ${s.label}:`;
-        if(rows.length) out+=` ${rows.join(', ')}`;
-        if(dxRows.length) out+=`\n  Meets criteria: ${dxRows.join(' | ')}`;
-        if(dxNote) out+=`\n  Notes: ${dxNote}`;
-        return out;
-      }).filter(Boolean);
-      if(sections.length) msg+=`\n${m.name} (positive/notable items and module outcomes):\n${sections.join('\n')}\n`;
-    }
-    // Collect DIVA-5 responses — endorsed symptoms with their checked examples,
-    // impairment domains, and the score-form/diagnosis conclusion.
-    for(let key in M[mod]){
-      const m=M[mod][key];
-      if(m.type!=='diva5') continue;
-      const mid=mod+'_'+key;
-      const checked=id=>!!document.getElementById(id)?.checked;
-      const itemLines=m.items.map(it=>{
-        const ya=v(`d5_${mid}_${it.code}_ya`),yc=v(`d5_${mid}_${it.code}_yc`);
-        if(ya!=='Yes'&&yc!=='Yes')return null;
-        const ea=it.adult.filter((_,i)=>checked(`d5_${mid}_${it.code}_ea_${i}`));
-        const ec=it.child.filter((_,i)=>checked(`d5_${mid}_${it.code}_ec_${i}`));
-        const oa=v(`d5_${mid}_${it.code}_oa`).trim(),oc=v(`d5_${mid}_${it.code}_oc`).trim();
-        let line=`${it.code} (${it.q}) — Adult: ${ya||'—'}`;
-        if(ya==='Yes'&&(ea.length||oa))line+=` [${[...ea,oa].filter(Boolean).join('; ')}]`;
-        line+=`; Childhood: ${yc||'—'}`;
-        if(yc==='Yes'&&(ec.length||oc))line+=` [${[...ec,oc].filter(Boolean).join('; ')}]`;
-        return line;
-      }).filter(Boolean);
-      const domainLines=m.domains.map(d=>{
-        const ea=d.adult.filter((_,i)=>checked(`d5_${mid}_dom_${d.id}_ea_${i}`));
-        const ec=d.child.filter((_,i)=>checked(`d5_${mid}_dom_${d.id}_ec_${i}`));
-        if(!ea.length&&!ec.length)return null;
-        return `${d.adultLabel}/${d.childLabel}: adult [${ea.join('; ')}] childhood [${ec.join('; ')}]`;
-      }).filter(Boolean);
-      const extraLines=m.extra.map(f=>{const val=v(`d5_${mid}_${f.id}`).trim();return val?`${f.label}: ${val}`:null;}).filter(Boolean);
-      if(itemLines.length||domainLines.length||extraLines.length){
-        msg+=`\n${m.name}:\n`;
-        msg+=`Auto-tallied counts — Attention adult ${document.getElementById(`d5_${mid}_sum_a_adult`)?.textContent||0}/9, childhood ${document.getElementById(`d5_${mid}_sum_a_child`)?.textContent||0}/9; Hyperactivity/Impulsivity adult ${document.getElementById(`d5_${mid}_sum_hi_adult`)?.textContent||0}/9, childhood ${document.getElementById(`d5_${mid}_sum_hi_child`)?.textContent||0}/9\n`;
-        if(itemLines.length) msg+=itemLines.join('\n')+'\n';
-        if(domainLines.length) msg+=`Impairment domains:\n${domainLines.join('\n')}\n`;
-        if(extraLines.length) msg+=`Score form / diagnosis:\n${extraLines.join('\n')}\n`;
-      }
-    }
-    const n=v('notes_'+mod);if(n)msg+=`\nSession Notes:\n${n}\n`;
-    const d=v('diff_'+mod);if(d)msg+=`\nDifferential Considerations:\n${d}\n`;
-    msg+='\n';
-  });
-  const obs=v('generalObservations');if(obs)msg+=`BEHAVIORAL OBSERVATIONS:\n${obs}\n\n`;
-
-  // Universal measures — always included
-  msg+=`===== UNIVERSAL SCREENING (ALL CLIENTS) =====\n`;
-  const sclSubs=['som','oc','int','dep','anx','hos','phob','par','psy'];
-  const sclGlob=['gsi','psdi','pst'];
-  const sclLbls={som:'SOM',oc:'O-C',int:'INT',dep:'DEP',anx:'ANX',hos:'HOS',phob:'PHOB',par:'PAR',psy:'PSY',gsi:'GSI',psdi:'PSDI',pst:'PST'};
-  const sclVals=[...sclSubs,...sclGlob].map(f=>{const val=v(`uni_scl90r_${f}`);return val?`${sclLbls[f]}: ${val}`:null;}).filter(Boolean);
-  if(sclVals.length) msg+=`\nSCL-90-R:\n${sclVals.join(' | ')}\n`;
-  const sclNotes=v('uni_scl90r_notes');if(sclNotes)msg+=`SCL-90-R Notes:\n${sclNotes}\n`;
-  UNIVERSAL.mini.sections.forEach(s=>{
-    const val=v(`uni_mini_${s.id}`);
-    if(val)msg+=`\nM.I.N.I. — ${s.label}:\n${val}\n`;
-  });
-
-  const attachedPDFs=(window.smGetFiles?window.smGetFiles():[]).filter(f=>f.b64);
-  if(attachedPDFs.length){
-    msg+=`\nSUBMITTED MEASURES (${attachedPDFs.length} PDF${attachedPDFs.length>1?'s':''}): The client's completed measure forms are attached as PDF documents. Read each PDF carefully. Extract every score, subscale, item response, and notation. Integrate this data into the appropriate report sections — do not summarize or omit any scores. Reference each measure by its full name.\n`;
-  }
-  msg+=`\nGenerate the complete report. Mark insufficient sections with [clinician to complete].`;
-  return msg;
-}
-
-// ================================================================
-// GENERATE
-// ================================================================
-async function generateReport(){
-  const key=localStorage.getItem('ntc_api_key');
-  if(!key){showErr('Configure API key in Settings first.');openSettings();return;}
-  if(!selectedModules.length){showErr('Select at least one module.');return;}
-  if(!document.getElementById('clientName')?.value){showErr('Enter the client\'s name on the Client Information tab before generating.');return;}
-  if(typeof getRequiredSelfReportEntries==='function'){
-    const incomplete=getRequiredSelfReportEntries().filter(({mod,key})=>!measureCompleteFor(mod,key));
-    if(incomplete.length){
-      showErr('Complete all required self-report measures before generating: '+incomplete.map(({m})=>m.name||m.abbr).join(', '));
-      if(typeof refreshReportGateStatus==='function') refreshReportGateStatus();
-      return;
-    }
-  }
-  hideErr();
-  const btn=document.getElementById('generateBtn');
-  btn.disabled=true;
-  document.getElementById('loadingIndicator').classList.add('active');
-  document.getElementById('reportOutput').classList.remove('active');
-  try{
-    // Build content array — prepend any submitted measure PDFs as document blocks
-    const submittedPDFs=(window.smGetFiles?window.smGetFiles():[]).filter(f=>f.b64);
-    const content=[];
-    submittedPDFs.forEach(function(f){
-      content.push({
-        type:'document',
-        source:{type:'base64',media_type:'application/pdf',data:f.b64},
-        title:f.name,
-        context:'Submitted measure PDF — extract all scores, subscale scores, item responses, and clinician notes verbatim and integrate them into the report.'
-      });
-    });
-    // Text prompt always last
-    let textPrompt=buildMsg();
-    if(submittedPDFs.length){
-      textPrompt+='\n\nSUBMITTED MEASURE PDFs: '+submittedPDFs.length+' PDF(s) attached above ('+submittedPDFs.map(f=>f.name).join(', ')+'). Extract all scores and integrate them into the relevant report sections.';
-    }
-    content.push({type:'text',text:textPrompt});
-
-    // Use the diagnosis-specific report template when that module is active.
-    // Autism takes precedence over ADHD if both are selected (AuDHD assessments still
-    // follow the Autism report structure).
-    const activeSys=selectedModules.includes('Autism')?SYS_AUTISM:selectedModules.includes('ADHD')?SYS_ADHD:SYS;
-
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:localStorage.getItem('ntc_model')||'claude-sonnet-4-5',max_tokens:8192,system:activeSys,messages:[{role:'user',content:content}]})
-    });
-    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||'API error: '+res.status);}
-    const data=await res.json();
-    const text=data.content?.find(b=>b.type==='text')?.text||'';
-    document.getElementById('reportText').textContent=text;
-    document.getElementById('reportOutput').classList.add('active');
-    document.getElementById('reportOutput').scrollIntoView({behavior:'smooth',block:'start'});
-  } catch(e){showErr('Error: '+e.message);}
-  finally{btn.disabled=false;document.getElementById('loadingIndicator').classList.remove('active');}
-}
-
 function openSettings(){document.getElementById('apiKeyInput').value=localStorage.getItem('ntc_api_key')||'';document.getElementById('modelSelect').value=localStorage.getItem('ntc_model')||'claude-sonnet-4-5';document.getElementById('settingsModal').classList.add('active');}
 function closeSettings(){document.getElementById('settingsModal').classList.remove('active');}
 function saveSettings(){const k=document.getElementById('apiKeyInput').value.trim();if(k)localStorage.setItem('ntc_api_key',k);localStorage.setItem('ntc_model',document.getElementById('modelSelect').value);closeSettings();}
-function copyReport(){navigator.clipboard.writeText(document.getElementById('reportText').textContent).then(()=>{const b=document.querySelector('.btn-copy');const o=b.textContent;b.textContent='Copied!';setTimeout(()=>b.textContent=o,2000);});}
-function clearReport(){document.getElementById('reportOutput').classList.remove('active');document.getElementById('reportText').textContent='';}
 
-// ================================================================
-// WORD DOC GENERATION
-// ================================================================
-function downloadWord(){
-  const raw=document.getElementById('reportText').textContent;
-  if(!raw){showErr('Generate a report first.');return;}
-  const {Document,Packer,Paragraph,TextRun,PageBreak,AlignmentType,BorderStyle,LevelFormat}=docx;
-  const FONT='Times New Roman',SZ=24,DARK='000000',CLAY='7D3F35',RULE='C5B9B0',GRN='2A5C32',RED='8B2020';
-
-  const sp=(b,a)=>({spacing:{before:b,after:a}});
-  const tx=(text,opts={})=>new TextRun({text,font:FONT,size:SZ,color:DARK,...opts});
-  const bTx=(text,opts={})=>tx(text,{bold:true,...opts});
-
-  // parse raw text into structured lines
-  const lines=raw.split('\n');
-
-  // split at page break marker Claude is instructed to insert
-  const pbIdx=lines.findIndex(l=>l.includes('===PAGE BREAK==='));
-  const summaryLines=pbIdx>-1?lines.slice(0,pbIdx):lines.slice(0,Math.min(60,lines.length));
-  const fullLines=pbIdx>-1?lines.slice(pbIdx+1):lines;
-
-  const rule=()=>new Paragraph({
-    border:{bottom:{style:BorderStyle.SINGLE,size:6,color:RULE,space:1}},
-    children:[tx('')], ...sp(0,200)
-  });
-
-  const buildParagraphs=(textLines)=>{
-    const paras=[];
-    for(const line of textLines){
-      const trim=line.trim();
-      if(!trim){paras.push(new Paragraph({children:[tx('')], ...sp(0,80)}));continue;}
-      // detect criterion lines [MET] [NOT MET] [INSUFFICIENT DATA]
-      const critMatch=trim.match(/^(A\d|B\d|Criterion [A-E]\.?)\s+\[(MET|NOT MET|INSUFFICIENT DATA|PROBABLE[^]]*)\]\s+(.*)/i);
-      if(critMatch){
-        const statusColor=critMatch[2].startsWith('MET')?GRN:critMatch[2].startsWith('NOT')?RED:'8B6914';
-        paras.push(new Paragraph({
-          indent:{left:400}, ...sp(60,60),
-          children:[
-            bTx(critMatch[1]+'  '),
-            tx('['+critMatch[2]+']  ',{bold:true,color:statusColor}),
-            tx(critMatch[3])
-          ]
-        }));
-        continue;
-      }
-      // ALL CAPS section headings (4+ chars, not a code/score line)
-      const isAllCaps=trim===trim.toUpperCase()&&trim.length>4&&!/[=\-_\*]/.test(trim)&&!/^\d/.test(trim);
-      if(isAllCaps){
-        paras.push(new Paragraph({
-          children:[bTx(trim,{color:CLAY,size:24})],
-          border:{bottom:{style:BorderStyle.SINGLE,size:3,color:CLAY,space:2}},
-          ...sp(280,120)
-        }));
-        continue;
-      }
-      // Sub-headings: lines ending with no period that are bold-ish (Title Case or contain colon)
-      const isSubHead=/^[A-Z][a-zA-Z\s,]+:$/.test(trim)||(/^[A-Z][a-zA-Z\s]+$/.test(trim)&&trim.split(' ').length<=6);
-      if(isSubHead&&trim.length<80&&!trim.includes('.')){
-        paras.push(new Paragraph({
-          children:[bTx(trim)], ...sp(200,80)
-        }));
-        continue;
-      }
-      // Bullet lines
-      if(/^[\u2022\-\*]\s/.test(trim)){
-        paras.push(new Paragraph({
-          numbering:{reference:'bullets',level:0},
-          children:[tx(trim.slice(2).trim())], ...sp(0,80)
-        }));
-        continue;
-      }
-      // Numbered recommendation lines "1.  Title"
-      const recMatch=trim.match(/^(\d+)\.\s{1,3}([A-Z][^:]+)$/);
-      if(recMatch){
-        paras.push(new Paragraph({
-          children:[bTx(recMatch[1]+'.  ',{color:CLAY}),bTx(recMatch[2])], ...sp(160,60)
-        }));
-        continue;
-      }
-      // Italic lines (start with Note: or italicized content)
-      const isItalic=/^Note:|^This report is confidential|^This is a draft/.test(trim);
-      paras.push(new Paragraph({
-        children:[tx(trim,{italics:isItalic,color:isItalic?'5A4A44':DARK})], ...sp(0,160)
-      }));
-    }
-    return paras;
-  };
-
-  // letterhead helper \u2014 pulls from CLINICIAN_INFO so reports stay free of hard-coded PHI
-  const CI = (typeof CLINICIAN_INFO !== 'undefined' && CLINICIAN_INFO) || {name:'',license:'',practice:'',location:''};
-  const lh=(compact=false)=>[
-    new Paragraph({alignment:AlignmentType.CENTER, ...sp(0,compact?60:80),
-      children:[new TextRun({text:(CI.practice||'PRACTICE NAME').toUpperCase(),font:FONT,size:compact?26:30,bold:true,color:CLAY})]}),
-    new Paragraph({alignment:AlignmentType.CENTER, ...sp(0,40),
-      children:[tx(CI.name + (CI.license?(', '+CI.license):''))]}),
-    new Paragraph({alignment:AlignmentType.CENTER, ...sp(0,40),
-      children:[tx('Licensed Clinician',{size:20,color:'5A4A44'})]}),
-    new Paragraph({alignment:AlignmentType.CENTER, ...sp(0,compact?160:200),
-      children:[tx(CI.location||'',{size:20,color:'5A4A44'})]}),
-    new Paragraph({alignment:AlignmentType.CENTER,
-      border:{bottom:{style:BorderStyle.SINGLE,size:6,color:RULE,space:1}},
-      children:[tx('')], ...sp(0,compact?200:240)})
-  ];
-
-  const clientName=document.getElementById('clientName')?.value||'Client';
-  const evalDate=document.getElementById('evalDate')?.value||'';
-  const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-  const safeDate=evalDate?new Date(evalDate+'T12:00:00').toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}):today;
-
-  const doc=new Document({
-    styles:{default:{document:{run:{font:FONT,size:SZ,color:DARK}}}},
-    numbering:{config:[{
-      reference:'bullets',
-      levels:[{level:0,format:LevelFormat.BULLET,text:'\u2022',alignment:AlignmentType.LEFT,
-        style:{paragraph:{indent:{left:720,hanging:360}},run:{font:FONT,size:SZ}}}]
-    }]},
-    sections:[{
-      properties:{page:{size:{width:12240,height:15840},margin:{top:1260,right:1260,bottom:1260,left:1260}}},
-      children:[
-        // ---- SUMMARY PAGE ----
-        ...lh(true),
-        new Paragraph({alignment:AlignmentType.CENTER, ...sp(0,60),
-          children:[bTx('DIAGNOSTIC SUMMARY',{size:28})]}),
-        new Paragraph({alignment:AlignmentType.CENTER, ...sp(0,240),
-          children:[tx('Confidential Evaluation Report',{italics:true,size:20,color:'5A4A44'})]}),
-        ...buildParagraphs(summaryLines),
-        // ---- PAGE BREAK ----
-        new Paragraph({children:[new PageBreak()], ...sp(0,0)}),
-        // ---- FULL REPORT ----
-        ...lh(false),
-        new Paragraph({alignment:AlignmentType.CENTER, ...sp(0,80),
-          children:[bTx('PSYCHOLOGICAL EVALUATION REPORT',{size:26})]}),
-        new Paragraph({alignment:AlignmentType.CENTER, ...sp(0,240),
-          children:[tx(`Date of Evaluation: ${safeDate}     Date of Report: ${today}`,{size:20,color:'5A4A44'})]}),
-        ...buildParagraphs(fullLines),
-        // signature
-        new Paragraph({border:{bottom:{style:BorderStyle.SINGLE,size:6,color:RULE,space:1}},children:[tx('')], ...sp(0,200)}),
-        new Paragraph({ ...sp(240,80),children:[tx('______________________________',{color:RULE})]}),
-        new Paragraph({ ...sp(0,40),children:[bTx(CI.name||'')]}),
-        new Paragraph({ ...sp(0,40),children:[tx('Licensed Clinician'+(CI.license?(' \u00b7 '+CI.license):''))]}),
-        new Paragraph({ ...sp(0,80),children:[tx(`Date of Report: ${today}`)]}),
-        new Paragraph({ ...sp(0,0),children:[tx('This report is confidential and intended solely for the named client and authorized recipients. This is a draft prepared for clinician review; all diagnostic conclusions require verification and signature by the clinician before release.',{italics:true,color:'5A4A44'})]})
-      ]
-    }]
-  });
-
-  Packer.toBlob(doc).then(blob=>{
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    const safeName=(clientName.replace(/[^a-zA-Z0-9]/g,'_')||'Client')+'_PsychEval_'+new Date().toISOString().slice(0,10)+'.docx';
-    a.href=url; a.download=safeName; a.click();
-    URL.revokeObjectURL(url);
-  }).catch(e=>showErr('Word doc error: '+e.message));
-}
-function showErr(m){const e=document.getElementById('errorMsg');e.textContent=m;e.classList.add('active');}
-function hideErr(){document.getElementById('errorMsg').classList.remove('active');}
 
 // ----------------------------------------------------------------
 // Olive palette runtime — three palettes, swappable via cycle button
@@ -8086,7 +6851,6 @@ function initTreatmentPlan(){
 
 document.addEventListener('DOMContentLoaded',()=>{
   initPalette();
-  document.getElementById('evalDate').value=new Date().toISOString().split('T')[0];
   renderUniversal();
   initIntakeForm();
   initClientInfo();
