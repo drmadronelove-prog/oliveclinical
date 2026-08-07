@@ -1567,14 +1567,10 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
 </div>
 
 <div class="tab-pane" id="tab-client">
-  <!-- Kept in sync with ci_lastname/ci_firstname/ci_dob/ci_pronouns/ci_gender by
-       syncReportClientFields() — the single source of truth several PDF exports
-       (assessment data, measure downloads, templates) read the client's name/
-       DOB/pronouns/gender from. -->
+  <!-- Kept in sync with ci_lastname/ci_firstname by syncReportClientFields() —
+       the single source of truth several PDF exports (assessment data,
+       measure downloads, templates) read the client's name from. -->
   <input type="hidden" id="clientName">
-  <input type="hidden" id="dob">
-  <input type="hidden" id="pronouns">
-  <input type="hidden" id="gender">
   <div class="section">
     <div class="section-label">Client Information</div>
     <div class="card" style="margin-bottom:16px;">
@@ -1591,20 +1587,6 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
       <div class="form-grid">
         <div class="field"><label>Last Name</label><input type="text" id="ci_lastname" placeholder="Last name"></div>
         <div class="field"><label>First Name</label><input type="text" id="ci_firstname" placeholder="First name"></div>
-        <div class="field"><label>Date of Birth</label><input type="date" id="ci_dob"></div>
-        <div class="field"><label>Pronouns</label><input type="text" id="ci_pronouns" placeholder="she/her, they/them..."></div>
-        <div class="field"><label>Gender</label>
-          <select id="ci_gender">
-            <option value="">—</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Trans male">Trans male</option>
-            <option value="Trans female">Trans female</option>
-            <option value="Nonbinary">Nonbinary</option>
-          </select>
-        </div>
-        <div class="field"><label>Email</label><input type="email" id="ci_email" placeholder="email@example.com"></div>
-        <div class="field"><label>Phone Number</label><input type="tel" id="ci_phone" placeholder="(555) 123-4567"></div>
         <div class="field span-2" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
           <button class="btn-primary" onclick="saveClient()">Save Client</button>
           <button class="btn-cancel" onclick="newClient()">+ New Client</button>
@@ -3358,10 +3340,10 @@ function toggleUniversal(btn){
 // ----------------------------------------------------------------
 // Client Information — multi-client manager with localStorage
 // ----------------------------------------------------------------
-let CLIENTS=[]; // [{id, lastname, firstname, dob, pronouns, email, phone}]
+let CLIENTS=[]; // [{id, lastname, firstname}]
 let ACTIVE_CLIENT_ID=null;
 
-const CI_FIELDS=['ci_lastname','ci_firstname','ci_dob','ci_pronouns','ci_gender','ci_email','ci_phone'];
+const CI_FIELDS=['ci_lastname','ci_firstname'];
 
 function loadClients(){
   try{
@@ -3381,8 +3363,7 @@ function clientLabel(c){
   if(!c)return 'No client selected';
   const ln=c.lastname||'';
   const fn=c.firstname||'';
-  const dob=c.dob||'';
-  return [ln, fn].filter(Boolean).join(', ')+(dob?' • '+dob:'');
+  return [ln, fn].filter(Boolean).join(', ');
 }
 function rebuildClientSelector(){
   const sel=document.getElementById('client_selector');
@@ -3403,7 +3384,7 @@ function updateActiveClientHeader(){
   else{el.textContent='No client selected';el.classList.add('empty');}
 }
 function fillClientForm(c){
-  const map={ci_lastname:'lastname',ci_firstname:'firstname',ci_dob:'dob',ci_pronouns:'pronouns',ci_gender:'gender',ci_email:'email',ci_phone:'phone'};
+  const map={ci_lastname:'lastname',ci_firstname:'firstname'};
   Object.entries(map).forEach(([id,key])=>{
     const el=document.getElementById(id);
     if(el)el.value=c?(c[key]||''):'';
@@ -3412,19 +3393,12 @@ function fillClientForm(c){
 function readClientForm(){
   return {
     lastname:document.getElementById('ci_lastname').value.trim(),
-    firstname:document.getElementById('ci_firstname').value.trim(),
-    dob:document.getElementById('ci_dob').value,
-    pronouns:document.getElementById('ci_pronouns').value.trim(),
-    gender:document.getElementById('ci_gender').value,
-    email:document.getElementById('ci_email').value.trim(),
-    phone:document.getElementById('ci_phone').value.trim()
+    firstname:document.getElementById('ci_firstname').value.trim()
   };
 }
-// The report-generation section (bottom of Diagnostic Assessment) no longer
-// asks for name/DOB/pronouns/gender itself (don't repeat questions already
-// asked on Client Information) — it reads them from hidden clientName/dob/
-// pronouns/gender inputs kept in sync with the Client Information tab by
-// this function, called on every edit,
+// Several PDF exports (assessment data, measure downloads, templates) read
+// the client's name from this hidden clientName input, kept in sync with
+// the Client Information tab by this function, called on every edit,
 // client switch, or client-record load so the two tabs can never drift apart.
 function syncReportClientFields(){
   const cn=document.getElementById('clientName');
@@ -3433,33 +3407,6 @@ function syncReportClientFields(){
     const fn=(document.getElementById('ci_firstname')?.value||'').trim();
     cn.value=[fn,ln].filter(Boolean).join(' ');
   }
-  const dst=document.getElementById('dob');
-  if(dst)dst.value=document.getElementById('ci_dob')?.value||'';
-  const pdst=document.getElementById('pronouns');
-  if(pdst)pdst.value=document.getElementById('ci_pronouns')?.value||'';
-  const gdst=document.getElementById('gender');
-  if(gdst)gdst.value=document.getElementById('ci_gender')?.value||'';
-  updateReportClientSummary();
-}
-
-function goToClientInfoTab(){
-  const btn=document.querySelector("button[onclick*=\"'client'\"]");
-  if(btn)switchTab('client',btn);
-}
-
-function updateReportClientSummary(){
-  const el=document.getElementById('reportClientSummary');
-  if(!el)return;
-  const name=(document.getElementById('clientName')?.value||'').trim();
-  const dob=document.getElementById('dob')?.value||'';
-  const pronouns=(document.getElementById('pronouns')?.value||'').trim();
-  const gender=document.getElementById('gender')?.value||'';
-  if(!name&&!dob&&!pronouns&&!gender){
-    el.innerHTML='No client selected. <button type="button" class="btn-sm" onclick="goToClientInfoTab()">Go to Client Information →</button>';
-    return;
-  }
-  const parts=[name,dob,pronouns,gender].filter(Boolean).map(escapeHtml);
-  el.innerHTML=`<strong>${parts.join(' &nbsp;·&nbsp; ')}</strong> <button type="button" class="btn-sm" onclick="goToClientInfoTab()">Edit on Client Information →</button>`;
 }
 
 function onClientSelect(id){
@@ -3521,7 +3468,6 @@ function initClientInfo(){
     const el=document.getElementById(id);
     if(!el)return;
     el.addEventListener('input',syncReportClientFields);
-    if(id==='ci_gender')el.addEventListener('change',syncReportClientFields);
   });
   syncReportClientFields();
 }
@@ -5132,8 +5078,6 @@ function writeUniversalBody(w,key){
 function buildAssessmentDataBody(w){
   const v=id=>document.getElementById(id)?.value||'';
   const clientNameRaw=v('clientName').trim();
-  const dob=v('dob');let age='';
-  if(dob){const d=Date.now()-new Date(dob).getTime();age=Math.abs(new Date(d).getUTCFullYear()-1970);}
 
   w.titleBlock('Assessment Data Export');
 
@@ -5141,10 +5085,7 @@ function buildAssessmentDataBody(w){
 
   // Client information
   const clientFields=[
-    ['Name',clientNameRaw],
-    ['Date of Birth',dob?dob+(age?` (Age ${age})`:''):''],
-    ['Gender',v('gender').trim()],
-    ['Pronouns',v('pronouns').trim()]
+    ['Name',clientNameRaw]
   ].filter(([,val])=>val!=='');
   if(clientFields.length){
     anyDataAtAll=true;
