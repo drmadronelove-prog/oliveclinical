@@ -77,6 +77,7 @@ const psychologistSchema = {
   ],
   sameAs: [
     'https://madronelove.com',
+    'https://www.psychologytoday.com/us/therapists/dr-madrone-love-neuro-inclusive-psychologist-berkeley-ca/1554818',
   ],
 }
 
