@@ -23,6 +23,12 @@ const SubscribeSchema = z.object({
  * way to add-or-update a member) rather than POST, and sets only
  * `status_if_new` — never `status` — so someone who previously unsubscribed
  * is never silently re-subscribed by refilling the form.
+ *
+ * status_if_new is "pending" (not "subscribed") for double opt-in: Mailchimp
+ * auto-sends a confirmation email and the contact only becomes "subscribed"
+ * once they click it. Note this is set here in the API call itself — the
+ * double-opt-in toggle in Mailchimp's Audience settings only affects
+ * Mailchimp's own hosted signup forms, not contacts added via the API.
  */
 export async function POST(request: Request) {
   let body: unknown
@@ -71,7 +77,7 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         email_address: email,
-        status_if_new: "subscribed",
+        status_if_new: "pending",
       }),
     })
 
@@ -84,7 +90,7 @@ export async function POST(request: Request) {
       )
     }
 
-    return NextResponse.json({ message: "You're on the list — thank you." })
+    return NextResponse.json({ message: "Almost there — check your inbox to confirm your subscription." })
   } catch (err) {
     console.error("[subscribe] Mailchimp request failed", err)
     return NextResponse.json(
