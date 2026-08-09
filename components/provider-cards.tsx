@@ -158,7 +158,7 @@ function ProviderCard({
       onMouseLeave={() => setHovered(false)}
       style={{
         aspectRatio: "17 / 20",
-        backgroundColor: "rgba(251, 248, 243, 0.94)",
+        backgroundColor: "rgba(247, 247, 247, 0.94)",
         backgroundImage: `${PAPER_BG}, linear-gradient(160deg, ${borderColor}22 0%, ${borderColor}10 100%)`,
         backgroundSize: "200px 200px, cover",
         backdropFilter: "blur(8px)",
@@ -279,7 +279,7 @@ function ReferralCard({
         onMouseLeave={() => setHovered(false)}
         style={{
           aspectRatio: "17 / 10",
-          backgroundColor: "rgba(251, 248, 243, 0.94)",
+          backgroundColor: "rgba(247, 247, 247, 0.94)",
           backgroundImage: `${PAPER_BG}, linear-gradient(160deg, ${borderColor}22 0%, ${borderColor}10 100%)`,
           backgroundSize: "200px 200px, cover",
           border: `1.5px solid ${borderColor}`,

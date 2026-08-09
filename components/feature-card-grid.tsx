@@ -8,9 +8,9 @@ const PAPER_BG =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E\")"
 
 const VARIANTS = [
-  { accent: "#5b6e88", surface: "#f4f3f0" }, // slate on paper
-  { accent: "#7a4f6e", surface: "#efeae0" }, // plum on linen
-  { accent: "#8c9bb0", surface: "#f4f3f0" }, // mist on paper
+  { accent: "#5b6e88", surface: "#f2f2f2" }, // slate on paper
+  { accent: "#7a4f6e", surface: "#e8e8e8" }, // plum on linen
+  { accent: "#8c9bb0", surface: "#f2f2f2" }, // mist on paper
 ]
 
 type CommonCard = {

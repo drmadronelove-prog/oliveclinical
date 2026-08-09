@@ -26,8 +26,8 @@ export type BlogPost = {
 // ── Olive Clinical settled palette tokens ────────────────────────────────────
 const C = {
   ink:    "#0b2545",
-  paper:  "#fbf8f3",
-  linen:  "#efeae0",
+  paper:  "#f7f7f7",
+  linen:  "#e8e8e8",
   mist:   "#8c9bb0",
   slate:  "#5b6e88",
   plum:   "#7a4f6e",

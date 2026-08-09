@@ -6,12 +6,14 @@
 :root {
   /* ── Olive Clinical settled palette ────────────────────────────
      Ink + Paper carry the system. Linen · Soft soften.
+     Paper/Linen/Soft are neutral greys, not cream — same lightness
+     steps as before, chroma removed.
      Cools: Glass · Mist · Slate. Warms: Plum · Rose · Dusk.
      Gold seals.                                                  */
   --ink:    #0b2545;
-  --paper:  #f6f4ee;
-  --linen:  #eeeae2;
-  --soft:   #e7e3da;
+  --paper:  #f3f3f3;
+  --linen:  #e9e9e9;
+  --soft:   #e1e1e1;
   --glass:  #9fb3b0;
   --mist:   #8c9bb0;
   --slate:  #5b6e88;

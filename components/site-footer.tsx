@@ -10,7 +10,7 @@ export function SiteFooter() {
         fontSize: "0.78rem",
         letterSpacing: "0.02em",
         background:
-          "linear-gradient(180deg, #f1f0ec 0%, #ecebe7 50%, #e6e5e0 100%)",
+          "linear-gradient(180deg, #efefef 0%, #eaeaea 50%, #e4e4e4 100%)",
         boxShadow:
           "0 -2px 10px rgba(11,37,69,0.05), inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -1px 0 rgba(11,37,69,0.08)",
       }}

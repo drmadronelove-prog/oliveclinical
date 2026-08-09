@@ -61,7 +61,7 @@ function HeroCard({
         style={{
           aspectRatio: "17 / 20",
           height: undefined,
-          backgroundColor: "rgba(251, 248, 243, 0.94)",
+          backgroundColor: "rgba(247, 247, 247, 0.94)",
           backgroundImage: `${PAPER_BG}, linear-gradient(160deg, ${card.borderColor}22 0%, ${card.borderColor}10 100%)`,
           backgroundSize: "200px 200px, cover",
           backdropFilter: "blur(8px)",
