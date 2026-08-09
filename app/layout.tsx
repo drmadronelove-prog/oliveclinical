@@ -34,6 +34,52 @@ const atari = Press_Start_2P({
 const SITE_DESCRIPTION =
   'Compassionate, neuroinclusive therapy services from Olive Clinical. Specializing in neurodivergent-affirming care, ADHD, autism, and holistic mental wellness.'
 
+// Structured data so search engines and AI systems can identify who runs
+// this practice, what she specializes in, and where she's licensed to
+// practice — surfaced on every page since it describes the practitioner,
+// not any one page's content.
+const psychologistSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Psychologist',
+  name: 'Madrone Love, PsyD',
+  image: 'https://oliveclinical.com/dr-love.jpg',
+  url: 'https://oliveclinical.com',
+  telephone: '+1-415-915-2183',
+  email: 'info@oliveclinical.com',
+  identifier: {
+    '@type': 'PropertyValue',
+    propertyID: 'CA Board of Psychology License',
+    value: 'PSY35899',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Berkeley',
+    addressRegion: 'CA',
+    addressCountry: 'US',
+  },
+  areaServed: [
+    { '@type': 'City', name: 'Berkeley, CA' },
+    { '@type': 'State', name: 'California' },
+  ],
+  availableService: {
+    '@type': 'MedicalTherapy',
+    name: 'Telehealth psychotherapy and assessment',
+  },
+  medicalSpecialty: 'Psychiatric',
+  knowsAbout: [
+    'ADHD',
+    'Autism',
+    'Neurodivergence',
+    'Neuroinclusive psychotherapy',
+    'Autism assessment',
+    'ADHD assessment',
+    'Neurodivergent-affirming therapy',
+  ],
+  sameAs: [
+    'https://madronelove.com',
+  ],
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://oliveclinical.com'),
   title: 'Olive Clinical',
@@ -74,6 +120,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${fraunces.variable} ${geist.variable} ${geistMono.variable} ${atari.variable}`}>
       <body className="font-body antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(psychologistSchema) }}
+        />
         <SiteHeader />
         {children}
         <SiteFooter />

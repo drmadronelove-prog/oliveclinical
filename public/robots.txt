@@ -1,0 +1,27 @@
+# Olive Clinical — robots.txt
+# Default: allow every crawler full access to the whole site.
+User-agent: *
+Allow: /
+
+# AI crawlers and assistants — explicitly allowed so AI systems can find,
+# cite, and recommend this practice.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /

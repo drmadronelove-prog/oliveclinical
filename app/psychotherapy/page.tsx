@@ -3,6 +3,38 @@
 import { ProviderCards } from "@/components/provider-cards"
 import { motion } from "framer-motion"
 
+const FAQS = [
+  {
+    q: "Do you offer ADHD assessments in Berkeley, CA?",
+    a: "Yes. Dr. Love provides comprehensive ADHD assessments for teens and adults in Berkeley, CA, and via telehealth throughout California.",
+  },
+  {
+    q: "Do you offer autism assessments for adults?",
+    a: "Yes. Autism assessments are available for adults and teens, conducted in a neuroinclusive, affirming way that focuses on understanding your experience rather than pathologizing it.",
+  },
+  {
+    q: "Can I get an ADHD or autism assessment via telehealth in California?",
+    a: "Yes. Telehealth assessments and psychotherapy are available anywhere in California, in addition to in-person sessions in Berkeley.",
+  },
+  {
+    q: "What does ‘neuroinclusive’ therapy mean?",
+    a: "Neuroinclusive therapy affirms neurodivergent ways of thinking, feeling, and relating — including ADHD, autism, and other forms of neurodivergence — rather than treating them as something to be fixed or normalized. It centers understanding how your brain works and building on your strengths.",
+  },
+]
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.a,
+    },
+  })),
+}
+
 export default function PsychotherapyPage() {
   return (
     <main className="relative bg-background overflow-x-hidden">
@@ -73,6 +105,59 @@ export default function PsychotherapyPage() {
             className="w-full"
           >
             <ProviderCards />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="w-full max-w-2xl"
+          >
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <h2
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 500,
+                fontSize: "clamp(1.4rem, 3vw, 1.9rem)",
+                color: "var(--ink)",
+                letterSpacing: "-0.018em",
+                marginBottom: "1.75rem",
+                textAlign: "center",
+              }}
+            >
+              Frequently asked questions
+            </h2>
+            <div className="flex flex-col gap-6">
+              {FAQS.map((f) => (
+                <div key={f.q}>
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontWeight: 500,
+                      fontSize: "1.05rem",
+                      color: "var(--plum)",
+                      letterSpacing: "-0.01em",
+                      marginBottom: "0.4rem",
+                    }}
+                  >
+                    {f.q}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      fontSize: "0.95rem",
+                      lineHeight: 1.6,
+                      color: "rgba(11,37,69,0.78)",
+                    }}
+                  >
+                    {f.a}
+                  </p>
+                </div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
