@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
+import crypto from "crypto"
 
 const SubscribeSchema = z.object({
   email: z.string().trim().min(1, "Please enter an email address.").email("Please enter a valid email address."),
@@ -8,15 +9,20 @@ const SubscribeSchema = z.object({
 })
 
 /**
- * Newsletter signup.
- *
- * The list itself lives with an email provider, configured through env vars:
- *   NEWSLETTER_API_URL  — provider endpoint that accepts a subscriber POST
- *   NEWSLETTER_API_KEY  — bearer token for that endpoint
+ * Newsletter signup via Mailchimp, configured through env vars:
+ *   MAILCHIMP_API_KEY — looks like "abcd1234...-us21"; the "-us21" suffix
+ *     names the datacenter and is required to build the API URL.
+ *   MAILCHIMP_LIST_ID — the target Audience's ID (Audience > Settings >
+ *     Audience name and defaults > Audience ID).
  *
  * If those aren't set we deliberately return 503 rather than a cheerful
  * "you're subscribed", so nobody is told they joined a list that never
  * received them.
+ *
+ * Upserts via PUT on the member's MD5-hashed email (Mailchimp's documented
+ * way to add-or-update a member) rather than POST, and sets only
+ * `status_if_new` — never `status` — so someone who previously unsubscribed
+ * is never silently re-subscribed by refilling the form.
  */
 export async function POST(request: Request) {
   let body: unknown
@@ -37,35 +43,41 @@ export async function POST(request: Request) {
   const { email, company } = parsed.data
 
   // Bot caught by the honeypot — accept quietly so it gets no signal, but
-  // don't forward anything to the provider.
+  // don't forward anything to Mailchimp.
   if (company && company.trim() !== "") {
     return NextResponse.json({ message: "You're on the list — thank you." })
   }
 
-  const apiUrl = process.env.NEWSLETTER_API_URL
-  const apiKey = process.env.NEWSLETTER_API_KEY
+  const apiKey = process.env.MAILCHIMP_API_KEY
+  const listId = process.env.MAILCHIMP_LIST_ID
+  const dc = apiKey?.split("-")[1]
 
-  if (!apiUrl || !apiKey) {
-    console.warn("[subscribe] NEWSLETTER_API_URL / NEWSLETTER_API_KEY are not configured; signup rejected.")
+  if (!apiKey || !listId || !dc) {
+    console.warn("[subscribe] MAILCHIMP_API_KEY / MAILCHIMP_LIST_ID are not configured; signup rejected.")
     return NextResponse.json(
       { error: "Email signup isn't available just yet. Please check back soon." },
       { status: 503 },
     )
   }
 
+  const subscriberHash = crypto.createHash("md5").update(email.trim().toLowerCase()).digest("hex")
+
   try {
-    const res = await fetch(apiUrl, {
-      method: "POST",
+    const res = await fetch(`https://${dc}.api.mailchimp.com/3.0/lists/${listId}/members/${subscriberHash}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Basic ${Buffer.from(`anystring:${apiKey}`).toString("base64")}`,
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({
+        email_address: email,
+        status_if_new: "subscribed",
+      }),
     })
 
     if (!res.ok) {
       const detail = await res.text().catch(() => "")
-      console.error("[subscribe] provider rejected signup", res.status, detail.slice(0, 500))
+      console.error("[subscribe] Mailchimp rejected signup", res.status, detail.slice(0, 500))
       return NextResponse.json(
         { error: "We couldn't complete your signup. Please try again later." },
         { status: 502 },
@@ -74,7 +86,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ message: "You're on the list — thank you." })
   } catch (err) {
-    console.error("[subscribe] provider request failed", err)
+    console.error("[subscribe] Mailchimp request failed", err)
     return NextResponse.json(
       { error: "We couldn't complete your signup. Please try again later." },
       { status: 502 },
