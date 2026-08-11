@@ -346,6 +346,13 @@ const SCREENERS: FeatureCard[] = [
     footerLabel: "Open & download",
     href: "/MMS_Fillable.pdf",
   },
+  {
+    kind: "link",
+    title: "EQ",
+    category: "Empathy quotient · fillable PDF",
+    footerLabel: "Open & download",
+    href: "/EQ_Fillable.pdf",
+  },
 ]
 
 // ── Page component ─────────────────────────────────────────────────────────────
