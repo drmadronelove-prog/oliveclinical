@@ -804,6 +804,22 @@ body::before{display:none;}
 }
 .mini-module-chevron.open{transform:rotate(90deg);}
 .mini-module-body{padding-top:10px;}
+/* Ruled-out toggle — lives in the collapsed header so a clinician can
+   mark a whole module ruled out while scanning through the M.I.N.I.
+   without opening it. */
+.mini-ruledout-toggle{
+  display:flex;align-items:center;gap:5px;flex-shrink:0;
+  font-size:10px;letter-spacing:0.04em;text-transform:none;
+  font-family:var(--font-sans,inherit);font-weight:600;
+  color:rgba(255,255,255,0.55);
+  cursor:pointer;user-select:none;
+}
+.mini-ruledout-toggle:hover{color:rgba(255,255,255,0.85);}
+.mini-ruledout-toggle input{cursor:pointer;accent-color:var(--danger,#b3453f);}
+.mini-module.ruledout .mini-module-head-label{
+  text-decoration:line-through;opacity:0.6;
+}
+.mini-module.ruledout .mini-ruledout-toggle{color:var(--danger,#e07a72);font-weight:700;}
 /* Current vs past episode — explicit two-column block */
 .mini-epi{margin-top:10px;}
 .mini-epi-head,.mini-epi-row{
@@ -4047,7 +4063,13 @@ function buildAnswerSheetCard(mod,key,m){
     h+=`<div class="mini-module">
       <div class="mini-module-head" onclick="event.stopPropagation();toggleMiniModule('${modId}')">
         <span class="mini-module-head-label"><span class="mini-module-dot" id="${modId}_dot" style="visibility:hidden;"></span>${s.code} — ${escapeHtml(s.label)}</span>
-        <span class="mini-module-chevron" id="${modId}_chev">▸</span>
+        <span style="display:flex;align-items:center;gap:14px;">
+          <label class="mini-ruledout-toggle" onclick="event.stopPropagation()">
+            <input type="checkbox" id="mini_${mid}_ruledout_${s.code}" onchange="onMiniRuledOutChange('${mod}','${key}','${s.code}')">
+            <span>Ruled out</span>
+          </label>
+          <span class="mini-module-chevron" id="${modId}_chev">▸</span>
+        </span>
       </div>
       <div class="mini-module-body" id="${modId}" style="display:none;">`;
 
@@ -4125,6 +4147,15 @@ function setAllMiniModules(mid,expand){
       if(chev)chev.classList.toggle('open',expand);
     }
   });
+}
+// Header-level "ruled out" checkbox — dims/strikes the module's label so a
+// clinician can mark a whole M.I.N.I. module ruled out without expanding it.
+function onMiniRuledOutChange(mod,key,code){
+  const mid=mod+'_'+key;
+  const cb=document.getElementById(`mini_${mid}_ruledout_${code}`);
+  const wrap=cb&&cb.closest('.mini-module');
+  if(wrap)wrap.classList.toggle('ruledout',cb.checked);
+  if(typeof scheduleProgressUpdate==='function')scheduleProgressUpdate();
 }
 // Lights up a module's header dot if anything inside it has a value —
 // lets a clinician see at a glance which sections already have data
@@ -4885,7 +4916,8 @@ function measureHasData(mod,key){
     return m.sections.some(s=>
       s.items.some(it=>miniAsFieldIds(mid,it).some(id=>v(id)!=='')
         ||miniPromptFieldIds(mid,it).some(id=>v(id)!==''))
-      ||miniDxFieldIds(mid,s).some(id=>v(id)!==''));
+      ||miniDxFieldIds(mid,s).some(id=>v(id)!=='')
+      ||chk(`mini_${mid}_ruledout_${s.code}`));
   }
   if(m.type==='diva5'){
     const mid=mod+'_'+key;
@@ -4950,6 +4982,7 @@ function writeMeasureBody(w,mod,key){
   }
   if(m.type==='answersheet'){
     const mid=mod+'_'+key;
+    const checked=id=>!!document.getElementById(id)?.checked;
     m.sections.forEach(s=>{
       const epiA=s.epi?s.epi.a:'(1)',epiB=s.epi?s.epi.b:'(2)';
       const rows=s.items.map(it=>{
@@ -4979,8 +5012,10 @@ function writeMeasureBody(w,mod,key){
         if(val) dxRows.push(`${e.label}: ${val}`);
       });
       const dxNote=v(`mini_${mid}_dxnote_${s.code}`).trim();
-      if(!rows.length&&!promptRows.length&&!dxRows.length&&!dxNote)return;
+      const ruledOut=checked(`mini_${mid}_ruledout_${s.code}`);
+      if(!rows.length&&!promptRows.length&&!dxRows.length&&!dxNote&&!ruledOut)return;
       w.writeLine(`${s.code} — ${s.label}:`,{size:9,style:'italic',indent:6});
+      if(ruledOut) w.writeLine('Diagnosis ruled out',{size:9,style:'bold',indent:12});
       if(rows.length) w.writeMultiline(rows.join('   '),{size:9,indent:12});
       promptRows.forEach(r=>w.writeLine(r,{size:9,indent:14}));
       if(dxRows.length){
@@ -5225,6 +5260,7 @@ function writeMeasureBodyTemplate(w,mod,key){
   if(m.type==='answersheet'){
     m.sections.forEach(s=>{
       w.writeLine(`${s.code} — ${s.label}:`,{size:9,style:'italic',indent:6});
+      w.writeLine('Ruled out (circle):  Yes / No',{size:8,indent:12});
       const epiA=s.epi?s.epi.a:'(1)',epiB=s.epi?s.epi.b:'(2)';
       const codes=s.items.map(it=>it.kind==='yn2'?`${it.code} ${epiA}__ ${epiB}__`:`${it.code} __`).join('   ');
       w.writeMultiline(codes,{size:9,indent:12});
@@ -5421,15 +5457,17 @@ function buildMeasurePayload(mod,key){
   }
   if(m.type==='answersheet'){
     const mid=mod+'_'+key;
-    const items={},prompts={},dx={};
+    const checked=id=>!!document.getElementById(id)?.checked;
+    const items={},prompts={},dx={},ruledOut={};
     m.sections.forEach(s=>{
       s.items.forEach(it=>{
         items[it.id]=miniAsFieldIds(mid,it).map(v);
         if(it.prompts&&it.prompts.length) prompts[it.id]=miniPromptFieldIds(mid,it).map(v);
       });
       dx[s.code]=miniDxFieldIds(mid,s).map(v);
+      ruledOut[s.code]=checked(`mini_${mid}_ruledout_${s.code}`);
     });
-    return {mod,key,mtype:'answersheet',items,prompts,dx};
+    return {mod,key,mtype:'answersheet',items,prompts,dx,ruledOut};
   }
   if(m.type==='diva5'){
     const mid=mod+'_'+key;
@@ -5554,6 +5592,11 @@ function importMeasurePayload(mod,key,payload){
         apply(miniPromptFieldIds(mid,it),payload.prompts&&payload.prompts[it.id]);
       });
       apply(miniDxFieldIds(mid,s),payload.dx&&payload.dx[s.code]);
+      const roCb=document.getElementById(`mini_${mid}_ruledout_${s.code}`);
+      if(roCb){
+        roCb.checked=!!(payload.ruledOut&&payload.ruledOut[s.code]);
+        onMiniRuledOutChange(mod,key,s.code);
+      }
     });
     if(typeof refreshMiniModuleDots==='function')refreshMiniModuleDots(mid);
     return true;
