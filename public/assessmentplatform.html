@@ -2352,6 +2352,25 @@ ADHD:{
 },
 Autism:{
   mini_as:makeMiniAnswerSheet(),
+  pai:{
+    name:"Personality Assessment Inventory (PAI)",abbr:"PAI",type:"entry",primary:true,reporter:"self",rowColor:"yellow",manualComplete:true,
+    note:"PAR-licensed. Enter T-scores from the administered PAI. T ≥70 clinically elevated on most scales. Used to characterize co-occurring personality/psychopathology features relevant to differential diagnosis.",
+    link:{url:"https://app.pariconnect.com/auth/login",label:"Administer via PARiConnect"},
+    fields:[
+      {id:"paiICN",l:"Inconsistency (ICN)",h:"validity scale T-score",required:true},
+      {id:"paiINF",l:"Infrequency (INF)",h:"validity scale T-score",required:true},
+      {id:"paiNIM",l:"Negative Impression Management (NIM)",h:"validity scale T-score",required:true},
+      {id:"paiPIM",l:"Positive Impression Management (PIM)",h:"validity scale T-score",required:true},
+      {id:"paiSomatic",l:"Somatic Complaints (SOM)",h:"T-score",required:true},
+      {id:"paiAnxiety",l:"Anxiety (ANX)",h:"T-score",required:true},
+      {id:"paiAnxietyRelated",l:"Anxiety-Related Disorders (ARD)",h:"T-score",required:true},
+      {id:"paiDepression",l:"Depression (DEP)",h:"T-score",required:true},
+      {id:"paiMania",l:"Mania (MAN)",h:"T-score",required:true},
+      {id:"paiBorderline",l:"Borderline Features (BOR)",h:"T-score",required:true},
+      {id:"paiSchizophrenia",l:"Schizophrenia (SCZ)",h:"T-score",required:true},
+      {id:"paiOther",l:"Other Elevated Scales / Notes",h:"e.g., ALC, DRG, AGG, SUI, STR, NON, RXR, DOM, WRM"}
+    ]
+  },
   migdas2:{
     name:"Monteiro Interview Guidelines for Diagnosing the Autism Spectrum — Second Edition (MIGDAS-2)",abbr:"MIGDAS-2",type:"interview",primary:true,reporter:"self",estMin:75,
     note:"Semi-structured, conversational diagnostic interview covering interests/activities, sensory processing, language/communication, social relationships and emotional responses, health, work/school competencies, and independent living. Administered directly with the adult client and, when present, a parent or family informant (their perspective is prompted separately within each section). Not scored — findings integrate into the broader diagnostic formulation alongside standardized measures.",
@@ -2379,35 +2398,6 @@ Autism:{
       {id:"eqTotal",l:"Total Score",h:"0–80; ≤30 low, autism-consistent range"}
     ]
   },
-  srs2_self:{
-    name:"Social Responsiveness Scale — Second Edition (SRS-2), Self-Report",abbr:"SRS-2 Self",type:"entry",primary:true,reporter:"self",rowColor:"orange",manualComplete:true,
-    note:"WPS-licensed. Enter T-scores from the Adult Self-Report form. T ≥60 mild-to-moderate range; T ≥76 severe range.",
-    link:{url:"https://hub.wpspublish.com/",label:"Administer via WPS Hub"},
-    fields:[
-      {id:"srs2SelfTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
-      {id:"srs2SelfSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
-      {id:"srs2SelfRRB",l:"Restricted Interests & Repetitive Behavior",h:"subscale T-score"}
-    ]
-  },
-  pai:{
-    name:"Personality Assessment Inventory (PAI)",abbr:"PAI",type:"entry",primary:true,reporter:"self",rowColor:"yellow",manualComplete:true,
-    note:"PAR-licensed. Enter T-scores from the administered PAI. T ≥70 clinically elevated on most scales. Used to characterize co-occurring personality/psychopathology features relevant to differential diagnosis.",
-    link:{url:"https://app.pariconnect.com/auth/login",label:"Administer via PARiConnect"},
-    fields:[
-      {id:"paiICN",l:"Inconsistency (ICN)",h:"validity scale T-score",required:true},
-      {id:"paiINF",l:"Infrequency (INF)",h:"validity scale T-score",required:true},
-      {id:"paiNIM",l:"Negative Impression Management (NIM)",h:"validity scale T-score",required:true},
-      {id:"paiPIM",l:"Positive Impression Management (PIM)",h:"validity scale T-score",required:true},
-      {id:"paiSomatic",l:"Somatic Complaints (SOM)",h:"T-score",required:true},
-      {id:"paiAnxiety",l:"Anxiety (ANX)",h:"T-score",required:true},
-      {id:"paiAnxietyRelated",l:"Anxiety-Related Disorders (ARD)",h:"T-score",required:true},
-      {id:"paiDepression",l:"Depression (DEP)",h:"T-score",required:true},
-      {id:"paiMania",l:"Mania (MAN)",h:"T-score",required:true},
-      {id:"paiBorderline",l:"Borderline Features (BOR)",h:"T-score",required:true},
-      {id:"paiSchizophrenia",l:"Schizophrenia (SCZ)",h:"T-score",required:true},
-      {id:"paiOther",l:"Other Elevated Scales / Notes",h:"e.g., ALC, DRG, AGG, SUI, STR, NON, RXR, DOM, WRM"}
-    ]
-  },
   sassi:{
     name:"Survey of Autistic Strengths, Skills, and Interests — Adult Version (SASSI)",abbr:"SASSI",type:"interview",primary:false,reporter:"self",estMin:20,
     note:"Woods & Estes (2023). Strengths-based interview questions meant to be asked as part of a larger clinical interview, aimed at identifying strengths commonly associated with (but not exclusive to) autism. Responses are not diagnostic of autism on their own.",
@@ -2424,6 +2414,16 @@ Autism:{
       {id:"cognition",label:"Cognition",ph:"How are you at detecting patterns?\nHow are you at figuring out how things work? Fixing things?\nHave you noticed anything interesting about your memory?\nDid you start reading at an early age?\nHow well do you do with categorizing and organizing information?\nDo you notice details that other people miss?\nHave people commented on any unique cognitive skills that you have?"},
       {id:"animals",label:"Connecting with Animals",ph:"How would you describe your ability to connect with animals?"},
       {id:"other",label:"Other",ph:"What other talents or skills do you have?\nDo you have any other special abilities, talents, or strengths that you associate with autism?"}
+    ]
+  },
+  srs2_self:{
+    name:"Social Responsiveness Scale — Second Edition (SRS-2), Self-Report",abbr:"SRS-2 Self",type:"entry",primary:true,reporter:"self",rowColor:"orange",manualComplete:true,
+    note:"WPS-licensed. Enter T-scores from the Adult Self-Report form. T ≥60 mild-to-moderate range; T ≥76 severe range.",
+    link:{url:"https://hub.wpspublish.com/",label:"Administer via WPS Hub"},
+    fields:[
+      {id:"srs2SelfTotal",l:"Total T-score",h:"≥60 mild-moderate, ≥76 severe"},
+      {id:"srs2SelfSCI",l:"Social Communication & Interaction",h:"subscale T-score"},
+      {id:"srs2SelfRRB",l:"Restricted Interests & Repetitive Behavior",h:"subscale T-score"}
     ]
   },
   rmet:{
