@@ -32,7 +32,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.05 }}
-              className="lg:absolute lg:left-12 lg:top-[3rem] lg:w-[clamp(18rem,48svh,38rem)]"
+              className="lg:absolute lg:left-12 lg:top-[3rem] lg:w-[clamp(18rem,56svh,76rem)]"
             >
               <Image
                 src="/blobs1.png"
@@ -46,7 +46,7 @@ export function HeroSection() {
             </motion.div>
 
             {/* Heading group */}
-            <div className="space-y-1 lg:absolute lg:left-12 lg:bottom-[clamp(1rem,12svh,10rem)] lg:max-w-none">
+            <div className="space-y-1 lg:absolute lg:left-12 lg:bottom-[clamp(0.5rem,4svh,10rem)] lg:max-w-none">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}

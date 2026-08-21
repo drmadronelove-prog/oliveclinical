@@ -6,9 +6,9 @@ import { OliveLockup } from "@/components/olive-logo"
 export function SiteHeader() {
   return (
     <header
-      className="no-print w-full border-b border-[rgba(11,37,69,0.10)] sticky top-0 z-50"
+      className="no-print w-full sticky top-0 z-50"
       style={{
-        background: "rgba(232,232,232,0.72)",
+        background: "var(--paper)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
       }}
