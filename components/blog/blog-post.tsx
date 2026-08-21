@@ -239,6 +239,36 @@ export function BlogPostArticle({ post }: { post: BlogPost }) {
           }
         })}
       </div>
+
+      {/* Author bio — same on every post, since Olive Clinical's blog has a single author */}
+      <footer
+        className="mt-14 pt-8"
+        style={{ borderTop: `1px solid ${C.rule}` }}
+      >
+        <p
+          className="text-[0.7rem] mb-3"
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontWeight: 500,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: C.slate,
+          }}
+        >
+          About the author
+        </p>
+        <p
+          className="text-[0.98rem] leading-relaxed"
+          style={{ color: C.ink }}
+        >
+          <strong>Dr. Madrone Love, PsyD (PSY35899)</strong> is a licensed clinical
+          psychologist practicing in the Bay Area, specializing in neurodivergent adults,
+          OCD, and trauma. She is an adjunct professor and the Director of the Sati Center
+          Certificate Program in Buddhist Studies. Her work integrates contemporary
+          clinical psychology with mindfulness, attachment, and a deep respect for
+          neurodivergent ways of being in the world.
+        </p>
+      </footer>
     </article>
   )
 }

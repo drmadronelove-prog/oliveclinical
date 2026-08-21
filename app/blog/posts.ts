@@ -255,10 +255,6 @@ export const posts: BlogPost[] = [
           "Murray, D., Lesser, M., & Lawson, W. (2005). Attention, monotropism and the diagnostic criteria for autism. Autism, 9(2), 139–156.",
         ],
       },
-      {
-        type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Berkeley and San Francisco, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
-      },
     ],
   },
   {
@@ -436,10 +432,6 @@ export const posts: BlogPost[] = [
           "r/OCD: \"New A24 film The Drama is incredibly triggering.\" Reddit. https://www.reddit.com/r/OCD/comments/1seadrc/new_a24_film_the_drama_is_incredibly_triggering/",
           "International OCD Foundation. Relationship OCD overview. https://iocdf.org/expert-opinions/relationship-ocd/",
         ],
-      },
-      {
-        type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
       },
     ],
   },
@@ -627,10 +619,6 @@ export const posts: BlogPost[] = [
           "Sung, M., Cueva, M., & Egusa, C. (2025, September 24). AI Prophets and Spiritual Delusions. Close All Tabs, KQED. kqed.org/news/12057327/ai-prophets-and-spiritual-delusions",
           "Cheng, M., Lee, C., Khadpe, P., Yu, S., Han, D., & Jurafsky, D. (2026). Sycophantic AI decreases prosocial intentions and promotes dependence. Science, 391, eaec8352. https://doi.org/10.1126/science.aec8352",
         ],
-      },
-      {
-        type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
       },
     ],
   },
@@ -1015,10 +1003,6 @@ export const posts: BlogPost[] = [
         type: "paragraph",
         text: "Your relationship to time has its own color. It belongs in the spectrum. And the spectrum, all of it together, is closer to the truth of human experience than any single color held up alone and called the light.",
       },
-      {
-        type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
-      },
     ],
   },
   {
@@ -1166,10 +1150,6 @@ export const posts: BlogPost[] = [
       {
         type: "paragraph",
         text: "This is normalizing in the deepest sense. Not \"it is fine, do not worry about it,\" but rather: what you have been experiencing has a shape and a logic. You are not broken. You are not making excuses. You have a nervous system with specific conditions for engagement, and learning those conditions, and building a life that honors them rather than fights them, is not self-indulgence. It is self-knowledge. And self-knowledge, for neurodivergent people who have spent years being told their experience is wrong, is one of the most subversive and healing things there is.",
-      },
-      {
-        type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
       },
     ],
   },
@@ -1816,10 +1796,6 @@ export const posts: BlogPost[] = [
         heading: "A small invitation",
         text: "If something in this list catches your attention, consider that the recognition you may feel is not coincidence. It is your nervous system noticing a kindred structure. Pay attention to what you find pleasurable in narrative form. The pattern that emerges may tell you more about how your mind works, and what it needs from culture, than any list of diagnostic criteria ever has.",
       },
-      {
-        type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
-      },
     ],
   },
   {
@@ -1979,10 +1955,6 @@ export const posts: BlogPost[] = [
           "Clark, D. A. (2004). Cognitive-Behavioral Therapy for OCD. Guilford Press.",
         ],
       },
-      {
-        type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899), is a licensed clinical psychologist in private practice in Oakland, specializing in neurodivergent adults, OCD, and trauma. She is an Assistant Professor of Integral Counseling Psychology at the California Institute of Integral Studies and serves as Director of the Sati Center for Buddhist Studies. Her work integrates contemporary clinical psychology with mindfulness, attachment, and a deep respect for neurodivergent ways of being in the world.",
-      },
     ],
   },
   {
@@ -2139,10 +2111,6 @@ export const posts: BlogPost[] = [
           "\"Stream It or Skip It: Couples Therapy Season 5.\" MSN Entertainment, May 2026.",
           "Walsh, M., & Parker, C. \"Autism and Couples Therapy: A Solution-Focused Approach.\" Presented at NEAFAST. Fairfield University School of Education and Human Development, 2024.",
         ],
-      },
-      {
-        type: "footer-note",
-        text: "Dr. Madrone Love, PsyD (PSY35899) is a licensed clinical psychologist in California specializing in neurodivergent adults, OCD, and complex trauma. She practices at Olive Clinical, 541 Athol, Oakland CA 94606, and hosts the Multiracial Mental Health podcast.",
       },
     ],
   },
