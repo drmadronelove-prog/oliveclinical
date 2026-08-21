@@ -45,7 +45,7 @@ export function NewsletterSection() {
     <section
       id="newsletter"
       className="relative px-5 sm:px-8 lg:px-12 py-20 lg:py-28"
-      style={{ backgroundColor: "var(--linen)", backgroundImage: "var(--bg-lines)" }}
+      style={{ background: "var(--linen)" }}
     >
       <div className="max-w-[1400px] mx-auto">
         <motion.div
