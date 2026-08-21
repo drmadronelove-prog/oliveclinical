@@ -17,6 +17,7 @@ import { OCTRS } from "@/components/assessments/octrs"
 import { AQ10 } from "@/components/assessments/aq10"
 import { DESB } from "@/components/assessments/desb"
 import { DSS } from "@/components/assessments/dss"
+import { SCSSF } from "@/components/assessments/scssf"
 import { FeatureCardGrid, type FeatureCard } from "@/components/feature-card-grid"
 
 // ── Neurodiversity map data ────────────────────────────────────────────────────
@@ -289,6 +290,15 @@ const SCREENERS: FeatureCard[] = [
     modalTitle: "DSS: Dissociative Symptoms Scale",
     modalSubtitle: "20-item self-report measure · Carlson et al., 2018.",
     content: <DSS />,
+  },
+  {
+    kind: "modal",
+    title: "SCS-SF",
+    category: "Self-compassion",
+    footerLabel: "Take scale",
+    modalTitle: "SCS-SF: Self-Compassion Scale (Short Form)",
+    modalSubtitle: "12-item self-compassion measure · Raes, Pommier, Neff & Van Gucht, 2011.",
+    content: <SCSSF />,
   },
   {
     kind: "link",
