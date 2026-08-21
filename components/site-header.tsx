@@ -8,7 +8,8 @@ export function SiteHeader() {
     <header
       className="no-print w-full sticky top-0 z-50"
       style={{
-        background: "var(--paper)",
+        backgroundColor: "var(--paper)",
+        backgroundImage: "var(--bg-lines)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
       }}

@@ -70,6 +70,15 @@
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: rgba(11, 37, 69, 0.18);
   --sidebar-ring: var(--plum);
+
+  /* Subtle ruled-paper texture layered over paper/linen page backgrounds. */
+  --bg-lines: repeating-linear-gradient(
+    to bottom,
+    rgba(91, 110, 136, 0.07) 0,
+    rgba(91, 110, 136, 0.07) 1px,
+    transparent 1px,
+    transparent 6px
+  );
 }
 
 .dark {
@@ -183,6 +192,13 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Applies the ruled-paper texture wherever the bg-background utility is
+   used — the utility itself only sets background-color, so this adds the
+   image layer on top without needing to touch every call site. */
+.bg-background {
+  background-image: var(--bg-lines);
 }
 
 /* Drop cap for blog article opening paragraphs — ink on paper. */

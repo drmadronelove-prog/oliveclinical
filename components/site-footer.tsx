@@ -9,8 +9,8 @@ export function SiteFooter() {
         color: "rgba(11,37,69,0.65)",
         fontSize: "0.78rem",
         letterSpacing: "0.02em",
-        background:
-          "linear-gradient(180deg, #efefef 0%, #eaeaea 50%, #e4e4e4 100%)",
+        backgroundImage:
+          "var(--bg-lines), linear-gradient(180deg, #efefef 0%, #eaeaea 50%, #e4e4e4 100%)",
         boxShadow:
           "0 -2px 10px rgba(11,37,69,0.05), inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -1px 0 rgba(11,37,69,0.08)",
       }}

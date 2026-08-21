@@ -40,7 +40,7 @@ export default function PsychotherapyPage() {
     <main className="relative bg-background overflow-x-hidden">
       <section
         className="relative"
-        style={{ minHeight: "100svh", background: "var(--paper)" }}
+        style={{ minHeight: "100svh", backgroundColor: "var(--paper)", backgroundImage: "var(--bg-lines)" }}
       >
         <div className="relative px-5 sm:px-6 lg:px-12 pt-8 sm:pt-10 lg:pt-12 pb-20 flex flex-col items-center gap-10 sm:gap-12">
           <motion.div

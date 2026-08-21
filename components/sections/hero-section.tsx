@@ -10,7 +10,7 @@ export function HeroSection() {
     <section
       id="home"
       className="relative"
-      style={{ minHeight: "100svh", background: "var(--paper)" }}
+      style={{ minHeight: "100svh", backgroundColor: "var(--paper)", backgroundImage: "var(--bg-lines)" }}
     >
       {/* Main content — same max-w-[1400px] px frame as the nav so the
           blob/heading left edge lines up with the lockup and the card
