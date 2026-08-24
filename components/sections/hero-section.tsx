@@ -46,7 +46,7 @@ export function HeroSection() {
             </motion.div>
 
             {/* Heading group */}
-            <div className="space-y-1 lg:absolute lg:left-12 lg:bottom-[clamp(3rem,10svh,10rem)] lg:max-w-none">
+            <div className="space-y-1 lg:absolute lg:left-12 lg:bottom-[calc(50%-17.04rem)] lg:max-w-none">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
