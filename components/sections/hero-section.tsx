@@ -32,7 +32,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.05 }}
-              className="lg:absolute lg:left-12 lg:top-[3rem] lg:w-[clamp(18rem,46svh,76rem)]"
+              className="lg:absolute lg:left-12 lg:top-[calc(50%-16.67rem)] lg:w-[21rem]"
             >
               <Image
                 src="/blobs1.png"
