@@ -15,27 +15,6 @@ function CTAButton({ href, children, className = "" }: { href: string; children:
   )
 }
 
-function Placeholder({ children }: { children: React.ReactNode }) {
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        fontFamily: "var(--font-mono)",
-        fontSize: "0.75em",
-        lineHeight: 1.5,
-        color: "var(--plum)",
-        background: "rgba(197,165,114,0.16)",
-        border: "1px dashed var(--gold)",
-        borderRadius: "4px",
-        padding: "0.1em 0.5em",
-        marginLeft: "0.4em",
-      }}
-    >
-      {children}
-    </span>
-  )
-}
-
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <h2
@@ -72,8 +51,8 @@ const ASSESS_FOR = [
     body: "Evaluation for attention, focus, and executive functioning differences in adults, including people who were overlooked earlier in life.",
   },
   {
-    title: "Pathological Demand Avoidance (PDA)",
-    body: "Assessment for PDA profiles, a less widely recognized presentation that many providers don't screen for.",
+    title: "OCD",
+    body: "Assessment for obsessive-compulsive disorder in adults, including presentations that go beyond visible compulsions and are often missed.",
   },
 ]
 
@@ -87,10 +66,7 @@ const PROCESS_STEPS = [
   {
     title: "Intake and questionnaires",
     body: (
-      <>
-        Before we meet, you'll complete some background forms and standardized questionnaires at your own pace.
-        <Placeholder>Dr. Love to confirm which measures or how long</Placeholder>
-      </>
+      <>Before we meet, you'll complete some background forms and standardized questionnaires at your own pace.</>
     ),
   },
   {
@@ -99,7 +75,6 @@ const PROCESS_STEPS = [
       <>
         A collaborative clinical interview conducted over telehealth, at a pace that works for you. Breaks, stimming,
         camera off — all welcome.
-        <Placeholder>Confirm number/length of sessions</Placeholder>
       </>
     ),
   },
@@ -109,7 +84,6 @@ const PROCESS_STEPS = [
       <>
         We review what I found together, and you receive a comprehensive written report — included with every
         assessment — that you can use for your own understanding and for accommodations where needed.
-        <Placeholder>Confirm report turnaround time</Placeholder>
       </>
     ),
   },
@@ -122,10 +96,9 @@ const PROCESS_STEPS = [
 ]
 
 const PRACTICAL_DETAILS = [
-  { label: "Format", value: "Telehealth", placeholder: "Confirm whether any in-person is offered" },
-  { label: "Locations served", value: "San Francisco, Oakland & Berkeley, CA", placeholder: "Confirm whether CA-wide" },
-  { label: "Ages", value: "Adults", placeholder: "Confirm minimum age" },
-  { label: "Payment", value: null, placeholder: "Private pay / insurance / superbill details — Dr. Love to fill in" },
+  { label: "Format", value: "Telehealth" },
+  { label: "Locations served", value: "San Francisco, Oakland & Berkeley, CA" },
+  { label: "Ages", value: "Adults" },
 ]
 
 export default function AssessmentsPage() {
@@ -166,7 +139,7 @@ export default function AssessmentsPage() {
                 marginTop: "1rem",
               }}
             >
-              Affirming, unhurried evaluations for autism, ADHD, and PDA — from someone who assumes you know your own
+              Affirming, unhurried evaluations for autism, ADHD, and OCD — from someone who assumes you know your own
               mind.
             </p>
             <div className="mt-8">
@@ -233,50 +206,6 @@ export default function AssessmentsPage() {
               }}
             >
               If any of this resonates, you're in a good place to start.
-            </p>
-          </motion.div>
-
-          {/* 3. A note on being taken seriously */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.6 }}
-            className="w-full max-w-2xl rounded-2xl px-6 py-8 sm:px-12 sm:py-12"
-            style={{
-              backgroundColor: "rgba(159,179,176,0.16)",
-              border: "1px solid rgba(159,179,176,0.35)",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "var(--font-display)",
-                fontStyle: "italic",
-                fontWeight: 400,
-                fontSize: "clamp(1.15rem, 2.2vw, 1.45rem)",
-                lineHeight: 1.55,
-                color: "var(--ink)",
-                textAlign: "center",
-              }}
-            >
-              &ldquo;Many neurodivergent adults I've assessed came to me carrying a real fear of being dismissed. Too
-              often, providers or family members have reacted to their questions about autism or ADHD with
-              skepticism or outdated stereotypes. I start from a different place: I take your self-knowledge
-              seriously, and I see assessment as a collaborative process of understanding — not a test you have to
-              pass.&rdquo;
-            </p>
-            <p
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.75rem",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--slate)",
-                textAlign: "center",
-                marginTop: "1.5rem",
-              }}
-            >
-              — Dr. Madrone Love, PsyD
             </p>
           </motion.div>
 
@@ -544,22 +473,6 @@ export default function AssessmentsPage() {
                 </p>
               </div>
             </div>
-            <p
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "0.88rem",
-                lineHeight: 1.6,
-                color: "rgba(11,37,69,0.65)",
-                textAlign: "center",
-                marginTop: "1.5rem",
-              }}
-            >
-              What the report covers
-              <Placeholder>
-                Dr. Love to confirm: e.g. diagnostic findings, clinical reasoning, strengths, and tailored
-                recommendations
-              </Placeholder>
-            </p>
           </motion.div>
 
           {/* 8. Practical details */}
@@ -596,7 +509,6 @@ export default function AssessmentsPage() {
                     }}
                   >
                     {d.value}
-                    <Placeholder>{d.placeholder}</Placeholder>
                   </dd>
                 </div>
               ))}
