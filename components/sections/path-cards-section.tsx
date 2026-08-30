@@ -14,7 +14,7 @@ const CARDS = [
     title: "Assessment",
     description: "ADHD, autism, and co-occurring evaluations.",
     linkText: "Learn more",
-    href: "/tests",
+    href: "/assessments",
   },
   {
     title: "Free resources",

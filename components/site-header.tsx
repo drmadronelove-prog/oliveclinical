@@ -9,7 +9,7 @@ type NavGroup = { heading: string; items: NavLink[] }
 
 const SERVICES_LINKS: NavLink[] = [
   { label: "Psychotherapy", href: "/psychotherapy" },
-  { label: "Neuroinclusive Assessments", href: "/tests" },
+  { label: "Diagnostic Assessments", href: "/assessments" },
 ]
 
 const RESOURCES_GROUPS: NavGroup[] = [
@@ -25,6 +25,7 @@ const RESOURCES_GROUPS: NavGroup[] = [
   {
     heading: "Tools",
     items: [
+      { label: "Neuroinclusive Assessments", href: "/tests" },
       { label: "Therapeutic Tools", href: "/tools" },
       { label: "Brain Games", href: "/brain-games" },
     ],
