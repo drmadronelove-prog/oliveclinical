@@ -67,7 +67,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25 }}
-          className="w-full max-w-sm sm:max-w-md mx-auto xl:max-w-none xl:flex-1 xl:min-w-0 xl:mx-0"
+          className="w-full max-w-md sm:max-w-lg lg:max-w-2xl mx-auto xl:max-w-none xl:flex-1 xl:min-w-0 xl:mx-0"
         >
           <Image
             src="/hero-people-illustration.png"
@@ -76,7 +76,6 @@ export function HeroSection() {
             width={1152}
             height={550}
             className="w-full h-auto select-none pointer-events-none xl:ml-auto"
-            style={{ maxWidth: "32rem" }}
           />
         </motion.div>
       </div>
