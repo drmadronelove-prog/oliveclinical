@@ -19,7 +19,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="w-[16rem] sm:w-[19rem] lg:w-[22rem]"
+            className="w-[16rem] sm:w-[19rem] lg:w-[24rem] xl:w-[26rem] 2xl:w-[28rem]"
           >
             <Image
               src="/blobs1.png"
@@ -63,8 +63,10 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Photo bubbles — mirror the blob cluster's geometry to balance the page */}
-        <div className="w-full max-w-sm sm:max-w-md mx-auto lg:max-w-none lg:mx-0 lg:flex-1 lg:min-w-0">
+        {/* Photo bubbles — mirror the blob cluster's geometry to balance the page.
+            Capped so the cluster keeps a steady size relationship to the blobs on
+            wide screens instead of growing with every extra pixel of free space. */}
+        <div className="w-full max-w-sm sm:max-w-md mx-auto lg:mr-0 lg:ml-auto lg:flex-1 lg:min-w-0 lg:max-w-[34rem] 2xl:max-w-[38rem]">
           <HeroPhotoBubbles />
         </div>
       </div>

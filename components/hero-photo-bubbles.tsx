@@ -21,19 +21,22 @@ type Bubble = {
   objectPosition: string
 }
 
+// Normalised so the circles' bounding box fills the container edge to edge —
+// the source art carries uneven padding, which mirroring would otherwise flip
+// into a visible left/right margin mismatch against the blobs.
 const BUBBLES: Bubble[] = [
   // Large tan blob, mirrored — the anchor of the cluster.
-  { src: "/image 6.png", left: 31.9, top: 36.5, size: 42.4, ring: "var(--gold)", objectPosition: "52% 30%" },
+  { src: "/image 6.png", left: 27.82, top: 38.6, size: 47.37, ring: "var(--gold)", objectPosition: "52% 30%" },
   // Mauve blob, mirrored.
-  { src: "/image 1.jpeg", left: 58.7, top: 5.1, size: 33.0, ring: "var(--plum)", objectPosition: "52% 26%" },
+  { src: "/image 1.jpeg", left: 57.77, top: 3.52, size: 36.87, ring: "var(--plum)", objectPosition: "52% 26%" },
   // Rose blob, mirrored.
-  { src: "/image 4.jpeg", left: 10.1, top: 25.6, size: 26.6, ring: "var(--rose)", objectPosition: "46% 26%" },
+  { src: "/image 4.jpeg", left: 3.46, top: 26.42, size: 29.72, ring: "var(--rose)", objectPosition: "46% 26%" },
   // Pink blob, mirrored.
-  { src: "/image 2.jpeg", left: 7.0, top: 64.9, size: 23.4, ring: "var(--dusk)", objectPosition: "46% 22%" },
+  { src: "/image 2.jpeg", left: 0, top: 70.34, size: 26.15, ring: "var(--dusk)", objectPosition: "46% 22%" },
   // Sage blob, mirrored.
-  { src: "/image 3.jpeg", left: 77.6, top: 61.6, size: 18.9, ring: "var(--glass)", objectPosition: "52% 24%" },
+  { src: "/image 3.jpeg", left: 78.88, top: 66.65, size: 21.12, ring: "var(--glass)", objectPosition: "52% 24%" },
   // Deep navy blob, mirrored.
-  { src: "/image 5.jpeg", left: 35.2, top: 9.8, size: 18.9, ring: "var(--slate)", objectPosition: "50% 24%" },
+  { src: "/image 5.jpeg", left: 31.51, top: 8.77, size: 21.12, ring: "var(--slate)", objectPosition: "50% 24%" },
 ]
 
 export function HeroPhotoBubbles() {
