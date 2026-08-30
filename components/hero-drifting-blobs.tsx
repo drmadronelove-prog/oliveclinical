@@ -24,12 +24,19 @@ const BLOBS = [
   { src: "/blob-6.png", left: 45.843, top: 10.298, w: 19.24, h: 19.851 },
 ]
 
+/**
+ * Quarter turn applied to every shape. The artwork's sheen sits upper-left at
+ * ~127°; turning it clockwise brings it to ~37° — upper-right, matching where
+ * the pimento sits in the Olive Clinical mark, so the shapes read as olives.
+ */
+const ROTATION = 90
+
 /** Seconds of stillness after load before they start moving. */
 const SETTLE_DELAY = 1.6
 /** Seconds spent easing from stationary up to full drift speed. */
 const SPIN_UP = 2.5
 /** Target drift speed, px/sec — slow enough to read as floating. */
-const SPEED = 26
+const SPEED = 27.3
 
 type Body = {
   x: number
@@ -75,7 +82,7 @@ export function HeroDriftingBlobs({ homeSelector }: { homeSelector: string }) {
         el.style.height = `${h}px`
         const x = originX + (b.left / 100) * scaleW
         const y = originY + (b.top / 100) * scaleH
-        el.style.transform = `translate3d(${x}px, ${y}px, 0)`
+        el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${ROTATION}deg)`
         // Give each a distinct heading so they fan out rather than travel as a pack.
         const angle = (i / BLOBS.length) * Math.PI * 2 + Math.random() * 0.9
         return { x, y, r: Math.min(w, h) / 2, vx: Math.cos(angle), vy: Math.sin(angle), el }
@@ -176,7 +183,7 @@ export function HeroDriftingBlobs({ homeSelector }: { homeSelector: string }) {
           // Renormalise so numeric drift can't bleed speed away.
           const m = Math.hypot(b.vx, b.vy) || 1
           b.vx /= m; b.vy /= m
-          b.el.style.transform = `translate3d(${b.x}px, ${b.y}px, 0)`
+          b.el.style.transform = `translate3d(${b.x}px, ${b.y}px, 0) rotate(${ROTATION}deg)`
         }
       }
 

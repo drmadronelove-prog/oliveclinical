@@ -60,10 +60,15 @@ export function HeroSection() {
 
         {/* Photo bubbles — mirror the blob cluster's geometry. The row is
             bottom-aligned and the cluster's ink sits flush to this box's lower
-            edge, so the lowest bubble lines up with the bottom of "different." */}
+            edge; the translate then drops it so the lower-left bubble is centred
+            on the subheading. The offset is half the bubble's diameter minus
+            half the text's height — the bubble scales with the container while
+            the text does not, so it needs both a % and a px term to stay exact
+            at every width (13.075% = half of that bubble's 26.15% diameter;
+            41.25px = half the subheading's 82.5px height). */}
         <div
           data-blob-obstacle
-          className="w-full max-w-sm sm:max-w-md mx-auto lg:mr-0 lg:ml-auto lg:flex-1 lg:min-w-0 lg:max-w-[42rem] 2xl:max-w-[46rem]"
+          className="w-full max-w-sm sm:max-w-md mx-auto lg:mr-0 lg:ml-auto lg:flex-1 lg:min-w-0 lg:max-w-[42rem] 2xl:max-w-[46rem] lg:translate-y-[calc(13.075%-41.25px)]"
         >
           <HeroPhotoBubbles />
         </div>

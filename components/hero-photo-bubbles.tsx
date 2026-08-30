@@ -61,7 +61,7 @@ export function HeroPhotoBubbles() {
           <div
             className="relative w-full h-full rounded-full overflow-hidden"
             style={{
-              border: `2px solid ${b.ring}`,
+              border: `2.2px solid ${b.ring}`,
               boxShadow: "0 10px 26px rgba(11,37,69,0.14), 0 2px 6px rgba(11,37,69,0.08)",
             }}
           >
