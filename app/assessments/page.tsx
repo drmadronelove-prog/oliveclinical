@@ -3,82 +3,130 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 
-type StateTrack = {
-  state: string
-  provider: string
-  descriptor: string
-  blurb: string
+function CTAButton({ href, children, className = "" }: { href: string; children: React.ReactNode; className?: string }) {
+  return (
+    <Link
+      href={href}
+      className={`inline-flex items-center justify-center rounded-md px-6 py-3 text-[0.95rem] transition-opacity hover:opacity-90 ${className}`}
+      style={{ fontFamily: "var(--font-body)", fontWeight: 600, background: "var(--gold)", color: "var(--ink)" }}
+    >
+      {children}
+    </Link>
+  )
 }
 
-const TRACKS: StateTrack[] = [
+function Placeholder({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        fontFamily: "var(--font-mono)",
+        fontSize: "0.75em",
+        lineHeight: 1.5,
+        color: "var(--plum)",
+        background: "rgba(197,165,114,0.16)",
+        border: "1px dashed var(--gold)",
+        borderRadius: "4px",
+        padding: "0.1em 0.5em",
+        marginLeft: "0.4em",
+      }}
+    >
+      {children}
+    </span>
+  )
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2
+      style={{
+        fontFamily: "var(--font-display)",
+        fontWeight: 500,
+        fontSize: "clamp(1.4rem, 3vw, 1.9rem)",
+        color: "var(--ink)",
+        letterSpacing: "-0.018em",
+        marginBottom: "1.5rem",
+        textAlign: "center",
+      }}
+    >
+      {children}
+    </h2>
+  )
+}
+
+const RECOGNITION_ITEMS = [
+  "You've long felt different in ways you couldn't quite name.",
+  "You've been told you're “too articulate” or “too successful” to be autistic or ADHD.",
+  "Earlier providers focused on anxiety or depression, but it never fully explained things.",
+  "You mask to get through work and social situations, and it's exhausting.",
+  "You've hesitated to seek an assessment because you feared being dismissed or stereotyped.",
+]
+
+const ASSESS_FOR = [
   {
-    state: "California",
-    provider: "Madrone Love, PsyD",
-    descriptor: "Licensed Psychologist",
-    blurb: "ADHD, autism, and OCD assessments for adults, available via telehealth throughout California.",
+    title: "Autism Spectrum (ASD)",
+    body: "Identity-affirming autism assessment for adults, including those with high-masking presentations that are often missed or misread.",
   },
   {
-    state: "Colorado",
-    provider: "Lindsay Moskowitz, PsyD",
-    descriptor: "Olive Clinical Network Provider",
-    blurb: "ADHD, autism, and OCD assessments for adults, available via telehealth throughout Colorado.",
+    title: "ADHD",
+    body: "Evaluation for attention, focus, and executive functioning differences in adults, including people who were overlooked earlier in life.",
+  },
+  {
+    title: "Pathological Demand Avoidance (PDA)",
+    body: "Assessment for PDA profiles, a less widely recognized presentation that many providers don't screen for.",
   },
 ]
 
 const PROCESS_STEPS = [
   {
-    title: "Consultation",
-    body: "A brief call to talk through what you're noticing, your goals for the assessment, and whether it's a good fit.",
+    title: "Reach out",
+    body: (
+      <>We start with a brief consultation so you can share what's bringing you in and ask questions. No referral needed.</>
+    ),
   },
   {
-    title: "Clinical interview",
-    body: "An in-depth conversation about your developmental, academic, occupational, and personal history.",
+    title: "Intake and questionnaires",
+    body: (
+      <>
+        Before we meet, you'll complete some background forms and standardized questionnaires at your own pace.
+        <Placeholder>Dr. Love to confirm which measures or how long</Placeholder>
+      </>
+    ),
   },
   {
-    title: "Standardized measures",
-    body: "Validated questionnaires and rating scales relevant to the conditions being assessed.",
+    title: "The assessment",
+    body: (
+      <>
+        A collaborative clinical interview conducted over telehealth, at a pace that works for you. Breaks, stimming,
+        camera off — all welcome.
+        <Placeholder>Confirm number/length of sessions</Placeholder>
+      </>
+    ),
   },
   {
-    title: "Feedback & report",
-    body: "A feedback session to review results together, followed by a written report you can share with providers, schools, or employers as needed.",
+    title: "Findings and report",
+    body: (
+      <>
+        We review what I found together, and you receive a comprehensive written report — included with every
+        assessment — that you can use for your own understanding and for accommodations where needed.
+        <Placeholder>Confirm report turnaround time</Placeholder>
+      </>
+    ),
+  },
+  {
+    title: "Where to go next",
+    body: (
+      <>An assessment is a beginning, not an endpoint. I'll help you think through next steps, whether that's therapy, accommodations, or simply a clearer understanding of yourself.</>
+    ),
   },
 ]
 
-const FAQS = [
-  {
-    q: "What conditions do you assess for?",
-    a: "Olive Clinical provides diagnostic assessments for ADHD, autism (ASD), and OCD, including evaluation of co-occurring conditions where relevant.",
-  },
-  {
-    q: "Do you offer assessments in Colorado?",
-    a: "Yes. Diagnostic assessments for adults in Colorado are provided by Dr. Lindsay Moskowitz, PsyD. Ongoing psychotherapy is currently only available to clients in California.",
-  },
-  {
-    q: "Are assessments available for children or teens?",
-    a: "Not currently — diagnostic assessments are available for adults (18+) only.",
-  },
-  {
-    q: "Are these assessments conducted virtually?",
-    a: "Yes. All diagnostic assessments are conducted via telehealth, so you can complete the process from home.",
-  },
-  {
-    q: "I'm not sure if I need a full assessment yet — is there somewhere to start?",
-    a: "Our free self-report screening tools are a good starting point if you want to explore before booking a full evaluation.",
-  },
+const PRACTICAL_DETAILS = [
+  { label: "Format", value: "Telehealth", placeholder: "Confirm whether any in-person is offered" },
+  { label: "Locations served", value: "San Francisco, Oakland & Berkeley, CA", placeholder: "Confirm whether CA-wide" },
+  { label: "Ages", value: "Adults", placeholder: "Confirm minimum age" },
+  { label: "Payment", value: null, placeholder: "Private pay / insurance / superbill details — Dr. Love to fill in" },
 ]
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQS.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: f.a,
-    },
-  })),
-}
 
 export default function AssessmentsPage() {
   return (
@@ -87,8 +135,9 @@ export default function AssessmentsPage() {
         className="relative"
         style={{ minHeight: "100svh", backgroundColor: "var(--paper)", backgroundImage: "var(--bg-lines)" }}
       >
-        <div className="relative px-5 sm:px-6 lg:px-12 pt-8 sm:pt-10 lg:pt-12 pb-20 flex flex-col items-center gap-12 sm:gap-14">
-          {/* Hero */}
+        <div className="relative px-5 sm:px-6 lg:px-12 pt-8 sm:pt-10 lg:pt-12 pb-24 flex flex-col items-center gap-16 sm:gap-20">
+
+          {/* 1. Hero */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -98,147 +147,211 @@ export default function AssessmentsPage() {
             <h1
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(1.9rem, 6vw, 4.2rem)",
+                fontSize: "clamp(1.9rem, 5.2vw, 3.4rem)",
                 fontWeight: 400,
                 color: "var(--ink)",
-                lineHeight: 1.05,
-                letterSpacing: "-0.025em",
+                lineHeight: 1.12,
+                letterSpacing: "-0.02em",
                 margin: 0,
               }}
             >
-              Diagnostic{" "}
-              <span
-                className="italic"
-                style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--plum)" }}
-              >
-                assessments
-              </span>
+              Neurodivergent assessment for adults
             </h1>
             <p
               style={{
                 fontFamily: "var(--font-body)",
-                fontSize: "clamp(1.1rem, 1.8vw, 1.4rem)",
+                fontSize: "clamp(1.05rem, 1.8vw, 1.3rem)",
                 color: "var(--ink)",
-                lineHeight: 1.4,
-                marginTop: "0.9rem",
+                lineHeight: 1.5,
+                marginTop: "1rem",
               }}
             >
-              Virtual evaluations for ADHD, autism, and OCD.
+              Affirming, unhurried evaluations for autism, ADHD, and PDA — from someone who assumes you know your own
+              mind.
+            </p>
+            <div className="mt-8">
+              <CTAButton href="/contact">Book a consultation</CTAButton>
+            </div>
+          </motion.div>
+
+          {/* 2. You may recognize yourself here */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-xl"
+          >
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "1.05rem",
+                lineHeight: 1.6,
+                color: "var(--ink)",
+                textAlign: "center",
+                marginBottom: "1.75rem",
+              }}
+            >
+              Many of the adults I work with arrive after years of sensing something didn't fit. You might recognize
+              some of this:
+            </p>
+            <ul className="flex flex-col gap-3">
+              {RECOGNITION_ITEMS.map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: "9999px",
+                      background: "var(--gold)",
+                      flexShrink: 0,
+                      marginTop: "0.55em",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      fontSize: "0.98rem",
+                      lineHeight: 1.6,
+                      color: "rgba(11,37,69,0.82)",
+                    }}
+                  >
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "1rem",
+                lineHeight: 1.6,
+                color: "var(--ink)",
+                textAlign: "center",
+                marginTop: "1.75rem",
+              }}
+            >
+              If any of this resonates, you're in a good place to start.
+            </p>
+          </motion.div>
+
+          {/* 3. A note on being taken seriously */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-2xl rounded-2xl px-6 py-8 sm:px-12 sm:py-12"
+            style={{
+              backgroundColor: "rgba(159,179,176,0.16)",
+              border: "1px solid rgba(159,179,176,0.35)",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--font-display)",
+                fontStyle: "italic",
+                fontWeight: 400,
+                fontSize: "clamp(1.15rem, 2.2vw, 1.45rem)",
+                lineHeight: 1.55,
+                color: "var(--ink)",
+                textAlign: "center",
+              }}
+            >
+              &ldquo;Many neurodivergent adults I've assessed came to me carrying a real fear of being dismissed. Too
+              often, providers or family members have reacted to their questions about autism or ADHD with
+              skepticism or outdated stereotypes. I start from a different place: I take your self-knowledge
+              seriously, and I see assessment as a collaborative process of understanding — not a test you have to
+              pass.&rdquo;
             </p>
             <p
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "0.78rem",
-                letterSpacing: "0.12em",
+                fontSize: "0.75rem",
+                letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                color: "rgba(11,37,69,0.55)",
-                marginTop: "1.4rem",
+                color: "var(--slate)",
+                textAlign: "center",
+                marginTop: "1.5rem",
               }}
             >
-              Telehealth · Adults 18+
+              — Dr. Madrone Love, PsyD
             </p>
           </motion.div>
 
-          {/* State tracks */}
+          {/* 4. What I assess for */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6"
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-4xl"
           >
-            {TRACKS.map((t) => (
-              <div
-                key={t.state}
-                className="flex flex-col p-6 sm:p-7 rounded-xl"
-                style={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid var(--border)",
-                  borderRadius: "12px",
-                  boxShadow: "0 3px 10px rgba(11,37,69,0.08), 0 1px 3px rgba(11,37,69,0.05)",
-                }}
-              >
-                <p
+            <SectionHeading>What I assess for</SectionHeading>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
+              {ASSESS_FOR.map((a) => (
+                <div
+                  key={a.title}
+                  className="flex flex-col p-6 rounded-xl"
                   style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.7rem",
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "var(--plum)",
-                    marginBottom: "0.75rem",
+                    backgroundColor: "#ffffff",
+                    border: "1px solid var(--border)",
+                    borderRadius: "12px",
+                    boxShadow: "0 3px 10px rgba(11,37,69,0.08), 0 1px 3px rgba(11,37,69,0.05)",
                   }}
                 >
-                  {t.state}
-                </p>
-                <h3
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontSize: "1.3rem",
-                    fontWeight: 500,
-                    color: "var(--ink)",
-                    letterSpacing: "-0.015em",
-                    marginBottom: "0.2rem",
-                  }}
-                >
-                  {t.provider}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.68rem",
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    color: "var(--slate)",
-                    marginBottom: "0.9rem",
-                  }}
-                >
-                  {t.descriptor}
-                </p>
-                <p
-                  className="flex-1"
-                  style={{
-                    fontFamily: "var(--font-body)",
-                    fontSize: "0.95rem",
-                    lineHeight: 1.6,
-                    color: "rgba(11,37,69,0.78)",
-                    marginBottom: "1.5rem",
-                  }}
-                >
-                  {t.blurb}
-                </p>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center rounded-md px-4 py-2.5 text-[0.88rem] transition-opacity hover:opacity-90 self-start"
-                  style={{ fontFamily: "var(--font-body)", fontWeight: 600, background: "var(--gold)", color: "var(--ink)" }}
-                >
-                  Book a consultation
-                </Link>
-              </div>
-            ))}
-          </motion.div>
-
-          {/* Process */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35 }}
-            className="w-full max-w-3xl"
-          >
-            <h2
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontSize: "1.15rem",
+                      fontWeight: 500,
+                      color: "var(--ink)",
+                      letterSpacing: "-0.012em",
+                      marginBottom: "0.6rem",
+                    }}
+                  >
+                    {a.title}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      fontSize: "0.92rem",
+                      lineHeight: 1.6,
+                      color: "rgba(11,37,69,0.75)",
+                    }}
+                  >
+                    {a.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p
               style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: "clamp(1.4rem, 3vw, 1.9rem)",
-                color: "var(--ink)",
-                letterSpacing: "-0.018em",
-                marginBottom: "1.75rem",
+                fontFamily: "var(--font-body)",
+                fontSize: "0.92rem",
+                color: "rgba(11,37,69,0.65)",
                 textAlign: "center",
+                marginTop: "1.5rem",
               }}
             >
-              What to expect
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+              These often overlap. Many adults come in wondering about more than one, and the assessment can account
+              for that.
+            </p>
+          </motion.div>
+
+          {/* 5. How the process works */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-3xl"
+          >
+            <SectionHeading>How the process works</SectionHeading>
+            <div className="flex flex-col gap-7">
               {PROCESS_STEPS.map((step, i) => (
-                <div key={step.title} className="flex gap-3">
+                <div key={step.title} className="flex gap-4">
                   <span
                     style={{
                       fontFamily: "var(--font-mono)",
@@ -266,9 +379,9 @@ export default function AssessmentsPage() {
                     <p
                       style={{
                         fontFamily: "var(--font-body)",
-                        fontSize: "0.92rem",
-                        lineHeight: 1.6,
-                        color: "rgba(11,37,69,0.72)",
+                        fontSize: "0.94rem",
+                        lineHeight: 1.65,
+                        color: "rgba(11,37,69,0.75)",
                       }}
                     >
                       {step.body}
@@ -279,74 +392,320 @@ export default function AssessmentsPage() {
             </div>
           </motion.div>
 
-          {/* FAQ */}
+          {/* 6. When another specialist is a better fit */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
             className="w-full max-w-2xl"
           >
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-            />
-            <h2
+            <SectionHeading>When another specialist is a better fit</SectionHeading>
+            <p
               style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: "clamp(1.4rem, 3vw, 1.9rem)",
-                color: "var(--ink)",
-                letterSpacing: "-0.018em",
-                marginBottom: "1.75rem",
+                fontFamily: "var(--font-body)",
+                fontSize: "0.98rem",
+                lineHeight: 1.7,
+                color: "rgba(11,37,69,0.78)",
                 textAlign: "center",
               }}
             >
-              Frequently asked questions
-            </h2>
-            <div className="flex flex-col gap-6">
-              {FAQS.map((f) => (
-                <div key={f.q}>
-                  <h3
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontWeight: 500,
-                      fontSize: "1.05rem",
-                      color: "var(--plum)",
-                      letterSpacing: "-0.01em",
-                      marginBottom: "0.4rem",
-                    }}
-                  >
-                    {f.q}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-body)",
-                      fontSize: "0.95rem",
-                      lineHeight: 1.6,
-                      color: "rgba(11,37,69,0.78)",
-                    }}
-                  >
-                    {f.a}
-                  </p>
-                </div>
-              ))}
+              Some people need more detailed neuropsychological testing — for example, to identify specific learning
+              disabilities or more complex processing differences. When that's the case, I'll refer you to a trusted
+              colleague who specializes in that testing, either instead of or alongside working with me. My goal is
+              for you to get the right assessment, not just an assessment.
+            </p>
+          </motion.div>
+
+          {/* 7. Pricing */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-3xl"
+          >
+            <SectionHeading>Pricing</SectionHeading>
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "0.98rem",
+                color: "rgba(11,37,69,0.72)",
+                textAlign: "center",
+                marginBottom: "1rem",
+              }}
+            >
+              Clear, flat-fee pricing. Every assessment includes a comprehensive written report — you'll know the
+              full cost before we begin.
+            </p>
+            <div
+              className="text-center rounded-lg px-5 py-3 mb-8 mx-auto"
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "0.9rem",
+                fontWeight: 600,
+                color: "var(--ink)",
+                background: "rgba(197,165,114,0.22)",
+                border: "1px solid rgba(197,165,114,0.5)",
+                maxWidth: "34rem",
+              }}
+            >
+              Every assessment includes an in-depth written report — not just a brief diagnostic letter.
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+              <div
+                className="flex flex-col p-6 sm:p-7 rounded-xl"
+                style={{
+                  backgroundColor: "#ffffff",
+                  border: "1px solid var(--border)",
+                  borderRadius: "12px",
+                  boxShadow: "0 3px 10px rgba(11,37,69,0.08), 0 1px 3px rgba(11,37,69,0.05)",
+                }}
+              >
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.2rem",
+                    fontWeight: 500,
+                    color: "var(--ink)",
+                    letterSpacing: "-0.015em",
+                    marginBottom: "0.3rem",
+                  }}
+                >
+                  Autism (ASD) or ADHD assessment
+                </h3>
+                <p
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.6rem",
+                    fontWeight: 500,
+                    color: "var(--plum)",
+                    marginBottom: "0.9rem",
+                  }}
+                >
+                  $1,200
+                </p>
+                <p
+                  style={{
+                    fontFamily: "var(--font-body)",
+                    fontSize: "0.92rem",
+                    lineHeight: 1.6,
+                    color: "rgba(11,37,69,0.75)",
+                  }}
+                >
+                  A focused, affirming evaluation for one area, including the clinical interview, questionnaires, and
+                  a comprehensive written report you can use for your own understanding and for accommodations at
+                  work or school.
+                </p>
+              </div>
+              <div
+                className="flex flex-col p-6 sm:p-7 rounded-xl"
+                style={{
+                  backgroundColor: "#ffffff",
+                  border: "1px solid var(--border)",
+                  borderRadius: "12px",
+                  boxShadow: "0 3px 10px rgba(11,37,69,0.08), 0 1px 3px rgba(11,37,69,0.05)",
+                }}
+              >
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.2rem",
+                    fontWeight: 500,
+                    color: "var(--ink)",
+                    letterSpacing: "-0.015em",
+                    marginBottom: "0.3rem",
+                  }}
+                >
+                  Combined autism and ADHD assessment
+                </h3>
+                <p
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.6rem",
+                    fontWeight: 500,
+                    color: "var(--plum)",
+                    marginBottom: "0.9rem",
+                  }}
+                >
+                  $1,600
+                </p>
+                <p
+                  style={{
+                    fontFamily: "var(--font-body)",
+                    fontSize: "0.92rem",
+                    lineHeight: 1.6,
+                    color: "rgba(11,37,69,0.75)",
+                  }}
+                >
+                  For adults who want both areas evaluated together. Many people come in wondering about more than
+                  one, and assessing them together gives a fuller picture in a single process. Also includes the full
+                  written report.
+                </p>
+              </div>
             </div>
             <p
               style={{
                 fontFamily: "var(--font-body)",
-                fontSize: "0.9rem",
+                fontSize: "0.88rem",
+                lineHeight: 1.6,
                 color: "rgba(11,37,69,0.65)",
                 textAlign: "center",
-                marginTop: "2rem",
+                marginTop: "1.5rem",
               }}
             >
-              Want to explore first? Try our free{" "}
-              <Link href="/tests" style={{ color: "var(--plum)", fontWeight: 600 }}>
-                self-report screening tools
-              </Link>
-              .
+              What the report covers
+              <Placeholder>
+                Dr. Love to confirm: e.g. diagnostic findings, clinical reasoning, strengths, and tailored
+                recommendations
+              </Placeholder>
             </p>
           </motion.div>
+
+          {/* 8. Practical details */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-xl"
+          >
+            <SectionHeading>Practical details</SectionHeading>
+            <dl className="flex flex-col gap-4">
+              {PRACTICAL_DETAILS.map((d) => (
+                <div key={d.label} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
+                  <dt
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.72rem",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "var(--slate)",
+                      minWidth: "9rem",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {d.label}
+                  </dt>
+                  <dd
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      fontSize: "0.96rem",
+                      color: "var(--ink)",
+                      margin: 0,
+                    }}
+                  >
+                    {d.value}
+                    <Placeholder>{d.placeholder}</Placeholder>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </motion.div>
+
+          {/* Colorado track — Dr. Lindsay Moskowitz */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-xl"
+          >
+            <SectionHeading>Assessments in Colorado</SectionHeading>
+            <div
+              className="flex flex-col p-6 sm:p-8 rounded-xl text-center"
+              style={{
+                backgroundColor: "#ffffff",
+                border: "1px solid var(--border)",
+                borderRadius: "12px",
+                boxShadow: "0 3px 10px rgba(11,37,69,0.08), 0 1px 3px rgba(11,37,69,0.05)",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.7rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--plum)",
+                  marginBottom: "0.75rem",
+                }}
+              >
+                Colorado
+              </p>
+              <h3
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "1.3rem",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  letterSpacing: "-0.015em",
+                  marginBottom: "0.2rem",
+                }}
+              >
+                Lindsay Moskowitz, PsyD
+              </h3>
+              <p
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.68rem",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "var(--slate)",
+                  marginBottom: "0.9rem",
+                }}
+              >
+                Olive Clinical Network Provider
+              </p>
+              <p
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.6,
+                  color: "rgba(11,37,69,0.78)",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                ADHD, autism, and OCD assessments for adults, available via telehealth throughout Colorado.
+              </p>
+              <CTAButton href="/contact" className="mx-auto">Book a consultation</CTAButton>
+            </div>
+          </motion.div>
+
+          {/* 9. Closing CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-xl"
+          >
+            <h2
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 500,
+                fontSize: "clamp(1.6rem, 3.4vw, 2.2rem)",
+                color: "var(--ink)",
+                letterSpacing: "-0.018em",
+                marginBottom: "0.75rem",
+              }}
+            >
+              Ready when you are
+            </h2>
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "1rem",
+                lineHeight: 1.6,
+                color: "rgba(11,37,69,0.78)",
+                marginBottom: "2rem",
+              }}
+            >
+              If you've been putting this off, that's okay. When you're ready, I'm here.
+            </p>
+            <CTAButton href="/contact" className="mx-auto">Book a consultation</CTAButton>
+          </motion.div>
+
         </div>
       </section>
     </main>
