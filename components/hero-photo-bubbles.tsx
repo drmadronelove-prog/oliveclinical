@@ -23,20 +23,22 @@ type Bubble = {
 
 // Normalised so the circles' bounding box fills the container edge to edge —
 // the source art carries uneven padding, which mirroring would otherwise flip
-// into a visible left/right margin mismatch against the blobs.
+// into a visible left/right margin mismatch against the blobs. Vertically the
+// ink is flush to the container's bottom (top 7.04% → bottom 100%), so
+// bottom-aligning the container lines the lowest bubble up with the headline.
 const BUBBLES: Bubble[] = [
   // Large tan blob, mirrored — the anchor of the cluster.
-  { src: "/image 6.png", left: 27.82, top: 38.6, size: 47.37, ring: "var(--gold)", objectPosition: "52% 30%" },
+  { src: "/image 6.png", left: 27.82, top: 42.12, size: 47.37, ring: "var(--gold)", objectPosition: "52% 30%" },
   // Mauve blob, mirrored.
-  { src: "/image 1.jpeg", left: 57.77, top: 3.52, size: 36.87, ring: "var(--plum)", objectPosition: "52% 26%" },
+  { src: "/image 1.jpeg", left: 57.77, top: 7.04, size: 36.87, ring: "var(--plum)", objectPosition: "52% 26%" },
   // Rose blob, mirrored.
-  { src: "/image 4.jpeg", left: 3.46, top: 26.42, size: 29.72, ring: "var(--rose)", objectPosition: "46% 26%" },
+  { src: "/image 4.jpeg", left: 3.46, top: 29.94, size: 29.72, ring: "var(--rose)", objectPosition: "46% 26%" },
   // Pink blob, mirrored.
-  { src: "/image 2.jpeg", left: 0, top: 70.34, size: 26.15, ring: "var(--dusk)", objectPosition: "46% 22%" },
+  { src: "/image 2.jpeg", left: 0, top: 73.86, size: 26.15, ring: "var(--dusk)", objectPosition: "46% 22%" },
   // Sage blob, mirrored.
-  { src: "/image 3.jpeg", left: 78.88, top: 66.65, size: 21.12, ring: "var(--glass)", objectPosition: "52% 24%" },
+  { src: "/image 3.jpeg", left: 78.88, top: 70.17, size: 21.12, ring: "var(--glass)", objectPosition: "52% 24%" },
   // Deep navy blob, mirrored.
-  { src: "/image 5.jpeg", left: 31.51, top: 8.77, size: 21.12, ring: "var(--slate)", objectPosition: "50% 24%" },
+  { src: "/image 5.jpeg", left: 31.51, top: 12.29, size: 21.12, ring: "var(--slate)", objectPosition: "50% 24%" },
 ]
 
 export function HeroPhotoBubbles() {
