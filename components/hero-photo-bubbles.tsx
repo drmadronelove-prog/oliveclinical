@@ -28,17 +28,17 @@ type Bubble = {
 // bottom-aligning the container lines the lowest bubble up with the headline.
 const BUBBLES: Bubble[] = [
   // Large tan blob, mirrored — the anchor of the cluster.
-  { src: "/ChatGPT Image Aug 30, 2026, 04_11_50 PM.png", left: 24.27, top: 38.57, size: 54.48, ring: "var(--gold)", objectPosition: "52% 30%" },
+  { src: "/ChatGPT Image Aug 30, 2026, 04_11_50 PM.png", left: 27.54, top: 41.84, size: 47.94, ring: "var(--gold)", objectPosition: "52% 30%" },
   // Mauve blob, mirrored.
-  { src: "/image 1.jpeg", left: 55.00, top: 4.27, size: 42.40, ring: "var(--plum)", objectPosition: "52% 26%" },
+  { src: "/image 1.jpeg", left: 57.55, top: 6.82, size: 37.31, ring: "var(--plum)", objectPosition: "52% 26%" },
   // Rose blob, mirrored.
-  { src: "/image 4.jpeg", left: 1.23, top: 27.71, size: 34.18, ring: "var(--rose)", objectPosition: "46% 26%" },
+  { src: "/image 4.jpeg", left: 3.28, top: 29.76, size: 30.08, ring: "var(--rose)", objectPosition: "46% 26%" },
   // Pink blob, mirrored.
-  { src: "/image 2.jpeg", left: -1.96, top: 71.90, size: 30.07, ring: "var(--dusk)", objectPosition: "46% 22%" },
+  { src: "/image 2.jpeg", left: -0.16, top: 73.71, size: 26.46, ring: "var(--dusk)", objectPosition: "46% 22%" },
   // Sage blob, mirrored.
-  { src: "/image 3.jpeg", left: 75.48, top: 66.77, size: 27.93, ring: "var(--glass)", objectPosition: "52% 24%" },
+  { src: "/image 3.jpeg", left: 77.16, top: 68.45, size: 24.58, ring: "var(--glass)", objectPosition: "52% 24%" },
   // Deep navy blob, mirrored.
-  { src: "/image 5.jpeg", left: 29.93, top: 10.71, size: 24.29, ring: "var(--slate)", objectPosition: "50% 24%" },
+  { src: "/image 5.jpeg", left: 31.39, top: 12.17, size: 21.38, ring: "var(--slate)", objectPosition: "50% 24%" },
 ]
 
 export function HeroPhotoBubbles() {
