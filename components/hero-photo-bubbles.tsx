@@ -28,17 +28,17 @@ type Bubble = {
 // bottom-aligning the container lines the lowest bubble up with the headline.
 const BUBBLES: Bubble[] = [
   // Large tan blob, mirrored — the anchor of the cluster.
-  { src: "/ChatGPT Image Aug 30, 2026, 04_11_50 PM.png", left: 27.54, top: 41.84, size: 47.94, ring: "var(--gold)", objectPosition: "52% 30%" },
+  { src: "/ChatGPT Image Aug 30, 2026, 04_11_50 PM.png", left: 22.75, top: 37.05, size: 57.53, ring: "var(--gold)", objectPosition: "52% 30%" },
   // Mauve blob, mirrored.
-  { src: "/image 1.jpeg", left: 57.55, top: 6.82, size: 37.31, ring: "var(--plum)", objectPosition: "52% 26%" },
+  { src: "/image 1.jpeg", left: 53.82, top: 3.09, size: 44.77, ring: "var(--plum)", objectPosition: "52% 26%" },
   // Rose blob, mirrored.
-  { src: "/image 4.jpeg", left: 3.28, top: 29.76, size: 30.08, ring: "var(--rose)", objectPosition: "46% 26%" },
+  { src: "/image 4.jpeg", left: 0.27, top: 26.75, size: 36.10, ring: "var(--rose)", objectPosition: "46% 26%" },
   // Pink blob, mirrored.
-  { src: "/image 2.jpeg", left: -0.16, top: 73.71, size: 26.46, ring: "var(--dusk)", objectPosition: "46% 22%" },
+  { src: "/image 2.jpeg", left: -2.81, top: 71.07, size: 31.75, ring: "var(--dusk)", objectPosition: "46% 22%" },
   // Sage blob, mirrored.
-  { src: "/image 3.jpeg", left: 77.16, top: 68.45, size: 24.58, ring: "var(--glass)", objectPosition: "52% 24%" },
+  { src: "/image 3.jpeg", left: 74.70, top: 65.99, size: 29.50, ring: "var(--glass)", objectPosition: "52% 24%" },
   // Deep navy blob, mirrored.
-  { src: "/image 5.jpeg", left: 31.39, top: 12.17, size: 21.38, ring: "var(--slate)", objectPosition: "50% 24%" },
+  { src: "/image 5.jpeg", left: 29.25, top: 10.03, size: 25.66, ring: "var(--slate)", objectPosition: "50% 24%" },
 ]
 
 export function HeroPhotoBubbles() {
@@ -70,16 +70,20 @@ export function HeroPhotoBubbles() {
               alt=""
               aria-hidden="true"
               fill
-              sizes="(max-width: 1024px) 40vw, 20vw"
+              quality={95}
+              sizes="(max-width: 1024px) 45vw, 24vw"
               className="select-none pointer-events-none"
-              style={{ objectFit: "cover", objectPosition: b.objectPosition }}
+              style={{ objectFit: "cover", objectPosition: b.objectPosition, filter: "saturate(1.08) contrast(1.05)" }}
             />
-            {/* Soft top gloss, echoing the sheen on the blob artwork */}
+            {/* Soft top gloss, echoing the sheen on the blob artwork — blended
+                rather than flatly composited, so it adds sheen without
+                washing out the photo's own colour and contrast. */}
             <div
               aria-hidden="true"
               className="absolute inset-0 rounded-full pointer-events-none"
               style={{
-                background: "linear-gradient(160deg, rgba(255,255,255,0.22) 0%, transparent 52%)",
+                background: "linear-gradient(160deg, rgba(255,255,255,0.35) 0%, transparent 45%)",
+                mixBlendMode: "soft-light",
               }}
             />
           </div>
