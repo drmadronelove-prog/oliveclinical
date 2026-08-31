@@ -73,7 +73,7 @@ export function HeroPhotoBubbles() {
               quality={95}
               sizes="(max-width: 1024px) 45vw, 24vw"
               className="select-none pointer-events-none"
-              style={{ objectFit: "cover", objectPosition: b.objectPosition, filter: "saturate(1.08) contrast(1.05)" }}
+              style={{ objectFit: "cover", objectPosition: b.objectPosition }}
             />
             {/* Soft top gloss, echoing the sheen on the blob artwork — blended
                 rather than flatly composited, so it adds sheen without
@@ -82,7 +82,7 @@ export function HeroPhotoBubbles() {
               aria-hidden="true"
               className="absolute inset-0 rounded-full pointer-events-none"
               style={{
-                background: "linear-gradient(160deg, rgba(255,255,255,0.35) 0%, transparent 45%)",
+                background: "linear-gradient(160deg, rgba(255,255,255,0.28) 0%, transparent 45%)",
                 mixBlendMode: "soft-light",
               }}
             />

@@ -27,7 +27,8 @@ const CARDS = [
 export function PathCardsSection() {
   return (
     <section
-      className="px-5 sm:px-8 lg:px-12 py-14 sm:py-16"
+      id="paths"
+      className="scroll-mt-24 px-5 sm:px-8 lg:px-12 py-14 sm:py-16"
       style={{ backgroundColor: "var(--paper)", backgroundImage: "var(--bg-lines)" }}
     >
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
