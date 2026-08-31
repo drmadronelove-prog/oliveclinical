@@ -16,13 +16,13 @@ export function SiteFooter() {
       }}
     >
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <p>San Francisco, Oakland &amp; Berkeley, CA</p>
+        <p>San Francisco &amp; Berkeley, CA</p>
         <div className="flex flex-wrap gap-x-5 gap-y-1">
           <a
-            href="tel:+14159152183"
+            href="tel:+14154843302"
             className="hover:text-foreground transition-colors"
           >
-            (415) 915-2183
+            (415) 484-3302
           </a>
           <a
             href="mailto:info@oliveclinical.com"

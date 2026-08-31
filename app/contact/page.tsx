@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Contact — Olive Clinical",
-  description: "Get in touch with Olive Clinical. In-person therapy in San Francisco, Oakland, and Berkeley, CA. Telehealth throughout California.",
+  description: "Get in touch with Olive Clinical. In-person therapy in San Francisco and Berkeley, CA. Telehealth throughout California.",
 }
 
 const locations = [
@@ -12,12 +12,6 @@ const locations = [
     detail: "Olive Clinical",
     address: "110 Gough",
     city: "San Francisco, CA 94102",
-  },
-  {
-    name: "Oakland",
-    detail: "Olive Clinical",
-    address: "541 Athol",
-    city: "Oakland, CA 94606",
   },
   {
     name: "Berkeley",
@@ -65,7 +59,7 @@ export default function ContactPage() {
           {/* Contact actions */}
           <div className="flex flex-col sm:flex-row gap-4">
             <a
-              href="tel:+14159152183"
+              href="tel:+14154843302"
               className="inline-flex items-center gap-3 px-5 py-3 border border-slate text-slate hover:bg-slate/10 transition-colors"
               style={buttonText}
             >
@@ -73,7 +67,7 @@ export default function ContactPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                   d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              (415) 915-2183
+              (415) 484-3302
             </a>
 
             <a
@@ -95,7 +89,7 @@ export default function ContactPage() {
           <h2 className="text-2xl text-foreground mb-6" style={sectionHeading}>
             Locations
           </h2>
-          <div className="grid sm:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-3 gap-4">
             {locations.map((loc) => (
               <div
                 key={loc.name}

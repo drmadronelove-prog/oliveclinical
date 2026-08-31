@@ -44,7 +44,7 @@ const psychologistSchema = {
   name: 'Madrone Love, PsyD',
   image: 'https://oliveclinical.com/dr-love.jpg',
   url: 'https://oliveclinical.com',
-  telephone: '+1-415-915-2183',
+  telephone: '+1-415-484-3302',
   email: 'info@oliveclinical.com',
   identifier: {
     '@type': 'PropertyValue',
