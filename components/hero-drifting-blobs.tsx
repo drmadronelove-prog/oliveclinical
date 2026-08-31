@@ -36,7 +36,7 @@ const SETTLE_DELAY = 1.6
 /** Seconds spent easing from stationary up to full drift speed. */
 const SPIN_UP = 2.5
 /** Target drift speed, px/sec — slow enough to read as floating. */
-const SPEED = 27.3
+const SPEED = 29.21
 
 type Body = {
   x: number

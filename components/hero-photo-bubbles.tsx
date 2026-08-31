@@ -28,17 +28,17 @@ type Bubble = {
 // bottom-aligning the container lines the lowest bubble up with the headline.
 const BUBBLES: Bubble[] = [
   // Large tan blob, mirrored — the anchor of the cluster.
-  { src: "/ChatGPT Image Aug 30, 2026, 04_11_50 PM.png", left: 27.82, top: 42.12, size: 47.37, ring: "var(--gold)", objectPosition: "52% 30%" },
+  { src: "/ChatGPT Image Aug 30, 2026, 04_11_50 PM.png", left: 24.27, top: 38.57, size: 54.48, ring: "var(--gold)", objectPosition: "52% 30%" },
   // Mauve blob, mirrored.
-  { src: "/image 1.jpeg", left: 57.77, top: 7.04, size: 36.87, ring: "var(--plum)", objectPosition: "52% 26%" },
+  { src: "/image 1.jpeg", left: 55.00, top: 4.27, size: 42.40, ring: "var(--plum)", objectPosition: "52% 26%" },
   // Rose blob, mirrored.
-  { src: "/image 4.jpeg", left: 3.46, top: 29.94, size: 29.72, ring: "var(--rose)", objectPosition: "46% 26%" },
+  { src: "/image 4.jpeg", left: 1.23, top: 27.71, size: 34.18, ring: "var(--rose)", objectPosition: "46% 26%" },
   // Pink blob, mirrored.
-  { src: "/image 2.jpeg", left: 0, top: 73.86, size: 26.15, ring: "var(--dusk)", objectPosition: "46% 22%" },
+  { src: "/image 2.jpeg", left: -1.96, top: 71.90, size: 30.07, ring: "var(--dusk)", objectPosition: "46% 22%" },
   // Sage blob, mirrored.
-  { src: "/image 3.jpeg", left: 78.88, top: 70.17, size: 21.12, ring: "var(--glass)", objectPosition: "52% 24%" },
+  { src: "/image 3.jpeg", left: 77.30, top: 68.59, size: 24.29, ring: "var(--glass)", objectPosition: "52% 24%" },
   // Deep navy blob, mirrored.
-  { src: "/image 5.jpeg", left: 31.51, top: 12.29, size: 21.12, ring: "var(--slate)", objectPosition: "50% 24%" },
+  { src: "/image 5.jpeg", left: 29.93, top: 10.71, size: 24.29, ring: "var(--slate)", objectPosition: "50% 24%" },
 ]
 
 export function HeroPhotoBubbles() {
@@ -61,7 +61,7 @@ export function HeroPhotoBubbles() {
           <div
             className="relative w-full h-full rounded-full overflow-hidden"
             style={{
-              border: `2.2px solid ${b.ring}`,
+              border: `2.53px solid ${b.ring}`,
               boxShadow: "0 10px 26px rgba(11,37,69,0.14), 0 2px 6px rgba(11,37,69,0.08)",
             }}
           >
