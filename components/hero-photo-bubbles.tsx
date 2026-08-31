@@ -28,7 +28,7 @@ type Bubble = {
 // bottom-aligning the container lines the lowest bubble up with the headline.
 const BUBBLES: Bubble[] = [
   // Large tan blob, mirrored — the anchor of the cluster.
-  { src: "/image 6.png", left: 27.82, top: 42.12, size: 47.37, ring: "var(--gold)", objectPosition: "52% 30%" },
+  { src: "/ChatGPT Image Aug 30, 2026, 04_11_50 PM.png", left: 27.82, top: 42.12, size: 47.37, ring: "var(--gold)", objectPosition: "52% 30%" },
   // Mauve blob, mirrored.
   { src: "/image 1.jpeg", left: 57.77, top: 7.04, size: 36.87, ring: "var(--plum)", objectPosition: "52% 26%" },
   // Rose blob, mirrored.
