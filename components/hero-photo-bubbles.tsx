@@ -36,7 +36,7 @@ const BUBBLES: Bubble[] = [
   // Pink blob, mirrored.
   { src: "/image 2.jpeg", left: -1.96, top: 71.90, size: 30.07, ring: "var(--dusk)", objectPosition: "46% 22%" },
   // Sage blob, mirrored.
-  { src: "/image 3.jpeg", left: 77.30, top: 68.59, size: 24.29, ring: "var(--glass)", objectPosition: "52% 24%" },
+  { src: "/image 3.jpeg", left: 75.48, top: 66.77, size: 27.93, ring: "var(--glass)", objectPosition: "52% 24%" },
   // Deep navy blob, mirrored.
   { src: "/image 5.jpeg", left: 29.93, top: 10.71, size: 24.29, ring: "var(--slate)", objectPosition: "50% 24%" },
 ]
@@ -61,7 +61,7 @@ export function HeroPhotoBubbles() {
           <div
             className="relative w-full h-full rounded-full overflow-hidden"
             style={{
-              border: `2.53px solid ${b.ring}`,
+              border: `3.04px solid ${b.ring}`,
               boxShadow: "0 10px 26px rgba(11,37,69,0.14), 0 2px 6px rgba(11,37,69,0.08)",
             }}
           >
