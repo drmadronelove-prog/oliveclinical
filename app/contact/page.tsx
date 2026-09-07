@@ -3,15 +3,21 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Contact — Olive Clinical",
-  description: "Get in touch with Olive Clinical. In-person therapy in San Francisco and Berkeley, CA. Telehealth throughout California.",
+  description: "Get in touch with Olive Clinical. In-person therapy in San Francisco, Oakland, and Berkeley, CA. Telehealth throughout California.",
 }
 
-const locations = [
+// `address` is optional: not every location publishes a street address.
+const locations: { name: string; detail: string; address?: string; city: string }[] = [
   {
     name: "San Francisco",
     detail: "Olive Clinical",
     address: "110 Gough",
     city: "San Francisco, CA 94102",
+  },
+  {
+    name: "Oakland",
+    detail: "Olive Clinical",
+    city: "Oakland, CA",
   },
   {
     name: "Berkeley",
@@ -89,7 +95,7 @@ export default function ContactPage() {
           <h2 className="text-2xl text-foreground mb-6" style={sectionHeading}>
             Locations
           </h2>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {locations.map((loc) => (
               <div
                 key={loc.name}
@@ -102,7 +108,7 @@ export default function ContactPage() {
                   {loc.name}
                 </h3>
                 <p className="text-sm text-muted-foreground">{loc.detail}</p>
-                <p className="text-sm text-muted-foreground">{loc.address}</p>
+                {loc.address && <p className="text-sm text-muted-foreground">{loc.address}</p>}
                 <p className="text-sm text-muted-foreground">{loc.city}</p>
               </div>
             ))}
@@ -112,7 +118,7 @@ export default function ContactPage() {
         {/* Additional info */}
         <div className="border-l-2 border-slate pl-6 space-y-2 max-w-prose">
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Sessions are available in-person at both Bay Area offices and via
+            Sessions are available in-person at our Bay Area offices and via
             telehealth for clients anywhere in California. I offer a sliding scale
             for a limited number of clients — please inquire when you reach out.
           </p>

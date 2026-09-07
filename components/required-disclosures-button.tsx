@@ -73,7 +73,6 @@ export function RequiredDisclosuresButton() {
                 </h3>
                 <ul className="space-y-2">
                   {[
-                    "541 Athol, Oakland, CA 94606",
                     "2915 Martin Luther King Junior Way, Berkeley, CA 94703",
                     "Telehealth available throughout California",
                   ].map((item, i) => (
