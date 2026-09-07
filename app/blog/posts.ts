@@ -2,6 +2,89 @@ import type { BlogPost } from "@/components/blog/blog-post"
 
 export const posts: BlogPost[] = [
   {
+    slug: "what-kind-of-demand-avoidance-is-this",
+    title: "What Kind of Demand Avoidance Is This?",
+    subtitle: "PDA usually arrives as a yes-or-no question. The more useful one is what kind of demand avoidance this is — six drivers can look identical in a waiting room and need opposite things.",
+    author: "Madrone Love",
+    credential: "PsyD",
+    category: "Neurodivergence & Assessment",
+    date: "September 2026",
+    blocks: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "Most of the PDA referrals I get come phrased as a yes or no. Does my kid have it. Is this PDA or is it something else. Is this the thing that finally explains the last four years.",
+      },
+      {
+        type: "paragraph",
+        text: "I understand why families ask it that way. By the time anyone gets to an assessment they have usually spent years being told the child is manipulative, or that the parenting is too soft, or that a sticker chart would sort it out. Having a name for it helps. The trouble is that the yes-or-no version treats demand avoidance as a single thing, and treats finding the label as the same job as working out what is going on underneath.",
+      },
+      {
+        type: "paragraph",
+        text: "Dr. Alex Klein, a clinical psychologist in Oakland whose practice centers on neurodiversity-affirming assessment and PDA, put this well in a recent presentation: often the more useful question is not whether it is PDA but what the nature of this child's demand avoidance is. What follows comes out of her framework, and I am grateful for it.",
+      },
+      { type: "heading", text: "Six drivers" },
+      {
+        type: "paragraph",
+        text: "Klein sorts demand avoidance into flavors and drivers rather than one category. Here is her taxonomy, with a bit about what each one asks of a treatment plan.",
+      },
+      {
+        type: "list",
+        items: [
+          "Autonomy hypersensitivity. Demands land as threats. The autonomic nervous system is tagging ordinary requests as dangerous and the child goes into fight, flight, or freeze. What sits underneath is a deep need for self-determination, so a demand registers as losing control rather than as an inconvenience. This is closest to what most people mean when they say PDA, and it is where standard behavioral plans tend to make things worse, since the pressure to comply is itself the threat. The work is to bring the demand load down and move toward the PDA Society's PANDA approach: prioritize and compromise, manage anxiety, negotiate and collaborate, disguise and manage demands, adapt.",
+          "Anxiety. Here the avoidance comes out of fear that something bad is coming. Catastrophizing. The demand is a doorway into the feared outcome rather than a bid for control, which changes the whole plan, because graded exposure often helps anxiety-driven avoidance and often escalates autonomy-driven avoidance. Two children can look identical in a waiting room and need opposite things.",
+          "Justice sensitivity. The demand reads as unfair or arbitrary. There is strong moral attunement, and the child will refuse what feels unjust no matter what it costs them. I am fond of these kids, partly because they are often right. Persuasion does not move them; explaining the reasoning does, and so does giving them a real say in the rule. Miss this one and you write a report that pathologizes a working conscience.",
+          "Capacity. The battery is empty. The demand is past what the child has available, and because capacity moves around, this is easy to miss in one quiet testing session. A child who manages the task on Tuesday morning in a room with no other children looks, on paper, like a child who could manage it Thursday afternoon in a classroom and is choosing not to. Capacity-driven avoidance gets read as willfulness more often than any other kind. What helps is taking things away rather than teaching more skills.",
+          "Sensory. The demand comes bundled with sensory overwhelm, and the environment is doing the dysregulating. Asking a child to sit at the cafeteria table is not really asking them to sit. It is asking them to stay inside a set of sound and smell and light conditions their nervous system is already losing to. Change the room and the avoidance often goes away without anyone working on the demand.",
+          "Executive functioning. Attention switching, task initiation, flexibility, a low tolerance for boredom, processing differences, frustration tolerance. The avoidance lives in the gap between wanting to do something and getting started on it. Most of these kids want to do the thing.",
+        ],
+      },
+      { type: "heading", text: "What that changes" },
+      {
+        type: "paragraph",
+        text: "Naming the driver changes the recommendations section, which is the part of the report anyone actually uses.",
+      },
+      {
+        type: "paragraph",
+        text: "Anxiety-driven avoidance may point toward exposure work. Autonomy-driven avoidance will not tolerate exposure until the demand load comes down, and pushing it produces escalation rather than habituation. Capacity-driven avoidance calls for less: fewer commitments, more recovery, and not an added social skills group on Wednesdays. Sensory-driven avoidance belongs in recommendations about the environment rather than about the child. Executive functioning asks for scaffolding. Justice sensitivity asks you to hand over some authorship.",
+      },
+      {
+        type: "paragraph",
+        text: "Almost every child I see has more than one driver running, in different proportions depending on the setting, and the balance shifts with sleep, illness, transitions, and where we are in the school year. So the output of a good assessment is not one label. It is a description of which drivers are operating, where, how strongly, and what each one needs. Schools can do something with that.",
+      },
+      { type: "heading", text: "What else is in the room" },
+      {
+        type: "paragraph",
+        text: "Klein's second point is that PDA rarely shows up on its own, and whatever else is going on shapes both the look of the avoidance and what will help.",
+      },
+      {
+        type: "list",
+        items: [
+          "ADHD. Executive functioning is doing the avoiding. The fix is sometimes small: an adult does the first step, or an adult gets visibly excited about the next activity. Order matters too, so try not to schedule a jump from the highest-interest task straight into the lowest.",
+          "Anxiety disorders. Phobias, specific fears, the conviction that something terrible happens if I go to the bathroom by myself. Some of this wants gentle stretching rather than accommodation, but it depends on what is actually true. If a child is afraid of bullying that is really happening, deal with the bullying. If a child is afraid of a social judgment nobody has made, that is different work.",
+          "Sensory processing. A loud cafeteria is intolerable, not merely unpleasant, and you cannot tell the difference without a detailed sensory history. That is the reason to take one. Do not push. Accommodate.",
+          "Trauma and PTSD. Traumatic stress produces hypervigilant threat detection and avoidance that can look a great deal like autonomy-driven demand avoidance. Safety and the relationship come first here, with co-regulation and restoring some control doing the early work.",
+          "OCD. A contamination fear that keeps a child home is demand avoidance in form only. Lowering demands may not help and can feed the compulsion, so this is one of the places where slow, gentle stretching is the right call. Telling OCD-driven avoidance apart from autonomy-driven avoidance is the differential I worry about most on this list, since the two want nearly opposite handling.",
+          "Depression and burnout. Years of masking and being pushed past capacity produce a burnout state that presents as depression. It needs a long stretch of low demand, not activation and behavioral scheduling.",
+        ],
+      },
+      { type: "heading", text: "A tool that pairs well" },
+      {
+        type: "paragraph",
+        text: "Klein also points to Ross Greene's revised Assessment of Skills and Unsolved Problems (ASUP 2024), which she describes as identifying \"the skills that may make it difficult for a child to respond adaptively to problems and frustrations, and the unsolved problems that need to be solved.\" The two do different jobs. The driver framework asks what kind of avoidance this is; the ASUP asks which specific situations keep going badly. That second answer is the one a parent can act on Monday morning. The paperwork packet is free from Lives in the Balance.",
+      },
+      { type: "heading", text: "A note on the term" },
+      {
+        type: "paragraph",
+        text: "PDA is not in the DSM-5-TR or the ICD-11. It is a descriptive profile, usually discussed as a presentation within autism, and people in the field disagree about its edges and its name. A lot of autistic adults prefer \"persistent drive for autonomy\" over \"pathological demand avoidance,\" on the reasonable grounds that a nervous system protecting its own self-determination is not obviously a pathology. I use the term because it is the one families arrive with and because it gets us in the door. Once we are in, I would rather stop asking whether the label fits and start asking what happens in this particular child when a demand lands.",
+      },
+      {
+        type: "footer-note",
+        text: "Sources — The driver framework, and the reframe from \"is it PDA\" to \"what is the nature of this child's demand avoidance,\" come from a presentation by Dr. Alex Klein, PsyD (dralexklein.com), a licensed clinical psychologist in Oakland, California, whose work focuses on neurodiversity-affirming assessment, PDA, and parent support. Used with attribution. — Ross W. Greene, Assessment of Skills and Unsolved Problems (ASUP 2024), in the Collaborative & Proactive Solutions paperwork packet, Lives in the Balance (livesinthebalance.org/cps-materials-paperwork). — PANDA as a way in, PDA Society (pdasociety.org.uk/what-helps-guides/pda-approaches/panda-as-a-way-in).",
+      },
+    ],
+  },
+  {
     slug: "a-taxonomy-of-friendship-styles",
     title: "A Taxonomy of Friendship Styles: Depth, Continuity, and What Actually Keeps a Friendship Running",
     subtitle: "We have precise language for romantic attachment and almost none for friendship. So we borrow the wrong words, and end up unable to say what is actually missing.",
