@@ -44,18 +44,36 @@ than this needs. You do not need a credit card.
 
 ### 4. Copy your three keys
 
-1. In the left sidebar click **Project Settings** (the gear), then **API**.
-   (In some versions of Supabase this is **Settings → API Keys**.)
-2. You need three values from this page:
-   - **Project URL** — looks like `https://abcdefgh.supabase.co`
-   - **anon** / **public** key — a very long string
-   - **service_role** / **secret** key — another very long string, marked
-     as secret. Click **Reveal** to see it.
+Supabase splits these across two pages under **Project Settings**.
 
-> **About the service_role key.** It ignores every security rule in the
-> database. It is used in exactly one place in this app — sending
-> invitations — and only ever on the server. Do not paste it into a
-> browser, an email, or any file other than the two places below.
+**Page one — Settings → Data API.** Copy the **Project URL**. It looks like
+`https://abcdefgh.supabase.co`.
+
+**Page two — Settings → API Keys.** You need two keys from here. Supabase
+now offers two generations of keys and **either generation works** with this
+app — pick one row and stay consistent.
+
+*If you see a "Publishable key" and a "Secret keys" section (newer projects):*
+
+| You need | What to copy | Looks like |
+|---|---|---|
+| Public key | **Publishable key** | `sb_publishable_...` |
+| Secret key | **Secret keys** → reveal or **Create new secret key** | `sb_secret_...` |
+
+*If you see an "anon / service_role" table, or a **Legacy API Keys** tab:*
+
+| You need | What to copy | Looks like |
+|---|---|---|
+| Public key | the **anon** / **public** row | a long `eyJ...` string |
+| Secret key | the **service_role** row — click **Reveal** | another long `eyJ...` string |
+
+Newer keys are the ones Supabase is moving to, so prefer
+`sb_publishable_` / `sb_secret_` if both are offered.
+
+> **About the secret key.** It ignores every security rule in the database.
+> It is used in exactly one place in this app — sending invitations — and
+> only ever on the server. Do not paste it into a browser, an email, or any
+> file other than the two places below.
 
 ### 5. Put the keys in the project
 
@@ -70,6 +88,11 @@ SUPABASE_SERVICE_ROLE_KEY=paste-the-service-role-key-here
 
 There is a template at `.env.example` you can copy. `.env.local` is
 git-ignored, so it will never be committed or published.
+
+The variable names still say `ANON_KEY` and `SERVICE_ROLE_KEY` because those
+are the names every Supabase guide uses. A newer `sb_publishable_...` key
+goes in the `ANON_KEY` line and a newer `sb_secret_...` key goes in the
+`SERVICE_ROLE_KEY` line — the app does not care which generation you used.
 
 ### 6. Tell Supabase where the app lives
 
