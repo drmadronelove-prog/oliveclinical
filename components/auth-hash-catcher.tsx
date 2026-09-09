@@ -24,9 +24,20 @@ import { useEffect } from 'react'
 export function AuthHashCatcher() {
   useEffect(() => {
     const hash = window.location.hash
-    if (!hash || !hash.includes('access_token')) return
+    if (!hash) return
 
     const params = new URLSearchParams(hash.slice(1))
+
+    // A used or expired link comes back as an error in the same spot a
+    // working one would put the token — never leave someone staring at
+    // a blank homepage with a cryptic address bar over this.
+    if (params.has('error')) {
+      window.location.replace('/team/login?error=expired')
+      return
+    }
+
+    if (!hash.includes('access_token')) return
+
     const access_token = params.get('access_token')
     const refresh_token = params.get('refresh_token')
     const type = params.get('type')

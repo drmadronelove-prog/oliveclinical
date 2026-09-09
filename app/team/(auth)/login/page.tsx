@@ -4,12 +4,18 @@ import { LoginForm } from './login-form'
 
 export const metadata = { title: 'Sign in — Olive Team', robots: { index: false } }
 
+const LINK_ERROR_MESSAGES: Record<string, string> = {
+  expired: 'That link has expired or was already used. Request a new one below.',
+  link: "That link didn't work. Request a new one below.",
+}
+
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>
+  searchParams: Promise<{ next?: string; error?: string }>
 }) {
-  const { next } = await searchParams
+  const { next, error } = await searchParams
+  const linkError = error ? (LINK_ERROR_MESSAGES[error] ?? LINK_ERROR_MESSAGES.link) : undefined
 
   return (
     <AuthCard
@@ -24,6 +30,15 @@ export default async function LoginPage({
         </Link>
       }
     >
+      {linkError && (
+        <p
+          role="status"
+          aria-live="polite"
+          className="mb-4 rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm"
+        >
+          {linkError}
+        </p>
+      )}
       <LoginForm next={next} />
     </AuthCard>
   )
