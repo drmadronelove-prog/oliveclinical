@@ -126,18 +126,28 @@ this.
 
 1. In Supabase go to **Authentication → Users** and click **Add user →
    Send invitation** (or **Invite user**).
-2. Enter your email: `madrone@madronelove.com`. Click send.
-3. Check your inbox and click the link. It will bring you to
-   `/team/update-password` where you choose a password.
-4. Now go back to Supabase, open **SQL Editor → New query**, and run this
+2. Enter your email: `madrone@madronelove.com`. Click send. This just
+   creates your account — do not click the link in that email.
+   Supabase's own invitation email does not know this app's pages, so it
+   drops you on the plain homepage instead of signing you in.
+3. Instead, go to `oliveclinical.com/team/reset-password` and enter the
+   same email. This one comes from the app itself, so it knows where to
+   send you.
+4. Check your inbox — a second, different email arrives. Click that link.
+   It will bring you to `/team/update-password` where you choose a
+   password.
+5. Now go back to Supabase, open **SQL Editor → New query**, and run this
    single line to promote yourself:
 
 ```sql
 update public.profiles set role = 'admin' where email = 'madrone@madronelove.com';
 ```
 
-5. Reload `oliveclinical.com/team`. You should now see **Members** in the
-   sidebar. Every future person gets invited from that page instead.
+6. Reload `oliveclinical.com/team`. You should now see **Members** in the
+   sidebar. Every future person gets invited from that page instead — and
+   those invitations land correctly, because the app sets its own
+   redirect automatically. This two-step workaround is only needed once,
+   for you, the very first person.
 
 ---
 
