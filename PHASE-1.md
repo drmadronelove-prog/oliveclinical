@@ -126,14 +126,14 @@ this.
 
 1. In Supabase go to **Authentication → Users** and click **Add user →
    Send invitation** (or **Invite user**).
-2. Enter your email: `mlove@wi.edu`. Click send.
+2. Enter your email: `madrone@madronelove.com`. Click send.
 3. Check your inbox and click the link. It will bring you to
    `/team/update-password` where you choose a password.
 4. Now go back to Supabase, open **SQL Editor → New query**, and run this
    single line to promote yourself:
 
 ```sql
-update public.profiles set role = 'admin' where email = 'mlove@wi.edu';
+update public.profiles set role = 'admin' where email = 'madrone@madronelove.com';
 ```
 
 5. Reload `oliveclinical.com/team`. You should now see **Members** in the
