@@ -13,21 +13,30 @@ import type { Profile } from './types'
  * is still valid.
  */
 export async function getCurrentProfile(): Promise<Profile | null> {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return null
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return null
 
-  const { data } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .maybeSingle()
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle()
 
-  if (!data || data.archived_at) return null
-  return data as Profile
+    if (!data || data.archived_at) return null
+    return data as Profile
+  } catch (error) {
+    // Middleware already sends a misconfigured or unreachable Supabase to
+    // /team/connection-error before any page renders. This mirrors that
+    // safety net here: if a page is ever reached anyway and the call
+    // fails, treat it as signed-out rather than crashing the render.
+    console.error('[team] getCurrentProfile failed:', error)
+    return null
+  }
 }
 
 /** Use in any /team page. Redirects to login instead of returning null. */

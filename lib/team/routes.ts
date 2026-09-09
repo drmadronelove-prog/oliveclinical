@@ -10,6 +10,7 @@ export const PUBLIC_TEAM_ROUTES = [
   '/team/update-password',
   '/team/auth/callback',
   '/team/not-configured',
+  '/team/connection-error',
 ] as const
 
 export function isPublicTeamRoute(pathname: string): boolean {

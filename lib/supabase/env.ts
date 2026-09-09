@@ -12,12 +12,27 @@ export type SupabasePublicEnv = {
   anonKey: string
 }
 
+function looksLikeAValidUrl(value: string): boolean {
+  try {
+    return new URL(value).protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
 export function readPublicEnv(): SupabasePublicEnv | null {
   // Next.js inlines NEXT_PUBLIC_* at build time only for full, literal
   // property reads, so these cannot be looked up dynamically.
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
   if (!url || !anonKey) return null
+
+  // A pasting mistake (missing "https://", a stray quote, a trailing
+  // space carried over from copy-paste) must show the same friendly
+  // "not configured yet" page as a genuinely missing key — never a
+  // crash. Treating it as "absent" here is what makes that automatic.
+  if (!looksLikeAValidUrl(url)) return null
+
   return { url, anonKey }
 }
 

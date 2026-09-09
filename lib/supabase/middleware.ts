@@ -30,28 +30,45 @@ export async function updateTeamSession(request: NextRequest) {
 
   let response = NextResponse.next({ request })
 
-  const supabase = createServerClient(env.url, env.anonKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll()
+  // Values that are present and well-formed can still fail here — a
+  // wrong project ref, a key copied from the wrong project, Supabase
+  // itself being briefly unreachable. Any of those must send the person
+  // to an explanatory page, never crash the whole /team section with a
+  // 500. That is the only job of this try/catch.
+  let user: { id: string } | null = null
+  try {
+    const supabase = createServerClient(env.url, env.anonKey, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          for (const { name, value } of cookiesToSet) {
+            request.cookies.set(name, value)
+          }
+          response = NextResponse.next({ request })
+          for (const { name, value, options } of cookiesToSet) {
+            response.cookies.set(name, value, options)
+          }
+        },
       },
-      setAll(cookiesToSet) {
-        for (const { name, value } of cookiesToSet) {
-          request.cookies.set(name, value)
-        }
-        response = NextResponse.next({ request })
-        for (const { name, value, options } of cookiesToSet) {
-          response.cookies.set(name, value, options)
-        }
-      },
-    },
-  })
+    })
 
-  // getUser() revalidates the token with Supabase. getSession() only reads
-  // the cookie, which a browser can forge, so it must not be trusted here.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    // getUser() revalidates the token with Supabase. getSession() only
+    // reads the cookie, which a browser can forge, so it must not be
+    // trusted here.
+    const {
+      data: { user: revalidatedUser },
+    } = await supabase.auth.getUser()
+    user = revalidatedUser
+  } catch (error) {
+    console.error('[team] Supabase middleware call failed:', error)
+    if (pathname === '/team/connection-error') return NextResponse.next({ request })
+    const url = request.nextUrl.clone()
+    url.pathname = '/team/connection-error'
+    url.search = ''
+    return NextResponse.redirect(url)
+  }
 
   if (!user && !isPublicTeamRoute(pathname)) {
     const url = request.nextUrl.clone()
