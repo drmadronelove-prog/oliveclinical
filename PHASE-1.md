@@ -99,12 +99,20 @@ goes in the `ANON_KEY` line and a newer `sb_secret_...` key goes in the
 1. In Supabase, go to **Authentication → URL Configuration**.
 2. Set **Site URL** to: `https://oliveclinical.com`
 3. Under **Redirect URLs**, click **Add URL** and add each of these, one at
-   a time:
+   a time — note the double asterisk on the end of the last two:
    - `https://oliveclinical.com/team/auth/callback`
    - `http://localhost:3000/team/auth/callback`
+   - `https://oliveclinical.com/team/auth/callback**`
+   - `http://localhost:3000/team/auth/callback**`
 4. Click **Save**.
 
-Without this step, invitation and password-reset links will refuse to open.
+Without this step, invitation and password-reset links will refuse to
+open. The `**` entries matter: Supabase checks the link address exactly
+against this list, but the app's links carry extra text on the end (like
+`?next=/team/update-password`) so it knows where to send someone next.
+Without the wildcard entries, that extra text makes the address not match
+anything on the list, and the link falls back to the plain homepage
+instead of signing you in.
 
 ### 7. Turn off public sign-up
 
