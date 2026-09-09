@@ -3,6 +3,7 @@ import { Fraunces, Geist, Geist_Mono, Press_Start_2P } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
+import { PublicChromeOnly } from '@/components/site-chrome'
 import './globals.css'
 
 const fraunces = Fraunces({
@@ -125,9 +126,13 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(psychologistSchema) }}
         />
-        <SiteHeader />
+        <PublicChromeOnly>
+          <SiteHeader />
+        </PublicChromeOnly>
         {children}
-        <SiteFooter />
+        <PublicChromeOnly>
+          <SiteFooter />
+        </PublicChromeOnly>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
