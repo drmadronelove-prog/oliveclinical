@@ -33,3 +33,28 @@ To learn more, take a look at the following resources:
 - [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
 
 <a href="https://v0.app/chat/api/kiro/clone/drmadronelove-prog/neuroinclusivetherapy" alt="Open in Kiro"><img src="https://pdgvvgmkdvyeydso.public.blob.vercel-storage.com/open%20in%20kiro.svg?sanitize=true" /></a>
+
+## Team workspace (`/team`)
+
+`oliveclinical.com/team` is an internal project-management workspace for the
+practice — marketing campaigns and clinical-hire onboarding checklists. It
+shares this Next.js deployment with the public site but has its own sign-in,
+its own layout, and its own database.
+
+**Data boundary — read this before you put anything in it.**
+
+> The team workspace holds **internal operations work only**: campaigns,
+> tasks, hiring steps, and notes about our own processes.
+>
+> **No client names. No clinical content. No PHI.** Not in a task title, not
+> in a comment, not in an attachment, not "just initials". This system is not
+> a HIPAA-covered environment and is not built to be one. If a piece of work
+> requires naming a client, it belongs in the EHR, not here.
+
+Setup instructions are in [`PHASE-1.md`](./PHASE-1.md). Database schema lives
+in `supabase/migrations/` and is applied by pasting each file into the
+Supabase SQL editor, in numbered order.
+
+The public marketing site does not depend on any of this: if the Supabase
+keys are absent, every page outside `/team` builds and serves exactly as
+before.
