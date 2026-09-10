@@ -16,6 +16,14 @@ import { ICQEV } from "@/components/assessments/icqev"
 import { OCTRS } from "@/components/assessments/octrs"
 import { POPS } from "@/components/assessments/pops"
 import { OCIR } from "@/components/assessments/ocir"
+import { EQ } from "@/components/assessments/eq"
+import { PHQ9 } from "@/components/assessments/phq9"
+import { GAD7 } from "@/components/assessments/gad7"
+import { AUDIT } from "@/components/assessments/audit"
+import { DAST10 } from "@/components/assessments/dast10"
+import { GQASC } from "@/components/assessments/gqasc"
+import { RBQ3 } from "@/components/assessments/rbq3"
+import { MMS } from "@/components/assessments/mms"
 import { AccessGate } from "@/components/access-gate"
 import { AQ10 } from "@/components/assessments/aq10"
 import { DESB } from "@/components/assessments/desb"
@@ -334,67 +342,76 @@ const SCREENERS: FeatureCard[] = [
     content: <SCSSF />,
   },
   {
-    kind: "link",
-    title: "AUDIT",
-    category: "Alcohol use · fillable PDF",
-    footerLabel: "Open & download",
-    href: "/AUDIT_Fillable.pdf",
-  },
-  {
-    kind: "link",
-    title: "DAST-10",
-    category: "Drug use · fillable PDF",
-    footerLabel: "Open & download",
-    href: "/DAST10_Fillable.pdf",
-  },
-  {
-    kind: "link",
-    title: "GQASC — Adult Women",
-    category: "Gender & autism · fillable PDF",
-    footerLabel: "Open & download",
-    href: "/GQASC_Adult_Women_Fillable.pdf",
-  },
-  {
-    kind: "link",
-    title: "RBQ-3",
-    category: "Repetitive behaviors · fillable PDF",
-    footerLabel: "Open & download",
-    href: "/RBQ3_Self_Fillable.pdf",
-  },
-  {
-    kind: "link",
-    title: "ADHD Health History",
-    category: "Intake form · fillable PDF",
-    footerLabel: "Open & download",
-    href: "/ADHD_Health_History_Fillable.pdf",
-  },
-  {
-    kind: "link",
+    kind: "modal",
     title: "PHQ-9",
-    category: "Depression screen · fillable PDF",
-    footerLabel: "Open & download",
-    href: "/PHQ9_Fillable.pdf",
+    category: "Depression screen",
+    footerLabel: "Take screen",
+    modalTitle: "PHQ-9: Patient Health Questionnaire",
+    modalSubtitle: "9-item depression scale · Kroenke, Spitzer & Williams, 2001.",
+    content: <PHQ9 />,
   },
   {
-    kind: "link",
+    kind: "modal",
     title: "GAD-7",
-    category: "Anxiety screen · fillable PDF",
-    footerLabel: "Open & download",
-    href: "/GAD7_Fillable.pdf",
+    category: "Anxiety screen",
+    footerLabel: "Take screen",
+    modalTitle: "GAD-7: Generalized Anxiety Disorder Scale",
+    modalSubtitle: "7-item anxiety scale · Spitzer, Kroenke, Williams & Löwe, 2006.",
+    content: <GAD7 />,
   },
   {
-    kind: "link",
+    kind: "modal",
+    title: "AUDIT",
+    category: "Alcohol use",
+    footerLabel: "Take screen",
+    modalTitle: "AUDIT: Alcohol Use Disorders Identification Test",
+    modalSubtitle: "10-item screen · World Health Organization.",
+    content: <AUDIT />,
+  },
+  {
+    kind: "modal",
+    title: "DAST-10",
+    category: "Drug use",
+    footerLabel: "Take screen",
+    modalTitle: "DAST-10: Drug Abuse Screening Test",
+    modalSubtitle: "10-item screen · Skinner, 1982.",
+    content: <DAST10 />,
+  },
+  {
+    kind: "modal",
+    title: "GQ-ASC — Adult Women",
+    category: "Gender & autism",
+    footerLabel: "Take screen",
+    modalTitle: "GQ-ASC: Scale for Adult Women",
+    modalSubtitle: "21 items across imagination, camouflaging, sensory sensitivities, socialising, and interests · Brown et al., 2020.",
+    content: <GQASC />,
+  },
+  {
+    kind: "modal",
+    title: "RBQ-3",
+    category: "Repetitive behaviours",
+    footerLabel: "Take questionnaire",
+    modalTitle: "RBQ-3: Repetitive Behaviour Questionnaire",
+    modalSubtitle: "20-item self-report across motor behaviours, restricted interests, and insistence on sameness.",
+    content: <RBQ3 />,
+  },
+  {
+    kind: "modal",
     title: "MMS",
-    category: "Broad psychiatric screen · fillable PDF",
-    footerLabel: "Open & download",
-    href: "/MMS_Fillable.pdf",
+    category: "Broad psychiatric screen",
+    footerLabel: "Take screen",
+    modalTitle: "MMS: Modified Mini Screen",
+    modalSubtitle: "22-item screen across mood, anxiety and trauma, and unusual experiences.",
+    content: <MMS />,
   },
   {
-    kind: "link",
+    kind: "modal",
     title: "EQ",
-    category: "Empathy quotient · fillable PDF",
-    footerLabel: "Open & download",
-    href: "/EQ_Fillable.pdf",
+    category: "Empathy quotient",
+    footerLabel: "Take questionnaire",
+    modalTitle: "EQ: Empathy Quotient (Cambridge Behaviour Scale)",
+    modalSubtitle: "Baron-Cohen & Wheelwright, 2004.",
+    content: <EQ />,
   },
 ]
 
