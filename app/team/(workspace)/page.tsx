@@ -6,7 +6,7 @@ import { PageHeader } from '@/components/team/page-header'
 
 const ROADMAP = [
   { phase: 1, label: 'Sign-in, members, and permissions', done: true },
-  { phase: 2, label: 'Projects and tasks, with fast keyboard entry', done: false },
+  { phase: 2, label: 'Projects and tasks, with fast keyboard entry', done: true },
   { phase: 3, label: 'Onboarding templates for new clinical hires', done: false },
   { phase: 4, label: 'Board and calendar views, My Tasks', done: false },
   { phase: 5, label: 'Comments, attachments, recurring tasks, email alerts', done: false },
@@ -25,19 +25,25 @@ export default async function TeamHomePage() {
 
       <div className="mx-auto max-w-3xl px-6 py-8">
         <section className="rounded-lg border border-border bg-secondary/30 p-5">
-          <h2 className="font-display text-base font-semibold">Phase 1 is live</h2>
+          <h2 className="font-display text-base font-semibold">Projects and tasks are live</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Sign-in works, and it is invite-only — there is no public sign-up form
-            anywhere. Anyone who is not signed in gets nothing, both at the app door and
-            at the database itself.
+            Create a project, add sections, and type tasks straight in — press Enter and the
+            next row is ready. Click any task for the full detail pane; drag to reorder or move
+            it to a different section.
           </p>
+          <Link
+            href="/team/projects"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            Go to Projects
+            <ArrowRight className="size-3.5" aria-hidden="true" />
+          </Link>
           {profile.role === 'admin' && (
             <Link
               href="/team/members"
-              className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className="ml-2 mt-4 inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
-              Invite your first team member
-              <ArrowRight className="size-3.5" aria-hidden="true" />
+              Invite a team member
             </Link>
           )}
         </section>

@@ -17,4 +17,5 @@ next.user-config.*
 # Common ignores
 node_modules
 .next/
-.DS_Store
+.DS_Storetest-results/
+playwright-report/

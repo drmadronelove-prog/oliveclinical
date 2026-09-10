@@ -1,0 +1,165 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { Trash2 } from 'lucide-react'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from '@/components/ui/sheet'
+import { Textarea } from '@/components/ui/textarea'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/ui/button'
+import { DatePicker } from '@/components/team/date-picker'
+import { PriorityPicker } from '@/components/team/priority-picker'
+import { AssigneePicker } from '@/components/team/assignee-picker'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import type { Task, Profile, Section } from '@/lib/team/types'
+import type { Priority } from '@/lib/team/priority'
+
+export function TaskDetailSheet({
+  task,
+  members,
+  sections,
+  onClose,
+  onPatch,
+  onToggleComplete,
+  onDelete,
+  onMoveSection,
+}: {
+  task: Task | null
+  members: Profile[]
+  sections: Section[]
+  onClose: () => void
+  onPatch: (id: string, patch: Partial<Task>) => void
+  onToggleComplete: (id: string, completed: boolean) => void
+  onDelete: (id: string) => void
+  onMoveSection: (id: string, sectionId: string) => void
+}) {
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+
+  // Local editable copies, resynced whenever a different task is opened —
+  // typing in one task must never leak into the next one you click.
+  useEffect(() => {
+    setTitle(task?.title ?? '')
+    setDescription(task?.description ?? '')
+  }, [task?.id])
+
+  if (!task) return null
+
+  function commitTitle() {
+    const trimmed = title.trim()
+    if (!trimmed || trimmed === task!.title) {
+      setTitle(task!.title)
+      return
+    }
+    onPatch(task!.id, { title: trimmed })
+  }
+
+  function commitDescription() {
+    if (description === (task!.description ?? '')) return
+    onPatch(task!.id, { description: description || null })
+  }
+
+  return (
+    <Sheet open={Boolean(task)} onOpenChange={(open) => !open && onClose()}>
+      <SheetContent className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
+        <SheetHeader className="border-b border-border px-5 py-4">
+          <SheetTitle className="sr-only">Task details</SheetTitle>
+          <SheetDescription className="sr-only">
+            Edit this task's title, description, assignee, dates, and priority.
+          </SheetDescription>
+          <div className="flex items-start gap-2.5">
+            <Checkbox
+              checked={task.completed}
+              onCheckedChange={(checked) => onToggleComplete(task.id, checked === true)}
+              className="mt-1.5 size-4"
+              aria-label={task.completed ? 'Mark incomplete' : 'Mark complete'}
+            />
+            <textarea
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              onBlur={commitTitle}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  e.currentTarget.blur()
+                }
+              }}
+              rows={1}
+              aria-label="Task title"
+              className="w-full resize-none bg-transparent font-display text-base font-semibold leading-snug outline-none placeholder:text-muted-foreground"
+            />
+          </div>
+        </SheetHeader>
+
+        <div className="flex-1 space-y-5 overflow-y-auto px-5 py-4">
+          <div className="flex flex-wrap gap-2">
+            <AssigneePicker
+              value={task.assignee_id}
+              onChange={(v) => onPatch(task.id, { assignee_id: v })}
+              members={members}
+            />
+            <DatePicker
+              value={task.due_date}
+              onChange={(v) => onPatch(task.id, { due_date: v })}
+              label="Due date"
+            />
+            <PriorityPicker
+              value={task.priority as Priority}
+              onChange={(v) => onPatch(task.id, { priority: v })}
+            />
+            {/* The keyboard-accessible way to move a task to a different
+                section — dragging works too, but this needs no drag
+                gesture at all. */}
+            <Select value={task.section_id} onValueChange={(v) => onMoveSection(task.id, v)}>
+              <SelectTrigger size="sm" className="h-7 w-auto gap-1.5 border-dashed px-2 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {sections.map((section) => (
+                  <SelectItem key={section.id} value={section.id} className="text-xs">
+                    {section.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-1.5">
+            <label htmlFor="task-description" className="block text-xs font-medium text-muted-foreground">
+              Description
+            </label>
+            <Textarea
+              id="task-description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              onBlur={commitDescription}
+              placeholder="Notes for this task…"
+              rows={8}
+              className="resize-none text-sm"
+            />
+          </div>
+        </div>
+
+        <div className="border-t border-border px-5 py-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="gap-1.5 text-xs text-muted-foreground hover:text-destructive"
+            onClick={() => {
+              onDelete(task.id)
+              onClose()
+            }}
+          >
+            <Trash2 className="size-3.5" aria-hidden="true" />
+            Delete task
+          </Button>
+        </div>
+      </SheetContent>
+    </Sheet>
+  )
+}

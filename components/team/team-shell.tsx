@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut } from 'lucide-react'
+import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut, FolderKanban } from 'lucide-react'
+import { Toaster } from 'sonner'
 import { cn } from '@/lib/utils'
 import { displayName, initialsOf, type Profile } from '@/lib/team/types'
 import { signOut } from '@/app/team/actions'
@@ -12,6 +13,7 @@ type NavItem = { href: string; label: string; icon: typeof Home; adminOnly?: boo
 
 const NAV: NavItem[] = [
   { href: '/team', label: 'Home', icon: Home },
+  { href: '/team/projects', label: 'Projects', icon: FolderKanban },
   { href: '/team/members', label: 'Members', icon: Users, adminOnly: true },
   { href: '/team/settings', label: 'Settings', icon: Settings },
 ]
@@ -170,6 +172,11 @@ export function TeamShell({
           <main className="min-w-0 flex-1">{children}</main>
         </div>
       </div>
+
+      {/* Explicit theme prop rather than CSS inheritance — sonner portals
+          its toasts to the end of <body>, outside this component's own
+          `dark` wrapper div. */}
+      <Toaster theme={dark ? 'dark' : 'light'} position="bottom-right" richColors closeButton />
     </div>
   )
 }
