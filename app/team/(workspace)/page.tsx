@@ -10,7 +10,7 @@ const ROADMAP = [
   { phase: 3, label: 'Onboarding templates for new clinical hires', done: true },
   { phase: 4, label: 'Board and calendar views, My Tasks', done: true },
   { phase: 5, label: 'Comments, attachments, recurring tasks, and an inbox', done: true },
-  { phase: 6, label: 'Search, command palette, exports, project overview', done: false },
+  { phase: 6, label: 'Search, command palette, exports, project overview', done: true },
 ]
 
 export default async function TeamHomePage() {
@@ -25,29 +25,31 @@ export default async function TeamHomePage() {
 
       <div className="mx-auto max-w-3xl px-6 py-8">
         <section className="rounded-lg border border-border bg-secondary/30 p-5">
-          <h2 className="font-display text-base font-semibold">Comments, attachments, and recurring tasks are live</h2>
+          <h2 className="font-display text-base font-semibold">Search everything with ⌘K</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Every task can carry comments (with @mentions), file attachments, and a full change
-            history. Set a task to repeat weekly, biweekly, monthly, or quarterly and the next
-            one is created automatically the moment you check it off. Assignments, mentions,
-            comments, and due-tomorrow reminders all land in your new Inbox.
+            Press <span className="font-mono">⌘K</span> (or Ctrl+K) anywhere in the workspace, or
+            click Search in the sidebar, to jump to any page or jump straight to a project or
+            task by name. Every project also has an Export CSV button next to its List/Board
+            toggle, and a third Overview tab — progress, overdue count, and recent activity at a
+            glance, for the whole project at once.
           </p>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Notifications can also go out by email — off by default, see PHASE-5.md to turn it
-            on.
+            That completes the original build plan. Comments, attachments, recurring tasks, and
+            email notifications from Phase 5 are still there too — see PHASE-5.md to turn on
+            email if you haven't.
           </p>
           <Link
-            href="/team/inbox"
+            href="/team/projects"
             className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            Go to Inbox
+            Go to Projects
             <ArrowRight className="size-3.5" aria-hidden="true" />
           </Link>
           <Link
-            href="/team/projects"
+            href="/team/inbox"
             className="ml-2 mt-4 inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            Go to Projects
+            Go to Inbox
           </Link>
           {profile.role === 'admin' && (
             <Link
@@ -60,7 +62,7 @@ export default async function TeamHomePage() {
         </section>
 
         <section className="mt-8">
-          <h2 className="font-display text-base font-semibold">What is coming</h2>
+          <h2 className="font-display text-base font-semibold">What's been built</h2>
           <ol className="mt-3 space-y-2">
             {ROADMAP.map(({ phase, label, done }) => (
               <li key={phase} className="flex items-start gap-3 text-sm">

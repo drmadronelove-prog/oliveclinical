@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut, FolderKanban, ListChecks, Calendar, ListTodo, Inbox } from 'lucide-react'
+import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut, FolderKanban, ListChecks, Calendar, ListTodo, Inbox, Search } from 'lucide-react'
 import { Toaster } from 'sonner'
 import { cn } from '@/lib/utils'
 import { displayName, initialsOf, type Profile } from '@/lib/team/types'
 import { signOut } from '@/app/team/actions'
+import { CommandPalette } from './command-palette'
 
 type NavItem = { href: string; label: string; icon: typeof Home; adminOnly?: boolean }
 
@@ -63,11 +64,23 @@ export function TeamShell({
   const pathname = usePathname()
   const { dark, toggle } = useTeamTheme()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [paletteOpen, setPaletteOpen] = useState(false)
 
   // Close the mobile drawer whenever navigation happens.
   useEffect(() => {
     setMobileOpen(false)
   }, [pathname])
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setPaletteOpen((v) => !v)
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
 
   const items = NAV.filter((item) => !item.adminOnly || profile.role === 'admin')
 
@@ -92,6 +105,18 @@ export function TeamShell({
               aria-label="Close navigation"
             >
               <X className="size-4" aria-hidden="true" />
+            </button>
+          </div>
+
+          <div className="p-2">
+            <button
+              type="button"
+              onClick={() => setPaletteOpen(true)}
+              className="flex w-full items-center gap-2.5 rounded-md border border-border px-2.5 py-1.5 text-sm text-muted-foreground hover:bg-background/60 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <Search className="size-4 shrink-0" aria-hidden="true" />
+              Search
+              <span className="ml-auto text-xs text-muted-foreground/70">⌘K</span>
             </button>
           </div>
 
@@ -191,6 +216,8 @@ export function TeamShell({
           its toasts to the end of <body>, outside this component's own
           `dark` wrapper div. */}
       <Toaster theme={dark ? 'dark' : 'light'} position="bottom-right" richColors closeButton />
+
+      <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} isAdmin={profile.role === 'admin'} />
     </div>
   )
 }

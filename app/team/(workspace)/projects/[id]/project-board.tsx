@@ -15,7 +15,7 @@ import {
   type DragStartEvent,
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
-import { Plus, List, LayoutGrid } from 'lucide-react'
+import { Plus, List, LayoutGrid, LayoutDashboard, Download } from 'lucide-react'
 import type {
   Project,
   Section,
@@ -46,6 +46,8 @@ import { TaskCard } from './task-card'
 import { FastEntryRow } from '@/components/team/fast-entry-row'
 import { TaskDetailSheet } from './task-detail-sheet'
 import { SectionHeader } from '@/components/team/section-header'
+import { ProjectOverview } from '@/components/team/project-overview'
+import { projectTasksToCsv } from '@/lib/team/csv'
 import { cn } from '@/lib/utils'
 
 function SectionDropZone({ id, children }: { id: string; children: React.ReactNode }) {
@@ -97,6 +99,10 @@ export function ProjectBoard({
   // "calendar" was Phase 2's placeholder third option on this column,
   // before Calendar became the separate, cross-project page it is now —
   // treat it as List here rather than as a view this toggle can select.
+  // Overview is a snapshot to check, not a place to work — unlike
+  // list/board it's never saved as the project's default_view, just
+  // local state that resets to whichever of those was chosen last.
+  const [showOverview, setShowOverview] = useState(false)
   const [viewMode, setViewMode] = useState<'list' | 'board'>(
     project.default_view === 'board' ? 'board' : 'list',
   )
@@ -421,6 +427,7 @@ export function ProjectBoard({
   }
 
   function handleViewChange(next: 'list' | 'board') {
+    setShowOverview(false)
     setViewMode(next)
     const formData = new FormData()
     formData.set('id', project.id)
@@ -428,17 +435,36 @@ export function ProjectBoard({
     updateProjectDefaultView(formData) // fire-and-forget — worst case, it just doesn't stick for next time
   }
 
+  function handleExportCsv() {
+    const csv = projectTasksToCsv(tasks, sections, members, taskTags)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${project.name.replace(/[^\w\-]+/g, '-').toLowerCase()}-tasks.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="px-6 py-6">
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={handleExportCsv}
+          className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <Download className="size-3.5" aria-hidden="true" />
+          Export CSV
+        </button>
         <div className="inline-flex rounded-md border border-border p-0.5" role="group" aria-label="View">
           <button
             type="button"
             onClick={() => handleViewChange('list')}
-            aria-pressed={viewMode === 'list'}
+            aria-pressed={!showOverview && viewMode === 'list'}
             className={cn(
               'flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-              viewMode === 'list' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
+              !showOverview && viewMode === 'list' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
             )}
           >
             <List className="size-3.5" aria-hidden="true" />
@@ -447,18 +473,35 @@ export function ProjectBoard({
           <button
             type="button"
             onClick={() => handleViewChange('board')}
-            aria-pressed={viewMode === 'board'}
+            aria-pressed={!showOverview && viewMode === 'board'}
             className={cn(
               'flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-              viewMode === 'board' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
+              !showOverview && viewMode === 'board' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
             )}
           >
             <LayoutGrid className="size-3.5" aria-hidden="true" />
             Board
           </button>
+          <button
+            type="button"
+            onClick={() => setShowOverview(true)}
+            aria-pressed={showOverview}
+            className={cn(
+              'flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+              showOverview ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            <LayoutDashboard className="size-3.5" aria-hidden="true" />
+            Overview
+          </button>
         </div>
       </div>
 
+      {showOverview && (
+        <ProjectOverview project={project} sections={sections} tasks={tasks} members={members} activity={initialActivity} />
+      )}
+
+      <div className={showOverview ? 'hidden' : undefined}>
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
@@ -555,6 +598,7 @@ export function ProjectBoard({
             Add section
           </button>
         )}
+      </div>
       </div>
 
       <TaskDetailSheet
