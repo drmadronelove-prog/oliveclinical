@@ -207,11 +207,15 @@ const SCREENERS: FeatureCard[] = [
   {
     kind: "modal",
     title: "TAS-20",
-    category: "Alexithymia scale",
-    footerLabel: "Take scale",
+    category: "Alexithymia scale · access code",
+    footerLabel: "Enter code",
     modalTitle: "TAS-20: Toronto Alexithymia Scale",
     modalSubtitle: "20 items measuring difficulty identifying and describing feelings.",
-    content: <TAS20 />,
+    content: (
+      <AccessGate>
+        <TAS20 />
+      </AccessGate>
+    ),
   },
   {
     kind: "modal",
@@ -243,11 +247,15 @@ const SCREENERS: FeatureCard[] = [
   {
     kind: "modal",
     title: "OEQ-II",
-    category: "Overexcitabilities",
-    footerLabel: "Take questionnaire",
+    category: "Overexcitabilities · access code",
+    footerLabel: "Enter code",
     modalTitle: "OEQ-II: Overexcitabilities Questionnaire",
     modalSubtitle: "Five Dabrowskian overexcitabilities — psychomotor, sensual, intellectual, imaginational, emotional.",
-    content: <OEQ2 />,
+    content: (
+      <AccessGate>
+        <OEQ2 />
+      </AccessGate>
+    ),
   },
   {
     kind: "modal",

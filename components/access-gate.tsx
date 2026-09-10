@@ -4,8 +4,8 @@ import { useEffect, useState } from "react"
 
 /**
  * Access code gate for an individual instrument that the practice shares with
- * clients rather than publishing — one whose copyright holder asks to be
- * contacted before it is reproduced. Wrap the assessment in it:
+ * clients rather than publishing — one whose publisher restricts reproduction.
+ * Wrap the assessment in it:
  *
  *   content: <AccessGate><POPS /></AccessGate>
  *
@@ -66,10 +66,9 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
           This one is shared with clients
         </h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          The publisher of this scale asks to be contacted before it is reproduced, so we share it
-          with clients rather than posting it. Enter the access code you were given to open it — if
-          you are working with Olive Clinical and need the code, ask your clinician or get in touch
-          and we will send it to you.
+          This scale is restricted by its publisher, so we share it with clients rather than posting
+          it openly. Enter the access code you were given to open it — if you are working with Olive
+          Clinical and need the code, ask your clinician or get in touch and we will send it to you.
         </p>
       </div>
 
