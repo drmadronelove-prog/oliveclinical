@@ -117,17 +117,28 @@ export async function duplicateTemplate(formData: FormData) {
   redirect(`/team/templates/${copy.id}`)
 }
 
-export async function archiveTemplate(formData: FormData) {
+export async function archiveTemplate(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
   await requireProfile()
   const id = String(formData.get('id') ?? '')
-  if (!id) return
+  if (!id) return { ok: false, error: 'Missing template.' }
 
   const supabase = await createClient()
-  await supabase
+  const { error } = await supabase
     .from('project_templates')
     .update({ archived_at: new Date().toISOString() })
     .eq('id', id)
 
+  if (error) {
+    console.error('[team] archiveTemplate failed:', error)
+    return { ok: false, error: error.message }
+  }
+
   revalidatePath('/team/templates')
-  redirect('/team/templates')
+  // No redirect() here — see the matching note on archiveProject. This is
+  // called as a bare function from a client event handler, not through a
+  // <form action> or useActionState, and redirect()'s throw isn't
+  // reliably caught in that shape. The caller navigates itself.
+  return { ok: true }
 }

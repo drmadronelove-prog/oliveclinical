@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { Archive } from 'lucide-react'
 import {
   AlertDialog,
@@ -19,15 +21,20 @@ import { archiveProject } from '../actions'
 export function ArchiveProjectButton({ projectId, projectName }: { projectId: string; projectName: string }) {
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
+  const router = useRouter()
 
   function confirmArchive() {
     const formData = new FormData()
     formData.set('id', projectId)
     formData.set('archived', 'true')
-    // archiveProject redirects to /team/projects itself once it succeeds —
-    // nothing left to do here after the await but let that happen.
     startTransition(async () => {
-      await archiveProject(formData)
+      const result = await archiveProject(formData)
+      if (!result.ok) {
+        toast.error(`Couldn't archive that project: ${result.error}`)
+        return
+      }
+      setOpen(false)
+      router.push('/team/projects')
     })
   }
 

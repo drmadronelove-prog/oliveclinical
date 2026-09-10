@@ -86,20 +86,34 @@ export async function updateProjectStatus(
   return { ok: true }
 }
 
-export async function archiveProject(formData: FormData) {
+export async function archiveProject(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
   await requireProfile()
   const id = String(formData.get('id') ?? '')
   const archived = formData.get('archived') === 'true'
-  if (!id) return
+  if (!id) return { ok: false, error: 'Missing project.' }
 
   const supabase = await createClient()
-  await supabase
+  const { error } = await supabase
     .from('projects')
     .update({ archived_at: archived ? new Date().toISOString() : null })
     .eq('id', id)
 
+  if (error) {
+    console.error('[team] archiveProject failed:', error)
+    return { ok: false, error: error.message }
+  }
+
   revalidatePath('/team/projects')
-  if (archived) redirect('/team/projects')
+  // Deliberately no redirect() here even for the archived case — this is
+  // called as a bare function from a client event handler (inside
+  // startTransition), not through a <form action> or useActionState. In
+  // that shape, redirect()'s special throw isn't reliably caught by
+  // Next's action machinery and can surface as a visible runtime error
+  // instead of a navigation. The caller does the navigating itself once
+  // it sees { ok: true }.
+  return { ok: true }
 }
 
 /** The un-archive half of the trash-can model: back into the active list, untouched. */

@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { Archive } from 'lucide-react'
 import {
   AlertDialog,
@@ -25,12 +27,19 @@ export function ArchiveTemplateButton({
 }) {
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
+  const router = useRouter()
 
   function confirmArchive() {
     const formData = new FormData()
     formData.set('id', templateId)
     startTransition(async () => {
-      await archiveTemplate(formData)
+      const result = await archiveTemplate(formData)
+      if (!result.ok) {
+        toast.error(`Couldn't archive that template: ${result.error}`)
+        return
+      }
+      setOpen(false)
+      router.push('/team/templates')
     })
   }
 
