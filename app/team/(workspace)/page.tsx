@@ -33,8 +33,8 @@ export default async function TeamHomePage() {
             comments, and due-tomorrow reminders all land in your new Inbox.
           </p>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            These alerts are in-app only for now — real email delivery is a deliberate next
-            decision, not yet built.
+            Notifications can also go out by email — off by default, see PHASE-5.md to turn it
+            on.
           </p>
           <Link
             href="/team/inbox"

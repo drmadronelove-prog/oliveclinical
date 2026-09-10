@@ -4,31 +4,13 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AtSign, MessageSquare, UserPlus, Clock, Inbox as InboxIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { displayName } from '@/lib/team/types'
 import { formatRelativeTime } from '@/lib/team/types'
+import { describeNotification } from '@/lib/team/notification-copy'
 import { markNotificationRead, markAllNotificationsRead } from './actions'
 import type { NotificationRow } from './page'
 import { cn } from '@/lib/utils'
 
 const TYPE_ICON = { assignment: UserPlus, mention: AtSign, comment: MessageSquare, due_soon: Clock } as const
-
-const TYPE_VERB = {
-  assignment: 'assigned you',
-  mention: 'mentioned you in',
-  comment: 'commented on',
-} as const
-
-/**
- * A due-soon reminder has no person behind it — it's a scheduled check,
- * not something someone did — so it gets its own sentence shape instead
- * of being forced into "{actor} {verb} {task}".
- */
-function describeNotification(notification: NotificationRow): string {
-  const taskTitle = notification.task?.title ?? 'a task'
-  if (notification.type === 'due_soon') return `"${taskTitle}" is due tomorrow`
-  const who = notification.actor ? displayName(notification.actor) : 'Someone'
-  return `${who} ${TYPE_VERB[notification.type]} ${taskTitle}`
-}
 
 export function InboxList({ initialNotifications }: { initialNotifications: NotificationRow[] }) {
   const [notifications, setNotifications] = useState(initialNotifications)
