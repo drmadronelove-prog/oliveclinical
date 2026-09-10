@@ -2,6 +2,180 @@ import type { BlogPost } from "@/components/blog/blog-post"
 
 export const posts: BlogPost[] = [
   {
+    slug: "the-most-common-personality-disorder",
+    title: "The Most Common Personality Disorder You've Never Heard Of",
+    subtitle: "OCPD is more common than any other personality disorder and worse understood than most. The traits that define it are the same ones that get praised in a colleague — the question is how far they go, and who pays for them.",
+    author: "Madrone Love",
+    credential: "PsyD",
+    category: "OCPD & Clinical Insight",
+    date: "September 2026",
+    blocks: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "Almost everyone has heard of OCD. Far fewer people have heard of OCPD, obsessive-compulsive personality disorder, even though it is the most common personality disorder in the general population, with lifetime prevalence estimates running from three to nine percent depending on the study.",
+      },
+      {
+        type: "paragraph",
+        text: "The name does it no favors. It sounds like a more serious version of OCD, which it is not, and it sounds like a verdict on someone's character, which is closer to how it tends to get used. In practice OCPD describes a personality style built around order, standards, thoroughness, moral seriousness, and control over one's own work and environment. Someone with this style has strong ideas about how things should be done. They often work harder than the people around them. They are usually the person who catches the error nobody else caught.",
+      },
+      {
+        type: "paragraph",
+        text: "Whether that adds up to a disorder depends almost entirely on how far it goes and where the person has landed in life.",
+      },
+      { type: "heading", text: "The label is looser than it sounds" },
+      {
+        type: "paragraph",
+        text: "Before anything else, it helps to know how the diagnosis is built, because the construction explains a lot of the confusion around it.",
+      },
+      {
+        type: "paragraph",
+        text: "The DSM lists eight features and asks for any four. Preoccupation with order and detail. Perfectionism that stops you finishing. Working to the exclusion of leisure and friendship. Inflexibility about morality and ethics. Trouble discarding things. Reluctance to delegate. Hoarding money against future catastrophe. Rigidity and stubbornness. Any four out of eight means two people can carry the same diagnosis without sharing a single feature.",
+      },
+      {
+        type: "paragraph",
+        text: "Not all eight have held up equally. Research on which criteria actually identify the condition has repeatedly pointed at four of them, preoccupation with details, perfectionism, reluctance to delegate, and rigidity and stubbornness, with the last three also proving the most stable when people were followed for two years. Miserliness, workaholism, and hoarding have performed poorly as diagnostic markers, and there is reasonable argument that they do not belong in the definition at all.",
+      },
+      {
+        type: "paragraph",
+        text: "The World Health Organization went further. ICD-11 threw out the categorical personality disorders entirely. There is no anankastic personality disorder to have anymore. What remains is a rating of how severe someone's personality difficulty is, plus trait descriptions, one of which is anankastia, defined as a narrow focus on one's own rigid standard of perfection and of right and wrong, and on controlling oneself, others, and situations to make them conform to that standard.",
+      },
+      {
+        type: "paragraph",
+        text: "That shift matters for how the rest of this reads. The main international diagnostic system now treats this as a dimension that everyone sits somewhere on, rather than a category you are either in or out of. Which is much closer to how it looks in a room.",
+      },
+      { type: "heading", text: "What the research actually shows about the traits" },
+      {
+        type: "paragraph",
+        text: "Here is a strange fact about the OCPD literature. Because the diagnosis is defined by impairment, nearly all the research has been designed to find problems, and so it finds them. Samuel Chamberlain and Jon Grant, writing in the American Psychiatric Association's book on OCPD, make this point directly: if you strip the impairment language out of the diagnostic criteria, what you are left with is a set of traits that could be useful in plenty of jobs and plenty of relationships.",
+      },
+      {
+        type: "paragraph",
+        text: "The trait that maps most closely onto OCPD in mainstream personality research is conscientiousness, and conscientiousness has one of the better track records in psychology. It predicts higher self-esteem, life satisfaction, and self-efficacy in adulthood. It predicts teamwork ratings in student groups, where conscientious members were rated as contributing more useful ideas, taking leadership roles, encouraging others to finish on time, and communicating clearly. Medical residents rated as more conscientious by their students were rated as more professional by their faculty. In older adults, conscientiousness has been linked to better cognition, more volunteering, and higher subjective health, and in a seven-year study, to slower age-related cognitive decline. In one long-running lifespan study, conscientiousness predicted lower mortality, with the strongest protection showing up in the people whose careers had gone least well.",
+      },
+      {
+        type: "paragraph",
+        text: "There is a smaller literature on OCPD as such. One study of 304 men from the general community looked at personality disorder dimensions and life success, and the OCPD dimension was the only one positively associated with status and wealth once the statistics were corrected properly. Schizoid, schizotypal, avoidant, dependent, borderline, and antisocial dimensions all went the other way. Another study found that people with what the researchers called \"pure\" OCPD, without co-occurring OCD, were better than comparison groups at waiting for a larger reward instead of taking a smaller one now. That capacity gets called a deficit when it is missing and rarely gets called a strength when it is present.",
+      },
+      {
+        type: "paragraph",
+        text: "The most useful finding, to my mind, is about fit. In a German study of more than eight thousand employed people, higher conscientiousness went with higher income, but only in jobs that demanded the trait. Highly conscientious people in roles that did not call for it earned less than their peers, not more. The same person can be an asset or a liability depending on where you put them. That is a fact about the environment as much as about the person.",
+      },
+      { type: "heading", text: "Steve Jobs" },
+      {
+        type: "paragraph",
+        text: "Steve Jobs is the name that comes up most often in popular writing about OCPD. The claim originates with the journalist Joshua Kendall, who devoted part of his 2013 book America's Obsessives to the idea. Kendall was careful about it, and it is worth repeating his caveat: Jobs was never diagnosed with anything of the kind, and Kendall was suggesting a fit with the criteria rather than reporting a clinical finding. Nobody can diagnose a dead man from his biography, and the exercise is always a little unfair to the person who cannot answer.",
+      },
+      {
+        type: "paragraph",
+        text: "What makes Jobs a useful example anyway is that the same traits show up on both sides of his ledger, and the story is usually told as if only one side existed. He cared how the inside of a circuit board looked in a machine no customer would ever open. He held products back over details most people would not have noticed. Colleagues describe a man who could not let a thing go until it was right by his own standard, who found other people's work insufficient, and who was extremely hard to work for. The demanding style that made the products contributed to his being pushed out of his own company in 1985.",
+      },
+      {
+        type: "paragraph",
+        text: "That is the honest version of the strengths-based argument. Nobody should claim the trait is secretly all upside. The point is narrower: what people admired in the finished product and what people could not stand in the meeting were the same thing running at the same intensity.",
+      },
+      { type: "heading", text: "How it differs from OCD" },
+      {
+        type: "paragraph",
+        text: "The clearest difference is how the person feels about it.",
+      },
+      {
+        type: "paragraph",
+        text: "In OCD, the obsessions are unwanted. They arrive against the person's will, they feel foreign and often repugnant, and the compulsions are things the person does to make the distress stop, usually while knowing on some level that the ritual makes no sense. People with OCD generally want the whole apparatus gone.",
+      },
+      {
+        type: "paragraph",
+        text: "OCPD works the other way around. The standards feel correct. Someone with this style usually experiences their high bar as a virtue and other people's lower bar as the actual problem, which is why the distress in OCPD so often lands on the spouse, the roommate, the direct report, or the co-author rather than on the person themselves. When people with OCPD do come in for help, it is frequently because of something the traits cost them, a marriage under strain or a career stalled by missed deadlines, rather than because the traits themselves feel wrong.",
+      },
+      {
+        type: "paragraph",
+        text: "The content differs too. OCD attaches to specific themes, contamination, harm, symmetry, doubt, and produces rituals aimed at those themes. Its perfectionism is focal, tied to the feared outcome. OCPD is not a set of rituals. It is a way of doing everything: the lists, the reworking, the difficulty throwing anything away, the reluctance to hand a task to anyone else, the sense that there is a right way to load a dishwasher and everyone else is doing it wrong. The perfectionism is global and shows up in every sphere at once.",
+      },
+      {
+        type: "paragraph",
+        text: "Insight tends to run in opposite directions as well. People with OCD usually know their rituals do not make sense and resist them anyway. People with OCPD tend to have poorer insight into the pattern and offer little inner resistance, since from inside there is nothing to resist.",
+      },
+      {
+        type: "paragraph",
+        text: "All of that is the clean version, and clinicians who write about this are careful to say the line is blurrier in practice. Perfectionism in OCPD is not always comfortable. Plenty of people with these traits are distressed by their own perfectionism precisely because it stops them finishing things, and they can describe that clearly. Running the other way, contamination fears in OCD are not always experienced as irrational and are not always resisted. Both conditions can also involve a sense of incompleteness, the feeling that something is not yet just right, which is one of the reasons they get confused.",
+      },
+      {
+        type: "paragraph",
+        text: "The two can occur together, and when they do the picture tends to be worse than either alone. Quality-of-life research has found impairment in OCPD equivalent to what is seen in OCD, which surprises people who assume a personality style must be milder than an anxiety disorder.",
+      },
+      { type: "heading", text: "How it differs from autism" },
+      {
+        type: "paragraph",
+        text: "This one gets confused often, and for good reason. Both can involve routines, discomfort with change, literal and rule-bound thinking, difficulty reading a room, and long hours of focused work. Both can look, from outside, like inflexibility.",
+      },
+      {
+        type: "paragraph",
+        text: "The differences are mostly about origin and purpose.",
+      },
+      {
+        type: "paragraph",
+        text: "Autism is neurodevelopmental. It is present from early childhood, it involves differences in social communication and in sensory processing, and its routines and repetitions usually serve regulation and predictability. The world is loud and hard to forecast, and sameness makes it manageable. An autistic person's deep interests tend to be a source of pleasure and restoration, not obligation.",
+      },
+      {
+        type: "paragraph",
+        text: "OCPD is a personality pattern that consolidates in early adulthood. The rigidity is organized around correctness rather than around regulation, and the overwork tends to be driven by duty rather than by delight. Sensory differences are not part of the picture. The moral flavor is distinctive as well: the inflexibility about ethics, right and wrong, the proper way, shows up in the diagnostic criteria for OCPD and does not appear in the autism criteria at all.",
+      },
+      {
+        type: "paragraph",
+        text: "They can also co-occur, and either can be mistaken for the other by a rushed evaluation. A careful assessment asks what the person's early childhood looked like, whether there is a sensory story, and what the rigidity is actually for.",
+      },
+      { type: "heading", text: "Where it tips" },
+      {
+        type: "paragraph",
+        text: "Everything above is an argument for taking the traits seriously rather than treating them as a character flaw. It is not an argument that this is a comfortable way to live, and I do not want the strengths framing to soften what the diagnosis actually costs people.",
+      },
+      {
+        type: "paragraph",
+        text: "Start with the obvious costs. Perfectionism that has hardened into the belief that anything less than perfect is unacceptable is linked to depression. Perfectionism aimed outward, at partners and colleagues, is linked to worse relationships. Tasks go unfinished because they are not perfect yet. Nothing gets delegated, so nothing gets lighter. In studies of treatment-seeking patients, OCPD sits alongside borderline personality disorder as one of the costliest personality disorders in direct medical spending and lost productivity.",
+      },
+      {
+        type: "paragraph",
+        text: "Anger is the part people do not expect. The public image of this style is a tidy, buttoned-up person, and the research does not match that image. OCPD has been linked to outbursts of anger and hostility at home and at work, and to behavioral disinhibition, which is not what the stereotype predicts. In a study comparing people with OCPD, people with both OCPD and OCD, and healthy controls, the OCPD-only group described themselves as controlling, vindictive, and cold in their relationships, and reported high interpersonal distress. Clinicians who work with this population describe at least two distinct presentations, one hostile and dominant, one anxious and self-critical, and the hostile version is the one that lands hardest on the people nearby.",
+      },
+      {
+        type: "paragraph",
+        text: "The empathy finding from that same study is worth stating precisely, because it is easy to garble. People with OCPD scored much lower than controls on perspective-taking, the ability to see a situation from where another person is standing. Their scores on empathic concern, the capacity to feel for someone, were comparable to controls. That combination explains a lot about how the conflicts go. The person often cares. What they struggle with is the possibility that someone else's way of seeing it is also legitimate.",
+      },
+      {
+        type: "paragraph",
+        text: "Then there is the overlap with eating disorders, which is closer than most people realize. OCPD traits and eating disorders co-occur at high rates, and one influential study found that childhood perfectionism and rigidity, present before any eating disorder appeared, were elevated in adult women who later developed one, enough that the authors proposed these traits as part of a broader eating disorder phenotype. Anorexia in particular has a long-observed relationship with this temperament. The treatment developed specifically for what its originator calls disorders of overcontrol was built with both anorexia and OCPD in mind, which tells you how closely the two are held in the clinical literature.",
+      },
+      {
+        type: "paragraph",
+        text: "Family life is where much of this is paid for, and the criteria themselves say so. Inflexibility about morality and values, an insistence that others do things exactly one's own way, reluctance to let anyone else handle a task: these are described in the diagnostic manual as things that happen to other people, and the other people are usually a spouse and children. There is far more written about adults who grew up with a parent like this than there is research measuring it, which is its own kind of evidence about where the burden falls. Adult children of a rigidly perfectionistic parent tend to describe a household organized around a standard they could not meet and were not allowed to question.",
+      },
+      {
+        type: "paragraph",
+        text: "None of that is a small thing to carry. This is not a benign quirk of temperament, and it is not, as the internet sometimes has it, a personality type to collect.",
+      },
+      {
+        type: "paragraph",
+        text: "There is treatment, though the evidence base is thinner than it should be. Cognitive behavioral work aimed specifically at perfectionism and rigidity has the most support. Radically open dialectical behavior therapy was developed for exactly this cluster, what its originator calls disorders of overcontrol. Some clinicians sequence emotion regulation and relationship skills first, on the theory that flexibility is hard to practice before a person can tolerate the feelings that flexibility stirs up. Acceptance and commitment therapy has been proposed for the same reasons, though it has not been tested here.",
+      },
+      {
+        type: "paragraph",
+        text: "None of that treatment is about removing conscientiousness. The goal is to give someone a choice about when to apply it, so that the standards can be turned up for the thing that matters and turned down for the email that does not.",
+      },
+      {
+        type: "paragraph",
+        text: "That distinction is worth holding onto if you recognize yourself in any of this. Caring a great deal about doing things properly is not a defect. Being unable to stop is a different matter, and it is the part worth getting help with.",
+      },
+      {
+        type: "paragraph",
+        text: "It is also worth knowing that this is not a self-diagnosis you can settle from a list of eight items. The people who study OCPD recommend a structured or semi-structured clinical interview, partly because the criteria overlap with so much else and partly because the person with the traits is often the last one in the room to see them.",
+      },
+      {
+        type: "footer-note",
+        text: "Sources — Samuel R. Chamberlain and Jon E. Grant, \"Positive Aspects of OCPD,\" in Jon E. Grant, Samuel R. Chamberlain, and Anthony Pinto, eds., Obsessive-Compulsive Personality Disorder (American Psychiatric Association Publishing, 2019): the conscientiousness findings, the Ullrich et al. (2007) status and wealth study, the Pinto et al. (2014) delayed-reward finding, the Denissen et al. (2018) income and job-demand study, and the Kern et al. (2009) longevity data. — Y. C. Janardhan Reddy, \"Diagnosis and Clinical Features of OCPD,\" in the same volume: the prevalence figures, the history of the diagnosis across editions of the DSM, the research on which criteria hold up (Grilo et al. 2001; McGlashan et al. 2005), the ICD-11 shift to a dimensional model and the definition of anankastia, and the OCPD and OCD comparison. — Anthony Pinto, \"Psychotherapy for OCPD,\" in the same volume: the quality-of-life comparison with OCD, the economic burden finding (Soeteman et al. 2008), the anger and hostility research (Villemarette-Pittman et al. 2004), the hostile-dominant and anxious subtypes, the perfectionism and depression literature (Rice and Aldea 2006; Haring et al. 2003), and the treatment approaches described. — Erin Cain et al., \"Interpersonal Functioning in Obsessive-Compulsive Personality Disorder\" (2015), reported in the Pinto chapter. — Marija Anderluh et al., \"Childhood Obsessive-Compulsive Personality Traits in Adult Women With Eating Disorders: Defining a Broader Eating Disorder Phenotype,\" American Journal of Psychiatry 160(2), 2003 (psychiatryonline.org/doi/full/10.1176/appi.ajp.160.2.242). — Joshua Kendall, America's Obsessives: The Compulsive Energy That Built a Nation (Grand Central, 2013), and Stephanie Pappas, \"Steve Jobs: Genius, or Just Obsessive?\", Live Science, 2013 (livescience.com/38933-steve-jobs-obsessive-compulsive-ocpd.html). — American Psychiatric Association, Diagnostic and Statistical Manual of Mental Disorders, Fifth Edition.",
+      },
+    ],
+  },
+  {
     slug: "what-kind-of-demand-avoidance-is-this",
     title: "What Kind of Demand Avoidance Is This?",
     subtitle: "PDA usually arrives as a yes-or-no question. The more useful one is what kind of demand avoidance this is — six drivers can look identical in a waiting room and need opposite things.",
