@@ -178,3 +178,53 @@ export function addOffsetDays(anchorDateIso: string, offsetDays: number): string
   const d = String(date.getDate()).padStart(2, '0')
   return `${y}-${m}-${d}`
 }
+
+// ---------------------------------------------------------------------
+// Phase 4 — tags, and the My Tasks date buckets
+// ---------------------------------------------------------------------
+
+export type Tag = {
+  id: string
+  name: string
+  color: string
+  created_at: string
+  archived_at: string | null
+}
+
+export type TaskBucket = 'overdue' | 'today' | 'this_week' | 'later'
+
+export const TASK_BUCKET_LABEL: Record<TaskBucket, string> = {
+  overdue: 'Overdue',
+  today: 'Today',
+  this_week: 'This week',
+  later: 'Later',
+}
+
+export const TASK_BUCKET_ORDER: TaskBucket[] = ['overdue', 'today', 'this_week', 'later']
+
+/**
+ * Which of the four My Tasks groups a task falls into. A completed task
+ * is never bucketed by the caller — it has nothing left to plan around —
+ * so this only looks at the date.
+ *
+ * "This week" means through the coming Sunday. A task with no due date
+ * at all goes to Later — there's no fifth "someday" bucket in the
+ * design, and Later already means "not urgent."
+ */
+export function bucketTaskDate(dueDate: string | null, referenceDate: Date = new Date()): TaskBucket {
+  const today = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate())
+
+  if (!dueDate) return 'later'
+
+  const [year, month, day] = dueDate.split('-').map(Number)
+  const due = new Date(year, month - 1, day)
+
+  if (due < today) return 'overdue'
+  if (due.getTime() === today.getTime()) return 'today'
+
+  const daysUntilSunday = 7 - today.getDay() // getDay(): 0 = Sunday
+  const endOfWeek = new Date(today)
+  endOfWeek.setDate(today.getDate() + (daysUntilSunday === 7 ? 0 : daysUntilSunday))
+
+  return due <= endOfWeek ? 'this_week' : 'later'
+}

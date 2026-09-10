@@ -15,7 +15,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { Plus } from 'lucide-react'
-import type { Project, Section, Task, Profile } from '@/lib/team/types'
+import type { Project, Section, Task, Profile, Tag } from '@/lib/team/types'
 import { positionAtEnd, positionBetween } from '@/lib/team/position'
 import {
   createTask,
@@ -27,10 +27,15 @@ import {
   renameSection,
   archiveSection,
 } from './actions'
+import { createTag, setTaskTags } from './tag-actions'
+import { updateProjectDefaultView } from '../actions'
 import { TaskRow } from './task-row'
+import { TaskCard } from './task-card'
 import { FastEntryRow } from '@/components/team/fast-entry-row'
 import { TaskDetailSheet } from './task-detail-sheet'
 import { SectionHeader } from '@/components/team/section-header'
+import { List, LayoutGrid } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 function SectionDropZone({ id, children }: { id: string; children: React.ReactNode }) {
   const { setNodeRef } = useDroppable({ id })
@@ -46,18 +51,30 @@ export function ProjectBoard({
   initialSections,
   initialTasks,
   members,
+  allTags,
+  initialTaskTags,
 }: {
   project: Project
   initialSections: Section[]
   initialTasks: Task[]
   members: Profile[]
+  allTags: Tag[]
+  initialTaskTags: Record<string, Tag[]>
 }) {
   const [sections, setSections] = useState(initialSections)
   const [tasks, setTasks] = useState(initialTasks)
+  const [tags, setTags] = useState(allTags)
+  const [taskTags, setTaskTagsState] = useState(initialTaskTags)
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
   const [activeTask, setActiveTask] = useState<Task | null>(null)
   const [addingSection, setAddingSection] = useState(false)
   const [sectionName, setSectionName] = useState('')
+  // "calendar" was Phase 2's placeholder third option on this column,
+  // before Calendar became the separate, cross-project page it is now —
+  // treat it as List here rather than as a view this toggle can select.
+  const [viewMode, setViewMode] = useState<'list' | 'board'>(
+    project.default_view === 'board' ? 'board' : 'list',
+  )
   const snapshotRef = useRef<Task[]>(initialTasks)
 
   const sensors = useSensors(
@@ -187,6 +204,28 @@ export function ProjectBoard({
     })
   }
 
+  function handleTagsChange(taskId: string, tagIds: string[]) {
+    const previous = taskTags
+    setTaskTagsState((prev) => ({ ...prev, [taskId]: tags.filter((t) => tagIds.includes(t.id)) }))
+    setTaskTags({ taskId, projectId: project.id, tagIds }).then((result) => {
+      if (!result.ok) {
+        setTaskTagsState(previous)
+        toast.error(result.error)
+      }
+    })
+  }
+
+  async function handleCreateTag(name: string) {
+    const result = await createTag(name)
+    if (!result.ok) {
+      toast.error(result.error)
+      return null
+    }
+    const newTag: Tag = { id: result.data.id, name, color: result.data.color, created_at: '', archived_at: null }
+    setTags((prev) => (prev.some((t) => t.id === newTag.id) ? prev : [...prev, newTag]))
+    return newTag
+  }
+
   function handleMoveSection(id: string, sectionId: string) {
     const siblingPositions = (tasksBySection.get(sectionId) ?? []).map((t) => t.position)
     const position = positionAtEnd(siblingPositions)
@@ -264,19 +303,56 @@ export function ProjectBoard({
     })
   }
 
+  function handleViewChange(next: 'list' | 'board') {
+    setViewMode(next)
+    const formData = new FormData()
+    formData.set('id', project.id)
+    formData.set('view', next)
+    updateProjectDefaultView(formData) // fire-and-forget — worst case, it just doesn't stick for next time
+  }
+
   return (
     <div className="px-6 py-6">
+      <div className="mb-4 flex justify-end">
+        <div className="inline-flex rounded-md border border-border p-0.5" role="group" aria-label="View">
+          <button
+            type="button"
+            onClick={() => handleViewChange('list')}
+            aria-pressed={viewMode === 'list'}
+            className={cn(
+              'flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+              viewMode === 'list' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            <List className="size-3.5" aria-hidden="true" />
+            List
+          </button>
+          <button
+            type="button"
+            onClick={() => handleViewChange('board')}
+            aria-pressed={viewMode === 'board'}
+            className={cn(
+              'flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+              viewMode === 'board' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            <LayoutGrid className="size-3.5" aria-hidden="true" />
+            Board
+          </button>
+        </div>
+      </div>
+
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onDragCancel={() => setActiveTask(null)}
       >
-        <div className="space-y-6">
+        <div className={viewMode === 'board' ? 'flex items-start gap-4 overflow-x-auto pb-2' : 'space-y-6'}>
           {sections.map((section) => {
             const sectionTasks = tasksBySection.get(section.id) ?? []
             return (
-              <div key={section.id}>
+              <div key={section.id} className={viewMode === 'board' ? 'w-72 shrink-0' : undefined}>
                 <SectionHeader
                   section={section}
                   taskCount={sectionTasks.length}
@@ -289,18 +365,30 @@ export function ProjectBoard({
                     items={sectionTasks.map((t) => t.id)}
                     strategy={verticalListSortingStrategy}
                   >
-                    {sectionTasks.length === 0 && (
-                      <p className="px-2 py-1.5 text-sm text-muted-foreground/50">No tasks yet</p>
-                    )}
-                    {sectionTasks.map((task) => (
-                      <TaskRow
-                        key={task.id}
-                        task={task}
-                        assignee={task.assignee_id ? membersById.get(task.assignee_id) : undefined}
-                        onOpen={() => setSelectedTaskId(task.id)}
-                        onToggleComplete={(completed) => handleToggleComplete(task.id, completed)}
-                      />
-                    ))}
+                    <div className={viewMode === 'board' ? 'space-y-2' : 'space-y-0.5'}>
+                      {sectionTasks.length === 0 && (
+                        <p className="px-2 py-1.5 text-sm text-muted-foreground/50">No tasks yet</p>
+                      )}
+                      {sectionTasks.map((task) =>
+                        viewMode === 'board' ? (
+                          <TaskCard
+                            key={task.id}
+                            task={task}
+                            assignee={task.assignee_id ? membersById.get(task.assignee_id) : undefined}
+                            onOpen={() => setSelectedTaskId(task.id)}
+                            onToggleComplete={(completed) => handleToggleComplete(task.id, completed)}
+                          />
+                        ) : (
+                          <TaskRow
+                            key={task.id}
+                            task={task}
+                            assignee={task.assignee_id ? membersById.get(task.assignee_id) : undefined}
+                            onOpen={() => setSelectedTaskId(task.id)}
+                            onToggleComplete={(completed) => handleToggleComplete(task.id, completed)}
+                          />
+                        ),
+                      )}
+                    </div>
                   </SortableContext>
                 </SectionDropZone>
 
@@ -356,11 +444,15 @@ export function ProjectBoard({
         task={selectedTask}
         members={members}
         sections={sections}
+        allTags={tags}
+        selectedTags={selectedTask ? (taskTags[selectedTask.id] ?? []) : []}
         onClose={() => setSelectedTaskId(null)}
         onPatch={handlePatch}
         onToggleComplete={handleToggleComplete}
         onDelete={handleDelete}
         onMoveSection={handleMoveSection}
+        onTagsChange={handleTagsChange}
+        onCreateTag={handleCreateTag}
       />
     </div>
   )

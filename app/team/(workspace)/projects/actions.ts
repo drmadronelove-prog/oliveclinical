@@ -86,6 +86,23 @@ export async function updateProjectStatus(
   return { ok: true }
 }
 
+/**
+ * Whichever view (List or Board) was last chosen for this project. It's
+ * one value on the project itself, not per-person — the next person to
+ * open it sees it the way it was last left, same as reopening any shared
+ * document. Fire-and-forget from the caller; nothing here is worth
+ * blocking the view switch on.
+ */
+export async function updateProjectDefaultView(formData: FormData) {
+  await requireProfile()
+  const id = String(formData.get('id') ?? '')
+  const view = String(formData.get('view') ?? '')
+  if (!id || (view !== 'list' && view !== 'board')) return
+
+  const supabase = await createClient()
+  await supabase.from('projects').update({ default_view: view }).eq('id', id)
+}
+
 export async function archiveProject(
   formData: FormData,
 ): Promise<{ ok: true } | { ok: false; error: string }> {

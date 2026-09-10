@@ -15,8 +15,9 @@ import { DatePicker } from '@/components/team/date-picker'
 import { PriorityPicker } from '@/components/team/priority-picker'
 import { AssigneePicker } from '@/components/team/assignee-picker'
 import { RichTextEditor } from '@/components/team/rich-text-editor'
+import { TagPicker } from '@/components/team/tag-picker'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import type { Task, Profile, Section } from '@/lib/team/types'
+import type { Task, Profile, Section, Tag } from '@/lib/team/types'
 import type { Priority } from '@/lib/team/priority'
 
 /** Tiptap's "nothing typed" state is `<p></p>`, not an empty string. */
@@ -28,20 +29,28 @@ export function TaskDetailSheet({
   task,
   members,
   sections,
+  allTags,
+  selectedTags,
   onClose,
   onPatch,
   onToggleComplete,
   onDelete,
   onMoveSection,
+  onTagsChange,
+  onCreateTag,
 }: {
   task: Task | null
   members: Profile[]
   sections: Section[]
+  allTags: Tag[]
+  selectedTags: Tag[]
   onClose: () => void
   onPatch: (id: string, patch: Partial<Task>) => void
   onToggleComplete: (id: string, completed: boolean) => void
   onDelete: (id: string) => void
   onMoveSection: (id: string, sectionId: string) => void
+  onTagsChange: (id: string, tagIds: string[]) => void
+  onCreateTag: (name: string) => Promise<Tag | null>
 }) {
   const [title, setTitle] = useState('')
 
@@ -134,6 +143,13 @@ export function TaskDetailSheet({
               </SelectContent>
             </Select>
           </div>
+
+          <TagPicker
+            selected={selectedTags}
+            allTags={allTags}
+            onChange={(tagIds) => onTagsChange(task.id, tagIds)}
+            onCreateTag={onCreateTag}
+          />
 
           <div className="space-y-1.5">
             <span className="block text-xs font-medium text-muted-foreground">Description</span>

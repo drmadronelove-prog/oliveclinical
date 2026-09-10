@@ -63,6 +63,8 @@ export async function toggleTaskComplete(input: {
     return { ok: false, error: `Couldn't update that task: ${error.message}` }
   }
   revalidatePath(`/team/projects/${input.projectId}`)
+  revalidatePath('/team/calendar')
+  revalidatePath('/team/my-tasks')
   return { ok: true, data: undefined }
 }
 
@@ -108,6 +110,8 @@ export async function updateTask(input: {
   }
 
   revalidatePath(`/team/projects/${input.projectId}`)
+  revalidatePath('/team/calendar')
+  revalidatePath('/team/my-tasks')
   return { ok: true, data: undefined }
 }
 
@@ -146,6 +150,8 @@ export async function archiveTask(input: { id: string; projectId: string }): Pro
     return { ok: false, error: `Couldn't delete that task: ${error.message}` }
   }
   revalidatePath(`/team/projects/${input.projectId}`)
+  revalidatePath('/team/calendar')
+  revalidatePath('/team/my-tasks')
   return { ok: true, data: undefined }
 }
 
