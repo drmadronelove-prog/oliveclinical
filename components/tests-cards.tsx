@@ -15,6 +15,7 @@ import { OEQ2 } from "@/components/assessments/oeq2"
 import { ICQEV } from "@/components/assessments/icqev"
 import { OCTRS } from "@/components/assessments/octrs"
 import { POPS } from "@/components/assessments/pops"
+import { OCIR } from "@/components/assessments/ocir"
 import { AQ10 } from "@/components/assessments/aq10"
 import { DESB } from "@/components/assessments/desb"
 import { DSS } from "@/components/assessments/dss"
@@ -273,6 +274,15 @@ const SCREENERS: FeatureCard[] = [
     modalTitle: "POPS: Pathological Obsessive-Compulsive Personality Scale",
     modalSubtitle: "49 items across rigidity, emotional overcontrol, perfectionism, delegation, and change · Pinto, Ansell & Wright, 2019.",
     content: <POPS />,
+  },
+  {
+    kind: "modal",
+    title: "OCI-R",
+    category: "OCD symptom screen",
+    footerLabel: "Take screen",
+    modalTitle: "OCI-R: Obsessive-Compulsive Inventory – Revised",
+    modalSubtitle: "18-item screen across washing, obsessing, hoarding, ordering, checking, and neutralizing · Foa et al., 2002.",
+    content: <OCIR />,
   },
   {
     kind: "modal",

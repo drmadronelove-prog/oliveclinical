@@ -1,5 +1,6 @@
 import { ToolPageLayout } from "@/components/tool-page-layout"
 import { TestsCards } from "@/components/tests-cards"
+import { AccessGate } from "@/components/access-gate"
 
 export const metadata = {
   title: "Neuroinclusive Assessments — Olive Clinical",
@@ -9,7 +10,9 @@ export const metadata = {
 export default function TestsPage() {
   return (
     <ToolPageLayout title="Neuroinclusive Assessments" color="text-slate">
-      <TestsCards />
+      <AccessGate>
+        <TestsCards />
+      </AccessGate>
     </ToolPageLayout>
   )
 }
