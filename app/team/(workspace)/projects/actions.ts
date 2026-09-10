@@ -65,17 +65,25 @@ export async function createProject(
   redirect(`/team/projects/${project.id}`)
 }
 
-export async function updateProjectStatus(formData: FormData) {
+export async function updateProjectStatus(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
   await requireProfile()
   const id = String(formData.get('id') ?? '')
   const status = formData.get('status') as ProjectStatus
-  if (!id || !status) return
+  if (!id || !status) return { ok: false, error: 'Missing project or status.' }
 
   const supabase = await createClient()
-  await supabase.from('projects').update({ status }).eq('id', id)
+  const { error } = await supabase.from('projects').update({ status }).eq('id', id)
+
+  if (error) {
+    console.error('[team] updateProjectStatus failed:', error)
+    return { ok: false, error: error.message }
+  }
 
   revalidatePath(`/team/projects/${id}`)
   revalidatePath('/team/projects')
+  return { ok: true }
 }
 
 export async function archiveProject(formData: FormData) {

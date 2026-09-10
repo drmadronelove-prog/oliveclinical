@@ -192,3 +192,46 @@ export async function renameSection(input: {
   revalidatePath(`/team/projects/${input.projectId}`)
   return { ok: true, data: undefined }
 }
+
+export async function archiveSection(input: {
+  id: string
+  projectId: string
+}): Promise<ActionResult> {
+  await requireProfile()
+  const supabase = await createClient()
+
+  // A section is only ever a container. Deleting one out from under
+  // tasks that still live in it would leave them pointing at a section
+  // that no longer shows up anywhere — quietly orphaned, not archived.
+  // Requiring it to be empty first keeps "delete" from ever losing track
+  // of real work.
+  const { count, error: countError } = await supabase
+    .from('tasks')
+    .select('id', { count: 'exact', head: true })
+    .eq('section_id', input.id)
+    .is('archived_at', null)
+
+  if (countError) {
+    console.error('[team] archiveSection count check failed:', countError)
+    return { ok: false, error: `Couldn't check that section: ${countError.message}` }
+  }
+  if (count && count > 0) {
+    return {
+      ok: false,
+      error: `Move or delete the ${count} task${count === 1 ? '' : 's'} in this section first.`,
+    }
+  }
+
+  const { error } = await supabase
+    .from('sections')
+    .update({ archived_at: new Date().toISOString() })
+    .eq('id', input.id)
+
+  if (error) {
+    console.error('[team] archiveSection failed:', error)
+    return { ok: false, error: `Couldn't delete that section: ${error.message}` }
+  }
+
+  revalidatePath(`/team/projects/${input.projectId}`)
+  return { ok: true, data: undefined }
+}

@@ -17,10 +17,20 @@ import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinat
 import { Plus } from 'lucide-react'
 import type { Project, Section, Task, Profile } from '@/lib/team/types'
 import { positionAtEnd, positionBetween } from '@/lib/team/position'
-import { createTask, toggleTaskComplete, updateTask, reorderTask, archiveTask, createSection } from './actions'
+import {
+  createTask,
+  toggleTaskComplete,
+  updateTask,
+  reorderTask,
+  archiveTask,
+  createSection,
+  renameSection,
+  archiveSection,
+} from './actions'
 import { TaskRow } from './task-row'
 import { FastEntryRow } from './fast-entry-row'
 import { TaskDetailSheet } from './task-detail-sheet'
+import { SectionHeader } from './section-header'
 
 function SectionDropZone({ id, children }: { id: string; children: React.ReactNode }) {
   const { setNodeRef } = useDroppable({ id })
@@ -201,6 +211,28 @@ export function ProjectBoard({
     })
   }
 
+  function handleRenameSection(id: string, name: string) {
+    const previous = sections
+    setSections((prev) => prev.map((s) => (s.id === id ? { ...s, name } : s)))
+    renameSection({ id, projectId: project.id, name }).then((result) => {
+      if (!result.ok) {
+        setSections(previous)
+        toast.error(result.error)
+      }
+    })
+  }
+
+  function handleDeleteSection(id: string) {
+    const previous = sections
+    setSections((prev) => prev.filter((s) => s.id !== id))
+    archiveSection({ id, projectId: project.id }).then((result) => {
+      if (!result.ok) {
+        setSections(previous)
+        toast.error(result.error)
+      }
+    })
+  }
+
   function handleCreateSection() {
     const name = sectionName.trim()
     if (!name) {
@@ -245,12 +277,12 @@ export function ProjectBoard({
             const sectionTasks = tasksBySection.get(section.id) ?? []
             return (
               <div key={section.id}>
-                <h2 className="mb-1 px-1 font-display text-sm font-semibold text-muted-foreground">
-                  {section.name}
-                  <span className="ml-1.5 font-sans font-normal text-muted-foreground/60">
-                    {sectionTasks.length}
-                  </span>
-                </h2>
+                <SectionHeader
+                  section={section}
+                  taskCount={sectionTasks.length}
+                  onRename={(name) => handleRenameSection(section.id, name)}
+                  onDelete={() => handleDeleteSection(section.id)}
+                />
 
                 <SectionDropZone id={section.id}>
                   <SortableContext
