@@ -44,7 +44,8 @@ export function ArchiveProjectButton({ projectId, projectName }: { projectId: st
           <AlertDialogTitle>Archive "{projectName}"?</AlertDialogTitle>
           <AlertDialogDescription>
             It disappears from the projects list, but nothing is deleted — every task and its
-            history stays intact. An admin can restore it from Supabase if you ever need it back.
+            history stays intact. Restore it any time from Projects → Archived, or delete it there
+            for good once you're sure.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

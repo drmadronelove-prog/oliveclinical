@@ -33,7 +33,7 @@ export function displayName(profile: Pick<Profile, 'name' | 'email'>): string {
 // Phase 2 — projects, sections, tasks
 // ---------------------------------------------------------------------
 
-export type ProjectType = 'marketing' | 'onboarding' | 'general'
+export type ProjectType = 'marketing' | 'onboarding' | 'assessment' | 'general'
 export type ProjectStatus = 'on_track' | 'at_risk' | 'blocked' | 'done'
 export type ProjectView = 'list' | 'board' | 'calendar'
 
@@ -98,6 +98,7 @@ export const PROJECT_STATUS_DOT_CLASS: Record<ProjectStatus, string> = {
 export const PROJECT_TYPE_LABEL: Record<ProjectType, string> = {
   marketing: 'Marketing',
   onboarding: 'Onboarding',
+  assessment: 'Assessment',
   general: 'General',
 }
 

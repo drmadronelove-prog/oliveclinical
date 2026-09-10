@@ -101,3 +101,51 @@ export async function archiveProject(formData: FormData) {
   revalidatePath('/team/projects')
   if (archived) redirect('/team/projects')
 }
+
+/** The un-archive half of the trash-can model: back into the active list, untouched. */
+export async function restoreProject(formData: FormData) {
+  await requireProfile()
+  const id = String(formData.get('id') ?? '')
+  if (!id) return
+
+  const supabase = await createClient()
+  await supabase.from('projects').update({ archived_at: null }).eq('id', id)
+
+  revalidatePath('/team/projects')
+}
+
+/**
+ * The other half: gone for good, sections and tasks with it (the
+ * database cascades that automatically). Only reachable on a project
+ * that is already archived — never a one-click way to destroy something
+ * still in active use.
+ */
+export async function deleteProjectPermanently(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  await requireProfile()
+  const id = String(formData.get('id') ?? '')
+  if (!id) return { ok: false, error: 'Missing project.' }
+
+  const supabase = await createClient()
+
+  const { data: project } = await supabase
+    .from('projects')
+    .select('archived_at')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (!project) return { ok: false, error: 'That project is already gone.' }
+  if (!project.archived_at) {
+    return { ok: false, error: 'Archive the project first — permanent delete only works from there.' }
+  }
+
+  const { error } = await supabase.from('projects').delete().eq('id', id)
+  if (error) {
+    console.error('[team] deleteProjectPermanently failed:', error)
+    return { ok: false, error: error.message }
+  }
+
+  revalidatePath('/team/projects')
+  return { ok: true }
+}
