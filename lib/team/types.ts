@@ -120,3 +120,61 @@ export function isOverdue(dueDate: string | null, completed: boolean): boolean {
   const [year, month, day] = dueDate.split('-').map(Number)
   return new Date(year, month - 1, day) < today
 }
+
+// ---------------------------------------------------------------------
+// Phase 3 — onboarding templates
+// ---------------------------------------------------------------------
+
+export type ProjectTemplate = {
+  id: string
+  name: string
+  description: string | null
+  created_at: string
+  updated_at: string
+  archived_at: string | null
+}
+
+export type TemplateSection = {
+  id: string
+  template_id: string
+  name: string
+  position: number
+  created_at: string
+  updated_at: string
+  archived_at: string | null
+}
+
+export type TemplateTask = {
+  id: string
+  template_id: string
+  template_section_id: string
+  title: string
+  offset_days: number
+  default_assignee_role: string | null
+  position: number
+  created_at: string
+  updated_at: string
+  archived_at: string | null
+}
+
+/** "-14" -> "14 days before start" · "0" -> "Start day" · "30" -> "30 days after start" */
+export function formatOffsetDays(offsetDays: number): string {
+  if (offsetDays === 0) return 'Start day'
+  if (offsetDays < 0) return `${Math.abs(offsetDays)} day${offsetDays === -1 ? '' : 's'} before start`
+  return `${offsetDays} day${offsetDays === 1 ? '' : 's'} after start`
+}
+
+/**
+ * The real calendar date a template task lands on once an anchor (start)
+ * date is chosen. Built from date parts rather than millisecond math, so
+ * it can never drift across a daylight-saving change.
+ */
+export function addOffsetDays(anchorDateIso: string, offsetDays: number): string {
+  const [year, month, day] = anchorDateIso.split('-').map(Number)
+  const date = new Date(year, month - 1, day)
+  date.setDate(date.getDate() + offsetDays)
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}

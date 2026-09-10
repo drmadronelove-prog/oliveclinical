@@ -28,9 +28,9 @@ import {
   archiveSection,
 } from './actions'
 import { TaskRow } from './task-row'
-import { FastEntryRow } from './fast-entry-row'
+import { FastEntryRow } from '@/components/team/fast-entry-row'
 import { TaskDetailSheet } from './task-detail-sheet'
-import { SectionHeader } from './section-header'
+import { SectionHeader } from '@/components/team/section-header'
 
 function SectionDropZone({ id, children }: { id: string; children: React.ReactNode }) {
   const { setNodeRef } = useDroppable({ id })

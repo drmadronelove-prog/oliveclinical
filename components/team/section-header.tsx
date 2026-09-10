@@ -2,15 +2,20 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Trash2 } from 'lucide-react'
-import type { Section } from '@/lib/team/types'
 
+/**
+ * Shared between the project board and the template editor — both group
+ * their items (tasks, or template tasks) into named, reorderable-by-name
+ * sections with the same rename/delete interaction. Only `name` is used
+ * here, so either a real Section or a TemplateSection satisfies this.
+ */
 export function SectionHeader({
   section,
   taskCount,
   onRename,
   onDelete,
 }: {
-  section: Section
+  section: { name: string }
   taskCount: number
   onRename: (name: string) => void
   onDelete: () => void

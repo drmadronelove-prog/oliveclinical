@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut, FolderKanban } from 'lucide-react'
+import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut, FolderKanban, ListChecks } from 'lucide-react'
 import { Toaster } from 'sonner'
 import { cn } from '@/lib/utils'
 import { displayName, initialsOf, type Profile } from '@/lib/team/types'
@@ -14,6 +14,7 @@ type NavItem = { href: string; label: string; icon: typeof Home; adminOnly?: boo
 const NAV: NavItem[] = [
   { href: '/team', label: 'Home', icon: Home },
   { href: '/team/projects', label: 'Projects', icon: FolderKanban },
+  { href: '/team/templates', label: 'Templates', icon: ListChecks },
   { href: '/team/members', label: 'Members', icon: Users, adminOnly: true },
   { href: '/team/settings', label: 'Settings', icon: Settings },
 ]
