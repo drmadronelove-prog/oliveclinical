@@ -36,7 +36,10 @@ export async function createTask(input: {
     .select('id')
     .single()
 
-  if (error || !data) return { ok: false, error: "Couldn't create that task." }
+  if (error || !data) {
+    console.error('[team] createTask failed:', error)
+    return { ok: false, error: `Couldn't create that task: ${error?.message ?? 'unknown error'}` }
+  }
 
   revalidatePath(`/team/projects/${input.projectId}`)
   return { ok: true, data: { id: data.id } }
@@ -54,7 +57,10 @@ export async function toggleTaskComplete(input: {
     .update({ completed: input.completed })
     .eq('id', input.id)
 
-  if (error) return { ok: false, error: "Couldn't update that task." }
+  if (error) {
+    console.error('[team] toggleTaskComplete failed:', error)
+    return { ok: false, error: `Couldn't update that task: ${error.message}` }
+  }
   revalidatePath(`/team/projects/${input.projectId}`)
   return { ok: true, data: undefined }
 }
@@ -87,7 +93,10 @@ export async function updateTask(input: {
 
   const supabase = await createClient()
   const { error } = await supabase.from('tasks').update(patch).eq('id', input.id)
-  if (error) return { ok: false, error: "Couldn't save that change." }
+  if (error) {
+    console.error('[team] updateTask failed:', error)
+    return { ok: false, error: `Couldn't save that change: ${error.message}` }
+  }
 
   revalidatePath(`/team/projects/${input.projectId}`)
   return { ok: true, data: undefined }
@@ -107,7 +116,10 @@ export async function reorderTask(input: {
     .update({ section_id: input.sectionId, position: input.position })
     .eq('id', input.id)
 
-  if (error) return { ok: false, error: "Couldn't move that task." }
+  if (error) {
+    console.error('[team] reorderTask failed:', error)
+    return { ok: false, error: `Couldn't move that task: ${error.message}` }
+  }
   revalidatePath(`/team/projects/${input.projectId}`)
   return { ok: true, data: undefined }
 }
@@ -120,7 +132,10 @@ export async function archiveTask(input: { id: string; projectId: string }): Pro
     .update({ archived_at: new Date().toISOString() })
     .eq('id', input.id)
 
-  if (error) return { ok: false, error: "Couldn't delete that task." }
+  if (error) {
+    console.error('[team] archiveTask failed:', error)
+    return { ok: false, error: `Couldn't delete that task: ${error.message}` }
+  }
   revalidatePath(`/team/projects/${input.projectId}`)
   return { ok: true, data: undefined }
 }
@@ -141,7 +156,10 @@ export async function createSection(input: {
     .select('id')
     .single()
 
-  if (error || !data) return { ok: false, error: "Couldn't create that section." }
+  if (error || !data) {
+    console.error('[team] createSection failed:', error)
+    return { ok: false, error: `Couldn't create that section: ${error?.message ?? 'unknown error'}` }
+  }
   revalidatePath(`/team/projects/${input.projectId}`)
   return { ok: true, data: { id: data.id } }
 }
@@ -157,7 +175,10 @@ export async function renameSection(input: {
 
   const supabase = await createClient()
   const { error } = await supabase.from('sections').update({ name }).eq('id', input.id)
-  if (error) return { ok: false, error: "Couldn't rename that section." }
+  if (error) {
+    console.error('[team] renameSection failed:', error)
+    return { ok: false, error: `Couldn't rename that section: ${error.message}` }
+  }
 
   revalidatePath(`/team/projects/${input.projectId}`)
   return { ok: true, data: undefined }

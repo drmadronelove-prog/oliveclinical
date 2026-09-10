@@ -38,11 +38,28 @@ export async function createProject(
     .select('id')
     .single()
 
-  if (error || !project) return { error: 'Could not create that project. Try again.' }
+  if (error || !project) {
+    // Unlike the sign-in forms, this page is only ever reached by a
+    // signed-in team member — there is no stranger to avoid tipping off
+    // by being specific, so show the real reason instead of guessing.
+    console.error('[team] createProject failed:', error)
+    if (error?.code === '42P01' || error?.code === 'PGRST205') {
+      return {
+        error:
+          "The projects table doesn't exist yet — run supabase/migrations/0002_projects_tasks.sql in the Supabase SQL Editor, then try again.",
+      }
+    }
+    return { error: `Could not create that project: ${error?.message ?? 'unknown error'}` }
+  }
 
   // A brand-new project is useless without anywhere to put a task, so it
-  // starts with one section instead of an empty page.
-  await supabase.from('sections').insert({ project_id: project.id, name: 'To do', position: 1024 })
+  // starts with one section instead of an empty page. Not fatal to the
+  // whole create if this one insert fails — the project still exists and
+  // "Add section" still works — but it should never fail silently.
+  const { error: sectionError } = await supabase
+    .from('sections')
+    .insert({ project_id: project.id, name: 'To do', position: 1024 })
+  if (sectionError) console.error('[team] default section insert failed:', sectionError)
 
   revalidatePath('/team/projects')
   redirect(`/team/projects/${project.id}`)
