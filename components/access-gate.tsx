@@ -3,14 +3,22 @@
 import { useEffect, useState } from "react"
 
 /**
- * Access code gate for pages shared with clients rather than the public.
+ * Access code gate for an individual instrument that the practice shares with
+ * clients rather than publishing — one whose copyright holder asks to be
+ * contacted before it is reproduced. Wrap the assessment in it:
+ *
+ *   content: <AccessGate><POPS /></AccessGate>
+ *
+ * Unlocking is shared across every gated instrument and remembered for the
+ * browser session, so a client enters the code once.
  *
  * Note on what this does and does not do: the check runs in the browser, so
- * the code and the gated markup both ship to every visitor inside the page
- * bundle. It keeps the page from reading as public and stops casual visitors,
- * but it is not a security boundary — anyone who opens developer tools can
- * read past it. Gating anything that genuinely must not be readable needs the
- * content served from behind a server-side check instead.
+ * the code and the gated items both ship to every visitor inside the page
+ * bundle, and both are readable in the repository. It keeps the instrument
+ * from reading as published and stops casual visitors, but it is not a
+ * security boundary — anyone who opens developer tools can read past it.
+ * Genuinely withholding an instrument means serving it from behind a
+ * server-side check AND keeping its items out of a public repository.
  */
 const ACCESS_CODE = "olive"
 const UNLOCK_KEY = "olive-clinical-tests-unlocked"
@@ -49,17 +57,19 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
   if (unlocked) return <>{children}</>
 
   return (
-    <div className="max-w-md mx-auto py-10 space-y-5">
+    <div className="border border-border rounded-lg bg-card p-5 sm:p-6 space-y-5">
       <div className="space-y-3">
         <h2
-          className="text-2xl text-foreground"
+          className="text-xl text-foreground"
           style={{ fontFamily: "var(--font-display)", fontWeight: 500, letterSpacing: "-0.018em" }}
         >
-          These tools are shared with clients
+          This one is shared with clients
         </h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Enter the access code you were given to open the assessments. If you are working with Olive
-          Clinical and need the code, ask your clinician or get in touch and we will send it to you.
+          The publisher of this scale asks to be contacted before it is reproduced, so we share it
+          with clients rather than posting it. Enter the access code you were given to open it — if
+          you are working with Olive Clinical and need the code, ask your clinician or get in touch
+          and we will send it to you.
         </p>
       </div>
 
@@ -95,8 +105,8 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
       )}
 
       <p className="text-xs text-muted-foreground border-t border-border pt-4 leading-relaxed">
-        These are screening and self-report tools, not diagnostic instruments, and they do not
-        replace an evaluation with a qualified clinician.
+        The other assessments on this page are open — this code is only needed for the ones whose
+        publishers restrict reproduction.
       </p>
     </div>
   )

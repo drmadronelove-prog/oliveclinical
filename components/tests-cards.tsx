@@ -16,6 +16,7 @@ import { ICQEV } from "@/components/assessments/icqev"
 import { OCTRS } from "@/components/assessments/octrs"
 import { POPS } from "@/components/assessments/pops"
 import { OCIR } from "@/components/assessments/ocir"
+import { AccessGate } from "@/components/access-gate"
 import { AQ10 } from "@/components/assessments/aq10"
 import { DESB } from "@/components/assessments/desb"
 import { DSS } from "@/components/assessments/dss"
@@ -269,11 +270,15 @@ const SCREENERS: FeatureCard[] = [
   {
     kind: "modal",
     title: "POPS",
-    category: "OC personality traits",
-    footerLabel: "Take scale",
+    category: "OC personality traits · access code",
+    footerLabel: "Enter code",
     modalTitle: "POPS: Pathological Obsessive-Compulsive Personality Scale",
     modalSubtitle: "49 items across rigidity, emotional overcontrol, perfectionism, delegation, and change · Pinto, Ansell & Wright, 2019.",
-    content: <POPS />,
+    content: (
+      <AccessGate>
+        <POPS />
+      </AccessGate>
+    ),
   },
   {
     kind: "modal",
