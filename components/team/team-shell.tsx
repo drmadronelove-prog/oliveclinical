@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut, FolderKanban, ListChecks, Calendar, ListTodo } from 'lucide-react'
+import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut, FolderKanban, ListChecks, Calendar, ListTodo, Inbox } from 'lucide-react'
 import { Toaster } from 'sonner'
 import { cn } from '@/lib/utils'
 import { displayName, initialsOf, type Profile } from '@/lib/team/types'
@@ -13,6 +13,7 @@ type NavItem = { href: string; label: string; icon: typeof Home; adminOnly?: boo
 
 const NAV: NavItem[] = [
   { href: '/team', label: 'Home', icon: Home },
+  { href: '/team/inbox', label: 'Inbox', icon: Inbox },
   { href: '/team/my-tasks', label: 'My Tasks', icon: ListTodo },
   { href: '/team/calendar', label: 'Calendar', icon: Calendar },
   { href: '/team/projects', label: 'Projects', icon: FolderKanban },
@@ -52,9 +53,11 @@ function useTeamTheme() {
 
 export function TeamShell({
   profile,
+  unreadCount = 0,
   children,
 }: {
   profile: Profile
+  unreadCount?: number
   children: React.ReactNode
 }) {
   const pathname = usePathname()
@@ -109,6 +112,14 @@ export function TeamShell({
                 >
                   <Icon className="size-4 shrink-0" aria-hidden="true" />
                   {label}
+                  {href === '/team/inbox' && unreadCount > 0 && (
+                    <span
+                      className="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground"
+                      aria-label={`${unreadCount} unread`}
+                    >
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
                 </Link>
               )
             })}

@@ -9,7 +9,7 @@ const ROADMAP = [
   { phase: 2, label: 'Projects and tasks, with fast keyboard entry', done: true },
   { phase: 3, label: 'Onboarding templates for new clinical hires', done: true },
   { phase: 4, label: 'Board and calendar views, My Tasks', done: true },
-  { phase: 5, label: 'Comments, attachments, recurring tasks, email alerts', done: false },
+  { phase: 5, label: 'Comments, attachments, recurring tasks, and an inbox', done: true },
   { phase: 6, label: 'Search, command palette, exports, project overview', done: false },
 ]
 
@@ -25,24 +25,29 @@ export default async function TeamHomePage() {
 
       <div className="mx-auto max-w-3xl px-6 py-8">
         <section className="rounded-lg border border-border bg-secondary/30 p-5">
-          <h2 className="font-display text-base font-semibold">Calendar and My Tasks are live</h2>
+          <h2 className="font-display text-base font-semibold">Comments, attachments, and recurring tasks are live</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Calendar shows every due task across every project on one month view, colored by
-            project, with drag-to-reschedule. My Tasks shows what's on you, grouped Today / This
-            week / Later / Overdue. Every project can also switch to a Board (kanban) view.
+            Every task can carry comments (with @mentions), file attachments, and a full change
+            history. Set a task to repeat weekly, biweekly, monthly, or quarterly and the next
+            one is created automatically the moment you check it off. Assignments, mentions,
+            comments, and due-tomorrow reminders all land in your new Inbox.
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            These alerts are in-app only for now — real email delivery is a deliberate next
+            decision, not yet built.
           </p>
           <Link
-            href="/team/calendar"
+            href="/team/inbox"
             className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            Go to Calendar
+            Go to Inbox
             <ArrowRight className="size-3.5" aria-hidden="true" />
           </Link>
           <Link
-            href="/team/my-tasks"
+            href="/team/projects"
             className="ml-2 mt-4 inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            Go to My Tasks
+            Go to Projects
           </Link>
           {profile.role === 'admin' && (
             <Link

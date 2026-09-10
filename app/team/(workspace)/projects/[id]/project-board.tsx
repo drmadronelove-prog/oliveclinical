@@ -1,6 +1,7 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import { toast } from 'sonner'
 import {
   DndContext,
@@ -14,8 +15,17 @@ import {
   type DragStartEvent,
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
-import { Plus } from 'lucide-react'
-import type { Project, Section, Task, Profile, Tag } from '@/lib/team/types'
+import { Plus, List, LayoutGrid } from 'lucide-react'
+import type {
+  Project,
+  Section,
+  Task,
+  Profile,
+  Tag,
+  Comment,
+  Attachment,
+  ActivityLogEntry,
+} from '@/lib/team/types'
 import { positionAtEnd, positionBetween } from '@/lib/team/position'
 import {
   createTask,
@@ -28,13 +38,14 @@ import {
   archiveSection,
 } from './actions'
 import { createTag, setTaskTags } from './tag-actions'
+import { createComment, deleteComment } from './comment-actions'
+import { recordAttachment, deleteAttachment } from './attachment-actions'
 import { updateProjectDefaultView } from '../actions'
 import { TaskRow } from './task-row'
 import { TaskCard } from './task-card'
 import { FastEntryRow } from '@/components/team/fast-entry-row'
 import { TaskDetailSheet } from './task-detail-sheet'
 import { SectionHeader } from '@/components/team/section-header'
-import { List, LayoutGrid } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 function SectionDropZone({ id, children }: { id: string; children: React.ReactNode }) {
@@ -51,21 +62,35 @@ export function ProjectBoard({
   initialSections,
   initialTasks,
   members,
+  currentProfile,
   allTags,
   initialTaskTags,
+  initialComments,
+  initialAttachments,
+  initialActivity,
+  initialSelectedTaskId,
 }: {
   project: Project
   initialSections: Section[]
   initialTasks: Task[]
   members: Profile[]
+  currentProfile: Profile
   allTags: Tag[]
   initialTaskTags: Record<string, Tag[]>
+  initialComments: Record<string, Comment[]>
+  initialAttachments: Record<string, Attachment[]>
+  initialActivity: Record<string, ActivityLogEntry[]>
+  initialSelectedTaskId: string | null
 }) {
+  const router = useRouter()
+  const pathname = usePathname()
   const [sections, setSections] = useState(initialSections)
   const [tasks, setTasks] = useState(initialTasks)
   const [tags, setTags] = useState(allTags)
   const [taskTags, setTaskTagsState] = useState(initialTaskTags)
-  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
+  const [comments, setComments] = useState(initialComments)
+  const [attachments, setAttachments] = useState(initialAttachments)
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(initialSelectedTaskId)
   const [activeTask, setActiveTask] = useState<Task | null>(null)
   const [addingSection, setAddingSection] = useState(false)
   const [sectionName, setSectionName] = useState('')
@@ -76,6 +101,15 @@ export function ProjectBoard({
     project.default_view === 'board' ? 'board' : 'list',
   )
   const snapshotRef = useRef<Task[]>(initialTasks)
+
+  // Keeps the address bar in sync with whichever task is open, so a
+  // notification in the Inbox (or any other link) can point straight at
+  // one task instead of just the project it lives in.
+  useEffect(() => {
+    const url = selectedTaskId ? `${pathname}?task=${selectedTaskId}` : pathname
+    router.replace(url, { scroll: false })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTaskId])
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -166,6 +200,8 @@ export function ProjectBoard({
       completed: false,
       completed_at: null,
       position,
+      recurrence_rule: null,
+      recurrence_parent_id: null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       archived_at: null,
@@ -224,6 +260,87 @@ export function ProjectBoard({
     const newTag: Tag = { id: result.data.id, name, color: result.data.color, created_at: '', archived_at: null }
     setTags((prev) => (prev.some((t) => t.id === newTag.id) ? prev : [...prev, newTag]))
     return newTag
+  }
+
+  async function handleCreateComment(taskId: string, body: string) {
+    const tempId = `temp-${crypto.randomUUID()}`
+    const optimisticComment: Comment = {
+      id: tempId,
+      task_id: taskId,
+      author_id: currentProfile.id,
+      body,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      archived_at: null,
+    }
+    setComments((prev) => ({ ...prev, [taskId]: [...(prev[taskId] ?? []), optimisticComment] }))
+
+    const result = await createComment({ taskId, projectId: project.id, body, members })
+    if (!result.ok) {
+      setComments((prev) => ({ ...prev, [taskId]: (prev[taskId] ?? []).filter((c) => c.id !== tempId) }))
+      toast.error(result.error)
+      return
+    }
+    setComments((prev) => ({
+      ...prev,
+      [taskId]: (prev[taskId] ?? []).map((c) => (c.id === tempId ? { ...c, id: result.data.id } : c)),
+    }))
+  }
+
+  function handleDeleteComment(comment: Comment) {
+    const previous = comments
+    setComments((prev) => ({
+      ...prev,
+      [comment.task_id]: (prev[comment.task_id] ?? []).filter((c) => c.id !== comment.id),
+    }))
+    deleteComment({ id: comment.id, projectId: project.id, authorId: comment.author_id }).then((result) => {
+      if (!result.ok) {
+        setComments(previous)
+        toast.error(result.error)
+      }
+    })
+  }
+
+  async function handleAttachmentUploaded(taskId: string, file: File, storagePath: string) {
+    const result = await recordAttachment({
+      taskId,
+      projectId: project.id,
+      storagePath,
+      fileName: file.name,
+      fileSize: file.size,
+      contentType: file.type || 'application/octet-stream',
+    })
+    if (!result.ok) {
+      toast.error(result.error)
+      return
+    }
+    const newAttachment: Attachment = {
+      id: result.data.id,
+      task_id: taskId,
+      storage_path: storagePath,
+      file_name: file.name,
+      file_size: file.size,
+      content_type: file.type || null,
+      uploaded_by: currentProfile.id,
+      created_at: result.data.created_at,
+    }
+    setAttachments((prev) => ({ ...prev, [taskId]: [...(prev[taskId] ?? []), newAttachment] }))
+  }
+
+  function handleDeleteAttachment(attachment: Attachment) {
+    const previous = attachments
+    setAttachments((prev) => ({
+      ...prev,
+      [attachment.task_id]: (prev[attachment.task_id] ?? []).filter((a) => a.id !== attachment.id),
+    }))
+    deleteAttachment({ id: attachment.id, projectId: project.id, storagePath: attachment.storage_path }).then(
+      (result) => {
+        if (!result.ok) {
+          setAttachments(previous)
+          toast.error(result.error)
+        }
+      },
+    )
   }
 
   function handleMoveSection(id: string, sectionId: string) {
@@ -444,8 +561,12 @@ export function ProjectBoard({
         task={selectedTask}
         members={members}
         sections={sections}
+        currentProfile={currentProfile}
         allTags={tags}
         selectedTags={selectedTask ? (taskTags[selectedTask.id] ?? []) : []}
+        comments={selectedTask ? (comments[selectedTask.id] ?? []) : []}
+        attachments={selectedTask ? (attachments[selectedTask.id] ?? []) : []}
+        activity={selectedTask ? (initialActivity[selectedTask.id] ?? []) : []}
         onClose={() => setSelectedTaskId(null)}
         onPatch={handlePatch}
         onToggleComplete={handleToggleComplete}
@@ -453,6 +574,10 @@ export function ProjectBoard({
         onMoveSection={handleMoveSection}
         onTagsChange={handleTagsChange}
         onCreateTag={handleCreateTag}
+        onCreateComment={handleCreateComment}
+        onDeleteComment={handleDeleteComment}
+        onAttachmentUploaded={handleAttachmentUploaded}
+        onDeleteAttachment={handleDeleteAttachment}
       />
     </div>
   )

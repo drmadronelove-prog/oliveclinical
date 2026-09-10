@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireProfile } from '@/lib/team/auth'
 import { sanitizeTaskDescription } from '@/lib/team/sanitize-html'
 import type { Priority } from '@/lib/team/priority'
+import type { RecurrenceRule } from '@/lib/team/types'
 
 /**
  * Every mutation on this page is called directly from client-side event
@@ -77,6 +78,7 @@ export async function updateTask(input: {
   due_date?: string | null
   start_date?: string | null
   priority?: Priority
+  recurrence_rule?: RecurrenceRule | null
 }): Promise<ActionResult> {
   await requireProfile()
   const patch: Record<string, unknown> = {}
@@ -99,6 +101,7 @@ export async function updateTask(input: {
   if (input.due_date !== undefined) patch.due_date = input.due_date
   if (input.start_date !== undefined) patch.start_date = input.start_date
   if (input.priority !== undefined) patch.priority = input.priority
+  if (input.recurrence_rule !== undefined) patch.recurrence_rule = input.recurrence_rule
 
   if (Object.keys(patch).length === 0) return { ok: true, data: undefined }
 

@@ -16,8 +16,20 @@ import { PriorityPicker } from '@/components/team/priority-picker'
 import { AssigneePicker } from '@/components/team/assignee-picker'
 import { RichTextEditor } from '@/components/team/rich-text-editor'
 import { TagPicker } from '@/components/team/tag-picker'
+import { RecurrencePicker } from '@/components/team/recurrence-picker'
+import { CommentThread } from '@/components/team/comment-thread'
+import { AttachmentList } from '@/components/team/attachment-list'
+import { ActivityFeed } from '@/components/team/activity-feed'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import type { Task, Profile, Section, Tag } from '@/lib/team/types'
+import type {
+  Task,
+  Profile,
+  Section,
+  Tag,
+  Comment,
+  Attachment,
+  ActivityLogEntry,
+} from '@/lib/team/types'
 import type { Priority } from '@/lib/team/priority'
 
 /** Tiptap's "nothing typed" state is `<p></p>`, not an empty string. */
@@ -29,8 +41,12 @@ export function TaskDetailSheet({
   task,
   members,
   sections,
+  currentProfile,
   allTags,
   selectedTags,
+  comments,
+  attachments,
+  activity,
   onClose,
   onPatch,
   onToggleComplete,
@@ -38,12 +54,20 @@ export function TaskDetailSheet({
   onMoveSection,
   onTagsChange,
   onCreateTag,
+  onCreateComment,
+  onDeleteComment,
+  onAttachmentUploaded,
+  onDeleteAttachment,
 }: {
   task: Task | null
   members: Profile[]
   sections: Section[]
+  currentProfile: Profile
   allTags: Tag[]
   selectedTags: Tag[]
+  comments: Comment[]
+  attachments: Attachment[]
+  activity: ActivityLogEntry[]
   onClose: () => void
   onPatch: (id: string, patch: Partial<Task>) => void
   onToggleComplete: (id: string, completed: boolean) => void
@@ -51,8 +75,13 @@ export function TaskDetailSheet({
   onMoveSection: (id: string, sectionId: string) => void
   onTagsChange: (id: string, tagIds: string[]) => void
   onCreateTag: (name: string) => Promise<Tag | null>
+  onCreateComment: (taskId: string, body: string) => void
+  onDeleteComment: (comment: Comment) => void
+  onAttachmentUploaded: (taskId: string, file: File, storagePath: string) => Promise<void>
+  onDeleteAttachment: (attachment: Attachment) => void
 }) {
   const [title, setTitle] = useState('')
+  const membersById = new Map(members.map((m) => [m.id, m]))
 
   // Local editable copy of the title, resynced whenever a different task
   // is opened — typing in one task must never leak into the next one you
@@ -85,7 +114,8 @@ export function TaskDetailSheet({
         <SheetHeader className="border-b border-border px-5 py-4">
           <SheetTitle className="sr-only">Task details</SheetTitle>
           <SheetDescription className="sr-only">
-            Edit this task's title, description, assignee, dates, and priority.
+            Edit this task's title, description, assignee, dates, priority, tags, and
+            recurrence. Comment, attach files, and review its activity below.
           </SheetDescription>
           <div className="flex items-start gap-2.5">
             <Checkbox
@@ -144,6 +174,12 @@ export function TaskDetailSheet({
             </Select>
           </div>
 
+          <RecurrencePicker
+            value={task.recurrence_rule}
+            dueDate={task.due_date}
+            onChange={(rule) => onPatch(task.id, { recurrence_rule: rule })}
+          />
+
           <TagPicker
             selected={selectedTags}
             allTags={allTags}
@@ -157,6 +193,30 @@ export function TaskDetailSheet({
               key={task.id}
               content={task.description ?? ''}
               onChange={commitDescription}
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <span className="block text-xs font-medium text-muted-foreground">Attachments</span>
+            <AttachmentList
+              taskId={task.id}
+              attachments={attachments}
+              membersById={membersById}
+              onUploaded={(file, storagePath) => onAttachmentUploaded(task.id, file, storagePath)}
+              onDelete={onDeleteAttachment}
+            />
+          </div>
+
+          <ActivityFeed entries={activity} members={members} sections={sections} />
+
+          <div className="space-y-1.5 border-t border-border pt-4">
+            <span className="block text-xs font-medium text-muted-foreground">Comments</span>
+            <CommentThread
+              comments={comments}
+              members={members}
+              currentProfile={currentProfile}
+              onSubmit={(body) => onCreateComment(task.id, body)}
+              onDelete={onDeleteComment}
             />
           </div>
         </div>

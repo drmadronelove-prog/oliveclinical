@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { requireProfile } from '@/lib/team/auth'
+import { createClient } from '@/lib/supabase/server'
 import { TeamShell } from '@/components/team/team-shell'
 
 // The workspace is per-person and always behind a session. Nothing here
@@ -14,5 +15,17 @@ export const metadata: Metadata = {
 
 export default async function TeamLayout({ children }: { children: React.ReactNode }) {
   const profile = await requireProfile()
-  return <TeamShell profile={profile}>{children}</TeamShell>
+  const supabase = await createClient()
+
+  const { count } = await supabase
+    .from('notifications')
+    .select('id', { count: 'exact', head: true })
+    .eq('recipient_id', profile.id)
+    .is('read_at', null)
+
+  return (
+    <TeamShell profile={profile} unreadCount={count ?? 0}>
+      {children}
+    </TeamShell>
+  )
 }
