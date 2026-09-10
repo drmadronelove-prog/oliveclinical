@@ -28,6 +28,8 @@ export type Item = {
   options?: Option[]
   /** Section heading rendered above this item. */
   section?: string
+  /** Standing instruction for the section this item opens, e.g. a VVIQ scene. */
+  sectionNote?: string
 }
 
 export type Subscale = {
@@ -58,8 +60,25 @@ export type ScaleConfig = {
   thresholds?: Threshold[]
   /** Citation/limitation text under the items. Defaults to a generic line. */
   disclaimer: React.ReactNode
-  /** Overrides the computed minimum (used when options start above 0). */
+  /**
+   * Replaces the default "sum the selected values, flipping reverseItems"
+   * scoring. Scales that key responses rather than sum them — the AQ family
+   * scoring one point per keyed answer, the EQ scoring 0/1/2 by direction with
+   * filler items scoring nothing — pass their own here. Supplying this means
+   * the range can no longer be derived from the options, so pass scoreRange too.
+   */
+  scoreItem?: (itemNum: number, raw: number) => number
+  /** Overrides the computed range (needed with a custom scoreItem, or when options start above 0). */
   scoreRange?: { min: number; max: number }
+  /**
+   * How item scores combine into the headline number. Most scales sum; the
+   * MDS-16 and SCS-SF are defined on the mean of their items, so summing them
+   * would report a number that means something different from the published
+   * one. Subscales follow the same aggregate.
+   */
+  aggregate?: "sum" | "mean"
+  /** Decimal places for a mean-scored total. Defaults to 2. */
+  meanPrecision?: number
   /** Extra note rendered inside the score summary, e.g. reverse-key wrinkles. */
   scoringNote?: React.ReactNode
 }
@@ -73,6 +92,7 @@ function optionsFor(config: ScaleConfig, itemNum: number): Option[] {
 }
 
 function scoreItem(config: ScaleConfig, itemNum: number, raw: number): number {
+  if (config.scoreItem) return config.scoreItem(itemNum, raw)
   if (!config.reverseItems?.includes(itemNum)) return raw
   const opts = optionsFor(config, itemNum)
   const lo = Math.min(...opts.map((o) => o.value))
@@ -82,14 +102,30 @@ function scoreItem(config: ScaleConfig, itemNum: number, raw: number): number {
 
 function totalFor(config: ScaleConfig, answers: Answers): number {
   let total = 0
+  let n = 0
   for (const [num, raw] of Object.entries(answers)) {
-    if (raw !== undefined) total += scoreItem(config, Number(num), raw)
+    if (raw !== undefined) {
+      total += scoreItem(config, Number(num), raw)
+      n += 1
+    }
   }
-  return total
+  if (config.aggregate !== "mean") return total
+  return n === 0 ? 0 : total / n
+}
+
+/** Formats a score for display, keeping means to their decimal places. */
+function fmt(config: ScaleConfig, value: number): string {
+  if (config.aggregate !== "mean") return String(value)
+  return value.toFixed(config.meanPrecision ?? 2)
 }
 
 function rangeFor(config: ScaleConfig): { min: number; max: number } {
   if (config.scoreRange) return config.scoreRange
+  // A mean stays on the item's own scale rather than accumulating across items.
+  if (config.aggregate === "mean") {
+    const values = config.items.flatMap((_, i) => optionsFor(config, i + 1).map((o) => o.value))
+    return { min: Math.min(...values), max: Math.max(...values) }
+  }
   let min = 0
   let max = 0
   for (let n = 1; n <= config.items.length; n++) {
@@ -213,7 +249,7 @@ export function ScaleAssessment({ config }: { config: ScaleConfig }) {
             <span
               className={`text-xs font-semibold tabular-nums px-2.5 py-1 rounded-full border border-border bg-muted ${band?.color ?? "text-muted-foreground"}`}
             >
-              Score: {score}&thinsp;/&thinsp;{max} &nbsp;·&nbsp; {answered} answered
+              Score: {fmt(config, score)}&thinsp;/&thinsp;{max} &nbsp;·&nbsp; {answered} answered
             </span>
           )}
           <ChevronIcon open={open} />
@@ -247,9 +283,14 @@ export function ScaleAssessment({ config }: { config: ScaleConfig }) {
               return (
                 <div key={num}>
                   {item.section && (
-                    <p className="text-[0.7rem] font-semibold uppercase tracking-wider text-muted-foreground pt-5 pb-1">
-                      {item.section}
-                    </p>
+                    <div className="pt-5 pb-1">
+                      <p className="text-[0.7rem] font-semibold uppercase tracking-wider text-muted-foreground">
+                        {item.section}
+                      </p>
+                      {item.sectionNote && (
+                        <p className="text-sm text-foreground mt-1.5">{item.sectionNote}</p>
+                      )}
+                    </div>
                   )}
                   <ItemRow
                     num={num}
@@ -267,7 +308,7 @@ export function ScaleAssessment({ config }: { config: ScaleConfig }) {
             <div className="rounded-lg border border-border bg-muted/40 p-4 space-y-3">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <span className="font-[var(--font-display)] text-lg font-bold text-foreground">
-                  Score: {score} / {max}
+                  Score: {fmt(config, score)} / {max}
                 </span>
                 <span className="text-sm text-muted-foreground">
                   {answered} of {totalItems} answered
@@ -329,11 +370,17 @@ export function ScaleAssessment({ config }: { config: ScaleConfig }) {
                         sAnswered += 1
                       }
                     }
+                    const shown =
+                      config.aggregate === "mean"
+                        ? { value: sScore / (s.items.length || 1), of: max }
+                        : { value: sScore, of: sMax }
                     return (
                       <div key={s.label} className="flex justify-between gap-2 text-xs">
                         <span className="text-muted-foreground">{s.label}</span>
                         <span className="tabular-nums text-foreground">
-                          {sAnswered === s.items.length ? `${sScore} / ${sMax}` : "—"}
+                          {sAnswered === s.items.length
+                            ? `${fmt(config, shown.value)} / ${shown.of}`
+                            : "—"}
                         </span>
                       </div>
                     )
