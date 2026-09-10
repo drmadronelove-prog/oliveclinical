@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { requireProfile } from '@/lib/team/auth'
+import { sanitizeTaskDescription } from '@/lib/team/sanitize-html'
 import type { Priority } from '@/lib/team/priority'
 
 /**
@@ -83,7 +84,15 @@ export async function updateTask(input: {
     if (!trimmed) return { ok: false, error: 'A task needs a title.' }
     patch.title = trimmed
   }
-  if (input.description !== undefined) patch.description = input.description
+  // The one field on this table that is ever HTML rather than a plain
+  // value. This is the real security boundary — the client-side editor
+  // already produces clean markup, but nothing else stored HTML ever
+  // reaches the database without passing through the same allowlist a
+  // hand-edited row in Supabase would also need to pass through to be
+  // rendered safely.
+  if (input.description !== undefined) {
+    patch.description = input.description ? sanitizeTaskDescription(input.description) : null
+  }
   if (input.assignee_id !== undefined) patch.assignee_id = input.assignee_id
   if (input.due_date !== undefined) patch.due_date = input.due_date
   if (input.start_date !== undefined) patch.start_date = input.start_date

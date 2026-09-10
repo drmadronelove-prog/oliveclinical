@@ -38,8 +38,9 @@ Try this:
    title, press **Enter**. Notice the row is ready for the next one
    immediately — that's the whole point of it. Add a few more.
 3. Click a task's title to open the detail pane on the right. Set an
-   assignee, a due date, and a priority. Type a note in the description box
-   and click elsewhere — it saves on its own.
+   assignee, a due date, and a priority. Type a note in the description
+   box — bold, italic, lists, and links all work from the small toolbar
+   above it — and click elsewhere. It saves on its own.
 4. Check the box to mark it complete. It goes gray and struck through in
    the list.
 5. Drag a task by the grip handle that appears on hover, either to reorder
@@ -72,17 +73,28 @@ not protect anyone.
 
 ---
 
-## Two deliberate simplifications, decided together
+## Rich text descriptions
 
-**Plain text, not rich text, for descriptions.** No bold, no bullet lists,
-no links — just notes. This was a real choice, not a shortcut: rich text is
-a meaningfully bigger build for something that's internal notes on a task,
-never a polished document. If that changes, it's a contained upgrade later,
-not a rebuild.
+Task descriptions support bold, italic, bullet and numbered lists, and
+links — a small toolbar above the description box in the detail pane.
+This was plain text in the first pass of this phase; upgraded after,
+same day, once the tradeoff was clear.
 
-**Everyone can edit everything.** Same reasoning as above — admin vs.
-member only controls who can manage people (Phase 1), never who can touch
-a given task.
+**Worth knowing:** rich text means the description is stored as HTML, not
+plain words. That is handled carefully — every save passes through an
+allowlist (`lib/team/sanitize-html.ts`) that keeps exactly the formatting
+the toolbar offers and strips everything else, including anything that
+could run code in someone else's browser (a script tag, a
+`javascript:` link, an `onclick` attribute). This is tested directly —
+`tests/sanitize-html.test.ts` throws several real attack shapes at it and
+checks each one comes out harmless.
+
+## One deliberate simplification, decided together
+
+**Everyone can edit everything.** Admin vs. member only controls who can
+manage people (Phase 1), never who can touch a given task. With two to
+six people who all need to see everything, per-task permissions would
+only add complexity, not protection.
 
 ---
 
@@ -116,8 +128,11 @@ npm test
 
 This phase added tests for the position/ordering math (how tasks and
 sections stay sorted without renumbering everything on every move), the
-priority ordering, and the date helpers (a classic timezone bug — a date
-picked as "Mar 14" must never silently become "Mar 13").
+priority ordering, the date helpers (a classic timezone bug — a date
+picked as "Mar 14" must never silently become "Mar 13"), and the rich
+text sanitizer — several real attack shapes (a script tag, a
+`javascript:` link, an inline event handler) checked directly against
+what actually gets saved.
 
 **Critical-flow test (Playwright)** — create a task, assign it, complete
 it, end to end in a real browser. This one needs a real signed-in account,

@@ -9,15 +9,20 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet'
-import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/team/date-picker'
 import { PriorityPicker } from '@/components/team/priority-picker'
 import { AssigneePicker } from '@/components/team/assignee-picker'
+import { RichTextEditor } from '@/components/team/rich-text-editor'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import type { Task, Profile, Section } from '@/lib/team/types'
 import type { Priority } from '@/lib/team/priority'
+
+/** Tiptap's "nothing typed" state is `<p></p>`, not an empty string. */
+function isEmptyHtml(html: string): boolean {
+  return html.replace(/<p>\s*<\/p>/g, '').trim() === ''
+}
 
 export function TaskDetailSheet({
   task,
@@ -39,13 +44,13 @@ export function TaskDetailSheet({
   onMoveSection: (id: string, sectionId: string) => void
 }) {
   const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
 
-  // Local editable copies, resynced whenever a different task is opened —
-  // typing in one task must never leak into the next one you click.
+  // Local editable copy of the title, resynced whenever a different task
+  // is opened — typing in one task must never leak into the next one you
+  // click. The rich text editor handles this itself, via the `key` prop
+  // below forcing a fresh instance per task.
   useEffect(() => {
     setTitle(task?.title ?? '')
-    setDescription(task?.description ?? '')
   }, [task?.id])
 
   if (!task) return null
@@ -59,9 +64,10 @@ export function TaskDetailSheet({
     onPatch(task!.id, { title: trimmed })
   }
 
-  function commitDescription() {
-    if (description === (task!.description ?? '')) return
-    onPatch(task!.id, { description: description || null })
+  function commitDescription(html: string) {
+    const next = isEmptyHtml(html) ? null : html
+    if (next === (task!.description ?? null)) return
+    onPatch(task!.id, { description: next })
   }
 
   return (
@@ -130,17 +136,11 @@ export function TaskDetailSheet({
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="task-description" className="block text-xs font-medium text-muted-foreground">
-              Description
-            </label>
-            <Textarea
-              id="task-description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              onBlur={commitDescription}
-              placeholder="Notes for this task…"
-              rows={8}
-              className="resize-none text-sm"
+            <span className="block text-xs font-medium text-muted-foreground">Description</span>
+            <RichTextEditor
+              key={task.id}
+              content={task.description ?? ''}
+              onChange={commitDescription}
             />
           </div>
         </div>
