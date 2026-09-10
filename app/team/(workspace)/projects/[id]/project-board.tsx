@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { toast } from 'sonner'
 import {
   DndContext,
@@ -84,7 +84,6 @@ export function ProjectBoard({
   initialActivity: Record<string, ActivityLogEntry[]>
   initialSelectedTaskId: string | null
 }) {
-  const router = useRouter()
   const pathname = usePathname()
   const [sections, setSections] = useState(initialSections)
   const [tasks, setTasks] = useState(initialTasks)
@@ -110,12 +109,17 @@ export function ProjectBoard({
 
   // Keeps the address bar in sync with whichever task is open, so a
   // notification in the Inbox (or any other link) can point straight at
-  // one task instead of just the project it lives in.
+  // one task instead of just the project it lives in. Uses the raw
+  // History API rather than router.replace — selectedTaskId is already
+  // real React state, so all this needs to do is update the URL text;
+  // going through Next's router would re-run this page's Server
+  // Component (and every query in its Promise.all) on every task
+  // opened or closed, turning an instant local panel into a server
+  // round trip.
   useEffect(() => {
     const url = selectedTaskId ? `${pathname}?task=${selectedTaskId}` : pathname
-    router.replace(url, { scroll: false })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTaskId])
+    window.history.replaceState(null, '', url)
+  }, [selectedTaskId, pathname])
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -299,7 +303,7 @@ export function ProjectBoard({
       ...prev,
       [comment.task_id]: (prev[comment.task_id] ?? []).filter((c) => c.id !== comment.id),
     }))
-    deleteComment({ id: comment.id, projectId: project.id, authorId: comment.author_id }).then((result) => {
+    deleteComment({ id: comment.id, projectId: project.id }).then((result) => {
       if (!result.ok) {
         setComments(previous)
         toast.error(result.error)

@@ -2,14 +2,19 @@ import { formatShortDate, type Profile, type Section, type Tag, type Task } from
 import { PRIORITY_LABEL, type Priority } from './priority'
 
 /**
- * One CSV cell, quoted only when it needs to be — a comma, a quote, or a
- * newline inside the value. Quoting everything would still be correct,
- * just noisier to read if someone opens the file in a plain text editor
- * instead of a spreadsheet.
+ * One CSV cell. A leading apostrophe is prepended when the value starts
+ * with =, +, -, or @ — Excel/Sheets/Numbers all treat a cell starting
+ * with one of those as a formula to evaluate, and a task title is
+ * ordinary user text, never something that should execute when someone
+ * opens the export. The apostrophe forces it to stay literal text.
+ * Quoted only when it needs to be after that — a comma, a quote, or a
+ * newline in the value; quoting everything would still be correct, just
+ * noisier to read if someone opens the file in a plain text editor.
  */
 export function toCsvCell(value: string): string {
-  if (/[",\n]/.test(value)) return `"${value.replace(/"/g, '""')}"`
-  return value
+  const safe = /^[=+\-@]/.test(value) ? `'${value}` : value
+  if (/[",\n]/.test(safe)) return `"${safe.replace(/"/g, '""')}"`
+  return safe
 }
 
 /** Rows of plain strings to one CSV document, CRLF line endings (the RFC 4180 default). */

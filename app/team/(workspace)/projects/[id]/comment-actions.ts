@@ -53,17 +53,24 @@ export async function createComment(input: {
   return { ok: true, data }
 }
 
-export async function deleteComment(input: {
-  id: string
-  projectId: string
-  authorId: string
-}): Promise<ActionResult> {
+export async function deleteComment(input: { id: string; projectId: string }): Promise<ActionResult> {
   const profile = await requireProfile()
-  if (input.authorId !== profile.id && profile.role !== 'admin') {
+  const supabase = await createClient()
+
+  // The real author comes from the database, never from the caller —
+  // comments RLS lets any active member write any comment row (it has
+  // to, for the trigger-driven notifications), so this check is the
+  // only thing standing between "delete your own comment" and "delete
+  // anyone's," and a client-supplied author id would make it trivial to
+  // spoof.
+  const { data: comment } = await supabase.from('comments').select('author_id').eq('id', input.id).maybeSingle()
+  if (!comment) {
+    return { ok: false, error: "That comment doesn't exist." }
+  }
+  if (comment.author_id !== profile.id && profile.role !== 'admin') {
     return { ok: false, error: 'Only the author or an admin can delete a comment.' }
   }
 
-  const supabase = await createClient()
   const { error } = await supabase
     .from('comments')
     .update({ archived_at: new Date().toISOString() })

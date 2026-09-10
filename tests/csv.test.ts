@@ -18,6 +18,21 @@ describe('toCsvCell', () => {
   it('quotes a value containing a newline', () => {
     expect(toCsvCell('Line one\nLine two')).toBe('"Line one\nLine two"')
   })
+
+  it('neutralizes a value that looks like a formula, so a spreadsheet never evaluates it', () => {
+    expect(toCsvCell('=1+1')).toBe("'=1+1")
+    expect(toCsvCell('+1-555-0100')).toBe("'+1-555-0100")
+    expect(toCsvCell('-5')).toBe("'-5")
+    expect(toCsvCell('@mention')).toBe("'@mention")
+  })
+
+  it('still quotes a formula-shaped value that also needs comma/quote escaping', () => {
+    expect(toCsvCell('=HYPERLINK("http://evil.example")')).toBe('"\'=HYPERLINK(""http://evil.example"")"')
+  })
+
+  it('does not touch a value that merely contains one of those characters, not at the start', () => {
+    expect(toCsvCell('Q1 report - final')).toBe('Q1 report - final')
+  })
 })
 
 describe('toCsv', () => {
