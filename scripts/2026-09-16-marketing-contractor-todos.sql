@@ -11,18 +11,30 @@
 -- Safe to run more than once: every section and every task is only
 -- inserted if a row with that exact name doesn't already exist in this
 -- project, so re-running (or pasting it in twice by accident) never
--- creates duplicates.
+-- creates duplicates. The final step (assigning everything to Jonatan)
+-- always re-applies too, so running this again after Jonatan is renamed
+-- or reassigned will just put it back.
 --
 -- Assumes a project named something containing "social media" (case
--- insensitive) already exists and is not archived. If none is found, or
--- more than one matches, this raises a clear error instead of guessing —
--- edit the `ilike` pattern a few lines down to match your project's exact
--- name and run it again.
+-- insensitive) already exists and is not archived, and a member named
+-- something containing "jonatan" already exists and is active. If
+-- either isn't found, or more than one matches, this raises a clear
+-- error instead of guessing — edit the two `ilike` patterns a few lines
+-- down to match your exact names and run it again.
+--
+-- All 46 tasks are assigned to Jonatan by assigning everything in the
+-- six sections this script owns (Before day one, Week 1-4, Month two
+-- and beyond) — simpler than repeating all 46 titles, and correct as
+-- long as those section names are unique to this checklist within the
+-- project, which they are unless you already had same-named sections
+-- with unrelated tasks in them before running this.
 
 do $$
 declare
   v_project_id   uuid;
   v_match_count  int;
+  v_jonatan_id   uuid;
+  v_jonatan_count int;
   v_before_id    uuid;
   v_week1_id     uuid;
   v_week2_id     uuid;
@@ -44,6 +56,21 @@ begin
   select id into v_project_id
   from public.projects
   where archived_at is null and name ilike '%social media%';
+
+  -- 1b. Find Jonatan.
+  select count(*) into v_jonatan_count
+  from public.profiles
+  where archived_at is null and name ilike '%jonatan%';
+
+  if v_jonatan_count = 0 then
+    raise exception 'No active team member with "jonatan" in their name was found. Check the exact name in Olive Team, then edit the ilike pattern near the top of this script to match it.';
+  elsif v_jonatan_count > 1 then
+    raise exception 'More than one active member matches "jonatan" — edit the ilike pattern near the top of this script to be more specific, then run it again.';
+  end if;
+
+  select id into v_jonatan_id
+  from public.profiles
+  where archived_at is null and name ilike '%jonatan%';
 
   -- 2. Sections — one per phase of the plan, appended after whatever
   --    sections the project already has.
@@ -179,5 +206,11 @@ begin
     ('Hold off on referral-source marketing until the basics are steady', 'Likely the highest yield for the assessment service, but only once the basics are steady.')
   ) as v(title, description)
   where not exists (select 1 from public.tasks t where t.section_id = v_month2_id and t.title = v.title);
+
+  -- 4. Assign everything above to Jonatan.
+  update public.tasks
+  set assignee_id = v_jonatan_id
+  where section_id in (v_before_id, v_week1_id, v_week2_id, v_week3_id, v_week4_id, v_month2_id)
+    and archived_at is null;
 
 end $$;
