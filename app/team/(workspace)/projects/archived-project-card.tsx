@@ -28,8 +28,14 @@ export function ArchivedProjectCard({ project }: { project: Project }) {
   function handleRestore() {
     const formData = new FormData()
     formData.set('id', project.id)
-    startTransition(() => restoreProject(formData))
     setGone(true) // optimistic — this list only ever holds archived projects, so a restored one always leaves it
+    startTransition(async () => {
+      const result = await restoreProject(formData)
+      if (!result.ok) {
+        setGone(false)
+        toast.error(`Couldn't restore "${project.name}": ${result.error}`)
+      }
+    })
   }
 
   function handleDeletePermanently() {

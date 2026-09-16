@@ -112,14 +112,26 @@ export async function archiveProject(
   if (!id) return { ok: false, error: 'Missing project.' }
 
   const supabase = await createClient()
-  const { error } = await supabase
+  // .select().maybeSingle() after the update, not just the error, because
+  // Supabase's update() reports no error at all when the WHERE clause (or
+  // row-level security) simply matches nothing — it looks exactly like
+  // success unless something checks that a row actually came back.
+  const { data, error } = await supabase
     .from('projects')
     .update({ archived_at: archived ? new Date().toISOString() : null })
     .eq('id', id)
+    .select('id')
+    .maybeSingle()
 
   if (error) {
     console.error('[team] archiveProject failed:', error)
     return { ok: false, error: error.message }
+  }
+  if (!data) {
+    return {
+      ok: false,
+      error: "That project couldn't be found, or you don't have permission to change it.",
+    }
   }
 
   revalidatePath('/team/projects')
@@ -134,15 +146,34 @@ export async function archiveProject(
 }
 
 /** The un-archive half of the trash-can model: back into the active list, untouched. */
-export async function restoreProject(formData: FormData) {
+export async function restoreProject(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
   await requireProfile()
   const id = String(formData.get('id') ?? '')
-  if (!id) return
+  if (!id) return { ok: false, error: 'Missing project.' }
 
   const supabase = await createClient()
-  await supabase.from('projects').update({ archived_at: null }).eq('id', id)
+  const { data, error } = await supabase
+    .from('projects')
+    .update({ archived_at: null })
+    .eq('id', id)
+    .select('id')
+    .maybeSingle()
+
+  if (error) {
+    console.error('[team] restoreProject failed:', error)
+    return { ok: false, error: error.message }
+  }
+  if (!data) {
+    return {
+      ok: false,
+      error: "That project couldn't be found, or you don't have permission to change it.",
+    }
+  }
 
   revalidatePath('/team/projects')
+  return { ok: true }
 }
 
 /**
