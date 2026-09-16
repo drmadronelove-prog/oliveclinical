@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut, FolderKanban, ListChecks, Calendar, ListTodo, Inbox, Search } from 'lucide-react'
+import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut, FolderKanban, ListChecks, Calendar, ListTodo, Inbox, Search, HardDrive, ExternalLink } from 'lucide-react'
 import { Toaster } from 'sonner'
 import { cn } from '@/lib/utils'
 import { displayName, initialsOf, type Profile } from '@/lib/team/types'
@@ -22,6 +22,8 @@ const NAV: NavItem[] = [
   { href: '/team/members', label: 'Members', icon: Users, adminOnly: true },
   { href: '/team/settings', label: 'Settings', icon: Settings },
 ]
+
+const GOOGLE_DRIVE_URL = 'https://drive.google.com/drive/folders/1Gyy3ulm6OnZGm2aJGsw6Fbk2w1oRrL07?usp=drive_link'
 
 /**
  * Dark mode is stored per browser and applied by putting the `dark` class
@@ -149,6 +151,19 @@ export function TeamShell({
               )
             })}
           </nav>
+
+          <div className="p-2">
+            <a
+              href={GOOGLE_DRIVE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-background/60 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <HardDrive className="size-4 shrink-0" aria-hidden="true" />
+              Google Drive
+              <ExternalLink className="ml-auto size-3 shrink-0 text-muted-foreground/60" aria-hidden="true" />
+            </a>
+          </div>
 
           <div className="border-t border-border p-2">
             <div className="flex items-center gap-2.5 rounded-md px-2.5 py-2">
