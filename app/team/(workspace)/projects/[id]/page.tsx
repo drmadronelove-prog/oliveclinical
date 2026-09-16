@@ -11,6 +11,7 @@ import type {
   Comment,
   Attachment,
   ActivityLogEntry,
+  ProjectResource,
 } from '@/lib/team/types'
 import { PROJECT_STATUS_LABEL } from '@/lib/team/types'
 import { ProjectStatusPicker } from './project-status-picker'
@@ -35,7 +36,7 @@ export default async function ProjectPage({
   const currentProfile = await requireProfile()
   const supabase = await createClient()
 
-  const [{ data: project }, { data: sections }, { data: tasks }, { data: members }, { data: allTags }] =
+  const [{ data: project }, { data: sections }, { data: tasks }, { data: members }, { data: allTags }, { data: resources }] =
     await Promise.all([
       supabase.from('projects').select('*').eq('id', id).is('archived_at', null).maybeSingle(),
       supabase
@@ -53,6 +54,14 @@ export default async function ProjectPage({
         .order('position', { ascending: true }),
       supabase.from('profiles').select('*').is('archived_at', null).order('name'),
       supabase.from('tags').select('*').is('archived_at', null).order('name'),
+      // Project-wide, not task-scoped, so it's fetched alongside the
+      // project itself rather than in the task-dependent batch below.
+      supabase
+        .from('project_resources')
+        .select('*')
+        .eq('project_id', id)
+        .is('archived_at', null)
+        .order('created_at', { ascending: false }),
     ])
 
   if (!project) notFound()
@@ -114,6 +123,7 @@ export default async function ProjectPage({
         initialComments={groupByTaskId((comments ?? []) as Comment[])}
         initialAttachments={groupByTaskId((attachments ?? []) as Attachment[])}
         initialActivity={groupByTaskId((activity ?? []) as ActivityLogEntry[])}
+        initialResources={(resources ?? []) as ProjectResource[]}
         initialSelectedTaskId={deepLinkedTaskId ?? null}
       />
     </>

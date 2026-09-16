@@ -15,7 +15,7 @@ import {
   type DragStartEvent,
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
-import { Plus, List, LayoutGrid, LayoutDashboard, Download } from 'lucide-react'
+import { Plus, List, LayoutGrid, LayoutDashboard, FolderOpen, Download } from 'lucide-react'
 import type {
   Project,
   Section,
@@ -25,6 +25,7 @@ import type {
   Comment,
   Attachment,
   ActivityLogEntry,
+  ProjectResource,
 } from '@/lib/team/types'
 import { positionAtEnd, positionBetween } from '@/lib/team/position'
 import {
@@ -40,6 +41,7 @@ import {
 import { createTag, setTaskTags } from './tag-actions'
 import { createComment, deleteComment } from './comment-actions'
 import { recordAttachment, deleteAttachment } from './attachment-actions'
+import { addProjectLink, recordProjectFile, deleteProjectResource } from './resource-actions'
 import { updateProjectDefaultView } from '../actions'
 import { TaskRow } from './task-row'
 import { TaskCard } from './task-card'
@@ -47,6 +49,7 @@ import { FastEntryRow } from '@/components/team/fast-entry-row'
 import { TaskDetailSheet } from './task-detail-sheet'
 import { SectionHeader } from '@/components/team/section-header'
 import { ProjectOverview } from '@/components/team/project-overview'
+import { ProjectResources } from '@/components/team/project-resources'
 import { projectTasksToCsv } from '@/lib/team/csv'
 import { cn } from '@/lib/utils'
 
@@ -70,6 +73,7 @@ export function ProjectBoard({
   initialComments,
   initialAttachments,
   initialActivity,
+  initialResources,
   initialSelectedTaskId,
 }: {
   project: Project
@@ -82,6 +86,7 @@ export function ProjectBoard({
   initialComments: Record<string, Comment[]>
   initialAttachments: Record<string, Attachment[]>
   initialActivity: Record<string, ActivityLogEntry[]>
+  initialResources: ProjectResource[]
   initialSelectedTaskId: string | null
 }) {
   const pathname = usePathname()
@@ -91,6 +96,7 @@ export function ProjectBoard({
   const [taskTags, setTaskTagsState] = useState(initialTaskTags)
   const [comments, setComments] = useState(initialComments)
   const [attachments, setAttachments] = useState(initialAttachments)
+  const [resources, setResources] = useState(initialResources)
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(initialSelectedTaskId)
   const [activeTask, setActiveTask] = useState<Task | null>(null)
   const [addingSection, setAddingSection] = useState(false)
@@ -98,11 +104,11 @@ export function ProjectBoard({
   // "calendar" was Phase 2's placeholder third option on this column,
   // before Calendar became the separate, cross-project page it is now —
   // treat it as List here rather than as a view this toggle can select.
-  // Overview is a snapshot to check, not a place to work — unlike
-  // list/board it's never saved as the project's default_view, just
-  // local state that resets to whichever of those was chosen last.
-  const [showOverview, setShowOverview] = useState(false)
-  const [viewMode, setViewMode] = useState<'list' | 'board'>(
+  // Overview and Files & Links are snapshots to check, not places to
+  // work — unlike list/board neither is ever saved as the project's
+  // default_view, just local state that resets to whichever of those
+  // was chosen last.
+  const [displayMode, setDisplayMode] = useState<'list' | 'board' | 'overview' | 'resources'>(
     project.default_view === 'board' ? 'board' : 'list',
   )
   const snapshotRef = useRef<Task[]>(initialTasks)
@@ -353,6 +359,75 @@ export function ProjectBoard({
     )
   }
 
+  async function handleAddLink(title: string, url: string) {
+    const tempId = `temp-${crypto.randomUUID()}`
+    const optimisticResource: ProjectResource = {
+      id: tempId,
+      project_id: project.id,
+      kind: 'link',
+      title,
+      url,
+      storage_path: null,
+      file_size: null,
+      content_type: null,
+      created_by: currentProfile.id,
+      created_at: new Date().toISOString(),
+      archived_at: null,
+    }
+    setResources((prev) => [optimisticResource, ...prev])
+
+    const result = await addProjectLink({ projectId: project.id, title, url })
+    if (!result.ok) {
+      setResources((prev) => prev.filter((r) => r.id !== tempId))
+      toast.error(result.error)
+      return
+    }
+    setResources((prev) =>
+      prev.map((r) => (r.id === tempId ? { ...r, id: result.data.id, url: result.data.url, created_at: result.data.created_at } : r)),
+    )
+  }
+
+  async function handleResourceFileUploaded(file: File, storagePath: string) {
+    const result = await recordProjectFile({
+      projectId: project.id,
+      storagePath,
+      fileName: file.name,
+      fileSize: file.size,
+      contentType: file.type || 'application/octet-stream',
+    })
+    if (!result.ok) {
+      toast.error(result.error)
+      return
+    }
+    const newResource: ProjectResource = {
+      id: result.data.id,
+      project_id: project.id,
+      kind: 'file',
+      title: file.name,
+      url: null,
+      storage_path: storagePath,
+      file_size: file.size,
+      content_type: file.type || null,
+      created_by: currentProfile.id,
+      created_at: result.data.created_at,
+      archived_at: null,
+    }
+    setResources((prev) => [newResource, ...prev])
+  }
+
+  function handleDeleteResource(resource: ProjectResource) {
+    const previous = resources
+    setResources((prev) => prev.filter((r) => r.id !== resource.id))
+    deleteProjectResource({ id: resource.id, projectId: project.id, storagePath: resource.storage_path }).then(
+      (result) => {
+        if (!result.ok) {
+          setResources(previous)
+          toast.error(result.error)
+        }
+      },
+    )
+  }
+
   function handleMoveSection(id: string, sectionId: string) {
     const siblingPositions = (tasksBySection.get(sectionId) ?? []).map((t) => t.position)
     const position = positionAtEnd(siblingPositions)
@@ -431,8 +506,7 @@ export function ProjectBoard({
   }
 
   function handleViewChange(next: 'list' | 'board') {
-    setShowOverview(false)
-    setViewMode(next)
+    setDisplayMode(next)
     const formData = new FormData()
     formData.set('id', project.id)
     formData.set('view', next)
@@ -465,10 +539,10 @@ export function ProjectBoard({
           <button
             type="button"
             onClick={() => handleViewChange('list')}
-            aria-pressed={!showOverview && viewMode === 'list'}
+            aria-pressed={displayMode === 'list'}
             className={cn(
               'flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-              !showOverview && viewMode === 'list' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
+              displayMode === 'list' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
             )}
           >
             <List className="size-3.5" aria-hidden="true" />
@@ -477,10 +551,10 @@ export function ProjectBoard({
           <button
             type="button"
             onClick={() => handleViewChange('board')}
-            aria-pressed={!showOverview && viewMode === 'board'}
+            aria-pressed={displayMode === 'board'}
             className={cn(
               'flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-              !showOverview && viewMode === 'board' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
+              displayMode === 'board' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
             )}
           >
             <LayoutGrid className="size-3.5" aria-hidden="true" />
@@ -488,35 +562,58 @@ export function ProjectBoard({
           </button>
           <button
             type="button"
-            onClick={() => setShowOverview(true)}
-            aria-pressed={showOverview}
+            onClick={() => setDisplayMode('overview')}
+            aria-pressed={displayMode === 'overview'}
             className={cn(
               'flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-              showOverview ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
+              displayMode === 'overview' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
             )}
           >
             <LayoutDashboard className="size-3.5" aria-hidden="true" />
             Overview
           </button>
+          <button
+            type="button"
+            onClick={() => setDisplayMode('resources')}
+            aria-pressed={displayMode === 'resources'}
+            className={cn(
+              'flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+              displayMode === 'resources' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            <FolderOpen className="size-3.5" aria-hidden="true" />
+            Files &amp; Links
+          </button>
         </div>
       </div>
 
-      {showOverview && (
+      {displayMode === 'overview' && (
         <ProjectOverview project={project} sections={sections} tasks={tasks} members={members} activity={initialActivity} />
       )}
 
-      <div className={showOverview ? 'hidden' : undefined}>
+      {displayMode === 'resources' && (
+        <ProjectResources
+          projectId={project.id}
+          resources={resources}
+          membersById={membersById}
+          onAddLink={handleAddLink}
+          onFileUploaded={handleResourceFileUploaded}
+          onDelete={handleDeleteResource}
+        />
+      )}
+
+      <div className={displayMode === 'list' || displayMode === 'board' ? undefined : 'hidden'}>
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onDragCancel={() => setActiveTask(null)}
       >
-        <div className={viewMode === 'board' ? 'flex items-start gap-4 overflow-x-auto pb-2' : 'space-y-6'}>
+        <div className={displayMode === 'board' ? 'flex items-start gap-4 overflow-x-auto pb-2' : 'space-y-6'}>
           {sections.map((section) => {
             const sectionTasks = tasksBySection.get(section.id) ?? []
             return (
-              <div key={section.id} className={viewMode === 'board' ? 'w-72 shrink-0' : undefined}>
+              <div key={section.id} className={displayMode === 'board' ? 'w-72 shrink-0' : undefined}>
                 <SectionHeader
                   section={section}
                   taskCount={sectionTasks.length}
@@ -529,12 +626,12 @@ export function ProjectBoard({
                     items={sectionTasks.map((t) => t.id)}
                     strategy={verticalListSortingStrategy}
                   >
-                    <div className={viewMode === 'board' ? 'space-y-2' : 'space-y-0.5'}>
+                    <div className={displayMode === 'board' ? 'space-y-2' : 'space-y-0.5'}>
                       {sectionTasks.length === 0 && (
                         <p className="px-2 py-1.5 text-sm text-muted-foreground/50">No tasks yet</p>
                       )}
                       {sectionTasks.map((task) =>
-                        viewMode === 'board' ? (
+                        displayMode === 'board' ? (
                           <TaskCard
                             key={task.id}
                             task={task}

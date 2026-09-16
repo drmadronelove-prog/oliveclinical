@@ -348,3 +348,23 @@ export function formatRelativeTime(iso: string, now: Date = new Date()): string 
   const dateOnly = `${then.getFullYear()}-${String(then.getMonth() + 1).padStart(2, '0')}-${String(then.getDate()).padStart(2, '0')}`
   return formatShortDate(dateOnly) ?? ''
 }
+
+// ---------------------------------------------------------------------
+// Project-level links and uploaded files (Files & Links tab)
+// ---------------------------------------------------------------------
+
+export type ProjectResourceKind = 'link' | 'file'
+
+export type ProjectResource = {
+  id: string
+  project_id: string
+  kind: ProjectResourceKind
+  title: string
+  url: string | null
+  storage_path: string | null
+  file_size: number | null
+  content_type: string | null
+  created_by: string | null
+  created_at: string
+  archived_at: string | null
+}
