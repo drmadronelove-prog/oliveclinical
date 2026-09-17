@@ -1,92 +1,86 @@
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2, Circle } from 'lucide-react'
+import { FolderKanban } from 'lucide-react'
 import { requireProfile } from '@/lib/team/auth'
-import { displayName } from '@/lib/team/types'
+import { createClient } from '@/lib/supabase/server'
+import { displayName, type Project } from '@/lib/team/types'
 import { PageHeader } from '@/components/team/page-header'
-
-const ROADMAP = [
-  { phase: 1, label: 'Sign-in, members, and permissions', done: true },
-  { phase: 2, label: 'Projects and tasks, with fast keyboard entry', done: true },
-  { phase: 3, label: 'Onboarding templates for new clinical hires', done: true },
-  { phase: 4, label: 'Board and calendar views, My Tasks', done: true },
-  { phase: 5, label: 'Comments, attachments, recurring tasks, and an inbox', done: true },
-  { phase: 6, label: 'Search, command palette, exports, project overview', done: true },
-]
+import { ProjectGrid } from '@/components/team/project-grid'
 
 export default async function TeamHomePage() {
   const profile = await requireProfile()
+  const supabase = await createClient()
+  const isAdmin = profile.role === 'admin'
+
+  // Admins see the practice's whole project list, same as the Projects
+  // page. Everyone else sees only projects they actually have a task
+  // in — found via tasks.assignee_id, since there's no separate
+  // "project membership" concept, just work assigned to you.
+  let projects: Project[] = []
+  if (isAdmin) {
+    const { data } = await supabase
+      .from('projects')
+      .select('*')
+      .is('archived_at', null)
+      .order('created_at', { ascending: false })
+    projects = (data ?? []) as Project[]
+  } else {
+    const { data: assignedTasks } = await supabase
+      .from('tasks')
+      .select('project_id')
+      .eq('assignee_id', profile.id)
+      .is('archived_at', null)
+    const projectIds = [...new Set((assignedTasks ?? []).map((t) => t.project_id))]
+
+    if (projectIds.length > 0) {
+      const { data } = await supabase
+        .from('projects')
+        .select('*')
+        .in('id', projectIds)
+        .is('archived_at', null)
+        .order('created_at', { ascending: false })
+      projects = (data ?? []) as Project[]
+    }
+  }
 
   return (
     <>
       <PageHeader
         title={`Welcome, ${displayName(profile).split(' ')[0]}`}
-        description="Your internal workspace for marketing work and clinical onboarding."
-      />
-
-      <div className="mx-auto max-w-3xl px-6 py-8">
-        <section className="rounded-lg border border-border bg-secondary/30 p-5">
-          <h2 className="font-display text-base font-semibold">Search everything with ⌘K</h2>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Press <span className="font-mono">⌘K</span> (or Ctrl+K) anywhere in the workspace, or
-            click Search in the sidebar, to jump to any page or jump straight to a project or
-            task by name. Every project also has an Export CSV button next to its List/Board
-            toggle, and a third Overview tab — progress, overdue count, and recent activity at a
-            glance, for the whole project at once.
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            That completes the original build plan. Comments, attachments, recurring tasks, and
-            email notifications from Phase 5 are still there too — see PHASE-5.md to turn on
-            email if you haven't.
-          </p>
+        description={isAdmin ? 'Every active project.' : "Projects you've been assigned work in."}
+        actions={
           <Link
             href="/team/projects"
-            className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            Go to Projects
-            <ArrowRight className="size-3.5" aria-hidden="true" />
+            {isAdmin ? 'Manage all projects' : 'Browse all projects'}
           </Link>
-          <Link
-            href="/team/inbox"
-            className="ml-2 mt-4 inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-          >
-            Go to Inbox
-          </Link>
-          {profile.role === 'admin' && (
-            <Link
-              href="/team/members"
-              className="ml-2 mt-4 inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-            >
-              Invite a team member
-            </Link>
-          )}
-        </section>
+        }
+      />
 
-        <section className="mt-8">
-          <h2 className="font-display text-base font-semibold">What's been built</h2>
-          <ol className="mt-3 space-y-2">
-            {ROADMAP.map(({ phase, label, done }) => (
-              <li key={phase} className="flex items-start gap-3 text-sm">
-                {done ? (
-                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-                ) : (
-                  <Circle className="mt-0.5 size-4 shrink-0 text-muted-foreground/50" aria-hidden="true" />
-                )}
-                <span className={done ? 'text-foreground' : 'text-muted-foreground'}>
-                  <span className="sr-only">{done ? 'Done: ' : 'Not started: '}</span>
-                  <span className="font-mono text-xs text-muted-foreground">Phase {phase}</span>
-                  {'  '}
-                  {label}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <p className="mt-8 rounded-md border border-border px-4 py-3 text-xs leading-relaxed text-muted-foreground">
-          <strong className="font-medium text-foreground">Data boundary.</strong> This
-          workspace holds internal operations only — campaigns, tasks, and hiring steps.
-          Never enter client names, clinical notes, or any protected health information.
-        </p>
+      <div className="px-6 py-8">
+        {projects.length === 0 ? (
+          <div className="rounded-lg border border-dashed border-border px-6 py-16 text-center">
+            <FolderKanban className="mx-auto size-8 text-muted-foreground/50" aria-hidden="true" />
+            <h2 className="mt-4 font-display text-base font-semibold">
+              {isAdmin ? 'No projects yet' : "Nothing assigned to you yet"}
+            </h2>
+            <p className="mx-auto mt-1.5 max-w-sm text-sm text-muted-foreground">
+              {isAdmin
+                ? "Start one for a marketing campaign, a new hire's onboarding, or anything else your team is tracking."
+                : "Once you're assigned a task in a project, it shows up here. In the meantime, you can browse everything the team is working on."}
+            </p>
+            <div className="mt-5 flex justify-center">
+              <Link
+                href="/team/projects"
+                className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                Go to Projects
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <ProjectGrid projects={projects} />
+        )}
       </div>
     </>
   )
