@@ -43,7 +43,7 @@ export function NewProjectDialog() {
         <DialogHeader>
           <DialogTitle>New project</DialogTitle>
           <DialogDescription>
-            Starts with one section, "To do", ready for tasks.
+            Starts empty — add your first section once it's created.
           </DialogDescription>
         </DialogHeader>
 

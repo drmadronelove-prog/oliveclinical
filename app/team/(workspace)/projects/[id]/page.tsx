@@ -1,4 +1,5 @@
-import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import { FolderKanban } from 'lucide-react'
 import { requireProfile } from '@/lib/team/auth'
 import { createClient } from '@/lib/supabase/server'
 import { PageHeader } from '@/components/team/page-header'
@@ -36,14 +37,6 @@ export default async function ProjectPage({
   const currentProfile = await requireProfile()
   const supabase = await createClient()
 
-  // Not filtered to archived_at is null — nothing in the app still sets
-  // that column from here, but this stayed permissive on purpose: the
-  // project's own detail page navigating away after deleting itself
-  // (DeleteProjectButton) is exactly the "mutate then leave the current
-  // route" shape that needs care, and useActionState + a real form is
-  // what actually makes that safe now, not a query-level workaround.
-  // notFound() below covers the real "doesn't exist" case: a wrong id,
-  // or after that delete completes.
   const [{ data: project }, { data: sections }, { data: tasks }, { data: members }, { data: allTags }, { data: resources }] =
     await Promise.all([
       supabase.from('projects').select('*').eq('id', id).maybeSingle(),
@@ -72,7 +65,30 @@ export default async function ProjectPage({
         .order('created_at', { ascending: false }),
     ])
 
-  if (!project) notFound()
+  // A plain conditional render, not notFound() — that special throw has
+  // the same "isn't reliably caught outside a normal page load" problem
+  // redirect() does, and this exact page hits it every time: deleting
+  // this project makes this same query, re-run by Next's automatic
+  // refresh after the action that just deleted it, return no row. A
+  // dead end that just renders something instead of throwing a signal
+  // Next has to catch works everywhere, including there.
+  if (!project) {
+    return (
+      <div className="mx-auto max-w-md px-6 py-24 text-center">
+        <FolderKanban className="mx-auto size-8 text-muted-foreground/50" aria-hidden="true" />
+        <h1 className="mt-4 font-display text-base font-semibold">This project doesn't exist</h1>
+        <p className="mx-auto mt-1.5 max-w-sm text-sm text-muted-foreground">
+          It may have been deleted, or the link is wrong.
+        </p>
+        <Link
+          href="/team/projects"
+          className="mt-5 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          Go to Projects
+        </Link>
+      </div>
+    )
+  }
 
   const taskIds = (tasks ?? []).map((t) => t.id)
 
