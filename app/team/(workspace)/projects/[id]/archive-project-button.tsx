@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Archive } from 'lucide-react'
@@ -20,8 +20,21 @@ import { archiveProject } from '../actions'
 
 export function ArchiveProjectButton({ projectId, projectName }: { projectId: string; projectName: string }) {
   const [open, setOpen] = useState(false)
+  const [archived, setArchived] = useState(false)
   const [pending, startTransition] = useTransition()
   const router = useRouter()
+
+  // Navigating away lives in its own effect, outside the transition that
+  // runs the action — this is the one place in the app that both mutates
+  // through a server action AND leaves the page it was called from.
+  // Calling router.push() inside the same startTransition as the action
+  // raced against Next's own automatic refresh of this now-archived
+  // project's page and surfaced as a crash instead of a clean redirect;
+  // letting the transition finish first and navigating in a separate
+  // effect avoids that entirely.
+  useEffect(() => {
+    if (archived) router.push('/team/projects')
+  }, [archived, router])
 
   function confirmArchive() {
     const formData = new FormData()
@@ -34,7 +47,7 @@ export function ArchiveProjectButton({ projectId, projectName }: { projectId: st
         return
       }
       setOpen(false)
-      router.push('/team/projects')
+      setArchived(true)
     })
   }
 
