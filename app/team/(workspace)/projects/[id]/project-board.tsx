@@ -15,7 +15,7 @@ import {
   type DragStartEvent,
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
-import { Plus, List, LayoutGrid, LayoutDashboard, FolderOpen, Download } from 'lucide-react'
+import { Plus, List, LayoutGrid, LayoutDashboard, FolderOpen } from 'lucide-react'
 import type {
   Project,
   Section,
@@ -50,7 +50,6 @@ import { TaskDetailSheet } from './task-detail-sheet'
 import { SectionHeader } from '@/components/team/section-header'
 import { ProjectOverview } from '@/components/team/project-overview'
 import { ProjectResources } from '@/components/team/project-resources'
-import { projectTasksToCsv } from '@/lib/team/csv'
 import { cn } from '@/lib/utils'
 
 function SectionDropZone({ id, children }: { id: string; children: React.ReactNode }) {
@@ -513,28 +512,9 @@ export function ProjectBoard({
     updateProjectDefaultView(formData) // fire-and-forget — worst case, it just doesn't stick for next time
   }
 
-  function handleExportCsv() {
-    const csv = projectTasksToCsv(tasks, sections, members, taskTags)
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `${project.name.replace(/[^\w\-]+/g, '-').toLowerCase()}-tasks.csv`
-    link.click()
-    URL.revokeObjectURL(url)
-  }
-
   return (
     <div className="px-6 py-6">
-      <div className="mb-4 flex items-center justify-between">
-        <button
-          type="button"
-          onClick={handleExportCsv}
-          className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-        >
-          <Download className="size-3.5" aria-hidden="true" />
-          Export CSV
-        </button>
+      <div className="mb-4 flex justify-end">
         <div className="inline-flex rounded-md border border-border p-0.5" role="group" aria-label="View">
           <button
             type="button"

@@ -15,7 +15,7 @@ import type {
 } from '@/lib/team/types'
 import { PROJECT_STATUS_LABEL } from '@/lib/team/types'
 import { ProjectStatusPicker } from './project-status-picker'
-import { ArchiveProjectButton } from './archive-project-button'
+import { DeleteProjectButton } from './delete-project-button'
 import { ProjectBoard } from './project-board'
 
 function groupByTaskId<T extends { task_id: string }>(rows: T[]): Record<string, T[]> {
@@ -36,15 +36,14 @@ export default async function ProjectPage({
   const currentProfile = await requireProfile()
   const supabase = await createClient()
 
-  // Deliberately not filtered to archived_at is null, unlike every other
-  // read of this table — archiving a project while its own detail page
-  // is open triggers Next.js's automatic refresh of the current route
-  // in the same transition as the client's own navigation away. If this
-  // query excluded archived rows, that refresh would hit notFound() for
-  // a project that still very much exists, racing the explicit
-  // navigation and surfacing as a crash instead of a clean redirect.
-  // notFound() below still covers the one case that matters: an id that
-  // doesn't exist at all (wrong link, or a hard delete).
+  // Not filtered to archived_at is null — nothing in the app still sets
+  // that column from here, but this stayed permissive on purpose: the
+  // project's own detail page navigating away after deleting itself
+  // (DeleteProjectButton) is exactly the "mutate then leave the current
+  // route" shape that needs care, and useActionState + a real form is
+  // what actually makes that safe now, not a query-level workaround.
+  // notFound() below covers the real "doesn't exist" case: a wrong id,
+  // or after that delete completes.
   const [{ data: project }, { data: sections }, { data: tasks }, { data: members }, { data: allTags }, { data: resources }] =
     await Promise.all([
       supabase.from('projects').select('*').eq('id', id).maybeSingle(),
@@ -113,18 +112,12 @@ export default async function ProjectPage({
     <>
       <PageHeader
         title={(project as Project).name}
-        description={
-          (project as Project).archived_at
-            ? 'Archived — restore it from Projects → Archived to make changes again.'
-            : PROJECT_STATUS_LABEL[(project as Project).status]
-        }
+        description={PROJECT_STATUS_LABEL[(project as Project).status]}
         actions={
-          (project as Project).archived_at ? undefined : (
-            <div className="flex items-center gap-2">
-              <ProjectStatusPicker projectId={project.id} status={(project as Project).status} />
-              <ArchiveProjectButton projectId={project.id} projectName={(project as Project).name} />
-            </div>
-          )
+          <div className="flex items-center gap-2">
+            <ProjectStatusPicker projectId={project.id} status={(project as Project).status} />
+            <DeleteProjectButton projectId={project.id} projectName={(project as Project).name} />
+          </div>
         }
       />
       <ProjectBoard

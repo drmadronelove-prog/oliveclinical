@@ -42,7 +42,7 @@ export function ArchivedProjectCard({ project }: { project: Project }) {
     const formData = new FormData()
     formData.set('id', project.id)
     startTransition(async () => {
-      const result = await deleteProjectPermanently(formData)
+      const result = await deleteProjectPermanently({}, formData)
       if (!result.ok) {
         toast.error(`Couldn't delete "${project.name}": ${result.error}`)
         return

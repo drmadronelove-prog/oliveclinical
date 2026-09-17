@@ -1,10 +1,16 @@
-# Phase 6 — Search, command palette, exports, project overview
+# Phase 6 — Search, command palette, project overview
 
 **What this phase built:** a Cmd/Ctrl+K command palette that jumps to
 any page or searches projects and tasks by name from anywhere in the
-workspace, a CSV export button on every project, and a third Overview
-tab alongside List and Board — a snapshot of a project's progress,
-overdue count, and recent activity across every task at once.
+workspace, and a third Overview tab alongside List and Board — a
+snapshot of a project's progress, overdue count, and recent activity
+across every task at once.
+
+(An Export CSV button also shipped in this phase and was removed
+shortly after, along with the "To do" section every new project used to
+start with — both per direct feedback once the team was actually using
+it. Mentioned here only so this doc doesn't describe something that no
+longer exists.)
 
 This is the last phase in the original build plan. Nothing about
 Phases 1–5 changed, and no database migration is needed.
@@ -21,15 +27,12 @@ Phases 1–5 changed, and no database migration is needed.
    project names and task titles instead, live as you type. Picking a
    task takes you straight to its project with the detail pane already
    open — the same jump the Inbox uses.
-2. Open any project. Next to the List/Board toggle, top left, an
-   **Export CSV** button — downloads that project's active tasks (title,
-   section, assignee, due date, priority, status, tags) as a spreadsheet
-   file, ready to open in Excel, Numbers, or Google Sheets.
-3. Same toggle group, a third option: **Overview**. Total tasks,
-   completed, overdue, and due this week at a glance, an overall
-   progress bar, a per-section breakdown, and the dozen most recent
-   changes across the whole project — not just one task's history, like
-   the Activity section in a task's detail pane already showed.
+2. Open any project. Next to the List/Board toggle, a third option:
+   **Overview**. Total tasks, completed, overdue, and due this week at
+   a glance, an overall progress bar, a per-section breakdown, and the
+   dozen most recent changes across the whole project — not just one
+   task's history, like the Activity section in a task's detail pane
+   already showed.
 
 ---
 
@@ -55,11 +58,8 @@ later if it turns out to matter.
 npm test
 ```
 
-This phase added two pure-logic test files:
+This phase added a pure-logic test file:
 
-- **CSV building** — cell quoting and escaping (a comma, a quote, a
-  newline inside a value), and the exact row shape produced for a task,
-  including the blank cells when assignee, due date, or tags aren't set.
 - **Activity descriptions** — the same sentence-building logic now
   shared between a task's own Activity section and the project-wide
   Overview feed, including the one difference between them: Overview
@@ -77,7 +77,7 @@ data-fetching actions.
 
 There's no Phase 7 planned. Everything in the original brief is built:
 sign-in, projects and tasks, onboarding templates, board and calendar
-views, comments and recurrence with email notifications, and now search
-and exports. From here it's real usage that should drive what comes
-next — whatever turns out to be missing once the whole team is actually
+views, comments and recurrence with email notifications, and now
+search. From here it's real usage that should drive what comes next —
+whatever turns out to be missing once the whole team is actually
 running marketing work and onboarding through it day to day.

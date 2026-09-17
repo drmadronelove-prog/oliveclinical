@@ -53,15 +53,6 @@ export async function createProject(
     return { error: `Could not create that project: ${error?.message ?? 'unknown error'}` }
   }
 
-  // A brand-new project is useless without anywhere to put a task, so it
-  // starts with one section instead of an empty page. Not fatal to the
-  // whole create if this one insert fails — the project still exists and
-  // "Add section" still works — but it should never fail silently.
-  const { error: sectionError } = await supabase
-    .from('sections')
-    .insert({ project_id: project.id, name: 'To do', position: 1024 })
-  if (sectionError) console.error('[team] default section insert failed:', sectionError)
-
   revalidatePath('/team/projects')
   redirect(`/team/projects/${project.id}`)
 }
@@ -197,36 +188,41 @@ export async function restoreProject(
   }
 }
 
+export type DeleteProjectState = { ok?: boolean; error?: string }
+
 /**
- * The other half: gone for good, sections and tasks with it (the
- * database cascades that automatically). Only reachable on a project
- * that is already archived — never a one-click way to destroy something
- * still in active use.
+ * Gone for good, sections and tasks with it (the database cascades that
+ * automatically). Takes (prevState, formData) for useActionState, the
+ * same proven pattern createProject already uses successfully — the
+ * project's own detail page navigates away after this, the exact
+ * category of "mutate then leave the page" flow that broke badly when
+ * archiving used a hand-rolled startTransition instead.
+ *
+ * No "must be archived first" step — there is no archive step in this
+ * app anymore. The one existing caller from the Archived list (deleting
+ * something already-archived for good) calls this the same way, just
+ * not through useActionState, since it never navigates away.
  */
 export async function deleteProjectPermanently(
+  _prevState: DeleteProjectState,
   formData: FormData,
-): Promise<{ ok: true } | { ok: false; error: string }> {
+): Promise<DeleteProjectState> {
   await requireProfile()
   const id = String(formData.get('id') ?? '')
   if (!id) return { ok: false, error: 'Missing project.' }
 
   const supabase = await createClient()
+  const { data, error } = await supabase.from('projects').delete().eq('id', id).select('id').maybeSingle()
 
-  const { data: project } = await supabase
-    .from('projects')
-    .select('archived_at')
-    .eq('id', id)
-    .maybeSingle()
-
-  if (!project) return { ok: false, error: 'That project is already gone.' }
-  if (!project.archived_at) {
-    return { ok: false, error: 'Archive the project first — permanent delete only works from there.' }
-  }
-
-  const { error } = await supabase.from('projects').delete().eq('id', id)
   if (error) {
     console.error('[team] deleteProjectPermanently failed:', error)
     return { ok: false, error: error.message }
+  }
+  if (!data) {
+    return {
+      ok: false,
+      error: "That project couldn't be found, or you don't have permission to delete it.",
+    }
   }
 
   revalidatePath('/team/projects')
