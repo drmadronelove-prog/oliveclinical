@@ -207,24 +207,40 @@ export async function deleteProjectPermanently(
   _prevState: DeleteProjectState,
   formData: FormData,
 ): Promise<DeleteProjectState> {
-  await requireProfile()
-  const id = String(formData.get('id') ?? '')
-  if (!id) return { ok: false, error: 'Missing project.' }
+  // TEMPORARY — this crashed with the same opaque "server error" page
+  // even now that the button genuinely submits (the earlier "nothing
+  // happens" was a separate, real, now-fixed client-side bug). The
+  // page's own try/catch never even ran, meaning whatever throws does
+  // so in here, before the page re-renders at all. Catching it and
+  // reporting it as a toast — including a real redirect(), for this one
+  // release — is the only way left to see it. Revert once diagnosed.
+  try {
+    await requireProfile()
+    const id = String(formData.get('id') ?? '')
+    if (!id) return { ok: false, error: 'Missing project.' }
 
-  const supabase = await createClient()
-  const { data, error } = await supabase.from('projects').delete().eq('id', id).select('id').maybeSingle()
+    const supabase = await createClient()
+    const { data, error } = await supabase.from('projects').delete().eq('id', id).select('id').maybeSingle()
 
-  if (error) {
-    console.error('[team] deleteProjectPermanently failed:', error)
-    return { ok: false, error: error.message }
-  }
-  if (!data) {
+    if (error) {
+      console.error('[team] deleteProjectPermanently failed:', error)
+      return { ok: false, error: error.message }
+    }
+    if (!data) {
+      return {
+        ok: false,
+        error: "That project couldn't be found, or you don't have permission to delete it.",
+      }
+    }
+
+    revalidatePath('/team/projects')
+    return { ok: true }
+  } catch (err) {
+    const e = err as { message?: string; digest?: string }
+    console.error('[team] deleteProjectPermanently threw:', err)
     return {
       ok: false,
-      error: "That project couldn't be found, or you don't have permission to delete it.",
+      error: `${e?.message ?? String(err)} [digest: ${e?.digest ?? 'none'}]`,
     }
   }
-
-  revalidatePath('/team/projects')
-  return { ok: true }
 }
