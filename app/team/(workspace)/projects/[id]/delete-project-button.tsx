@@ -6,7 +6,6 @@ import { toast } from 'sonner'
 import { Trash2 } from 'lucide-react'
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -15,7 +14,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { deleteProjectPermanently, type DeleteProjectState } from '../actions'
 
 const initialState: DeleteProjectState = {}
@@ -84,13 +84,20 @@ export function DeleteProjectButton({ projectId, projectName }: { projectId: str
           <input type="hidden" name="id" value={projectId} />
           <AlertDialogFooter>
             <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
+            {/* A plain native submit button, not AlertDialogAction — that
+                Radix component is only ever used elsewhere in this app
+                via onClick handlers, never type="submit" inside a real
+                <form>, and that exact untested combination is the prime
+                suspect for delete silently doing nothing: this native
+                button is the same mechanism SubmitButton (form-controls.tsx)
+                already proves works, for createProject. */}
+            <button
               type="submit"
               disabled={!nameMatches || pending}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className={cn(buttonVariants(), 'bg-destructive text-destructive-foreground hover:bg-destructive/90')}
             >
               {pending ? 'Deleting…' : 'Delete permanently'}
-            </AlertDialogAction>
+            </button>
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>
