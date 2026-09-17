@@ -36,9 +36,18 @@ export default async function ProjectPage({
   const currentProfile = await requireProfile()
   const supabase = await createClient()
 
+  // Deliberately not filtered to archived_at is null, unlike every other
+  // read of this table — archiving a project while its own detail page
+  // is open triggers Next.js's automatic refresh of the current route
+  // in the same transition as the client's own navigation away. If this
+  // query excluded archived rows, that refresh would hit notFound() for
+  // a project that still very much exists, racing the explicit
+  // navigation and surfacing as a crash instead of a clean redirect.
+  // notFound() below still covers the one case that matters: an id that
+  // doesn't exist at all (wrong link, or a hard delete).
   const [{ data: project }, { data: sections }, { data: tasks }, { data: members }, { data: allTags }, { data: resources }] =
     await Promise.all([
-      supabase.from('projects').select('*').eq('id', id).is('archived_at', null).maybeSingle(),
+      supabase.from('projects').select('*').eq('id', id).maybeSingle(),
       supabase
         .from('sections')
         .select('*')
@@ -104,12 +113,18 @@ export default async function ProjectPage({
     <>
       <PageHeader
         title={(project as Project).name}
-        description={PROJECT_STATUS_LABEL[(project as Project).status]}
+        description={
+          (project as Project).archived_at
+            ? 'Archived — restore it from Projects → Archived to make changes again.'
+            : PROJECT_STATUS_LABEL[(project as Project).status]
+        }
         actions={
-          <div className="flex items-center gap-2">
-            <ProjectStatusPicker projectId={project.id} status={(project as Project).status} />
-            <ArchiveProjectButton projectId={project.id} projectName={(project as Project).name} />
-          </div>
+          (project as Project).archived_at ? undefined : (
+            <div className="flex items-center gap-2">
+              <ProjectStatusPicker projectId={project.id} status={(project as Project).status} />
+              <ArchiveProjectButton projectId={project.id} projectName={(project as Project).name} />
+            </div>
+          )
         }
       />
       <ProjectBoard
