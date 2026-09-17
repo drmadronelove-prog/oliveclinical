@@ -34,6 +34,42 @@ export default async function ProjectPage({
 }) {
   const { id } = await params
   const { task: deepLinkedTaskId } = await searchParams
+
+  // TEMPORARY — this whole page wrapped in try/catch for one release.
+  // Two completely different actions (Archive, then Delete), built two
+  // completely different ways, crashed identically on this same page,
+  // and removing every specific throw either could plausibly hit
+  // (redirect() inside a Server Action, notFound() on a missing row)
+  // changed nothing. That means whatever's actually throwing has never
+  // been seen — Next.js redacts it everywhere: the network response,
+  // the console, a normal error.tsx boundary. Catching it here, in the
+  // page's own render, and printing it directly is the only way left to
+  // find out what it actually is instead of guessing again. This also
+  // swallows a genuine redirect() (e.g. a real expired session) into
+  // this same diagnostic output for the one release it's in — revert
+  // once this is actually diagnosed.
+  try {
+    return await renderProjectPage(id, deepLinkedTaskId)
+  } catch (err) {
+    const e = err as { message?: string; digest?: string; stack?: string }
+    return (
+      <div className="mx-auto max-w-2xl px-6 py-12">
+        <h1 className="font-display text-base font-semibold text-destructive">
+          Diagnostic: caught an error rendering this page
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Copy everything below back to Claude — this is temporary instrumentation, not the
+          normal behavior of this page.
+        </p>
+        <pre className="mt-4 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-secondary/40 p-4 text-xs">
+          {`name: ${err instanceof Error ? err.constructor.name : typeof err}\nmessage: ${e?.message ?? String(err)}\ndigest: ${e?.digest ?? 'none'}\nstack:\n${e?.stack ?? 'none'}`}
+        </pre>
+      </div>
+    )
+  }
+}
+
+async function renderProjectPage(id: string, deepLinkedTaskId: string | undefined) {
   const currentProfile = await requireProfile()
   const supabase = await createClient()
 
