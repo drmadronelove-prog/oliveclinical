@@ -154,14 +154,20 @@ export async function archiveProject(
     // once it sees { ok: true }.
     return { ok: true }
   } catch (err) {
-    // requireProfile() above can call redirect() itself if the session
-    // turns out to be gone — that throw must keep going, not get
-    // swallowed into a confusing error toast in place of "log back in."
-    if (isNextRedirectError(err)) throw err
+    // TEMPORARY — not re-throwing isNextRedirectError() here on purpose,
+    // for one release: two rounds of fixes changed nothing about this
+    // exact crash, which is the signature of requireProfile()'s own
+    // redirect() call hitting the same "throw isn't reliably caught
+    // inside startTransition" problem this project has hit before — and
+    // re-throwing it would hide that instead of proving it. If this
+    // shows a NEXT_REDIRECT-shaped message next time, that confirms it
+    // and the real fix is restructuring how this action checks the
+    // session; if it shows something else, this was the wrong theory.
+    // Revert to re-throwing once this is actually diagnosed.
     console.error('[team] archiveProject threw:', err)
     return {
       ok: false,
-      error: err instanceof Error ? err.message : 'Unexpected error archiving that project.',
+      error: err instanceof Error ? `${err.message} [digest: ${(err as { digest?: string }).digest ?? 'none'}]` : String(err),
     }
   }
 }
