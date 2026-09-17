@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { requireProfile } from '@/lib/team/auth'
+import { isNextRedirectError } from '@/lib/team/next-redirect'
 import type { ProjectStatus, ProjectType } from '@/lib/team/types'
 
 export type ProjectFormState = { error?: string }
@@ -106,74 +107,103 @@ export async function updateProjectDefaultView(formData: FormData) {
 export async function archiveProject(
   formData: FormData,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
-  await requireProfile()
-  const id = String(formData.get('id') ?? '')
-  const archived = formData.get('archived') === 'true'
-  if (!id) return { ok: false, error: 'Missing project.' }
+  // Wrapped in try/catch, unlike every other action in this file: this
+  // one already crashed opaquely once (a generic "server error" page
+  // with no usable detail) even after the .select().maybeSingle() fix
+  // below, meaning something in here throws instead of returning a
+  // normal Postgrest error. Catching it and reporting the real message
+  // is how that actually gets diagnosed, since there's no other way to
+  // see it from a deployed environment.
+  try {
+    await requireProfile()
+    const id = String(formData.get('id') ?? '')
+    const archived = formData.get('archived') === 'true'
+    if (!id) return { ok: false, error: 'Missing project.' }
 
-  const supabase = await createClient()
-  // .select().maybeSingle() after the update, not just the error, because
-  // Supabase's update() reports no error at all when the WHERE clause (or
-  // row-level security) simply matches nothing — it looks exactly like
-  // success unless something checks that a row actually came back.
-  const { data, error } = await supabase
-    .from('projects')
-    .update({ archived_at: archived ? new Date().toISOString() : null })
-    .eq('id', id)
-    .select('id')
-    .maybeSingle()
+    const supabase = await createClient()
+    // .select().maybeSingle() after the update, not just the error,
+    // because Supabase's update() reports no error at all when the
+    // WHERE clause (or row-level security) simply matches nothing — it
+    // looks exactly like success unless something checks that a row
+    // actually came back.
+    const { data, error } = await supabase
+      .from('projects')
+      .update({ archived_at: archived ? new Date().toISOString() : null })
+      .eq('id', id)
+      .select('id')
+      .maybeSingle()
 
-  if (error) {
-    console.error('[team] archiveProject failed:', error)
-    return { ok: false, error: error.message }
-  }
-  if (!data) {
+    if (error) {
+      console.error('[team] archiveProject failed:', error)
+      return { ok: false, error: error.message }
+    }
+    if (!data) {
+      return {
+        ok: false,
+        error: "That project couldn't be found, or you don't have permission to change it.",
+      }
+    }
+
+    revalidatePath('/team/projects')
+    // Deliberately no redirect() here even for the archived case — this
+    // is called as a bare function from a client event handler (inside
+    // startTransition), not through a <form action> or useActionState.
+    // In that shape, redirect()'s special throw isn't reliably caught by
+    // Next's action machinery and can surface as a visible runtime error
+    // instead of a navigation. The caller does the navigating itself
+    // once it sees { ok: true }.
+    return { ok: true }
+  } catch (err) {
+    // requireProfile() above can call redirect() itself if the session
+    // turns out to be gone — that throw must keep going, not get
+    // swallowed into a confusing error toast in place of "log back in."
+    if (isNextRedirectError(err)) throw err
+    console.error('[team] archiveProject threw:', err)
     return {
       ok: false,
-      error: "That project couldn't be found, or you don't have permission to change it.",
+      error: err instanceof Error ? err.message : 'Unexpected error archiving that project.',
     }
   }
-
-  revalidatePath('/team/projects')
-  // Deliberately no redirect() here even for the archived case — this is
-  // called as a bare function from a client event handler (inside
-  // startTransition), not through a <form action> or useActionState. In
-  // that shape, redirect()'s special throw isn't reliably caught by
-  // Next's action machinery and can surface as a visible runtime error
-  // instead of a navigation. The caller does the navigating itself once
-  // it sees { ok: true }.
-  return { ok: true }
 }
 
 /** The un-archive half of the trash-can model: back into the active list, untouched. */
 export async function restoreProject(
   formData: FormData,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
-  await requireProfile()
-  const id = String(formData.get('id') ?? '')
-  if (!id) return { ok: false, error: 'Missing project.' }
+  try {
+    await requireProfile()
+    const id = String(formData.get('id') ?? '')
+    if (!id) return { ok: false, error: 'Missing project.' }
 
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('projects')
-    .update({ archived_at: null })
-    .eq('id', id)
-    .select('id')
-    .maybeSingle()
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('projects')
+      .update({ archived_at: null })
+      .eq('id', id)
+      .select('id')
+      .maybeSingle()
 
-  if (error) {
-    console.error('[team] restoreProject failed:', error)
-    return { ok: false, error: error.message }
-  }
-  if (!data) {
+    if (error) {
+      console.error('[team] restoreProject failed:', error)
+      return { ok: false, error: error.message }
+    }
+    if (!data) {
+      return {
+        ok: false,
+        error: "That project couldn't be found, or you don't have permission to change it.",
+      }
+    }
+
+    revalidatePath('/team/projects')
+    return { ok: true }
+  } catch (err) {
+    if (isNextRedirectError(err)) throw err
+    console.error('[team] restoreProject threw:', err)
     return {
       ok: false,
-      error: "That project couldn't be found, or you don't have permission to change it.",
+      error: err instanceof Error ? err.message : 'Unexpected error restoring that project.',
     }
   }
-
-  revalidatePath('/team/projects')
-  return { ok: true }
 }
 
 /**
