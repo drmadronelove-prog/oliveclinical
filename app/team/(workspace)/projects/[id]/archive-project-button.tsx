@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useTransition } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Archive } from 'lucide-react'
@@ -16,40 +16,28 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { archiveProject } from '../actions'
+import { archiveProject, type ArchiveProjectState } from '../actions'
+
+const initialState: ArchiveProjectState = {}
 
 export function ArchiveProjectButton({ projectId, projectName }: { projectId: string; projectName: string }) {
   const [open, setOpen] = useState(false)
-  const [archived, setArchived] = useState(false)
-  const [pending, startTransition] = useTransition()
+  const [state, formAction, pending] = useActionState(archiveProject, initialState)
   const router = useRouter()
+  // useActionState re-delivers the same state object on every render, not
+  // just when it actually changes — this is how the effect below tells
+  // "the action just resolved" from "this component merely re-rendered."
+  const handledStateRef = useRef(state)
 
-  // Navigating away lives in its own effect, outside the transition that
-  // runs the action — this is the one place in the app that both mutates
-  // through a server action AND leaves the page it was called from.
-  // Calling router.push() inside the same startTransition as the action
-  // raced against Next's own automatic refresh of this now-archived
-  // project's page and surfaced as a crash instead of a clean redirect;
-  // letting the transition finish first and navigating in a separate
-  // effect avoids that entirely.
   useEffect(() => {
-    if (archived) router.push('/team/projects')
-  }, [archived, router])
-
-  function confirmArchive() {
-    const formData = new FormData()
-    formData.set('id', projectId)
-    formData.set('archived', 'true')
-    startTransition(async () => {
-      const result = await archiveProject(formData)
-      if (!result.ok) {
-        toast.error(`Couldn't archive that project: ${result.error}`)
-        return
-      }
-      setOpen(false)
-      setArchived(true)
-    })
-  }
+    if (state === handledStateRef.current) return
+    handledStateRef.current = state
+    if (state.ok) {
+      router.push('/team/projects')
+    } else if (state.error) {
+      toast.error(`Couldn't archive that project: ${state.error}`)
+    }
+  }, [state, router])
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -68,18 +56,22 @@ export function ArchiveProjectButton({ projectId, projectName }: { projectId: st
             for good once you're sure.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={(e) => {
-              e.preventDefault()
-              confirmArchive()
-            }}
-            disabled={pending}
-          >
-            {pending ? 'Archiving…' : 'Archive project'}
-          </AlertDialogAction>
-        </AlertDialogFooter>
+        {/* A real form + useActionState, not a manually-built FormData
+            passed to a bare async function — the same pattern
+            NewProjectDialog already uses successfully (including calling
+            redirect() from the action), so Next's own action lifecycle
+            handles submission and pending state instead of this
+            component reimplementing pieces of it by hand. */}
+        <form action={formAction}>
+          <input type="hidden" name="id" value={projectId} />
+          <input type="hidden" name="archived" value="true" />
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction type="submit" disabled={pending}>
+              {pending ? 'Archiving…' : 'Archive project'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </form>
       </AlertDialogContent>
     </AlertDialog>
   )

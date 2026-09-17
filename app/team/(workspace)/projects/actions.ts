@@ -104,72 +104,57 @@ export async function updateProjectDefaultView(formData: FormData) {
   await supabase.from('projects').update({ default_view: view }).eq('id', id)
 }
 
+export type ArchiveProjectState = { ok?: boolean; error?: string }
+
+/**
+ * Takes (previousState, formData), not just (formData) — the shape
+ * useActionState requires. Every earlier fix here (the row-existence
+ * check below, the try/catch, decoupling the navigation) addressed a
+ * real, separate issue, but a raw crash with no usable detail survived
+ * all of them, which is the signature of this project's own documented
+ * bug: redirect()'s throw (from requireProfile(), if the session is
+ * ever actually gone) isn't reliably caught when a server action is
+ * invoked as a bare function inside startTransition instead of through
+ * <form action> or useActionState. createProject uses that same proven
+ * pattern successfully (and does call redirect()) — this now matches
+ * it, so Next's own action machinery handles the whole lifecycle
+ * instead of this component reimplementing pieces of it by hand.
+ */
 export async function archiveProject(
+  _prevState: ArchiveProjectState,
   formData: FormData,
-): Promise<{ ok: true } | { ok: false; error: string }> {
-  // Wrapped in try/catch, unlike every other action in this file: this
-  // one already crashed opaquely once (a generic "server error" page
-  // with no usable detail) even after the .select().maybeSingle() fix
-  // below, meaning something in here throws instead of returning a
-  // normal Postgrest error. Catching it and reporting the real message
-  // is how that actually gets diagnosed, since there's no other way to
-  // see it from a deployed environment.
-  try {
-    await requireProfile()
-    const id = String(formData.get('id') ?? '')
-    const archived = formData.get('archived') === 'true'
-    if (!id) return { ok: false, error: 'Missing project.' }
+): Promise<ArchiveProjectState> {
+  await requireProfile()
+  const id = String(formData.get('id') ?? '')
+  const archived = formData.get('archived') === 'true'
+  if (!id) return { ok: false, error: 'Missing project.' }
 
-    const supabase = await createClient()
-    // .select().maybeSingle() after the update, not just the error,
-    // because Supabase's update() reports no error at all when the
-    // WHERE clause (or row-level security) simply matches nothing — it
-    // looks exactly like success unless something checks that a row
-    // actually came back.
-    const { data, error } = await supabase
-      .from('projects')
-      .update({ archived_at: archived ? new Date().toISOString() : null })
-      .eq('id', id)
-      .select('id')
-      .maybeSingle()
+  const supabase = await createClient()
+  // .select().maybeSingle() after the update, not just the error,
+  // because Supabase's update() reports no error at all when the
+  // WHERE clause (or row-level security) simply matches nothing — it
+  // looks exactly like success unless something checks that a row
+  // actually came back.
+  const { data, error } = await supabase
+    .from('projects')
+    .update({ archived_at: archived ? new Date().toISOString() : null })
+    .eq('id', id)
+    .select('id')
+    .maybeSingle()
 
-    if (error) {
-      console.error('[team] archiveProject failed:', error)
-      return { ok: false, error: error.message }
-    }
-    if (!data) {
-      return {
-        ok: false,
-        error: "That project couldn't be found, or you don't have permission to change it.",
-      }
-    }
-
-    revalidatePath('/team/projects')
-    // Deliberately no redirect() here even for the archived case — this
-    // is called as a bare function from a client event handler (inside
-    // startTransition), not through a <form action> or useActionState.
-    // In that shape, redirect()'s special throw isn't reliably caught by
-    // Next's action machinery and can surface as a visible runtime error
-    // instead of a navigation. The caller does the navigating itself
-    // once it sees { ok: true }.
-    return { ok: true }
-  } catch (err) {
-    // TEMPORARY — not re-throwing isNextRedirectError() here on purpose,
-    // for one release: two rounds of fixes changed nothing about this
-    // exact crash, which is the signature of requireProfile()'s own
-    // redirect() call hitting the same "throw isn't reliably caught
-    // inside startTransition" problem this project has hit before — and
-    // re-throwing it would hide that instead of proving it. If this
-    // shows a NEXT_REDIRECT-shaped message next time, that confirms it
-    // and the real fix is restructuring how this action checks the
-    // session; if it shows something else, this was the wrong theory.
-    // Revert to re-throwing once this is actually diagnosed.
-    console.error('[team] archiveProject threw:', err)
+  if (error) {
+    console.error('[team] archiveProject failed:', error)
+    return { ok: false, error: error.message }
+  }
+  if (!data) {
     return {
       ok: false,
-      error: err instanceof Error ? `${err.message} [digest: ${(err as { digest?: string }).digest ?? 'none'}]` : String(err),
+      error: "That project couldn't be found, or you don't have permission to change it.",
     }
   }
+
+  revalidatePath('/team/projects')
+  return { ok: true }
 }
 
 /** The un-archive half of the trash-can model: back into the active list, untouched. */
