@@ -82,8 +82,9 @@ export default async function TeamHomePage() {
 
   return (
     <>
-      <header className="max-w-[1320px] px-6 pt-10 sm:px-14 sm:pt-14">
-        <div className="flex flex-wrap items-start justify-between gap-10">
+      <header className="relative max-w-[1320px] px-6 pt-10 sm:px-14 sm:pt-14 xl:min-h-[30rem]">
+        <OliveBlobs />
+        <div className="relative flex flex-wrap items-start justify-between gap-10">
           <div className="team-rise-in min-w-0 flex-1 basis-90">
             <p className="text-xs font-semibold tracking-[0.16em] text-muted-foreground uppercase">
               {today}
@@ -95,16 +96,13 @@ export default async function TeamHomePage() {
             </h1>
           </div>
 
-          <div className="flex shrink-0 basis-75 flex-col items-start gap-6 lg:items-end">
-            <Link
-              href="/team/projects"
-              className="inline-flex lg:mt-1.5 items-center gap-2.5 rounded-md bg-gold px-5 py-3 text-sm font-bold text-ink transition-colors hover:bg-gold/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-            >
-              {isAdmin ? 'Manage all projects' : 'Browse all projects'}
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
-            <OliveBlobs />
-          </div>
+          <Link
+            href="/team/projects"
+            className="inline-flex shrink-0 items-center gap-2.5 rounded-md bg-gold px-5 py-3 text-sm font-bold text-ink transition-colors hover:bg-gold/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring lg:mt-1.5"
+          >
+            {isAdmin ? 'Manage all projects' : 'Browse all projects'}
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
         </div>
       </header>
 

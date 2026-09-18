@@ -207,15 +207,27 @@
    where they were going to end up. */
 @keyframes team-drift-a {
   0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-16px, 14px); }
+  25% { transform: translate(-90px, 40px); }
+  50% { transform: translate(-30px, 96px); }
+  75% { transform: translate(58px, 46px); }
 }
 @keyframes team-drift-b {
   0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(14px, -16px); }
+  25% { transform: translate(70px, -52px); }
+  50% { transform: translate(18px, -104px); }
+  75% { transform: translate(-56px, -44px); }
 }
 @keyframes team-drift-c {
   0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(10px, 12px); }
+  25% { transform: translate(-64px, -58px); }
+  50% { transform: translate(-110px, 10px); }
+  75% { transform: translate(-40px, 62px); }
+}
+@keyframes team-drift-d {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(86px, 54px); }
+  50% { transform: translate(30px, 116px); }
+  75% { transform: translate(-46px, 58px); }
 }
 @keyframes team-rise-in {
   from { opacity: 0; transform: translateY(14px); }
@@ -224,13 +236,17 @@
 
 .team-drift-a,
 .team-drift-b,
-.team-drift-c {
-  animation-timing-function: ease-in-out;
+.team-drift-c,
+.team-drift-d {
+  /* Linear, not eased: an ease-in-out on a four-point loop stalls at every
+     waypoint, which is what made the olives look pinned in place. */
+  animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
 .team-drift-a { animation-name: team-drift-a; }
 .team-drift-b { animation-name: team-drift-b; }
 .team-drift-c { animation-name: team-drift-c; }
+.team-drift-d { animation-name: team-drift-d; }
 
 .team-rise-in {
   animation: team-rise-in 0.7s cubic-bezier(0.2, 0.8, 0.25, 1) both;
@@ -240,6 +256,7 @@
   .team-drift-a,
   .team-drift-b,
   .team-drift-c,
+  .team-drift-d,
   .team-rise-in {
     animation: none;
   }
