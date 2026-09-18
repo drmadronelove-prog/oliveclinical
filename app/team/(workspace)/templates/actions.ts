@@ -136,7 +136,7 @@ export async function archiveTemplate(
   }
 
   revalidatePath('/team/templates')
-  // No redirect() here — see the matching note on archiveProject. This is
+  // No redirect() here. This is
   // called as a bare function from a client event handler, not through a
   // <form action> or useActionState, and redirect()'s throw isn't
   // reliably caught in that shape. The caller navigates itself.

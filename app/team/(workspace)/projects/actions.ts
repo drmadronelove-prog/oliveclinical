@@ -95,60 +95,18 @@ export async function updateProjectDefaultView(formData: FormData) {
   await supabase.from('projects').update({ default_view: view }).eq('id', id)
 }
 
-export type ArchiveProjectState = { ok?: boolean; error?: string }
-
 /**
- * Takes (previousState, formData), not just (formData) — the shape
- * useActionState requires. Every earlier fix here (the row-existence
- * check below, the try/catch, decoupling the navigation) addressed a
- * real, separate issue, but a raw crash with no usable detail survived
- * all of them, which is the signature of this project's own documented
- * bug: redirect()'s throw (from requireProfile(), if the session is
- * ever actually gone) isn't reliably caught when a server action is
- * invoked as a bare function inside startTransition instead of through
- * <form action> or useActionState. createProject uses that same proven
- * pattern successfully (and does call redirect()) — this now matches
- * it, so Next's own action machinery handles the whole lifecycle
- * instead of this component reimplementing pieces of it by hand.
+ * Puts a project archived under the old archive model back into the
+ * active list, untouched. There is no archive step in the app anymore
+ * (a project is deleted outright — see app/api/team/projects/[id]/
+ * route.ts), but anything archived before that change still sits in the
+ * Archived list, and this is how it comes back.
+ *
+ * .select().maybeSingle() after the update, not just the error, because
+ * Supabase's update() reports no error at all when the WHERE clause (or
+ * row-level security) simply matches nothing — it looks exactly like
+ * success unless something checks that a row actually came back.
  */
-export async function archiveProject(
-  _prevState: ArchiveProjectState,
-  formData: FormData,
-): Promise<ArchiveProjectState> {
-  await requireProfile()
-  const id = String(formData.get('id') ?? '')
-  const archived = formData.get('archived') === 'true'
-  if (!id) return { ok: false, error: 'Missing project.' }
-
-  const supabase = await createClient()
-  // .select().maybeSingle() after the update, not just the error,
-  // because Supabase's update() reports no error at all when the
-  // WHERE clause (or row-level security) simply matches nothing — it
-  // looks exactly like success unless something checks that a row
-  // actually came back.
-  const { data, error } = await supabase
-    .from('projects')
-    .update({ archived_at: archived ? new Date().toISOString() : null })
-    .eq('id', id)
-    .select('id')
-    .maybeSingle()
-
-  if (error) {
-    console.error('[team] archiveProject failed:', error)
-    return { ok: false, error: error.message }
-  }
-  if (!data) {
-    return {
-      ok: false,
-      error: "That project couldn't be found, or you don't have permission to change it.",
-    }
-  }
-
-  revalidatePath('/team/projects')
-  return { ok: true }
-}
-
-/** The un-archive half of the trash-can model: back into the active list, untouched. */
 export async function restoreProject(
   formData: FormData,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
@@ -184,63 +142,6 @@ export async function restoreProject(
     return {
       ok: false,
       error: err instanceof Error ? err.message : 'Unexpected error restoring that project.',
-    }
-  }
-}
-
-export type DeleteProjectState = { ok?: boolean; error?: string }
-
-/**
- * Gone for good, sections and tasks with it (the database cascades that
- * automatically). Takes (prevState, formData) for useActionState, the
- * same proven pattern createProject already uses successfully — the
- * project's own detail page navigates away after this, the exact
- * category of "mutate then leave the page" flow that broke badly when
- * archiving used a hand-rolled startTransition instead.
- *
- * No "must be archived first" step — there is no archive step in this
- * app anymore. The one existing caller from the Archived list (deleting
- * something already-archived for good) calls this the same way, just
- * not through useActionState, since it never navigates away.
- */
-export async function deleteProjectPermanently(
-  _prevState: DeleteProjectState,
-  formData: FormData,
-): Promise<DeleteProjectState> {
-  // TEMPORARY — this crashed with the same opaque "server error" page
-  // even now that the button genuinely submits (the earlier "nothing
-  // happens" was a separate, real, now-fixed client-side bug). The
-  // page's own try/catch never even ran, meaning whatever throws does
-  // so in here, before the page re-renders at all. Catching it and
-  // reporting it as a toast — including a real redirect(), for this one
-  // release — is the only way left to see it. Revert once diagnosed.
-  try {
-    await requireProfile()
-    const id = String(formData.get('id') ?? '')
-    if (!id) return { ok: false, error: 'Missing project.' }
-
-    const supabase = await createClient()
-    const { data, error } = await supabase.from('projects').delete().eq('id', id).select('id').maybeSingle()
-
-    if (error) {
-      console.error('[team] deleteProjectPermanently failed:', error)
-      return { ok: false, error: error.message }
-    }
-    if (!data) {
-      return {
-        ok: false,
-        error: "That project couldn't be found, or you don't have permission to delete it.",
-      }
-    }
-
-    revalidatePath('/team/projects')
-    return { ok: true }
-  } catch (err) {
-    const e = err as { message?: string; digest?: string }
-    console.error('[team] deleteProjectPermanently threw:', err)
-    return {
-      ok: false,
-      error: `${e?.message ?? String(err)} [digest: ${e?.digest ?? 'none'}]`,
     }
   }
 }

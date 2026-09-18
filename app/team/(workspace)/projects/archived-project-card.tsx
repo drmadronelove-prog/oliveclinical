@@ -16,7 +16,8 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { PROJECT_TYPE_LABEL, type Project } from '@/lib/team/types'
-import { restoreProject, deleteProjectPermanently } from './actions'
+import { deleteProjectRequest } from '@/lib/team/delete-project'
+import { restoreProject } from './actions'
 
 export function ArchivedProjectCard({ project }: { project: Project }) {
   const [gone, setGone] = useState(false)
@@ -39,10 +40,8 @@ export function ArchivedProjectCard({ project }: { project: Project }) {
   }
 
   function handleDeletePermanently() {
-    const formData = new FormData()
-    formData.set('id', project.id)
     startTransition(async () => {
-      const result = await deleteProjectPermanently({}, formData)
+      const result = await deleteProjectRequest(project.id)
       if (!result.ok) {
         toast.error(`Couldn't delete "${project.name}": ${result.error}`)
         return
@@ -92,9 +91,8 @@ export function ArchivedProjectCard({ project }: { project: Project }) {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete "{project.name}" permanently?</AlertDialogTitle>
             <AlertDialogDescription>
-              This is different from Archive — every section and task in this project is
-              deleted along with it, for good. Nobody, including an admin, can get it back.
-              Type the project's name to confirm.
+              Every section and task in this project is deleted along with it, for good. Nobody,
+              including an admin, can get it back. Type the project's name to confirm.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <input

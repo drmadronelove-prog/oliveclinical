@@ -1,11 +1,12 @@
 'use client'
 
-import { useActionState, useEffect, useRef, useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Trash2 } from 'lucide-react'
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -14,42 +15,40 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Button, buttonVariants } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { deleteProjectPermanently, type DeleteProjectState } from '../actions'
-
-const initialState: DeleteProjectState = {}
+import { Button } from '@/components/ui/button'
+import { deleteProjectRequest } from '@/lib/team/delete-project'
 
 /**
- * Deletes the project outright — no archive step first. Type the
- * project's name to confirm, the same friction the Archived list's own
- * "Delete permanently" already uses, appropriate here since this is the
- * only way to remove a project now and there's no undo.
+ * Deletes the project outright — no archive step. Type the project's
+ * name to confirm, the same friction the Archived list's own delete
+ * uses, appropriate since this is the only way to remove a project and
+ * there is no undo.
  *
- * Uses useActionState + a real form, the same proven pattern
- * createProject already uses successfully (including calling
- * redirect()) — this page navigates away after deleting itself, which
- * is exactly the shape that broke badly for Archive under a hand-rolled
- * startTransition instead.
+ * Calls a plain route handler over fetch rather than a server action —
+ * see app/api/team/projects/[id]/route.ts for why. That also means
+ * nothing re-renders this page out from under the button: it stays
+ * mounted until the navigation below actually happens.
  */
 export function DeleteProjectButton({ projectId, projectName }: { projectId: string; projectName: string }) {
   const [open, setOpen] = useState(false)
   const [confirmText, setConfirmText] = useState('')
-  const [state, formAction, pending] = useActionState(deleteProjectPermanently, initialState)
+  const [pending, startTransition] = useTransition()
   const router = useRouter()
-  const handledStateRef = useRef(state)
-
-  useEffect(() => {
-    if (state === handledStateRef.current) return
-    handledStateRef.current = state
-    if (state.ok) {
-      router.push('/team/projects')
-    } else if (state.error) {
-      toast.error(`Couldn't delete "${projectName}": ${state.error}`)
-    }
-  }, [state, projectName, router])
 
   const nameMatches = confirmText.trim() === projectName
+
+  function confirmDelete() {
+    startTransition(async () => {
+      const result = await deleteProjectRequest(projectId)
+      if (!result.ok) {
+        toast.error(`Couldn't delete "${projectName}": ${result.error}`)
+        return
+      }
+      setOpen(false)
+      router.push('/team/projects')
+      router.refresh()
+    })
+  }
 
   return (
     <AlertDialog
@@ -80,26 +79,19 @@ export function DeleteProjectButton({ projectId, projectName }: { projectId: str
           aria-label="Type the project name to confirm"
           className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
         />
-        <form action={formAction}>
-          <input type="hidden" name="id" value={projectId} />
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
-            {/* A plain native submit button, not AlertDialogAction — that
-                Radix component is only ever used elsewhere in this app
-                via onClick handlers, never type="submit" inside a real
-                <form>, and that exact untested combination is the prime
-                suspect for delete silently doing nothing: this native
-                button is the same mechanism SubmitButton (form-controls.tsx)
-                already proves works, for createProject. */}
-            <button
-              type="submit"
-              disabled={!nameMatches || pending}
-              className={cn(buttonVariants(), 'bg-destructive text-destructive-foreground hover:bg-destructive/90')}
-            >
-              {pending ? 'Deleting…' : 'Delete permanently'}
-            </button>
-          </AlertDialogFooter>
-        </form>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            disabled={!nameMatches || pending}
+            onClick={(e) => {
+              e.preventDefault()
+              confirmDelete()
+            }}
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          >
+            {pending ? 'Deleting…' : 'Delete permanently'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   )
