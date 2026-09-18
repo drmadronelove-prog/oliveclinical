@@ -10,6 +10,21 @@ import { displayName, initialsOf, type Profile } from '@/lib/team/types'
 import { signOut } from '@/app/team/actions'
 import { CommandPalette } from './command-palette'
 
+/**
+ * The Olive Clinical mark — a filled circle with the pimento sheen set
+ * upper-right, the same shape the marketing site's hero blobs wear. Inline
+ * rather than an <img> so it inherits the text color (and so flips with the
+ * theme) and stays crisp at the two sizes the sidebar uses it at.
+ */
+function OliveMark({ className, fill = 'currentColor' }: { className?: string; fill?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true" className={className}>
+      <circle cx="50" cy="50" r="50" fill={fill} />
+      <ellipse cx="62" cy="40" rx="15" ry="22" fill="#ffffff" opacity="0.28" />
+    </svg>
+  )
+}
+
 type NavItem = { href: string; label: string; icon: typeof Home; adminOnly?: boolean }
 
 const NAV: NavItem[] = [
@@ -92,13 +107,20 @@ export function TeamShell({
         {/* Sidebar */}
         <aside
           className={cn(
-            'fixed inset-y-0 left-0 z-50 flex w-64 shrink-0 flex-col border-r border-border bg-secondary/40 transition-transform duration-200 md:sticky md:top-0 md:h-screen md:translate-x-0',
+            'fixed inset-y-0 left-0 z-50 flex w-[17rem] shrink-0 flex-col border-r border-border bg-secondary/40 transition-transform duration-200 md:sticky md:top-0 md:h-screen md:translate-x-0',
             mobileOpen ? 'translate-x-0' : '-translate-x-full',
           )}
         >
-          <div className="flex h-14 items-center justify-between border-b border-border px-4">
-            <Link href="/team" className="font-display text-base font-semibold tracking-tight">
-              Olive <span className="text-muted-foreground font-normal">Team</span>
+          <div className="flex h-16 items-center justify-between px-5">
+            <Link
+              href="/team"
+              className="flex items-center gap-3.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <OliveMark className="size-6.5 shrink-0" />
+              <span aria-hidden="true" className="h-6.5 w-px bg-gold" />
+              <span className="font-display text-xl tracking-tight">
+                Olive <span className="font-normal text-muted-foreground">Team</span>
+              </span>
             </Link>
             <button
               type="button"
@@ -110,11 +132,11 @@ export function TeamShell({
             </button>
           </div>
 
-          <div className="p-2">
+          <div className="px-4 pb-4">
             <button
               type="button"
               onClick={() => setPaletteOpen(true)}
-              className="flex w-full items-center gap-2.5 rounded-md border border-border px-2.5 py-1.5 text-sm text-muted-foreground hover:bg-background/60 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className="flex w-full items-center gap-2.5 rounded-md border border-border bg-background/60 px-3 py-2.5 text-sm text-muted-foreground hover:border-gold hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               <Search className="size-4 shrink-0" aria-hidden="true" />
               Search
@@ -122,7 +144,7 @@ export function TeamShell({
             </button>
           </div>
 
-          <nav className="flex-1 space-y-0.5 p-2" aria-label="Workspace">
+          <nav className="flex-1 space-y-0.5 overflow-y-auto px-3" aria-label="Workspace">
             {items.map(({ href, label, icon: Icon }) => {
               const active = href === '/team' ? pathname === href : pathname.startsWith(href)
               return (
@@ -131,9 +153,9 @@ export function TeamShell({
                   href={href}
                   aria-current={active ? 'page' : undefined}
                   className={cn(
-                    'flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+                    'flex items-center gap-3 rounded-md px-3 py-2.5 text-[0.9375rem] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
                     active
-                      ? 'bg-background font-medium text-foreground shadow-xs'
+                      ? 'bg-background font-semibold text-foreground shadow-[inset_2px_0_0_var(--gold)]'
                       : 'text-muted-foreground hover:bg-background/60 hover:text-foreground',
                   )}
                 >
@@ -141,7 +163,7 @@ export function TeamShell({
                   {label}
                   {href === '/team/inbox' && unreadCount > 0 && (
                     <span
-                      className="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground"
+                      className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-gold/35 px-2 text-xs font-semibold text-foreground"
                       aria-label={`${unreadCount} unread`}
                     >
                       {unreadCount > 9 ? '9+' : unreadCount}
@@ -152,12 +174,12 @@ export function TeamShell({
             })}
           </nav>
 
-          <div className="p-2">
+          <div className="px-3 pt-4">
             <a
               href={GOOGLE_DRIVE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-background/60 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-background/60 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               <HardDrive className="size-4 shrink-0" aria-hidden="true" />
               Google Drive
@@ -165,33 +187,33 @@ export function TeamShell({
             </a>
           </div>
 
-          <div className="border-t border-border p-2">
-            <div className="flex items-center gap-2.5 rounded-md px-2.5 py-2">
-              <span
-                aria-hidden="true"
-                className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-medium text-primary-foreground"
-              >
-                {initialsOf(profile)}
+          <div className="mt-3.5 flex flex-col gap-4 border-t border-border px-5 py-4.5">
+            <div className="flex items-center gap-3">
+              <span aria-hidden="true" className="relative grid size-9.5 shrink-0 place-items-center">
+                <OliveMark className="absolute inset-0 size-9.5" fill="var(--plum)" />
+                <span className="relative text-xs font-semibold text-paper">{initialsOf(profile)}</span>
               </span>
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm">{displayName(profile)}</span>
-                <span className="block text-xs capitalize text-muted-foreground">{profile.role}</span>
+              <span className="min-w-0 flex-1 leading-tight">
+                <span className="block truncate font-display text-base">{displayName(profile)}</span>
+                <span className="block text-[11px] tracking-[0.09em] text-muted-foreground uppercase">
+                  {profile.role}
+                </span>
               </span>
             </div>
-            <div className="flex gap-1">
+            <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={toggle}
-                className="flex flex-1 items-center gap-2 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground hover:bg-background/60 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="flex flex-1 items-center justify-center gap-2 rounded-md border border-border bg-background/60 px-2.5 py-2 text-[0.8125rem] text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
               >
                 {dark ? <Sun className="size-4" aria-hidden="true" /> : <Moon className="size-4" aria-hidden="true" />}
                 {dark ? 'Light' : 'Dark'}
               </button>
-              <form action={signOut}>
+              <form action={signOut} className="flex-1">
                 <button
                   type="submit"
-                  className="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground hover:bg-background/60 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  className="flex w-full items-center justify-center gap-2 rounded-md border border-border bg-background/60 px-2.5 py-2 text-[0.8125rem] text-muted-foreground hover:border-plum/35 hover:bg-plum/10 hover:text-plum focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   <LogOut className="size-4" aria-hidden="true" />
                   Sign out
@@ -220,7 +242,12 @@ export function TeamShell({
             >
               <Menu className="size-5" aria-hidden="true" />
             </button>
-            <span className="font-display text-base font-semibold">Olive Team</span>
+            <span className="flex items-center gap-2.5">
+              <OliveMark className="size-5 shrink-0" />
+              <span className="font-display text-lg">
+                Olive <span className="font-normal text-muted-foreground">Team</span>
+              </span>
+            </span>
           </header>
 
           <main className="min-w-0 flex-1">{children}</main>

@@ -201,6 +201,50 @@
   background-image: var(--bg-lines);
 }
 
+/* Team workspace motion — the home page's olive cluster drifts, and its
+   header and cards rise into place once on load. Everything here is
+   decorative: under a reduced-motion preference the elements simply sit
+   where they were going to end up. */
+@keyframes team-drift-a {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-16px, 14px); }
+}
+@keyframes team-drift-b {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(14px, -16px); }
+}
+@keyframes team-drift-c {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10px, 12px); }
+}
+@keyframes team-rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.team-drift-a,
+.team-drift-b,
+.team-drift-c {
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.team-drift-a { animation-name: team-drift-a; }
+.team-drift-b { animation-name: team-drift-b; }
+.team-drift-c { animation-name: team-drift-c; }
+
+.team-rise-in {
+  animation: team-rise-in 0.7s cubic-bezier(0.2, 0.8, 0.25, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-drift-a,
+  .team-drift-b,
+  .team-drift-c,
+  .team-rise-in {
+    animation: none;
+  }
+}
+
 /* Drop cap for blog article opening paragraphs — ink on paper. */
 .prose-drop-cap::first-letter,
 .prose-drop-cap-bg::first-letter {
