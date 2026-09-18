@@ -20,11 +20,11 @@ type Blob = {
 }
 
 const BLOBS: Blob[] = [
-  { color: 'var(--dusk)', size: 96, top: 0, left: 118, drift: 'a', seconds: 4.75, opacity: 0.85 },
-  { color: 'var(--slate)', size: 54, top: 88, left: 24, drift: 'b', seconds: 5.75, opacity: 1 },
-  { color: 'var(--rose)', size: 80, top: 52, right: -12, drift: 'c', seconds: 4.25, opacity: 0.9 },
-  { color: 'var(--gold)', size: 124, top: 142, left: 62, drift: 'a', seconds: 6.5, opacity: 0.85 },
-  { color: 'var(--glass)', size: 48, top: 132, right: 8, drift: 'b', seconds: 3.75, opacity: 0.9 },
+  { color: 'var(--dusk)', size: 96, top: 0, left: 118, drift: 'a', seconds: 2.71, opacity: 0.85 },
+  { color: 'var(--slate)', size: 54, top: 88, left: 24, drift: 'b', seconds: 3.29, opacity: 1 },
+  { color: 'var(--rose)', size: 80, top: 52, right: -12, drift: 'c', seconds: 2.43, opacity: 0.9 },
+  { color: 'var(--gold)', size: 124, top: 142, left: 62, drift: 'a', seconds: 3.71, opacity: 0.85 },
+  { color: 'var(--glass)', size: 48, top: 132, right: 8, drift: 'b', seconds: 2.14, opacity: 0.9 },
 ]
 
 export function OliveBlobs() {
