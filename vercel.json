@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/institute",
+      "destination": "https://oliveinstitute-production.up.railway.app/institute"
+    },
+    {
+      "source": "/institute/:path*",
+      "destination": "https://oliveinstitute-production.up.railway.app/institute/:path*"
+    }
+  ]
+}
