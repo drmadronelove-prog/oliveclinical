@@ -27,7 +27,7 @@ const RESOURCES_GROUPS: NavGroup[] = [
     items: [
       { label: "Neuroinclusive Assessments", href: "/tests" },
       { label: "Therapeutic Tools", href: "/tools" },
-      { label: "Brain Games", href: "/brain-games" },
+      { label: "CBT Games", href: "https://cbtgames.com/" },
     ],
   },
   {
@@ -127,14 +127,29 @@ function DropdownLink({
   onNavigate: () => void
   children: React.ReactNode
 }) {
+  const className =
+    "block px-3 py-2 rounded-md text-[0.9rem] transition-colors hover:bg-[var(--linen)]"
+  const style: React.CSSProperties = { fontFamily: "var(--font-body)", color: "var(--ink)" }
+
+  // Links off the site (e.g. CBT Games) open in their own tab.
+  if (href.startsWith("http")) {
+    return (
+      <a
+        href={href}
+        role="menuitem"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onNavigate}
+        className={className}
+        style={style}
+      >
+        {children}
+      </a>
+    )
+  }
+
   return (
-    <Link
-      href={href}
-      role="menuitem"
-      onClick={onNavigate}
-      className="block px-3 py-2 rounded-md text-[0.9rem] transition-colors hover:bg-[var(--linen)]"
-      style={{ fontFamily: "var(--font-body)", color: "var(--ink)" }}
-    >
+    <Link href={href} role="menuitem" onClick={onNavigate} className={className} style={style}>
       {children}
     </Link>
   )
