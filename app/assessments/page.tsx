@@ -3,16 +3,19 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 
-// Every CTA on this page points at the free 15-minute consult. There is
-// no booking tool wired up yet, so they land on /contact — swap this one
-// constant for the scheduler URL once there is one.
-const CONSULT_HREF = "/contact"
+// Every CTA on this page points at the free 15-minute consult. Swap this
+// one constant if the booking link ever changes.
+const CONSULT_HREF = "https://calendar.app.google/8JgFfgxurfS5xqDP7"
 const CONSULT_LABEL = "Book a free 15-minute consult"
 
 function CTAButton({ href, children, className = "" }: { href: string; children: React.ReactNode; className?: string }) {
+  const external = href.startsWith("http")
   return (
     <Link
       href={href}
+      // The booking tool is on someone else's domain, so it opens in a new
+      // tab and gets the usual rel guard.
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={`inline-flex items-center justify-center rounded-md px-6 py-3 text-[0.95rem] transition-opacity hover:opacity-90 ${className}`}
       style={{ fontFamily: "var(--font-body)", fontWeight: 600, background: "var(--gold)", color: "var(--ink)" }}
     >
@@ -84,6 +87,10 @@ const ASSESS_FOR = [
     body: "Assessment for obsessive-compulsive disorder in adults, including the presentations that have no visible compulsions at all: rumination, mental reviewing, reassurance-seeking, and intrusive thoughts that have never been said out loud to anyone.",
   },
   {
+    title: "PTSD and trauma",
+    body: "Assessment for post-traumatic stress in adults, including the long-running presentations that were never named as trauma at the time. Trauma and neurodivergence are routinely mistaken for each other, so this is assessed alongside the rest rather than in isolation.",
+  },
+  {
     title: "PDA and demand sensitivity",
     body: "Many autistic adults describe an overwhelming resistance to demands, including demands they set for themselves. It is not laziness and it is not defiance. If this is part of why you are here, I assess for it and I address it directly in the report.",
   },
@@ -131,6 +138,11 @@ const PRICING = [
     title: "OCD assessment",
     price: "$1,800",
     body: "Diagnostic evaluation for OCD, including subtypes that involve no visible compulsions. Same structure, same written report.",
+  },
+  {
+    title: "PTSD assessment",
+    price: "$1,800",
+    body: "Diagnostic evaluation for post-traumatic stress, including presentations that have gone unrecognized for years. Same structure, same written report.",
   },
   {
     title: "Combined autism and ADHD assessment",
@@ -482,7 +494,7 @@ export default function AssessmentsPage() {
               Flat fees. You know the full cost before anything begins, and the written report is included at every
               price point rather than sold as an add-on.
             </BodyText>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 mt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 mt-8">
               {PRICING.map((p) => (
                 <div key={p.title} className="flex flex-col p-6 sm:p-7 rounded-xl" style={CARD_STYLE}>
                   <h3
