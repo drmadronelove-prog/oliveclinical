@@ -23,8 +23,12 @@
 -- is Jonatan. Task 6 ("Red or freelancer") goes to Jonatan; everything
 -- else goes to Madrone.
 --
--- Task 11 repeats: it carries recurrence_rule 'monthly', so completing it
--- spawns the next month's copy (see migration 0007).
+-- Task 11 repeats monthly. Where migration 0007 has been applied, it
+-- carries recurrence_rule 'monthly' so completing it spawns the next
+-- month's copy. Where that migration hasn't run yet, the tasks.recurrence_rule
+-- column doesn't exist, so the script inserts without it and says
+-- "then monthly" in the task's description instead — the list still
+-- seeds correctly, the repeat just isn't automatic.
 --
 -- Marketing/ops tracking only — no client names, no PHI, no assessment
 -- content. See README.md.
@@ -37,6 +41,7 @@ declare
   v_madrone_count int;
   v_jonatan_id    uuid;
   v_jonatan_count int;
+  v_has_recurrence boolean;
 begin
   -- 1. Find Madrone ("Red" on the punch list).
   select count(*) into v_madrone_count
@@ -100,24 +105,58 @@ begin
 
   -- 4. Tasks — skipping any title that already exists in this section.
   --    completed stays false: everything starts as not started.
-  insert into public.tasks (project_id, section_id, title, description, due_date, recurrence_rule, position)
-  select v_project_id, v_section_id, v.title, v.description::text, v.due_date::date, v.recurrence_rule::text,
-         coalesce((select max(position) from public.tasks where section_id = v_section_id), 0) + v.ord * 1024
-  from (values
-    (1,  'Update assessment page pricing to $2,400 / $3,200', 'New copy is in Olive_Clinical_Marketing_Punch_List.docx, section 2.', '2026-09-26', null),
-    (2,  'Build referrer list: 30 names (therapists, psychiatrists, college counseling, ND coaches)', null, '2026-09-30', null),
-    (3,  'Send 10 referrer emails per week, weeks of Sep 28, Oct 5, Oct 12', 'Two email versions (therapists/coaches, psychiatrists/prescribers) plus follow-up are in the same doc, section 3.', '2026-10-16', null),
-    (4,  'Meet Alex Klein: referral pipeline plus one joint webinar', null, '2026-09-24', null),
-    (5,  'Create Psychology Today listing for Olive Clinical assessments', 'Listing copy is in the same doc, section 5.', '2026-09-30', null),
-    (6,  'Set up Google Ads account, one campaign, $40/day', 'Full campaign spec (keywords, negatives, headlines, descriptions, landing page requirements) is in the same doc, section 6.', '2026-10-03', null),
-    (7,  'Add tracking: "How did you hear about us" on intake form, one dropdown', null, '2026-10-03', null),
-    (8,  'Give contractor the content calendar and blog posts to cut into carousels', 'Four-week content calendar is in the same doc, section 7.', '2026-09-30', null),
-    (9,  'Book and complete 4 assessments', null, '2026-10-31', null),
-    (10, 'Get CPA quote for professional corporation conversion', null, '2026-10-31', null),
-    (11, 'Review inquiries by source, cost per booked assessment', null, '2026-11-01', 'monthly'),
-    (12, 'Tell Sati your end date', null, '2026-09-30', null)
-  ) as v(ord, title, description, due_date, recurrence_rule)
-  where not exists (select 1 from public.tasks t where t.section_id = v_section_id and t.title = v.title);
+  --
+  --    The task rows are the same either way; only whether the monthly
+  --    repeat on task 11 is stored as a recurrence rule or as a note
+  --    depends on whether migration 0007 has been applied here.
+  select exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'tasks' and column_name = 'recurrence_rule'
+  ) into v_has_recurrence;
+
+  create temporary table tmp_punch_list (
+    ord             int,
+    title           text,
+    description     text,
+    due_date        date,
+    recurrence_rule text
+  ) on commit drop;
+
+  insert into tmp_punch_list (ord, title, description, due_date, recurrence_rule)
+  values
+    (1,  'Update assessment page pricing to $2,400 / $3,200', 'New copy is in Olive_Clinical_Marketing_Punch_List.docx, section 2.', date '2026-09-26', null),
+    (2,  'Build referrer list: 30 names (therapists, psychiatrists, college counseling, ND coaches)', null, date '2026-09-30', null),
+    (3,  'Send 10 referrer emails per week, weeks of Sep 28, Oct 5, Oct 12', 'Two email versions (therapists/coaches, psychiatrists/prescribers) plus follow-up are in the same doc, section 3.', date '2026-10-16', null),
+    (4,  'Meet Alex Klein: referral pipeline plus one joint webinar', null, date '2026-09-24', null),
+    (5,  'Create Psychology Today listing for Olive Clinical assessments', 'Listing copy is in the same doc, section 5.', date '2026-09-30', null),
+    (6,  'Set up Google Ads account, one campaign, $40/day', 'Full campaign spec (keywords, negatives, headlines, descriptions, landing page requirements) is in the same doc, section 6.', date '2026-10-03', null),
+    (7,  'Add tracking: "How did you hear about us" on intake form, one dropdown', null, date '2026-10-03', null),
+    (8,  'Give contractor the content calendar and blog posts to cut into carousels', 'Four-week content calendar is in the same doc, section 7.', date '2026-09-30', null),
+    (9,  'Book and complete 4 assessments', null, date '2026-10-31', null),
+    (10, 'Get CPA quote for professional corporation conversion', null, date '2026-10-31', null),
+    (11, 'Review inquiries by source, cost per booked assessment', null, date '2026-11-01', 'monthly'),
+    (12, 'Tell Sati your end date', null, date '2026-09-30', null);
+
+  if v_has_recurrence then
+    execute $ins$
+      insert into public.tasks (project_id, section_id, title, description, due_date, recurrence_rule, position)
+      select $1, $2, v.title, v.description, v.due_date, v.recurrence_rule,
+             coalesce((select max(position) from public.tasks where section_id = $2), 0) + v.ord * 1024
+      from tmp_punch_list v
+      where not exists (select 1 from public.tasks t where t.section_id = $2 and t.title = v.title)
+    $ins$ using v_project_id, v_section_id;
+  else
+    -- No recurrence column here: keep the repeat visible in the text.
+    update tmp_punch_list
+    set description = trim(both ' ' from coalesce(description || ' ', '') || 'Due Nov 1, then monthly.')
+    where recurrence_rule is not null;
+
+    insert into public.tasks (project_id, section_id, title, description, due_date, position)
+    select v_project_id, v_section_id, v.title, v.description, v.due_date,
+           coalesce((select max(position) from public.tasks where section_id = v_section_id), 0) + v.ord * 1024
+    from tmp_punch_list v
+    where not exists (select 1 from public.tasks t where t.section_id = v_section_id and t.title = v.title);
+  end if;
 
   -- 5. Assign: Madrone owns the list, Jonatan owns the Google Ads setup.
   update public.tasks
