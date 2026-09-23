@@ -59,7 +59,7 @@ function BodyText({ children, className = "" }: { children: React.ReactNode; cla
 }
 
 const HERO_STRIP = [
-  "Telehealth across California and Colorado",
+  "Telehealth across California",
   "Three-week wait",
   "Full written report included",
 ]
@@ -631,69 +631,7 @@ export default function AssessmentsPage() {
             </BodyText>
           </motion.div>
 
-          {/* 9. Assessments in Colorado */}
-          <motion.div {...fadeUp} className="w-full max-w-xl">
-            <SectionHeading>Assessments in Colorado</SectionHeading>
-            <BodyText className="text-center !mb-7">
-              Olive Clinical works with licensed providers in other states so you can be assessed by someone licensed
-              where you live.
-            </BodyText>
-            <div className="flex flex-col p-6 sm:p-8 rounded-xl text-center mt-7" style={CARD_STYLE}>
-              <p
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.7rem",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--plum)",
-                  marginBottom: "0.75rem",
-                }}
-              >
-                Colorado
-              </p>
-              <h3
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "1.3rem",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  letterSpacing: "-0.015em",
-                  marginBottom: "0.2rem",
-                }}
-              >
-                Lindsay Moskowitz, PsyD
-              </h3>
-              <p
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.68rem",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "var(--slate)",
-                  marginBottom: "0.9rem",
-                }}
-              >
-                Olive Clinical Network Provider
-              </p>
-              <p
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "0.95rem",
-                  lineHeight: 1.6,
-                  color: "rgba(11,37,69,0.78)",
-                  marginBottom: "1.5rem",
-                }}
-              >
-                Dr. Moskowitz provides adult ADHD, autism, and OCD assessments via telehealth throughout Colorado,
-                using the same process, the same report standard, and the same fees described on this page.
-              </p>
-              <CTAButton href={CONSULT_HREF} className="mx-auto">
-                {CONSULT_LABEL}
-              </CTAButton>
-            </div>
-          </motion.div>
-
-          {/* 10. Closing */}
+          {/* 9. Closing */}
           <motion.div {...fadeUp} className="text-center max-w-xl">
             <h2
               style={{

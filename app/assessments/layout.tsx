@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 // Without this the route inherits the site-wide description from the
 // root layout, which says nothing about assessments.
 const DESCRIPTION =
-  "Affirming autism, ADHD, and OCD assessments for adults in California and Colorado. Telehealth, three-week wait, full written report included."
+  "Affirming autism, ADHD, OCD, and PTSD assessments for adults in California. Telehealth, three-week wait, full written report included."
 
 export const metadata: Metadata = {
   title: "Adult Autism & ADHD Assessment | Oakland | Olive Clinical",
