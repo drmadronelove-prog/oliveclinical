@@ -19,24 +19,23 @@ const nextConfig = {
     ]
   },
   // The Olive Institute course platform (a separate deployment, separate
-  // repo) is mounted at /institute on this domain — but the rewrite that
-  // proxies it lives in vercel.json, NOT here, and that is deliberate.
+  // repo) is mounted at /institute on this domain. It is proxied by a
+  // route handler — app/institute/[[...path]]/route.ts — and deliberately
+  // NOT by a rewrite, here or in vercel.json.
   //
-  // Next.js strips the `_rsc` marker from the App Router's own data
-  // requests when it performs the rewrite itself (vercel/next.js#69296).
-  // The Institute app then answers those requests as if they were page
-  // loads, its router cannot use what comes back, and it renders its own
-  // "404 — Page not found". The symptom is specific and was confusing to
-  // track down: clicking a link inside /institute 404s while reloading
-  // that exact URL works, and the Institute's own origin is fine
-  // throughout. The same issue records that a rewrite performed at the
-  // CDN level does not strip it, which is what vercel.json gets us.
+  // Both were tried and both failed the same way: clicking a link inside
+  // /institute returned a 404 while reloading that exact URL worked, and
+  // the Institute's own origin was fine throughout. The difference between
+  // those two cases is one request header. A click fetches the URL with
+  // `RSC: 1`; a reload asks for a plain document. Both this site and the
+  // Institute are Next.js apps on Vercel, and a request carrying that
+  // header never reached the Institute — this app answered it, has no
+  // /institute page, and returned 404, which the Institute's router then
+  // rendered as its own "404 — Page not found".
   //
-  // Consequences of the move, both acceptable: the destination is a
-  // literal in vercel.json rather than the INSTITUTE_ORIGIN env var
-  // (vercel.json cannot read env vars), so moving the Institute means
-  // editing that file; and `next dev` here no longer proxies /institute,
-  // since vercel.json is a platform config the dev server does not read.
+  // A route handler leaves nothing to intercept: /institute/:path* is a
+  // real route in this app, and it forwards the request verbatim. See the
+  // comment at the top of that file for how it was confirmed.
 }
 
 export default nextConfig
