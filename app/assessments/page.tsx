@@ -261,7 +261,7 @@ export default function AssessmentsPage() {
                 margin: 0,
               }}
             >
-              Adult autism, ADHD, and OCD assessment
+              Adult autism, ADHD, OCD, and PTSD assessment
             </h1>
             <p
               style={{
@@ -272,8 +272,7 @@ export default function AssessmentsPage() {
                 marginTop: "1rem",
               }}
             >
-              Affirming, unhurried evaluations from someone who assumes you already know a great deal about your own
-              mind.
+              Assessing for difference, not deficit.
             </p>
             <div className="mt-8">
               <CTAButton href={CONSULT_HREF}>{CONSULT_LABEL}</CTAButton>
