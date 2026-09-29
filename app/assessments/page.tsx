@@ -261,7 +261,7 @@ export default function AssessmentsPage() {
                 margin: 0,
               }}
             >
-              Adult autism, ADHD, and OCD assessment
+              Adult autism, ADHD, OCD, and PTSD assessment
             </h1>
             <p
               style={{
@@ -272,8 +272,7 @@ export default function AssessmentsPage() {
                 marginTop: "1rem",
               }}
             >
-              Affirming, unhurried evaluations from someone who assumes you already know a great deal about your own
-              mind.
+              Assessing for difference, not deficit.
             </p>
             <div className="mt-8">
               <CTAButton href={CONSULT_HREF}>{CONSULT_LABEL}</CTAButton>
@@ -616,8 +615,8 @@ export default function AssessmentsPage() {
             <BodyText>
               I am Madrone Love, a licensed clinical psychologist (PSY35899) in Oakland. I trained at UC Berkeley and
               the Wright Institute, did my internship at the University of Wisconsin-Madison and my postdoctoral
-              fellowship at UCSF, and taught clinical psychology at the California Institute of Integral Studies for
-              years.
+              fellowship at UCSF, and currently teach clinical psychology at the California Institute of Integral
+              Studies.
             </BodyText>
             <BodyText>
               My specialized training is in OCD (exposure and response prevention, and inference-based CBT through the
