@@ -87,6 +87,10 @@ const ASSESS_FOR = [
     body: "Assessment for obsessive-compulsive disorder in adults, including the presentations that have no visible compulsions at all: rumination, mental reviewing, reassurance-seeking, and intrusive thoughts that have never been said out loud to anyone.",
   },
   {
+    title: "PTSD and trauma",
+    body: "Assessment for post-traumatic stress in adults, including the long-running presentations that were never named as trauma at the time. Trauma and neurodivergence are routinely mistaken for each other, so this is assessed alongside the rest rather than in isolation.",
+  },
+  {
     title: "PDA and demand sensitivity",
     body: "Many autistic adults describe an overwhelming resistance to demands, including demands they set for themselves. It is not laziness and it is not defiance. If this is part of why you are here, I assess for it and I address it directly in the report.",
   },
@@ -134,6 +138,11 @@ const PRICING = [
     title: "OCD assessment",
     price: "$1,800",
     body: "Diagnostic evaluation for OCD, including subtypes that involve no visible compulsions. Same structure, same written report.",
+  },
+  {
+    title: "PTSD assessment",
+    price: "$1,800",
+    body: "Diagnostic evaluation for post-traumatic stress, including presentations that have gone unrecognized for years. Same structure, same written report.",
   },
   {
     title: "Combined autism and ADHD assessment",
@@ -252,7 +261,7 @@ export default function AssessmentsPage() {
                 margin: 0,
               }}
             >
-              Adult autism, ADHD, and OCD assessment
+              Adult autism, ADHD, OCD, and PTSD assessment
             </h1>
             <p
               style={{
