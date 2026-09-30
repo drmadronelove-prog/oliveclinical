@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { PublicChromeOnly } from '@/components/site-chrome'
+import { GoogleAnalytics } from '@/components/google-analytics'
 import './globals.css'
 
 const fraunces = Fraunces({
@@ -133,7 +134,12 @@ export default function RootLayout({
         <PublicChromeOnly>
           <SiteFooter />
         </PublicChromeOnly>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Analytics />
+            <GoogleAnalytics />
+          </>
+        )}
       </body>
     </html>
   )
