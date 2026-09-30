@@ -89,8 +89,16 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   generator: 'v0.app',
   icons: {
-    icon: '/olive-logo.svg',
-    apple: '/olive-logo.svg',
+    // Sized PNGs rather than the old flat SVG: the logo artwork is a shaded
+    // render, so there is no vector form of it. 16 and 32 are cut from the
+    // same source separately so the tab icon stays legible at that size
+    // instead of being downscaled from 512 by the browser.
+    icon: [
+      { url: '/olive-logo-16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/olive-logo-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/olive-logo-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [{ url: '/olive-logo-180.png', sizes: '180x180', type: 'image/png' }],
   },
   openGraph: {
     title: 'Olive Clinical',
