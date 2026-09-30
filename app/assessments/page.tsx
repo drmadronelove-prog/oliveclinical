@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 import { BookingEmbed } from "@/components/booking-embed"
 import { BOOKING_LABEL, BOOKING_URL, hasBookingEmbed } from "@/lib/booking"
 
-// Every CTA on this page points at the free 15-minute consult. When the
+// Every CTA on this page points at the free 20-minute consult. When the
 // scheduler is embedded further down the page, the buttons scroll to it
 // rather than sending people off-site; without the embed configured they
 // fall back to opening Google directly.
@@ -103,7 +103,7 @@ const ASSESS_FOR = [
 
 const PROCESS_STEPS = [
   {
-    title: "A free 15-minute consult",
+    title: "A free 20-minute consult",
     body: "You tell me what brings you in, I tell you whether an assessment is the right step and what it would cover. No referral needed. If I am not the right person, I will say so on this call.",
   },
   {
@@ -650,10 +650,10 @@ export default function AssessmentsPage() {
               When you are ready
             </h2>
             <BodyText className="!mb-8">
-              If you have been putting this off, that is a common place to be, and it is usually not procrastination.
-              Waiting has often been the sensible response to a system that has not made room for you.
+              Schedule a free 20 minute consultation with me, Dr. Madrone Love, to explore whether Olive Clinical is
+              a good fit. If we&apos;re not, we can point you in the right direction.
             </BodyText>
-            <BodyText className="!mb-8">Start with fifteen minutes and no commitment.</BodyText>
+            <BodyText className="!mb-8">Start with twenty minutes and no commitment.</BodyText>
             {!hasBookingEmbed && (
               <div className="mt-8">
                 <CTAButton href={CONSULT_HREF} className="mx-auto">

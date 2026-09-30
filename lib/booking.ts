@@ -21,7 +21,12 @@
  */
 export const BOOKING_URL = "https://calendar.app.google/8JgFfgxurfS5xqDP7"
 
-export const BOOKING_LABEL = "Book a free 15-minute consult"
+export const BOOKING_LABEL = "Book a free 20-minute consult"
+
+/** Whose calendar this is. The scheduler books this person specifically. */
+export const BOOKING_PROVIDER = "Dr. Madrone Love"
+
+export const BOOKING_TITLE = `Book a free 20-minute consult with ${BOOKING_PROVIDER}`
 
 const rawEmbedUrl = process.env.NEXT_PUBLIC_BOOKING_EMBED_URL?.trim()
 

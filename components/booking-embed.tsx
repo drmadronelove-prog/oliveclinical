@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { BOOKING_EMBED_URL, BOOKING_LABEL, BOOKING_URL } from "@/lib/booking"
+import { BOOKING_EMBED_URL, BOOKING_LABEL, BOOKING_TITLE, BOOKING_URL } from "@/lib/booking"
 
 /**
  * The Google appointment scheduler, inline.
@@ -38,7 +38,7 @@ export function BookingEmbed({ className = "" }: { className?: string }) {
         )}
         <iframe
           src={BOOKING_EMBED_URL}
-          title="Book a free 15-minute consult"
+          title={BOOKING_TITLE}
           onLoad={() => setLoaded(true)}
           loading="lazy"
           // Google's scheduler is a full booking flow, so it needs its own
