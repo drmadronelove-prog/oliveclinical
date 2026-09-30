@@ -3,10 +3,15 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 
-// Every CTA on this page points at the free 15-minute consult. Swap this
-// one constant if the booking link ever changes.
-const CONSULT_HREF = "https://calendar.app.google/8JgFfgxurfS5xqDP7"
-const CONSULT_LABEL = "Book a free 15-minute consult"
+import { BookingEmbed } from "@/components/booking-embed"
+import { BOOKING_LABEL, BOOKING_URL, hasBookingEmbed } from "@/lib/booking"
+
+// Every CTA on this page points at the free 15-minute consult. When the
+// scheduler is embedded further down the page, the buttons scroll to it
+// rather than sending people off-site; without the embed configured they
+// fall back to opening Google directly.
+const CONSULT_HREF = hasBookingEmbed ? "#book" : BOOKING_URL
+const CONSULT_LABEL = BOOKING_LABEL
 
 function CTAButton({ href, children, className = "" }: { href: string; children: React.ReactNode; className?: string }) {
   const external = href.startsWith("http")
@@ -631,7 +636,7 @@ export default function AssessmentsPage() {
           </motion.div>
 
           {/* 9. Closing */}
-          <motion.div {...fadeUp} className="text-center max-w-xl">
+          <motion.div {...fadeUp} id="book" className="scroll-mt-24 text-center max-w-xl">
             <h2
               style={{
                 fontFamily: "var(--font-display)",
@@ -649,12 +654,22 @@ export default function AssessmentsPage() {
               Waiting has often been the sensible response to a system that has not made room for you.
             </BodyText>
             <BodyText className="!mb-8">Start with fifteen minutes and no commitment.</BodyText>
-            <div className="mt-8">
-              <CTAButton href={CONSULT_HREF} className="mx-auto">
-                {CONSULT_LABEL}
-              </CTAButton>
-            </div>
+            {!hasBookingEmbed && (
+              <div className="mt-8">
+                <CTAButton href={CONSULT_HREF} className="mx-auto">
+                  {CONSULT_LABEL}
+                </CTAButton>
+              </div>
+            )}
           </motion.div>
+
+          {/* The scheduler itself, wider than the prose column above it so
+              Google's month grid is not cramped. */}
+          {hasBookingEmbed && (
+            <motion.div {...fadeUp} className="w-full max-w-2xl">
+              <BookingEmbed />
+            </motion.div>
+          )}
 
         </div>
       </section>

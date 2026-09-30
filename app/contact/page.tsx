@@ -1,4 +1,6 @@
 import { ToolPageLayout } from "@/components/tool-page-layout"
+import { BookingEmbed } from "@/components/booking-embed"
+import { hasBookingEmbed } from "@/lib/booking"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -58,8 +60,10 @@ export default function ContactPage() {
             Get in touch
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            We are currently accepting new clients. Please reach out by phone or
-            email to schedule a free 20 minute consultation.
+            We are currently accepting new clients.{" "}
+            {hasBookingEmbed
+              ? "Book a free consultation below, or reach out by phone or email."
+              : "Please reach out by phone or email to schedule a free consultation."}
           </p>
 
           {/* Contact actions */}
@@ -89,6 +93,20 @@ export default function ContactPage() {
             </a>
           </div>
         </div>
+
+        {/* Request an appointment */}
+        {hasBookingEmbed && (
+          <div className="space-y-6">
+            <h2 className="text-2xl text-foreground" style={sectionHeading}>
+              Request an appointment
+            </h2>
+            <p className="text-muted-foreground leading-relaxed max-w-prose">
+              Pick a time that works for you. The consultation is free and there is
+              no commitment attached to it.
+            </p>
+            <BookingEmbed />
+          </div>
+        )}
 
         {/* Locations */}
         <div>
