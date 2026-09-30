@@ -7,11 +7,11 @@ const DESCRIPTION =
   "Affirming autism, ADHD, OCD, and PTSD assessments for adults in California. Telehealth, three-week wait, full written report included."
 
 export const metadata: Metadata = {
-  title: "Adult Autism & ADHD Assessment | Oakland | Olive Clinical",
+  title: "Adult Autism & ADHD Assessment | Berkeley | Olive Clinical",
   description: DESCRIPTION,
   alternates: { canonical: "/assessments" },
   openGraph: {
-    title: "Adult Autism & ADHD Assessment | Oakland | Olive Clinical",
+    title: "Adult Autism & ADHD Assessment | Berkeley | Olive Clinical",
     description: DESCRIPTION,
     url: "https://oliveclinical.com/assessments",
     siteName: "Olive Clinical",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Adult Autism & ADHD Assessment | Oakland | Olive Clinical",
+    title: "Adult Autism & ADHD Assessment | Berkeley | Olive Clinical",
     description: DESCRIPTION,
   },
 }

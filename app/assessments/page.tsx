@@ -618,7 +618,7 @@ export default function AssessmentsPage() {
           <motion.div {...fadeUp} className="w-full max-w-2xl flex flex-col gap-4">
             <SectionHeading>Who I am</SectionHeading>
             <BodyText>
-              I am Madrone Love, a licensed clinical psychologist (PSY35899) in Oakland. I trained at UC Berkeley and
+              I am Madrone Love, a licensed clinical psychologist (PSY35899) in Berkeley. I trained at UC Berkeley and
               the Wright Institute, did my internship at the University of Wisconsin-Madison and my postdoctoral
               fellowship at UCSF, and currently teach clinical psychology at the California Institute of Integral
               Studies.
