@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Home, Users, Settings, Moon, Sun, Menu, X, LogOut, FolderKanban, ListChecks, Calendar, ListTodo, Inbox, Search, HardDrive, ExternalLink } from 'lucide-react'
 import { Toaster } from 'sonner'
@@ -16,7 +17,26 @@ import { CommandPalette } from './command-palette'
  * rather than an <img> so it inherits the text color (and so flips with the
  * theme) and stays crisp at the two sizes the sidebar uses it at.
  */
-function OliveMark({ className, fill = 'currentColor' }: { className?: string; fill?: string }) {
+/** The brand mark, same artwork as the public site. */
+function OliveMark({ className }: { className?: string }) {
+  return (
+    <Image
+      src="/olive-logo-512.png"
+      alt=""
+      aria-hidden="true"
+      width={64}
+      height={64}
+      className={className}
+    />
+  )
+}
+
+/**
+ * Plain tinted disc sitting behind a member's initials. Deliberately not the
+ * brand mark: it is an avatar background, and it has to take an arbitrary
+ * fill colour, which the logo artwork cannot.
+ */
+function AvatarDisc({ className, fill = 'currentColor' }: { className?: string; fill?: string }) {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true" className={className}>
       <circle cx="50" cy="50" r="50" fill={fill} />
@@ -190,7 +210,7 @@ export function TeamShell({
           <div className="mt-3.5 flex flex-col gap-4 border-t border-border px-5 py-4.5">
             <div className="flex items-center gap-3">
               <span aria-hidden="true" className="relative grid size-9.5 shrink-0 place-items-center">
-                <OliveMark className="absolute inset-0 size-9.5" fill="var(--plum)" />
+                <AvatarDisc className="absolute inset-0 size-9.5" fill="var(--plum)" />
                 <span className="relative text-xs font-semibold text-paper">{initialsOf(profile)}</span>
               </span>
               <span className="min-w-0 flex-1 leading-tight">
