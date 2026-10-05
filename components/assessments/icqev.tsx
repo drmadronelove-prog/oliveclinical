@@ -73,7 +73,7 @@ function answeredCount(answers: Answers): number {
 
 // Pick the reference group whose mean is closest to the score.
 function closestGroup(score: number): typeof REF_GROUPS[number] {
-  let best = REF_GROUPS[0]
+  let best: typeof REF_GROUPS[number] = REF_GROUPS[0]
   let bestDist = Math.abs(score - best.mean)
   for (const g of REF_GROUPS) {
     const d = Math.abs(score - g.mean)

@@ -1,0 +1,139 @@
+/* Land of the Whatifs — page-turn picture book.
+   Landscape stage is exactly 3:2 (1500×1000), matching the illustrations.
+   On portrait screens the stage flips to 2:3 and stacks art above verse. */
+
+.root {
+  --paper: #f4ead0;
+  --ink: #3c2c1c;
+  --gold: #c89a4e;
+  --cocoa: #1b1410;
+  --body-font: var(--book-body), Georgia, serif;
+  --display-font: var(--book-display), Georgia, serif;
+
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 40%, #241a12 0%, #160f0a 70%, #0f0a07 100%);
+  -webkit-font-smoothing: antialiased;
+}
+.root *,
+.root *::before,
+.root *::after { box-sizing: border-box; }
+
+/* ---- stage ---- */
+.stage { position: absolute; inset: 0; }
+.stageInner { position: absolute; top: 50%; left: 50%; width: 1500px; height: 1000px; transform-origin: center center; }
+.stacked .stageInner { width: 1000px; height: 1500px; }
+.layer { position: absolute; inset: 0; border-radius: 4px; overflow: hidden; background: var(--paper); box-shadow: 0 34px 90px -22px rgba(0,0,0,0.75), 0 4px 18px rgba(0,0,0,0.45); }
+.page { position: absolute; inset: 0; display: flex; }
+
+/* ---- art pages ---- */
+.pageArt { background: var(--cocoa); }
+.fitImg { width: 100%; height: 100%; object-fit: fill; display: block; }
+
+.coverCredit { position: absolute; left: 0; right: 0; bottom: 40px; display: flex; flex-direction: column; align-items: center; gap: 13px; z-index: 2; }
+.coverCredit::before { content: ""; position: absolute; left: -400px; right: -400px; bottom: -40px; height: 210px; background: linear-gradient(to top, rgba(18,12,7,0.72), transparent); z-index: -1; pointer-events: none; }
+.ccRule { width: 62px; height: 1px; background: rgba(245,235,210,0.75); }
+.ccName { font-family: var(--display-font); color: #f6eed8; font-size: 29px; letter-spacing: 0.32em; text-transform: uppercase; font-weight: 500; text-shadow: 0 2px 14px rgba(0,0,0,0.8); padding-left: 0.32em; }
+
+/* stacked cover: art on top, credit on the dark page beneath */
+.stacked .pageArt { flex-direction: column; justify-content: center; }
+.stacked .pageArt .fitImg { height: auto; }
+.stacked .coverCredit { position: relative; bottom: auto; margin-top: 70px; }
+.stacked .coverCredit::before { display: none; }
+.stacked .ccName { font-size: 40px; }
+
+/* ---- paper pages ---- */
+.pagePaper { background: var(--paper); }
+.pagePaper::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(140% 120% at 50% 0%, rgba(255,255,255,0.32), transparent 55%), radial-gradient(120% 120% at 50% 110%, rgba(60,40,20,0.10), transparent 60%); }
+.pageFront { align-items: center; justify-content: center; }
+.frontInner { position: relative; z-index: 1; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 28px; padding: 80px; }
+.ornament { display: flex; align-items: center; gap: 16px; }
+.ornRule { width: 88px; height: 1px; background: var(--gold); opacity: 0.8; }
+.ornDot { width: 7px; height: 7px; border: 1px solid var(--gold); transform: rotate(45deg); }
+.bookTitle { font-family: var(--display-font); font-weight: 600; font-size: 90px; line-height: 1.04; color: var(--ink); margin: 0; }
+.bookSub { font-family: var(--body-font); font-style: italic; font-size: 26px; color: color-mix(in srgb, var(--ink) 72%, transparent); margin: -4px 0 0; }
+.bookAuthor { font-family: var(--display-font); text-transform: uppercase; letter-spacing: 0.3em; font-size: 23px; color: var(--ink); margin: 8px 0 0; padding-left: 0.3em; }
+.dedication { gap: 32px; }
+.dedFor { font-family: var(--display-font); font-style: italic; font-size: 38px; color: var(--ink); margin: 0; }
+.dedLine { font-family: var(--body-font); font-size: 27px; line-height: 1.6; color: color-mix(in srgb, var(--ink) 78%, transparent); margin: 0; }
+.theEnd { font-family: var(--display-font); font-style: italic; font-size: 46px; color: var(--ink); margin: 0; }
+
+/* ---- verse ---- */
+.verse { font-family: var(--body-font); color: var(--ink); font-size: 34px; line-height: 1.64; }
+.stanza { margin: 0 0 1.15em; text-align: center; }
+.stanza:last-child { margin-bottom: 0; }
+.vline { display: block; white-space: nowrap; }
+.verseWrap { position: relative; z-index: 1; width: 100%; max-width: 1000px; }
+.folio { position: absolute; bottom: 44px; right: 60px; font-family: var(--display-font); font-size: 23px; color: color-mix(in srgb, var(--ink) 52%, transparent); z-index: 2; }
+
+/* ---- facing: art on the left page, verse on the right ---- */
+.spreadLeft,
+.spreadRight { position: relative; z-index: 1; flex: 1 1 50%; min-width: 0; display: flex; align-items: center; justify-content: center; }
+.spreadLeft { padding: 0 46px 0 62px; }
+.spreadRight { padding: 90px 74px 90px 58px; }
+.plate { position: relative; width: 100%; line-height: 0; box-shadow: 0 20px 44px -16px rgba(40,26,12,0.55); }
+.plate img { display: block; width: 100%; height: auto; }
+.plate::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(60,40,20,0.25); pointer-events: none; }
+.gutter { position: absolute; left: 50%; top: 0; bottom: 0; width: 64px; transform: translateX(-50%); pointer-events: none; z-index: 2; background: linear-gradient(to right, rgba(40,26,12,0) 0%, rgba(40,26,12,0.09) 47%, rgba(40,26,12,0.09) 53%, rgba(40,26,12,0) 100%); }
+
+/* ---- stacked: art above, verse on paper below ---- */
+.pageStacked { flex-direction: column; }
+.stackImg { flex: 0 0 auto; position: relative; z-index: 1; line-height: 0; box-shadow: 0 14px 30px -18px rgba(40,26,12,0.6); }
+.stackImg img { display: block; width: 100%; height: auto; }
+.stackText { flex: 1 1 auto; position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 60px 70px 100px; }
+.stackText::before { content: ""; position: absolute; top: 34px; left: 50%; transform: translateX(-50%); width: 150px; height: 1px; background: var(--gold); opacity: 0.7; }
+.stacked .verse { font-size: 38px; line-height: 1.55; }
+
+/* ---- page-turn animation ---- */
+@keyframes enterRight { from { transform: translateX(70px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes enterLeft  { from { transform: translateX(-70px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes leaveRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-46px); opacity: 0; } }
+@keyframes leaveLeft  { from { transform: translateX(0); opacity: 1; } to { transform: translateX(46px); opacity: 0; } }
+.enterFwd  { animation: enterRight 0.62s cubic-bezier(.22,.61,.36,1) both; z-index: 2; }
+.enterBack { animation: enterLeft  0.62s cubic-bezier(.22,.61,.36,1) both; z-index: 2; }
+.leaveFwd  { animation: leaveRight 0.5s ease both; z-index: 1; }
+.leaveBack { animation: leaveLeft  0.5s ease both; z-index: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .enterFwd, .enterBack, .leaveFwd, .leaveBack { animation-duration: 0.01s; }
+}
+
+/* ---- chrome ---- */
+.navzone { position: fixed; top: 0; bottom: 0; width: 38%; background: none; border: 0; cursor: pointer; z-index: 20; padding: 0; }
+.navzoneLeft { left: 0; cursor: w-resize; }
+.navzoneRight { right: 0; cursor: e-resize; }
+.navzone:disabled { cursor: default; }
+
+.arrow {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(28,20,14,0.55); border: 1px solid rgba(200,154,78,0.4);
+  color: #f0e6cf; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 30; transition: opacity .25s, background .25s, transform .15s;
+  backdrop-filter: blur(6px);
+}
+.arrow:hover { background: rgba(40,28,18,0.8); }
+.arrow:active { transform: translateY(-50%) scale(0.94); }
+.arrowLeft { left: 26px; }
+.arrowRight { right: 26px; }
+.arrow:disabled { opacity: 0; pointer-events: none; }
+.stacked .arrow { top: auto; bottom: 14px; transform: none; width: 44px; height: 44px; }
+.stacked .arrow:active { transform: scale(0.94); }
+.stacked .arrowLeft { left: 16px; }
+.stacked .arrowRight { right: 16px; }
+
+.counter {
+  position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+  font-family: var(--display-font); color: rgba(240,230,207,0.62);
+  font-size: 18px; letter-spacing: 0.18em; z-index: 30; user-select: none;
+}
+.cdiv { opacity: 0.5; margin: 0 4px; }
+
+.back {
+  position: fixed; top: 18px; left: 22px; z-index: 30;
+  font-family: var(--display-font); font-size: 17px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(240,230,207,0.62); text-decoration: none; transition: color .2s;
+}
+.back:hover { color: #f0e6cf; }
+.stacked .back { top: 12px; left: 16px; font-size: 15px; }

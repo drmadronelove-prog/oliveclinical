@@ -18,7 +18,7 @@ const CARDS = [
   },
   {
     title: "Free resources",
-    description: "Skills, tools, and brain games to explore.",
+    description: "Skills, tools, and CBT games to explore.",
     linkText: "Browse",
     href: "/tools",
   },

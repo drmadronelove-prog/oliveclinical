@@ -31,6 +31,13 @@ const CARDS: FeatureCard[] = [
   },
   {
     kind: "link",
+    title: "A Taxonomy of Friendship Styles",
+    category: "Relationships & Inner Life",
+    footerLabel: "Read",
+    href: "/blog/a-taxonomy-of-friendship-styles",
+  },
+  {
+    kind: "link",
     title: "Neurodivergent Romantic Relationships",
     category: "Relationships · Presentation",
     footerLabel: "View slides",

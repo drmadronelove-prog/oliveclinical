@@ -56,6 +56,13 @@ const CARDS: FeatureCard[] = [
   },
   {
     kind: "link",
+    title: "The Land of the Whatifs",
+    category: "OCD · Picture Book",
+    footerLabel: "Read the book",
+    href: "/books/land-of-the-whatifs",
+  },
+  {
+    kind: "link",
     title: "Incoming Game",
     category: "I-CBT · Thought Catching",
     footerLabel: "Play",

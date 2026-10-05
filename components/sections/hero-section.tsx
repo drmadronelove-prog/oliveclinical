@@ -100,7 +100,7 @@ export function HeroSection() {
                 margin: 0,
               }}
             >
-              San Francisco, Oakland &amp; Berkeley — telehealth across CA &amp; CO
+              Berkeley, CA — telehealth across CA &amp; CO
             </p>
           </motion.div>
         </div>
