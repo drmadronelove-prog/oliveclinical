@@ -39,11 +39,13 @@ export default async function MembersPage() {
           </ul>
 
           <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-            Removing access keeps the person&apos;s history — the tasks they completed stay
-            attributed to them — but they can no longer sign in or read anything. Deleting goes
-            further and erases their account entirely, which only works if they have no history
-            yet. You cannot change your own role, remove your own access, or delete your own
-            account, so the workspace can never be locked out.
+            &quot;Send reset link&quot; emails someone the same link they&apos;d get from
+            &quot;Forgot your password?&quot; on the sign-in page — use it if they can&apos;t
+            find that link themselves. Removing access keeps the person&apos;s history — the
+            tasks they completed stay attributed to them — but they can no longer sign in or
+            read anything. Deleting goes further and erases their account entirely, which only
+            works if they have no history yet. You cannot change your own role, remove your own
+            access, or delete your own account, so the workspace can never be locked out.
           </p>
         </section>
 

@@ -15,7 +15,13 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { displayName, initialsOf, type Profile } from '@/lib/team/types'
-import { setMemberRole, setMemberArchived, resendInvite, deleteMember } from './actions'
+import {
+  setMemberRole,
+  setMemberArchived,
+  resendInvite,
+  sendPasswordReset,
+  deleteMember,
+} from './actions'
 
 /**
  * One row in the Members list. A client component so Delete can ask for
@@ -29,6 +35,7 @@ export function MemberRow({ member, isMe }: { member: Profile; isMe: boolean }) 
   const [open, setOpen] = useState(false)
   const [confirmText, setConfirmText] = useState('')
   const [resendPending, startResend] = useTransition()
+  const [resetPending, startReset] = useTransition()
   const [deletePending, startDelete] = useTransition()
 
   if (gone) return null
@@ -47,6 +54,19 @@ export function MemberRow({ member, isMe }: { member: Profile; isMe: boolean }) 
         return
       }
       toast.success(`Invitation resent to ${member.email}.`)
+    })
+  }
+
+  function handleSendReset() {
+    const formData = new FormData()
+    formData.set('id', member.id)
+    startReset(async () => {
+      const result = await sendPasswordReset(formData)
+      if (!result.ok) {
+        toast.error(result.error)
+        return
+      }
+      toast.success(`Password reset link sent to ${member.email}.`)
     })
   }
 
@@ -124,6 +144,18 @@ export function MemberRow({ member, isMe }: { member: Profile; isMe: boolean }) 
           className="shrink-0 text-xs"
         >
           {resendPending ? 'Sending…' : 'Resend invitation'}
+        </Button>
+      )}
+
+      {!isMe && !archived && (
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={resetPending}
+          onClick={handleSendReset}
+          className="shrink-0 text-xs"
+        >
+          {resetPending ? 'Sending…' : 'Send reset link'}
         </Button>
       )}
 
