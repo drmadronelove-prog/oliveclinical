@@ -166,6 +166,49 @@ export async function resendInvite(formData: FormData): Promise<MemberActionResu
 }
 
 /**
+ * Sends a password reset link on someone's behalf — the same email the
+ * "Forgot your password?" link on the sign-in page sends them, just
+ * triggered by an admin instead of waiting for the person to find that
+ * link themselves. Uses the ordinary (non-admin) client deliberately:
+ * resetPasswordForEmail is the same public-safe call the sign-in page
+ * already uses, and it needs no elevated privilege.
+ */
+export async function sendPasswordReset(formData: FormData): Promise<MemberActionResult> {
+  try {
+    await assertAdmin()
+  } catch {
+    return { ok: false, error: 'Only an admin can send a password reset link.' }
+  }
+
+  const id = String(formData.get('id') ?? '')
+  if (!id) return { ok: false, error: 'Missing member.' }
+
+  const supabase = await createClient()
+  const { data: member } = await supabase.from('profiles').select('*').eq('id', id).maybeSingle()
+  if (!member) return { ok: false, error: "That person couldn't be found." }
+
+  const origin = (await headers()).get('origin') ?? 'https://oliveclinical.com'
+
+  const { error } = await supabase.auth.resetPasswordForEmail(member.email, {
+    redirectTo: `${origin}/team/auth/callback?next=/team/update-password`,
+  })
+
+  if (error) {
+    console.error('[team] sendPasswordReset failed:', error)
+    if (error.status === 429 || /rate limit/i.test(error.message)) {
+      return {
+        ok: false,
+        error:
+          "Supabase's free email sender has hit its hourly limit. Wait about an hour and try again.",
+      }
+    }
+    return { ok: false, error: error.message }
+  }
+
+  return { ok: true }
+}
+
+/**
  * Erases someone's account entirely — not just their access. Deletes the
  * auth.users row through the admin API, which cascades to their profile
  * (profiles.id references auth.users with ON DELETE CASCADE) and frees
