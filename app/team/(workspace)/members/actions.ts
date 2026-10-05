@@ -109,3 +109,111 @@ export async function setMemberArchived(formData: FormData) {
 
   revalidatePath('/team/members')
 }
+
+export type MemberActionResult = { ok: true } | { ok: false; error: string }
+
+/**
+ * Sends a fresh invitation email to someone who was already invited.
+ * Supabase's invite endpoint happily resends a new link to anyone who
+ * hasn't yet confirmed (set a password) — it only refuses once they
+ * have, which we turn into a plain "nothing to resend" message rather
+ * than an error to chase.
+ */
+export async function resendInvite(formData: FormData): Promise<MemberActionResult> {
+  try {
+    await assertAdmin()
+  } catch {
+    return { ok: false, error: 'Only an admin can resend invitations.' }
+  }
+
+  const id = String(formData.get('id') ?? '')
+  if (!id) return { ok: false, error: 'Missing member.' }
+
+  const supabase = await createClient()
+  const { data: member } = await supabase.from('profiles').select('*').eq('id', id).maybeSingle()
+  if (!member) return { ok: false, error: "That person couldn't be found." }
+
+  const origin = (await headers()).get('origin') ?? 'https://oliveclinical.com'
+
+  let admin
+  try {
+    admin = createAdminClient()
+  } catch {
+    return {
+      ok: false,
+      error:
+        'Resending invitations needs the SUPABASE_SERVICE_ROLE_KEY setting, which is missing. See PHASE-1.md.',
+    }
+  }
+
+  const { error } = await admin.auth.admin.inviteUserByEmail(member.email, {
+    data: { name: member.name, role: member.role },
+    redirectTo: `${origin}/team/auth/callback?next=/team/update-password`,
+  })
+
+  if (error) {
+    if (/already been registered|already exists/i.test(error.message)) {
+      return {
+        ok: false,
+        error: `${member.email} has already signed in and set a password — there's nothing to resend.`,
+      }
+    }
+    return { ok: false, error: error.message }
+  }
+
+  revalidatePath('/team/members')
+  return { ok: true }
+}
+
+/**
+ * Erases someone's account entirely — not just their access. Deletes the
+ * auth.users row through the admin API, which cascades to their profile
+ * (profiles.id references auth.users with ON DELETE CASCADE) and frees
+ * their email so they could be invited again from scratch.
+ *
+ * Nothing else about them has that cascade, on purpose: a project they
+ * own, a task assigned to them, a comment they wrote all reference their
+ * profile without ON DELETE CASCADE, so Postgres refuses the whole
+ * deletion rather than silently orphaning that history. In practice this
+ * only succeeds for someone who was invited and never did anything —
+ * exactly the case this exists for (a mistyped email, a no-show hire).
+ * Anyone with real history should have their access removed instead
+ * (setMemberArchived), which keeps the history intact.
+ */
+export async function deleteMember(formData: FormData): Promise<MemberActionResult> {
+  let me
+  try {
+    me = await assertAdmin()
+  } catch {
+    return { ok: false, error: 'Only an admin can delete members.' }
+  }
+
+  const id = String(formData.get('id') ?? '')
+  if (!id) return { ok: false, error: 'Missing member.' }
+  if (id === me.id) return { ok: false, error: "You can't delete your own account." }
+
+  let admin
+  try {
+    admin = createAdminClient()
+  } catch {
+    return {
+      ok: false,
+      error: 'Deleting members needs the SUPABASE_SERVICE_ROLE_KEY setting, which is missing. See PHASE-1.md.',
+    }
+  }
+
+  const { error } = await admin.auth.admin.deleteUser(id)
+
+  if (error) {
+    return {
+      ok: false,
+      error:
+        `Couldn't delete this person — they likely have history in the workspace ` +
+        `(tasks, comments, or projects). Use "Remove access" instead to keep that ` +
+        `history intact. (${error.message})`,
+    }
+  }
+
+  revalidatePath('/team/members')
+  return { ok: true }
+}
