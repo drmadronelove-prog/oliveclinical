@@ -59,10 +59,18 @@ export async function updateTemplateTask(input: {
   if (Object.keys(patch).length === 0) return { ok: true, data: undefined }
 
   const supabase = await createClient()
-  const { error } = await supabase.from('template_tasks').update(patch).eq('id', input.id)
+  const { data, error } = await supabase
+    .from('template_tasks')
+    .update(patch)
+    .eq('id', input.id)
+    .select('id')
+    .maybeSingle()
   if (error) {
     console.error('[team] updateTemplateTask failed:', error)
     return { ok: false, error: `Couldn't save that change: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That task couldn't be found. It may have been deleted." }
   }
   revalidatePath(`/team/templates/${input.templateId}`)
   return { ok: true, data: undefined }
@@ -74,14 +82,19 @@ export async function archiveTemplateTask(input: {
 }): Promise<ActionResult> {
   await requireProfile()
   const supabase = await createClient()
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('template_tasks')
     .update({ archived_at: new Date().toISOString() })
     .eq('id', input.id)
+    .select('id')
+    .maybeSingle()
 
   if (error) {
     console.error('[team] archiveTemplateTask failed:', error)
     return { ok: false, error: `Couldn't delete that task: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That task couldn't be found. It may already be deleted." }
   }
   revalidatePath(`/team/templates/${input.templateId}`)
   return { ok: true, data: undefined }
@@ -121,10 +134,18 @@ export async function renameTemplateSection(input: {
   if (!name) return { ok: false, error: 'Give the section a name.' }
 
   const supabase = await createClient()
-  const { error } = await supabase.from('template_sections').update({ name }).eq('id', input.id)
+  const { data, error } = await supabase
+    .from('template_sections')
+    .update({ name })
+    .eq('id', input.id)
+    .select('id')
+    .maybeSingle()
   if (error) {
     console.error('[team] renameTemplateSection failed:', error)
     return { ok: false, error: `Couldn't rename that section: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That section couldn't be found. It may have been deleted." }
   }
   revalidatePath(`/team/templates/${input.templateId}`)
   return { ok: true, data: undefined }
@@ -154,14 +175,19 @@ export async function archiveTemplateSection(input: {
     }
   }
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('template_sections')
     .update({ archived_at: new Date().toISOString() })
     .eq('id', input.id)
+    .select('id')
+    .maybeSingle()
 
   if (error) {
     console.error('[team] archiveTemplateSection failed:', error)
     return { ok: false, error: `Couldn't delete that section: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That section couldn't be found. It may already be deleted." }
   }
   revalidatePath(`/team/templates/${input.templateId}`)
   return { ok: true, data: undefined }
@@ -175,14 +201,19 @@ export async function reorderTemplateTask(input: {
 }): Promise<ActionResult> {
   await requireProfile()
   const supabase = await createClient()
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('template_tasks')
     .update({ position: input.position })
     .eq('id', input.id)
+    .select('id')
+    .maybeSingle()
 
   if (error) {
     console.error('[team] reorderTemplateTask failed:', error)
     return { ok: false, error: `Couldn't move that task: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That task couldn't be found. It may have been deleted." }
   }
   revalidatePath(`/team/templates/${input.templateId}`)
   return { ok: true, data: undefined }

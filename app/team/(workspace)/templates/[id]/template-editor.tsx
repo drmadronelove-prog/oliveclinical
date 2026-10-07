@@ -1,10 +1,10 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { toast } from 'sonner'
 import { Plus } from 'lucide-react'
 import type { ProjectTemplate, TemplateSection, TemplateTask } from '@/lib/team/types'
 import { positionAtEnd, positionBetween } from '@/lib/team/position'
+import { runMutation } from '@/lib/team/run-mutation'
 import {
   createTemplateTask,
   updateTemplateTask,
@@ -60,15 +60,10 @@ export function TemplateEditor({
     }
     setTasks((prev) => [...prev, optimisticTask])
 
-    createTemplateTask({ templateId: template.id, templateSectionId: sectionId, title, position }).then(
-      (result) => {
-        if (!result.ok) {
-          setTasks((prev) => prev.filter((t) => t.id !== tempId))
-          toast.error(result.error)
-          return
-        }
-        setTasks((prev) => prev.map((t) => (t.id === tempId ? { ...t, id: result.data.id } : t)))
-      },
+    runMutation(
+      () => createTemplateTask({ templateId: template.id, templateSectionId: sectionId, title, position }),
+      () => setTasks((prev) => prev.filter((t) => t.id !== tempId)),
+      (data) => setTasks((prev) => prev.map((t) => (t.id === tempId ? { ...t, id: data.id } : t))),
     )
   }
 
@@ -78,12 +73,7 @@ export function TemplateEditor({
   ) {
     const previous = tasks
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, ...patch } : t)))
-    updateTemplateTask({ id, templateId: template.id, ...patch }).then((result) => {
-      if (!result.ok) {
-        setTasks(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => updateTemplateTask({ id, templateId: template.id, ...patch }), () => setTasks(previous))
   }
 
   function handleMoveTask(sectionId: string, taskId: string, direction: 'up' | 'down') {
@@ -100,45 +90,28 @@ export function TemplateEditor({
 
     const previous = tasks
     setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, position: newPosition } : t)))
-    reorderTemplateTask({ id: taskId, templateId: template.id, position: newPosition }).then((result) => {
-      if (!result.ok) {
-        setTasks(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(
+      () => reorderTemplateTask({ id: taskId, templateId: template.id, position: newPosition }),
+      () => setTasks(previous),
+    )
   }
 
   function handleDeleteTask(id: string) {
     const previous = tasks
     setTasks((prev) => prev.filter((t) => t.id !== id))
-    archiveTemplateTask({ id, templateId: template.id }).then((result) => {
-      if (!result.ok) {
-        setTasks(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => archiveTemplateTask({ id, templateId: template.id }), () => setTasks(previous))
   }
 
   function handleRenameSection(id: string, name: string) {
     const previous = sections
     setSections((prev) => prev.map((s) => (s.id === id ? { ...s, name } : s)))
-    renameTemplateSection({ id, templateId: template.id, name }).then((result) => {
-      if (!result.ok) {
-        setSections(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => renameTemplateSection({ id, templateId: template.id, name }), () => setSections(previous))
   }
 
   function handleDeleteSection(id: string) {
     const previous = sections
     setSections((prev) => prev.filter((s) => s.id !== id))
-    archiveTemplateSection({ id, templateId: template.id }).then((result) => {
-      if (!result.ok) {
-        setSections(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => archiveTemplateSection({ id, templateId: template.id }), () => setSections(previous))
   }
 
   function handleCreateSection() {
@@ -162,14 +135,11 @@ export function TemplateEditor({
     setSectionName('')
     setAddingSection(false)
 
-    createTemplateSection({ templateId: template.id, name, position }).then((result) => {
-      if (!result.ok) {
-        setSections((prev) => prev.filter((s) => s.id !== tempId))
-        toast.error(result.error)
-        return
-      }
-      setSections((prev) => prev.map((s) => (s.id === tempId ? { ...s, id: result.data.id } : s)))
-    })
+    runMutation(
+      () => createTemplateSection({ templateId: template.id, name, position }),
+      () => setSections((prev) => prev.filter((s) => s.id !== tempId)),
+      (data) => setSections((prev) => prev.map((s) => (s.id === tempId ? { ...s, id: data.id } : s))),
+    )
   }
 
   return (

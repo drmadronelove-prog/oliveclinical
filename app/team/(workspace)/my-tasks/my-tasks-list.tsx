@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { toast } from 'sonner'
 import { CheckCircle2 } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
@@ -16,6 +15,7 @@ import {
 } from '@/lib/team/types'
 import { PRIORITY_LABEL, PRIORITY_BADGE_CLASS, type Priority } from '@/lib/team/priority'
 import { toggleTaskComplete } from '../projects/[id]/actions'
+import { runMutation } from '@/lib/team/run-mutation'
 import { cn } from '@/lib/utils'
 
 export function MyTasksList({ initialTasks, projects }: { initialTasks: Task[]; projects: Project[] }) {
@@ -39,12 +39,10 @@ export function MyTasksList({ initialTasks, projects }: { initialTasks: Task[]; 
     // leave anyway.
     const previous = tasks
     setTasks((prev) => prev.filter((t) => t.id !== task.id))
-    toggleTaskComplete({ id: task.id, projectId: task.project_id, completed: true }).then((result) => {
-      if (!result.ok) {
-        setTasks(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(
+      () => toggleTaskComplete({ id: task.id, projectId: task.project_id, completed: true }),
+      () => setTasks(previous),
+    )
   }
 
   if (tasks.length === 0) {

@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
 import {
   DndContext,
   DragOverlay,
@@ -19,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { getMonthGridDays, toDateOnly } from '@/lib/team/calendar-grid'
 import { displayName, isOverdue, type Project, type Task, type Profile, type Tag } from '@/lib/team/types'
 import { updateTask } from '../projects/[id]/actions'
+import { runMutation } from '@/lib/team/run-mutation'
 import { cn } from '@/lib/utils'
 
 const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -156,12 +156,10 @@ export function CalendarView({
     const previous = tasks
     setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, due_date: newDate } : t)))
 
-    updateTask({ id: taskId, projectId: task.project_id, due_date: newDate }).then((result) => {
-      if (!result.ok) {
-        setTasks(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(
+      () => updateTask({ id: taskId, projectId: task.project_id, due_date: newDate }),
+      () => setTasks(previous),
+    )
   }
 
   return (
