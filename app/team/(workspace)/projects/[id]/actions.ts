@@ -54,14 +54,24 @@ export async function toggleTaskComplete(input: {
 }): Promise<ActionResult> {
   await requireProfile()
   const supabase = await createClient()
-  const { error } = await supabase
+  // .select().maybeSingle() after the update, not just the error — an
+  // update that matches no row (a stale id, a task deleted out from
+  // under this click) reports no error at all from Supabase, and would
+  // otherwise look exactly like success while nothing was actually
+  // written — the one way this ever silently "doesn't save".
+  const { data, error } = await supabase
     .from('tasks')
     .update({ completed: input.completed })
     .eq('id', input.id)
+    .select('id')
+    .maybeSingle()
 
   if (error) {
     console.error('[team] toggleTaskComplete failed:', error)
     return { ok: false, error: `Couldn't update that task: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That task couldn't be found. It may have been deleted." }
   }
   revalidatePath(`/team/projects/${input.projectId}`)
   revalidatePath('/team/calendar')
@@ -106,10 +116,13 @@ export async function updateTask(input: {
   if (Object.keys(patch).length === 0) return { ok: true, data: undefined }
 
   const supabase = await createClient()
-  const { error } = await supabase.from('tasks').update(patch).eq('id', input.id)
+  const { data, error } = await supabase.from('tasks').update(patch).eq('id', input.id).select('id').maybeSingle()
   if (error) {
     console.error('[team] updateTask failed:', error)
     return { ok: false, error: `Couldn't save that change: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That task couldn't be found. It may have been deleted." }
   }
 
   revalidatePath(`/team/projects/${input.projectId}`)
@@ -127,14 +140,19 @@ export async function reorderTask(input: {
 }): Promise<ActionResult> {
   await requireProfile()
   const supabase = await createClient()
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('tasks')
     .update({ section_id: input.sectionId, position: input.position })
     .eq('id', input.id)
+    .select('id')
+    .maybeSingle()
 
   if (error) {
     console.error('[team] reorderTask failed:', error)
     return { ok: false, error: `Couldn't move that task: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That task couldn't be found. It may have been deleted." }
   }
   revalidatePath(`/team/projects/${input.projectId}`)
   return { ok: true, data: undefined }
@@ -143,14 +161,19 @@ export async function reorderTask(input: {
 export async function archiveTask(input: { id: string; projectId: string }): Promise<ActionResult> {
   await requireProfile()
   const supabase = await createClient()
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('tasks')
     .update({ archived_at: new Date().toISOString() })
     .eq('id', input.id)
+    .select('id')
+    .maybeSingle()
 
   if (error) {
     console.error('[team] archiveTask failed:', error)
     return { ok: false, error: `Couldn't delete that task: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That task couldn't be found. It may already be deleted." }
   }
   revalidatePath(`/team/projects/${input.projectId}`)
   revalidatePath('/team/calendar')
@@ -192,10 +215,13 @@ export async function renameSection(input: {
   if (!name) return { ok: false, error: 'Give the section a name.' }
 
   const supabase = await createClient()
-  const { error } = await supabase.from('sections').update({ name }).eq('id', input.id)
+  const { data, error } = await supabase.from('sections').update({ name }).eq('id', input.id).select('id').maybeSingle()
   if (error) {
     console.error('[team] renameSection failed:', error)
     return { ok: false, error: `Couldn't rename that section: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That section couldn't be found. It may have been deleted." }
   }
 
   revalidatePath(`/team/projects/${input.projectId}`)
@@ -231,14 +257,19 @@ export async function archiveSection(input: {
     }
   }
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('sections')
     .update({ archived_at: new Date().toISOString() })
     .eq('id', input.id)
+    .select('id')
+    .maybeSingle()
 
   if (error) {
     console.error('[team] archiveSection failed:', error)
     return { ok: false, error: `Couldn't delete that section: ${error.message}` }
+  }
+  if (!data) {
+    return { ok: false, error: "That section couldn't be found. It may already be deleted." }
   }
 
   revalidatePath(`/team/projects/${input.projectId}`)

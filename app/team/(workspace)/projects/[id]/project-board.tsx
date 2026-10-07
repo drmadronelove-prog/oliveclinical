@@ -28,6 +28,8 @@ import type {
   ProjectResource,
 } from '@/lib/team/types'
 import { positionAtEnd, positionBetween } from '@/lib/team/position'
+import { runMutation } from '@/lib/team/run-mutation'
+import { isNextRedirectError } from '@/lib/team/next-redirect'
 import {
   createTask,
   toggleTaskComplete,
@@ -186,13 +188,9 @@ export function ProjectBoard({
       ),
     )
 
-    reorderTask({ id: activeId, projectId: project.id, sectionId: targetSectionId, position: newPosition }).then(
-      (result) => {
-        if (!result.ok) {
-          setTasks(before_snapshot)
-          toast.error(result.error)
-        }
-      },
+    runMutation(
+      () => reorderTask({ id: activeId, projectId: project.id, sectionId: targetSectionId, position: newPosition }),
+      () => setTasks(before_snapshot),
     )
   }
 
@@ -223,61 +221,55 @@ export function ProjectBoard({
     }
     setTasks((prev) => [...prev, optimisticTask])
 
-    createTask({ projectId: project.id, sectionId, title, position }).then((result) => {
-      if (!result.ok) {
-        setTasks((prev) => prev.filter((t) => t.id !== tempId))
-        toast.error(result.error)
-        return
-      }
-      setTasks((prev) => prev.map((t) => (t.id === tempId ? { ...t, id: result.data.id } : t)))
-    })
+    runMutation(
+      () => createTask({ projectId: project.id, sectionId, title, position }),
+      () => setTasks((prev) => prev.filter((t) => t.id !== tempId)),
+      (data) => setTasks((prev) => prev.map((t) => (t.id === tempId ? { ...t, id: data.id } : t))),
+    )
   }
 
   function handleToggleComplete(id: string, completed: boolean) {
     const previous = tasks
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, completed } : t)))
-    toggleTaskComplete({ id, projectId: project.id, completed }).then((result) => {
-      if (!result.ok) {
-        setTasks(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => toggleTaskComplete({ id, projectId: project.id, completed }), () => setTasks(previous))
   }
 
   function handlePatch(id: string, patch: Partial<Task>) {
     const previous = tasks
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, ...patch } : t)))
-    updateTask({ id, projectId: project.id, ...patch }).then((result) => {
-      if (!result.ok) {
-        setTasks(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => updateTask({ id, projectId: project.id, ...patch }), () => setTasks(previous))
   }
 
   function handleTagsChange(taskId: string, tagIds: string[]) {
     const previous = taskTags
     setTaskTagsState((prev) => ({ ...prev, [taskId]: tags.filter((t) => tagIds.includes(t.id)) }))
-    setTaskTags({ taskId, projectId: project.id, tagIds }).then((result) => {
-      if (!result.ok) {
-        setTaskTagsState(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(
+      () => setTaskTags({ taskId, projectId: project.id, tagIds }),
+      () => setTaskTagsState(previous),
+    )
   }
 
   async function handleCreateTag(name: string) {
-    const result = await createTag(name)
-    if (!result.ok) {
-      toast.error(result.error)
+    // Not routed through runMutation — it returns the new tag so the
+    // picker can select it right away, and there's no optimistic state
+    // to roll back here, only a result to report.
+    try {
+      const result = await createTag(name)
+      if (!result.ok) {
+        toast.error(result.error)
+        return null
+      }
+      const newTag: Tag = { id: result.data.id, name, color: result.data.color, created_at: '', archived_at: null }
+      setTags((prev) => (prev.some((t) => t.id === newTag.id) ? prev : [...prev, newTag]))
+      return newTag
+    } catch (err) {
+      if (isNextRedirectError(err)) throw err
+      toast.error(err instanceof Error ? err.message : "Couldn't create that tag. Try again.")
       return null
     }
-    const newTag: Tag = { id: result.data.id, name, color: result.data.color, created_at: '', archived_at: null }
-    setTags((prev) => (prev.some((t) => t.id === newTag.id) ? prev : [...prev, newTag]))
-    return newTag
   }
 
-  async function handleCreateComment(taskId: string, body: string) {
+  function handleCreateComment(taskId: string, body: string) {
     const tempId = `temp-${crypto.randomUUID()}`
     const optimisticComment: Comment = {
       id: tempId,
@@ -290,16 +282,16 @@ export function ProjectBoard({
     }
     setComments((prev) => ({ ...prev, [taskId]: [...(prev[taskId] ?? []), optimisticComment] }))
 
-    const result = await createComment({ taskId, projectId: project.id, body, members })
-    if (!result.ok) {
-      setComments((prev) => ({ ...prev, [taskId]: (prev[taskId] ?? []).filter((c) => c.id !== tempId) }))
-      toast.error(result.error)
-      return
-    }
-    setComments((prev) => ({
-      ...prev,
-      [taskId]: (prev[taskId] ?? []).map((c) => (c.id === tempId ? { ...c, id: result.data.id } : c)),
-    }))
+    runMutation(
+      () => createComment({ taskId, projectId: project.id, body, members }),
+      () =>
+        setComments((prev) => ({ ...prev, [taskId]: (prev[taskId] ?? []).filter((c) => c.id !== tempId) })),
+      (data) =>
+        setComments((prev) => ({
+          ...prev,
+          [taskId]: (prev[taskId] ?? []).map((c) => (c.id === tempId ? { ...c, id: data.id } : c)),
+        })),
+    )
   }
 
   function handleDeleteComment(comment: Comment) {
@@ -308,38 +300,39 @@ export function ProjectBoard({
       ...prev,
       [comment.task_id]: (prev[comment.task_id] ?? []).filter((c) => c.id !== comment.id),
     }))
-    deleteComment({ id: comment.id, projectId: project.id }).then((result) => {
-      if (!result.ok) {
-        setComments(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => deleteComment({ id: comment.id, projectId: project.id }), () => setComments(previous))
   }
 
-  async function handleAttachmentUploaded(taskId: string, file: File, storagePath: string) {
-    const result = await recordAttachment({
-      taskId,
-      projectId: project.id,
-      storagePath,
-      fileName: file.name,
-      fileSize: file.size,
-      contentType: file.type || 'application/octet-stream',
-    })
-    if (!result.ok) {
-      toast.error(result.error)
-      return
-    }
-    const newAttachment: Attachment = {
-      id: result.data.id,
-      task_id: taskId,
-      storage_path: storagePath,
-      file_name: file.name,
-      file_size: file.size,
-      content_type: file.type || null,
-      uploaded_by: currentProfile.id,
-      created_at: result.data.created_at,
-    }
-    setAttachments((prev) => ({ ...prev, [taskId]: [...(prev[taskId] ?? []), newAttachment] }))
+  // Returns the mutation's promise (not fire-and-forget, unlike the rest
+  // of this file): AttachmentList awaits it to know when to stop showing
+  // its own "uploading" state, since the file itself is already sitting
+  // in storage by the time this runs — only the database record is left.
+  function handleAttachmentUploaded(taskId: string, file: File, storagePath: string) {
+    return runMutation(
+      () =>
+        recordAttachment({
+          taskId,
+          projectId: project.id,
+          storagePath,
+          fileName: file.name,
+          fileSize: file.size,
+          contentType: file.type || 'application/octet-stream',
+        }),
+      () => {}, // the file is already uploaded to storage; nothing local to undo
+      (data) => {
+        const newAttachment: Attachment = {
+          id: data.id,
+          task_id: taskId,
+          storage_path: storagePath,
+          file_name: file.name,
+          file_size: file.size,
+          content_type: file.type || null,
+          uploaded_by: currentProfile.id,
+          created_at: data.created_at,
+        }
+        setAttachments((prev) => ({ ...prev, [taskId]: [...(prev[taskId] ?? []), newAttachment] }))
+      },
+    )
   }
 
   function handleDeleteAttachment(attachment: Attachment) {
@@ -348,17 +341,13 @@ export function ProjectBoard({
       ...prev,
       [attachment.task_id]: (prev[attachment.task_id] ?? []).filter((a) => a.id !== attachment.id),
     }))
-    deleteAttachment({ id: attachment.id, projectId: project.id, storagePath: attachment.storage_path }).then(
-      (result) => {
-        if (!result.ok) {
-          setAttachments(previous)
-          toast.error(result.error)
-        }
-      },
+    runMutation(
+      () => deleteAttachment({ id: attachment.id, projectId: project.id, storagePath: attachment.storage_path }),
+      () => setAttachments(previous),
     )
   }
 
-  async function handleAddLink(title: string, url: string) {
+  function handleAddLink(title: string, url: string) {
     const tempId = `temp-${crypto.randomUUID()}`
     const optimisticResource: ProjectResource = {
       id: tempId,
@@ -375,55 +364,54 @@ export function ProjectBoard({
     }
     setResources((prev) => [optimisticResource, ...prev])
 
-    const result = await addProjectLink({ projectId: project.id, title, url })
-    if (!result.ok) {
-      setResources((prev) => prev.filter((r) => r.id !== tempId))
-      toast.error(result.error)
-      return
-    }
-    setResources((prev) =>
-      prev.map((r) => (r.id === tempId ? { ...r, id: result.data.id, url: result.data.url, created_at: result.data.created_at } : r)),
+    runMutation(
+      () => addProjectLink({ projectId: project.id, title, url }),
+      () => setResources((prev) => prev.filter((r) => r.id !== tempId)),
+      (data) =>
+        setResources((prev) =>
+          prev.map((r) => (r.id === tempId ? { ...r, id: data.id, url: data.url, created_at: data.created_at } : r)),
+        ),
     )
   }
 
-  async function handleResourceFileUploaded(file: File, storagePath: string) {
-    const result = await recordProjectFile({
-      projectId: project.id,
-      storagePath,
-      fileName: file.name,
-      fileSize: file.size,
-      contentType: file.type || 'application/octet-stream',
-    })
-    if (!result.ok) {
-      toast.error(result.error)
-      return
-    }
-    const newResource: ProjectResource = {
-      id: result.data.id,
-      project_id: project.id,
-      kind: 'file',
-      title: file.name,
-      url: null,
-      storage_path: storagePath,
-      file_size: file.size,
-      content_type: file.type || null,
-      created_by: currentProfile.id,
-      created_at: result.data.created_at,
-      archived_at: null,
-    }
-    setResources((prev) => [newResource, ...prev])
+  // Same reason as handleAttachmentUploaded above: ProjectResources awaits
+  // this to know when to stop showing its own "uploading" state.
+  function handleResourceFileUploaded(file: File, storagePath: string) {
+    return runMutation(
+      () =>
+        recordProjectFile({
+          projectId: project.id,
+          storagePath,
+          fileName: file.name,
+          fileSize: file.size,
+          contentType: file.type || 'application/octet-stream',
+        }),
+      () => {}, // the file is already uploaded to storage; nothing local to undo
+      (data) => {
+        const newResource: ProjectResource = {
+          id: data.id,
+          project_id: project.id,
+          kind: 'file',
+          title: file.name,
+          url: null,
+          storage_path: storagePath,
+          file_size: file.size,
+          content_type: file.type || null,
+          created_by: currentProfile.id,
+          created_at: data.created_at,
+          archived_at: null,
+        }
+        setResources((prev) => [newResource, ...prev])
+      },
+    )
   }
 
   function handleDeleteResource(resource: ProjectResource) {
     const previous = resources
     setResources((prev) => prev.filter((r) => r.id !== resource.id))
-    deleteProjectResource({ id: resource.id, projectId: project.id, storagePath: resource.storage_path }).then(
-      (result) => {
-        if (!result.ok) {
-          setResources(previous)
-          toast.error(result.error)
-        }
-      },
+    runMutation(
+      () => deleteProjectResource({ id: resource.id, projectId: project.id, storagePath: resource.storage_path }),
+      () => setResources(previous),
     )
   }
 
@@ -432,45 +420,25 @@ export function ProjectBoard({
     const position = positionAtEnd(siblingPositions)
     const previous = tasks
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, section_id: sectionId, position } : t)))
-    reorderTask({ id, projectId: project.id, sectionId, position }).then((result) => {
-      if (!result.ok) {
-        setTasks(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => reorderTask({ id, projectId: project.id, sectionId, position }), () => setTasks(previous))
   }
 
   function handleDelete(id: string) {
     const previous = tasks
     setTasks((prev) => prev.filter((t) => t.id !== id))
-    archiveTask({ id, projectId: project.id }).then((result) => {
-      if (!result.ok) {
-        setTasks(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => archiveTask({ id, projectId: project.id }), () => setTasks(previous))
   }
 
   function handleRenameSection(id: string, name: string) {
     const previous = sections
     setSections((prev) => prev.map((s) => (s.id === id ? { ...s, name } : s)))
-    renameSection({ id, projectId: project.id, name }).then((result) => {
-      if (!result.ok) {
-        setSections(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => renameSection({ id, projectId: project.id, name }), () => setSections(previous))
   }
 
   function handleDeleteSection(id: string) {
     const previous = sections
     setSections((prev) => prev.filter((s) => s.id !== id))
-    archiveSection({ id, projectId: project.id }).then((result) => {
-      if (!result.ok) {
-        setSections(previous)
-        toast.error(result.error)
-      }
-    })
+    runMutation(() => archiveSection({ id, projectId: project.id }), () => setSections(previous))
   }
 
   function handleCreateSection() {
@@ -494,14 +462,11 @@ export function ProjectBoard({
     setSectionName('')
     setAddingSection(false)
 
-    createSection({ projectId: project.id, name, position }).then((result) => {
-      if (!result.ok) {
-        setSections((prev) => prev.filter((s) => s.id !== tempId))
-        toast.error(result.error)
-        return
-      }
-      setSections((prev) => prev.map((s) => (s.id === tempId ? { ...s, id: result.data.id } : s)))
-    })
+    runMutation(
+      () => createSection({ projectId: project.id, name, position }),
+      () => setSections((prev) => prev.filter((s) => s.id !== tempId)),
+      (data) => setSections((prev) => prev.map((s) => (s.id === tempId ? { ...s, id: data.id } : s))),
+    )
   }
 
   function handleViewChange(next: 'list' | 'board') {
