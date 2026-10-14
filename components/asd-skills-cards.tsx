@@ -57,6 +57,13 @@ const CARDS: FeatureCard[] = [
     footerLabel: "Read essay",
     href: "/blog/autistic-culture-is-flourishing",
   },
+  {
+    kind: "link",
+    title: "Autistic Culture",
+    category: "Worksheet · Media Tracker",
+    footerLabel: "Download",
+    href: "/autistic-culture-list.pdf",
+  },
 ]
 
 export function ASDSkillsCards() {
