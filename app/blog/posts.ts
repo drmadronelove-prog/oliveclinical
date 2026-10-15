@@ -2,6 +2,239 @@ import type { BlogPost } from "@/components/blog/blog-post"
 
 export const posts: BlogPost[] = [
   {
+    slug: "autistic-parents-and-their-children",
+    title: "Autistic Parents and Their Children",
+    author: "Madrone Love",
+    credential: "PsyD",
+    category: "Neurodivergence & Parenting",
+    date: "October 2026",
+    blocks: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "When researchers write about autism and parenting, they almost always mean non-autistic parents raising autistic children. The autistic parent, and the child growing up with that parent, have been close to invisible. In 2024, Thom-Jones, Brownlow, and Abel reviewed what autistic people have said about parenthood, from deciding to have children through relationships with adult children. Most participants in the studies they found were White mothers of babies or young children, and very little covered parents of teenagers or adults. Their conclusion was that autistic parents are different from non-autistic parents, not less than or worse than them, and that the hard part may lie less in being an autistic parent than in how autistic parents are misunderstood and unsupported by systems built for neurotypical ones. What follows is a walk through the studies that do exist, first on the parents and then on their children. Many of them recruited autistic parents whose children were also autistic, so they describe those families better than they describe autistic parents raising non-autistic kids.",
+      },
+      { type: "heading", text: "What the research has been missing" },
+      {
+        type: "paragraph",
+        text: "The gap is easy to state. Thom-Jones and colleagues list the groups still largely absent from the literature: autistic fathers, parents who do not identify as mothers or fathers, non-White autistic parents, parents of older children, and studies that focus on parenting strengths. A 2024 review of qualitative studies by Pagnier and Moualla adds that even the rate of autism among autistic adults' children has not been studied. And almost nothing asks the children themselves.",
+      },
+      {
+        type: "paragraph",
+        text: "What does exist falls into two groups. A handful of surveys and cohort studies measure autistic parents' mental health, pregnancy outcomes, and parenting. A growing set of interview studies asks autistic parents to describe their lives in their own words. The entries below take them one at a time.",
+      },
+      { type: "heading", text: "Autistic People's Perinatal Experiences" },
+      {
+        type: "paragraph",
+        text: "Survey · 417 autistic and 524 non-autistic people · Hampton, Allison, Baron-Cohen & Holt, 2022",
+      },
+      {
+        type: "paragraph",
+        text: "Researchers at Cambridge's Autism Research Centre asked people who had been pregnant about their mental health and care during pregnancy. Twenty-four percent of autistic respondents reported depression during pregnancy, compared with 9 percent of non-autistic respondents. For anxiety the figures were 48 percent and 14 percent. Autistic respondents were also less satisfied with their prenatal care. The team suggested that prenatal care could adjust the sensory environment of appointments and the way information is communicated.",
+      },
+      { type: "heading", text: "Autistic Mothers' Perinatal Well-Being and Parenting Styles" },
+      {
+        type: "paragraph",
+        text: "Longitudinal survey · pregnancy to six months after birth · Hampton, Allison, Aydin, Baron-Cohen & Holt, 2022",
+      },
+      {
+        type: "paragraph",
+        text: "The same team followed autistic and non-autistic parents through pregnancy and the first six months. Autistic parents had higher stress, depression, and anxiety scores throughout. At six months, the two groups did not differ in parenting confidence, nurturance, involvement, or routine. Autistic parents scored lower on one area, discipline. The authors noted that autistic and non-autistic parents reported being equally likely to parent in positive ways, and called for better perinatal screening and support.",
+      },
+      { type: "heading", text: "A Comparative Study of Autistic and Non-Autistic Women's Experience of Motherhood" },
+      {
+        type: "paragraph",
+        text: "Survey · 355 autistic and 132 non-autistic mothers, all with at least one autistic child · Pohl, Crockford, Blakemore, Allison & Baron-Cohen, 2020",
+      },
+      {
+        type: "paragraph",
+        text: "Sixty percent of the autistic mothers reported postnatal depression. They described more difficulty multitasking, keeping up with the household, and creating social opportunities for their children. They more often felt misunderstood by professionals, reported more anxiety and more selective mutism, and were often unsure what to share. Most who disclosed their autism to a professional were not believed. Motherhood felt more isolating, and they worried more about being judged.",
+      },
+      {
+        type: "paragraph",
+        text: "The same mothers put their children's needs first, and the overwhelming majority described parenting as rewarding. The research team called for postnatal depression screening and support built specifically for autistic mothers.",
+      },
+      { type: "heading", text: "Maternal Autistic Traits and Adverse Birth Outcomes" },
+      {
+        type: "paragraph",
+        text: "Cohort study · 87,687 pregnant women in Japan · Hosozawa et al., 2024",
+      },
+      {
+        type: "paragraph",
+        text: "This study measured autistic traits during pregnancy rather than relying on diagnosis. Only 18 women had an autism diagnosis, but 2.7 percent scored in the clinical range on a short autism trait questionnaire. Higher trait scores were linked to higher risk of preterm birth and of babies born small for their gestational age, with the strongest link for very preterm birth. Women scoring in the clinical range had a 49 percent higher risk of very preterm birth. The authors recommend tailored, timely prenatal support for women with high autistic traits, whether or not they have a formal diagnosis.",
+      },
+      { type: "heading", text: "Challenges, Strengths, and Joys of Autistic Parents" },
+      {
+        type: "paragraph",
+        text: "Interview study · Thom-Jones, Brownlow & Abel, 2025",
+      },
+      {
+        type: "paragraph",
+        text: "The hardest things these parents named came from outside the family: support that was missing or did not fit, feeling judged by doctors, teachers, and social services, and worry that disclosing their autism would lead people to assume the worst about their parenting. They also named strengths. Many felt their autism helped them be thoughtful, fair, and consistent, and described being deeply committed and emotionally connected to their children, and good at understanding children who think or feel differently. Routines, honesty, and clear communication were often named as strengths. Their joys included love and pride, time together, shared interests, and watching their children grow.",
+      },
+      {
+        type: "pull-quote",
+        text: "The hardest things autistic parents named came from outside the family. Many said their strengths came from being autistic.",
+      },
+      { type: "heading", text: "Intense Connection and Love" },
+      {
+        type: "paragraph",
+        text: "Interview study · nine autistic mothers of children aged 5 to 15 · Dugdale, Thompson, Leedham, Beail & Freeth, 2021",
+      },
+      {
+        type: "paragraph",
+        text: "The title is the finding. The mothers described motherhood as largely joyful, with feelings of intense connection and closeness to their children. They also described a heavy personal cost to meeting their children's needs, and the constant work of managing other people's misunderstandings. All nine believed at least one of their children was autistic. The authors recommend training for service providers, ideally led by autistic people, on how autism presents in adults, masking, the possible mismatch between felt emotion and facial expression, sensory needs in pregnancy, and the double empathy problem.",
+      },
+      { type: "heading", text: "\"I Do My Best to Do Right by Her\"" },
+      {
+        type: "paragraph",
+        text: "Interview study · seven autistic mothers of non-autistic daughters · Libster, Harwood, Meacham & Kasari, 2024",
+      },
+      {
+        type: "paragraph",
+        text: "One of the few studies centered on autistic parents raising non-autistic children. Five of the daughters were adolescents and two were adults. The mothers described their relationships with their daughters as loving, safe, and empathetic. They reported strengths in helping their daughters solve problems and in handling conflict well. Many worried about their daughters' social development and worked to create good social opportunities for them, so their daughters would not face the social difficulties they had. Some described being ignored or excluded by other parents. This is still the mothers' account. The daughters were not interviewed.",
+      },
+      { type: "heading", text: "Autistic Mothers and the Perinatal Period" },
+      {
+        type: "paragraph",
+        text: "Doctoral thesis · infants of autistic and non-autistic mothers · Sarah Hampton, University of Cambridge",
+      },
+      {
+        type: "paragraph",
+        text: "The earliest data on the children themselves. Infants of autistic mothers showed social interaction similar to infants of non-autistic mothers through the first six months. In both groups, the mother's stress, depression, and anxiety were associated with how certain regions of the infant's brain developed. The mother's mental health showed up in the baby's development, and her diagnosis did not change that pattern. Hampton concludes that autistic parents are not less likely to engage in positive parenting with their infants.",
+      },
+      {
+        type: "pull-quote",
+        text: "In both groups, what showed up in the babies' development was the mother's wellbeing, not her diagnosis.",
+      },
+      { type: "heading", text: "A Guide for Children of Autistic Parents" },
+      {
+        type: "paragraph",
+        text: "Guidance · National Autistic Society (UK)",
+      },
+      {
+        type: "paragraph",
+        text: "Not research, but one of the few published resources written for the children. It gives a sense of daily life from the child's side. A parent may not make eye contact while listening closely. A parent may talk at length about an intense interest, react strongly to music that seems quiet to everyone else, rely on routines, and need warning before plans change. A parent may not notice when a child is upset, or may not know how to comfort them. The guide describes growing up with an autistic parent as potentially very positive. It also says it can be lonely and confusing, especially when a parent has meltdowns, and that a child who is the only non-autistic person in the family may feel isolated. It encourages children to say what they need directly, for example that they need a hug.",
+      },
+      { type: "heading", text: "Other entries in the research" },
+      {
+        type: "paragraph",
+        text: "Autistic Parents' Personal Experiences of Parenting and Support · Online focus group · Hwang & Heslop, 2023",
+      },
+      {
+        type: "paragraph",
+        text: "Seven autistic parents said autism did not always affect their capacity to parent, and that when it did, they could succeed with the right support. Their parenting styles, they said, were often misread by professionals working from pathologizing assumptions. The authors argue for assessing autistic parents' needs and capacity with a strength-based approach.",
+      },
+      {
+        type: "paragraph",
+        text: "Parents on the Autism Continuum · Survey · Lau, Peterson, Attwood, Garnett & Kelly, 2016",
+      },
+      {
+        type: "paragraph",
+        text: "Fathers are rarely studied. In this survey, autistic fathers of autistic children reported lower parenting efficacy than non-autistic fathers, while autistic mothers reported efficacy comparable to non-autistic mothers.",
+      },
+      {
+        type: "paragraph",
+        text: "Exploring Family Relationships in the Context of Autism · Doctoral thesis · Lucy Francis, University of Southampton, 2023",
+      },
+      {
+        type: "paragraph",
+        text: "Interviews with six autistic fathers. Their accounts centered on what fatherhood meant to them, how autism shaped their parenting, how they understood their diagnosis, and the coping strategies and support they relied on.",
+      },
+      {
+        type: "paragraph",
+        text: "Autistic Mothers of Autistic Children · Matched comparison · Adams, Stainsby & Paynter, 2021",
+      },
+      {
+        type: "paragraph",
+        text: "Twenty autistic mothers matched to twenty non-autistic mothers on child behavior, autism characteristics, adaptive functioning, family income, and age. There were no meaningful differences in family outcomes, and parenting stress was equally high in both groups. The authors conclude that negative outcomes should not be assumed from a parent's diagnosis.",
+      },
+      {
+        type: "paragraph",
+        text: "\"I'm Sick of Being the Problem\" · Interview study · Rabba et al., 2025",
+      },
+      {
+        type: "paragraph",
+        text: "Thirty-one autistic mothers in Australia described their dealings with their autistic children's schools as a war zone and an ongoing fight for support, and said their own autistic expertise was not taken seriously. Some had positive experiences, and several found that advocating for themselves and their children improved things over time.",
+      },
+      {
+        type: "paragraph",
+        text: "\"I Think I'm Really Well-Equipped to Be a Parent\" · Interview study · Heyworth, Tan & Pellicano, 2026",
+      },
+      {
+        type: "paragraph",
+        text: "Forty autistic parents of autistic children described honesty and vulnerability with their children, close listening, and respect for their children's autonomy and dignity as distinctly autistic ways of parenting. The authors also note that many autistic parents fear their child could be taken from them, and that some may choose not to become parents at all.",
+      },
+      { type: "heading", text: "What these studies share" },
+      {
+        type: "paragraph",
+        text: "Read side by side, the studies point in a consistent direction, even though most are small.",
+      },
+      {
+        type: "list",
+        items: [
+          "Autistic parents report more depression, anxiety, and stress, especially around pregnancy and the first months after birth",
+          "Where parenting itself is measured, autistic and non-autistic parents mostly look alike, in confidence, nurturance, involvement, family outcomes, and parenting stress",
+          "Parents describe intense connection, love, and pride, and name strengths they attribute to being autistic: fairness, consistency, honesty, clear communication, and understanding children who think differently",
+          "The hardest moments tend to involve professionals and institutions: not being believed, being judged, being offered support that does not fit",
+          "Many parents fear what disclosure could cost them, up to and including custody",
+          "The children's own accounts are almost entirely missing",
+        ],
+      },
+      { type: "heading", text: "Why this matters" },
+      {
+        type: "paragraph",
+        text: "The pattern in this research locates most of the difficulty outside the parent. The mental health burden is real, particularly around pregnancy. But when researchers measure parenting directly, autistic parents mostly look like other parents, and the problems they describe most often involve how they are treated. Thom-Jones and colleagues put it plainly in their review: autistic parents are often unsupported or misunderstood, not because they are poor parents, but because systems are not inclusive.",
+      },
+      {
+        type: "paragraph",
+        text: "The researchers' recommendations follow from that. Screen for perinatal depression and anxiety with tools built for autistic parents. Adjust the sensory environment and communication style of prenatal care. Offer support based on autistic traits, not only on formal diagnosis. Train professionals, ideally with autistic people leading the training. Assess parenting capacity from strengths rather than stereotypes. And do not assume negative outcomes from a parent's diagnosis.",
+      },
+      {
+        type: "pull-quote",
+        text: "When researchers measure parenting directly, autistic parents mostly look like other parents. The problems they describe most often involve how they are treated.",
+      },
+      { type: "heading", text: "For autistic parents" },
+      {
+        type: "paragraph",
+        text: "If you are an autistic parent, the research does not support the idea that your diagnosis makes you a worse parent. It does support taking your own mental health seriously, especially during pregnancy and the first year, and it documents that many autistic parents find professionals hard to deal with and worry about disclosure. The strengths autistic parents name in these studies, fairness, consistency, honesty, close attention, and understanding children who think differently, are strengths the research takes seriously too.",
+      },
+      { type: "heading", text: "For the children of autistic parents" },
+      {
+        type: "paragraph",
+        text: "If you grew up with an autistic parent, you will find almost nothing in the research written from your side. The closest resources are guidance written for children and parents' descriptions of their relationships with their kids. The National Autistic Society's guide describes this kind of childhood as potentially very positive and sometimes lonely or confusing, and both can be true in the same household.",
+      },
+      { type: "heading", text: "A small invitation" },
+      {
+        type: "paragraph",
+        text: "The biggest gap in this literature is the people who grew up in these homes. Researchers have asked autistic parents about their children and have measured infants, but they have rarely asked children and adult children of autistic parents, autistic or not, what it was like. Until those studies exist, the picture of these families is drawn almost entirely from the parents' side.",
+      },
+      { type: "heading", text: "Sources and References" },
+      {
+        type: "list",
+        items: [
+          "Adams, D., Stainsby, M., & Paynter, J. (2021). \"Autistic mothers of autistic children: A preliminary study in an under-researched area.\" Autism in Adulthood, 3(4), 339–346. https://doi.org/10.1089/aut.2020.0078",
+          "Dugdale, A.-S., Thompson, A. R., Leedham, A., Beail, N., & Freeth, M. (2021). \"Intense connection and love: The experiences of autistic mothers.\" Autism, 25(7), 1973–1984. https://doi.org/10.1177/13623613211005987",
+          "Francis, L. (2023). \"Exploring family relationships in the context of autism\" (doctoral thesis, University of Southampton). https://eprints.soton.ac.uk/481622",
+          "Hampton, S. (2021). \"Autistic mothers and the perinatal period: Maternal experiences and infant development\" (doctoral thesis, University of Cambridge). https://www.repository.cam.ac.uk/handle/1810/323654",
+          "Hampton, S., Allison, C., Aydin, E., Baron-Cohen, S., & Holt, R. (2022). \"Autistic mothers' perinatal well-being and parenting styles.\" Autism, 26(7), 1805–1820. https://doi.org/10.1177/13623613211065544",
+          "Hampton, S., Allison, C., Baron-Cohen, S., & Holt, R. (2022). \"Autistic people's perinatal experiences I: A survey of pregnancy experiences.\" Journal of Autism and Developmental Disorders; summary in University of Cambridge news. https://doi.org/10.1007/s10803-022-05754-1",
+          "Heyworth, M., Tan, D. W., & Pellicano, E. (2026). \"'I think I'm really well-equipped to be a parent': Autistic parents' experiences of parenting autistically.\" Autism in Adulthood. https://doi.org/10.1177/25739581261426626",
+          "Hosozawa, M., et al. (2024). \"Maternal autistic traits and adverse birth outcomes.\" JAMA Network Open, 7(1), e2352809. https://doi.org/10.1001/jamanetworkopen.2023.52809",
+          "Hwang, S. K., & Heslop, P. (2023). \"Autistic parents' personal experiences of parenting and support: Messages from an online focus group.\" British Journal of Social Work, 53(1), 276–295. https://doi.org/10.1093/bjsw/bcac133",
+          "Lau, W. Y. P., Peterson, C. C., Attwood, T., Garnett, M. S., & Kelly, A. B. (2016). \"Parents on the autism continuum: Links with parenting efficacy.\" Research in Autism Spectrum Disorders, 26, 57–64. https://doi.org/10.1016/j.rasd.2016.02.007",
+          "Libster, N., Harwood, R., Meacham, K., & Kasari, C. (2024). \"'I do my best to do right by her': Autistic motherhood and the experience of raising a non-autistic adolescent daughter.\" Autism, 28(6), 1357–1368. https://doi.org/10.1177/13623613241241577",
+          "National Autistic Society. \"Family relationships: A guide for children of autistic parents.\" https://www.autism.org.uk/advice-and-guidance/family-life-and-relationships/family-life/children-of-autistic-parents",
+          "Pagnier, M., & Moualla, M. (2024). \"The autistic parenting journey: A systematic review of qualitative evidence and thematic meta-synthesis.\" Autism in Adulthood. https://doi.org/10.1089/aut.2024.0176",
+          "Pohl, A. L., Crockford, S. K., Blakemore, M., Allison, C., & Baron-Cohen, S. (2020). \"A comparative study of autistic and non-autistic women's experience of motherhood.\" Molecular Autism, 11, 3; postnatal depression figure and disclosure finding from University of Cambridge news. https://doi.org/10.1186/s13229-019-0304-2",
+          "Rabba, A. S., et al. (2025). \"'I'm sick of being the problem': Autistic mothers' experiences of interacting with schools for their autistic children.\" Autism, 29(4), 1034–1046. https://doi.org/10.1177/13623613241297223",
+          "Thom-Jones, S., Brownlow, C., & Abel, S. (2024). \"Experiences of autistic parents, from conception to raising adult children: A systematic review of the literature.\" Autism in Adulthood; plain-language summary from Griffith University Inclusive Futures. https://doi.org/10.1089/aut.2024.0181",
+          "Thom-Jones, S., Brownlow, C., & Abel, S. (2025). \"Challenges, strengths, and joys of autistic parents: An abductive qualitative content analysis of parent interviews.\" Autism in Adulthood; plain-language summary from Griffith University Inclusive Futures. https://doi.org/10.1177/25739581251385735",
+        ],
+      },
+    ],
+  },
+  {
     slug: "the-most-common-personality-disorder",
     title: "The Most Common Personality Disorder You've Never Heard Of",
     subtitle: "OCPD is more common than any other personality disorder and worse understood than most. The traits that define it are the same ones that get praised in a colleague — the question is how far they go, and who pays for them.",
