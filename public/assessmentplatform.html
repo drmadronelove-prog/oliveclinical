@@ -175,6 +175,8 @@ body::before{display:none;}
   text-overflow:ellipsis;
   max-width:320px;
 }
+.lq-case-status{font-size:10px;letter-spacing:.04em;color:var(--text-muted);margin-top:2px;text-align:right;}
+
 .lq-active-client.empty{color:rgba(248,246,242,0.55);font-style:italic;}
 
 /* ── Floating control cluster — neumorphic pill ── */
@@ -1488,6 +1490,7 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{
       <span class="lq-tagline">Assessment Dashboard</span>
     </div>
     <div class="lq-active-client" id="lqActiveClient">No client selected</div>
+    <div class="lq-case-status" id="caseSaveStatus" aria-live="polite"></div>
   </div>
 </header>
 
@@ -3035,6 +3038,8 @@ const intakeFormState={
   medicalOtherText:'',
   notes:''
 };
+// Pristine copy of the blank intake form, so switching client can reset to it.
+const INTAKE_FORM_DEFAULTS=JSON.parse(JSON.stringify(intakeFormState));
 
 function initIntakeForm(){
   const root=document.getElementById('tab-intake');
@@ -3464,6 +3469,9 @@ function syncReportClientFields(){
 
 function onClientSelect(id){
   if(id==='__new__'){newClient();return;}
+  // Flush the record being left before the active id moves, or the last
+  // few edits would be written under the incoming client.
+  if(typeof caseSaveActive==='function')caseSaveActive();
   ACTIVE_CLIENT_ID=id;
   const c=CLIENTS.find(x=>x.id===id);
   fillClientForm(c);
@@ -3471,8 +3479,10 @@ function onClientSelect(id){
   persistClients();
   updateActiveClientHeader();
   if(typeof tpLoadForActiveClient==='function')tpLoadForActiveClient();
+  if(typeof caseLoadForActiveClient==='function')caseLoadForActiveClient();
 }
 function newClient(){
+  if(typeof caseSaveActive==='function')caseSaveActive();
   ACTIVE_CLIENT_ID=null;
   fillClientForm(null);
   syncReportClientFields();
@@ -3481,6 +3491,7 @@ function newClient(){
   persistClients();
   updateActiveClientHeader();
   if(typeof tpLoadForActiveClient==='function')tpLoadForActiveClient();
+  if(typeof caseLoadForActiveClient==='function')caseLoadForActiveClient();
 }
 function saveClient(){
   const data=readClientForm();
@@ -3492,21 +3503,30 @@ function saveClient(){
     const id='c_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
     CLIENTS.push({id,...data});
     ACTIVE_CLIENT_ID=id;
+    // Naming a client partway through a session should carry the work so
+    // far onto them rather than stranding it under 'unassigned'.
+    if(typeof caseSaveActive==='function')caseSaveActive();
+    try{ localStorage.removeItem(caseKey(null)); }catch{}
   }
   persistClients();
   rebuildClientSelector();
   updateActiveClientHeader();
+  if(typeof caseSaveActive==='function')caseSaveActive();
 }
 function deleteClient(){
   if(!ACTIVE_CLIENT_ID){alert('No client selected.');return;}
-  if(!confirm('Delete this client record? This cannot be undone.'))return;
+  if(!confirm('Delete this client record? This removes their intake, diagnostic, referral and treatment plan work as well. This cannot be undone.'))return;
+  const goneId=ACTIVE_CLIENT_ID;
   CLIENTS=CLIENTS.filter(x=>x.id!==ACTIVE_CLIENT_ID);
+  if(typeof caseDelete==='function')caseDelete(goneId);
+  try{ localStorage.removeItem('ntc_tp_'+goneId); }catch{}
   ACTIVE_CLIENT_ID=null;
   persistClients();
   rebuildClientSelector();
   fillClientForm(null);
   syncReportClientFields();
   updateActiveClientHeader();
+  if(typeof caseLoadForActiveClient==='function')caseLoadForActiveClient();
 }
 function initClientInfo(){
   loadClients();
@@ -3523,6 +3543,230 @@ function initClientInfo(){
     el.addEventListener('input',syncReportClientFields);
   });
   syncReportClientFields();
+}
+
+
+// ================================================================
+// PER-CLIENT CASE FILE
+// ----------------------------------------------------------------
+// Everything clinical a session produces — the intake form, the
+// diagnostic modules and their item responses, the referrals tab and
+// the notes panel — is stored against the active client rather than
+// globally, so switching client swaps the whole working record and one
+// client's answers can never show up under another's name.
+//
+// The treatment plan predates this and keeps its own ntc_tp_<id> key.
+// Clinic details and the clinician checklists stay global on purpose:
+// they describe the practice and the practitioner, not the client.
+//
+// Work done with no client selected is kept under 'unassigned' so it is
+// never silently lost; selecting a client afterwards leaves it there.
+// ================================================================
+const CASE_TAB_IDS=['tab-intake','tab-diagnostic','tab-referrals'];
+let CASE_SAVE_DEBOUNCE=null;
+let CASE_LOADING=false;
+
+function caseKey(id){ return 'ntc_case_'+(id||'unassigned'); }
+
+/** Form controls inside the client-owned tabs, keyed by element id. */
+function caseEachDomField(fn){
+  CASE_TAB_IDS.forEach(tid=>{
+    const root=document.getElementById(tid);
+    if(!root)return;
+    root.querySelectorAll('input[id],textarea[id],select[id]').forEach(fn);
+  });
+}
+
+function caseCapture(){
+  const dom={};
+  caseEachDomField(el=>{
+    dom[el.id]=(el.type==='checkbox'||el.type==='radio')?el.checked:el.value;
+  });
+  let notes='';
+  const nw=document.getElementById('notesWidget');
+  if(nw)notes=nw.value;
+  return {
+    v:1,
+    savedAt:new Date().toISOString(),
+    intake:JSON.parse(JSON.stringify(intakeFormState)),
+    selectedModules:selectedModules.slice(),
+    responses:JSON.parse(JSON.stringify(responses)),
+    dom,
+    notes
+  };
+}
+
+/** Blank every client-owned field. Runs before loading another client. */
+function caseResetAll(){
+  const blank=JSON.parse(JSON.stringify(INTAKE_FORM_DEFAULTS));
+  Object.keys(blank).forEach(k=>{ intakeFormState[k]=blank[k]; });
+  selectedModules=[];
+  responses={};
+  caseEachDomField(el=>{
+    if(el.type==='checkbox'||el.type==='radio')el.checked=false;
+    else el.value='';
+  });
+  const nw=document.getElementById('notesWidget');
+  if(nw)nw.value='';
+}
+
+/** Push intakeFormState back into the controls that carry data-state. */
+function caseApplyIntakeToDom(){
+  document.querySelectorAll('[data-state]').forEach(el=>{
+    const key=el.dataset.state;
+    let val;
+    if(key.includes('.')){
+      const [bucket,sub]=key.split('.');
+      val=intakeFormState[bucket]?intakeFormState[bucket][sub]:undefined;
+    }else{
+      val=intakeFormState[key];
+    }
+    if(val===undefined)return;
+    if(el.type==='checkbox')el.checked=!!val;
+    else if(el.type==='radio')el.checked=(el.value===val);
+    else el.value=val==null?'':val;
+  });
+}
+
+/** Re-run the handlers that show and hide panels driven by a checkbox. */
+function caseResyncToggles(){
+  const ims=document.getElementById('intakeMultiselect');
+  if(ims){
+    ims.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+      const card=document.getElementById('iac_'+cb.value);
+      if(card)card.style.display=cb.checked?'':'none';
+    });
+    if(typeof updateIntakeMsLabel==='function')updateIntakeMsLabel();
+    if(typeof updateIntakeAccordionEmpty==='function')updateIntakeAccordionEmpty();
+  }
+
+  const dms=document.getElementById('dxMultiselect');
+  if(dms){
+    // selectedModules is authoritative; mirror it onto the checkboxes
+    // rather than rebuilding it from them, so restored item responses
+    // are not wiped by initR().
+    dms.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+      if(cb.value==='UNIVERSAL')return;
+      cb.checked=selectedModules.includes(cb.value);
+    });
+    const uni=dms.querySelector('input[value="UNIVERSAL"]');
+    const uniSec=document.getElementById('universalSection');
+    if(uni&&uniSec)uniSec.style.display=uni.checked?'':'none';
+    const modSec=document.getElementById('modulesSection');
+    if(modSec)modSec.style.display=selectedModules.length?'':'none';
+    selectedModules.forEach(mod=>{ if(!responses[mod])initR(mod); });
+    if(typeof renderMeasures==='function')renderMeasures();
+    if(typeof updateDxMsLabel==='function')updateDxMsLabel();
+  }
+}
+
+function caseLoadForActiveClient(){
+  CASE_LOADING=true;
+  try{
+    caseResetAll();
+    let rec=null;
+    try{
+      const raw=localStorage.getItem(caseKey(ACTIVE_CLIENT_ID));
+      if(raw)rec=JSON.parse(raw);
+    }catch{}
+    if(rec){
+      if(rec.intake)Object.keys(rec.intake).forEach(k=>{ intakeFormState[k]=rec.intake[k]; });
+      if(Array.isArray(rec.selectedModules))selectedModules=rec.selectedModules.slice();
+      if(rec.responses)responses=rec.responses;
+      if(rec.dom){
+        Object.keys(rec.dom).forEach(id=>{
+          const el=document.getElementById(id);
+          if(!el)return;
+          const v=rec.dom[id];
+          if(el.type==='checkbox'||el.type==='radio')el.checked=!!v;
+          else el.value=v==null?'':v;
+        });
+      }
+      const nw=document.getElementById('notesWidget');
+      if(nw)nw.value=rec.notes||'';
+    }
+    caseApplyIntakeToDom();
+    caseResyncToggles();
+    if(typeof updateIntakeValidity==='function')updateIntakeValidity();
+    if(typeof updateProgressWidget==='function')updateProgressWidget();
+    updateCaseStatus(rec);
+  }finally{
+    CASE_LOADING=false;
+  }
+}
+
+function caseSaveActive(){
+  if(CASE_LOADING)return;
+  const rec=caseCapture();
+  try{ localStorage.setItem(caseKey(ACTIVE_CLIENT_ID),JSON.stringify(rec)); }
+  catch(err){
+    // Quota is the realistic failure here, and losing clinical notes
+    // silently is not acceptable — say so rather than swallowing it.
+    const st=document.getElementById('caseSaveStatus');
+    if(st)st.textContent='Could not save — browser storage is full.';
+    return;
+  }
+  updateCaseStatus(rec);
+}
+
+function updateCaseStatus(rec){
+  const st=document.getElementById('caseSaveStatus');
+  if(!st)return;
+  if(!rec||!rec.savedAt){ st.textContent=''; return; }
+  const c=CLIENTS.find(x=>x.id===ACTIVE_CLIENT_ID);
+  const who=c?clientLabel(c):'unassigned';
+  st.textContent='Saved '+new Date(rec.savedAt).toLocaleString()+' · '+who;
+}
+
+function caseScheduleSave(){
+  if(CASE_LOADING)return;
+  clearTimeout(CASE_SAVE_DEBOUNCE);
+  CASE_SAVE_DEBOUNCE=setTimeout(caseSaveActive,500);
+}
+
+function caseDelete(id){
+  try{ localStorage.removeItem(caseKey(id)); }catch{}
+}
+
+/**
+ * One-off: the notes panel used to write to a single global ntc_notes key
+ * shared by every client. Move whatever is in it into the unassigned case
+ * file so it is still reachable, rather than attributing it to whichever
+ * client happens to be selected now.
+ */
+function caseMigrateLegacyNotes(){
+  let legacy=null;
+  try{ legacy=localStorage.getItem('ntc_notes'); }catch{}
+  if(!legacy||!legacy.trim())return;
+  try{
+    const key=caseKey(null);
+    const rec=JSON.parse(localStorage.getItem(key)||'null')||{v:1,dom:{},intake:{},selectedModules:[],responses:{}};
+    if(!rec.notes||!rec.notes.trim()){
+      rec.notes=legacy;
+      rec.savedAt=new Date().toISOString();
+      localStorage.setItem(key,JSON.stringify(rec));
+    }
+    localStorage.removeItem('ntc_notes');
+  }catch{}
+}
+
+function initCaseFile(){
+  caseMigrateLegacyNotes();
+  // Autosave anything typed or toggled inside the client-owned tabs, plus
+  // the notes panel, which lives outside them.
+  const watch=e=>{
+    const t=e.target;
+    if(!t||!t.closest)return;
+    if(t.id==='notesWidget'||CASE_TAB_IDS.some(tid=>t.closest('#'+tid)))caseScheduleSave();
+  };
+  document.addEventListener('input',watch);
+  document.addEventListener('change',watch);
+  // A tab close should not cost the last few seconds of typing.
+  window.addEventListener('beforeunload',()=>{
+    clearTimeout(CASE_SAVE_DEBOUNCE);
+    caseSaveActive();
+  });
+  caseLoadForActiveClient();
 }
 
 // ----------------------------------------------------------------
@@ -3713,8 +3957,9 @@ function updateProgressWidget(){
 function initNotesWidget(){
   const el=document.getElementById('notesWidget');
   if(!el) return;
-  try{el.value=localStorage.getItem('ntc_notes')||'';}catch{}
-  el.addEventListener('input',()=>{ try{localStorage.setItem('ntc_notes',el.value);}catch{} });
+  // Notes are saved with the active client's case file (see caseCapture),
+  // not under one shared ntc_notes key. caseLoadForActiveClient fills this in.
+  el.placeholder=el.placeholder||'Notes for the selected client…';
 }
 
 // Timer widget — elapsed time for the current assessment, pausing after a
@@ -6884,6 +7129,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   rebuildRightNav();
   initSidePanel();
   initMiniModuleDots();
+  initCaseFile();
   if(!localStorage.getItem('ntc_api_key'))openSettings();
 });
 </script>
