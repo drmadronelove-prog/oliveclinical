@@ -59,7 +59,7 @@ export function OliveBlobs() {
           }}
         >
           <circle cx="50" cy="50" r="50" fill={blob.color} />
-          <ellipse cx="62" cy="39" rx="14" ry="22" fill="#ffffff" opacity="0.28" />
+          <circle cx="69" cy="29" r="15" fill="#ffffff" opacity="0.28" />
         </svg>
       ))}
     </div>

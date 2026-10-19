@@ -40,7 +40,7 @@ function AvatarDisc({ className, fill = 'currentColor' }: { className?: string; 
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true" className={className}>
       <circle cx="50" cy="50" r="50" fill={fill} />
-      <ellipse cx="62" cy="40" rx="15" ry="22" fill="#ffffff" opacity="0.28" />
+      <circle cx="69" cy="29" r="15" fill="#ffffff" opacity="0.28" />
     </svg>
   )
 }

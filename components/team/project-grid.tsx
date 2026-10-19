@@ -36,7 +36,7 @@ function ProjectOlive({ color, size }: { color: string; size: number }) {
       className="block shrink-0"
     >
       <circle cx="50" cy="50" r="50" fill={color} />
-      <ellipse cx="62" cy="39" rx="14" ry="22" fill="#ffffff" opacity="0.3" />
+      <circle cx="69" cy="29" r="15" fill="#ffffff" opacity="0.3" />
     </svg>
   )
 }
@@ -83,7 +83,7 @@ export function ProjectGrid({
               className="pointer-events-none absolute -top-13 -right-11 size-38 opacity-[0.16]"
             >
               <circle cx="50" cy="50" r="50" fill="var(--project-color)" />
-              <ellipse cx="62" cy="39" rx="15" ry="23" fill="#ffffff" opacity="0.55" />
+              <circle cx="69" cy="29" r="15" fill="#ffffff" opacity="0.55" />
             </svg>
 
             <div className="relative flex items-start justify-between gap-4">

@@ -25,7 +25,7 @@ const QUADRANT_INFO: Record<QuadrantKey, {
   bottomRight: {
     title: "Who & what matters to you?",
     subtitle: "Select values or type your own",
-    label: "TOWARD",
+    label: "VITAL",
     placeholder: "Or type your own value...",
     color: "#6B7F47",
     bgColor: "rgba(107, 127, 71, 0.06)",
@@ -35,7 +35,7 @@ const QUADRANT_INFO: Record<QuadrantKey, {
     title: "What shows up inside to get in the way?",
     subtitle: "Thoughts, feelings, memories, sensations",
     placeholder: '"I\'m not good enough", anxiety, dread...',
-    label: "AWAY",
+    label: "SUFFERING",
     color: "#9E6B5A",
     bgColor: "rgba(158, 107, 90, 0.06)",
     borderColor: "rgba(158, 107, 90, 0.2)",
@@ -44,7 +44,7 @@ const QUADRANT_INFO: Record<QuadrantKey, {
     title: "What do you do when that inside stuff shows up?",
     subtitle: "Actions, reactions, behaviors, coping patterns",
     placeholder: "Isolate, scroll phone, shut down, avoid...",
-    label: "AWAY MOVES",
+    label: "SUFFERING MOVES",
     color: "#9E6B5A",
     bgColor: "rgba(158, 107, 90, 0.06)",
     borderColor: "rgba(158, 107, 90, 0.2)",
@@ -53,7 +53,7 @@ const QUADRANT_INFO: Record<QuadrantKey, {
     title: "What can you do to move toward what matters?",
     subtitle: "Actions, steps, commitments you can make",
     placeholder: "Call a friend, go for a walk, set a boundary...",
-    label: "TOWARD MOVES",
+    label: "VITAL MOVES",
     color: "#6B7F47",
     bgColor: "rgba(107, 127, 71, 0.06)",
     borderColor: "rgba(107, 127, 71, 0.2)",
@@ -63,8 +63,8 @@ const QUADRANT_INFO: Record<QuadrantKey, {
 const AXIS_LABELS = {
   top: "OUTER WORLD: actions, behaviors",
   bottom: "INNER WORLD: thoughts, feelings, memories",
-  left: "AWAY",
-  right: "TOWARD",
+  left: "SUFFERING",
+  right: "VITAL",
 }
 
 function storSave<T>(k: string, v: T) { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
@@ -451,34 +451,56 @@ export function ActMatrix() {
 
         {/* Matrix grid */}
         <div style={{ position: "relative" }}>
-          {/* Left axis label */}
-          <div style={{
-            position: "absolute", left: -4, top: "50%",
-            transform: "translateY(-50%) rotate(-90deg)",
-            fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: 16, fontWeight: 700, color: "#9E6B5A", letterSpacing: "2px", zIndex: 2,
-          }}>
-            {AXIS_LABELS.left}
-          </div>
-          {/* Right axis label */}
-          <div style={{
-            position: "absolute", right: -14, top: "50%",
-            transform: "translateY(-50%) rotate(90deg)",
-            fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: 16, fontWeight: 700, color: "#6B7F47", letterSpacing: "2px", zIndex: 2,
-          }}>
-            {AXIS_LABELS.right}
-          </div>
-
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, padding: "0 24px" }}>
             <QuadrantCard quadrant="topLeft" items={items.topLeft} onAdd={handleAdd} onRemove={handleRemove} onToggleValue={handleToggleValue} />
             <QuadrantCard quadrant="topRight" items={items.topRight} onAdd={handleAdd} onRemove={handleRemove} onToggleValue={handleToggleValue} />
 
-            {/* Center circle */}
+            {/* Center circle, sitting on the suffering → vital axis */}
             <div style={{
               gridColumn: "1 / -1", display: "flex", justifyContent: "center",
               margin: "-16px 0", zIndex: 3, position: "relative",
             }}>
+              {/* Horizontal axis: an open circle at suffering, a rule running
+                  across, and a solid arrowhead at vital. Built from CSS shapes
+                  rather than a stretched SVG so the circle stays round and the
+                  arrowhead keeps its proportions at any width. Sits behind the
+                  centre circle so the line reads as passing through it. */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute", left: 0, right: 0, top: "50%",
+                  transform: "translateY(-50%)",
+                  display: "flex", alignItems: "center", gap: 8,
+                  zIndex: 1, pointerEvents: "none",
+                }}
+              >
+                <span style={{
+                  fontFamily: "'Cormorant Garamond', Georgia, serif",
+                  fontSize: 15, fontWeight: 700, color: "#9E6B5A",
+                  letterSpacing: "1px", whiteSpace: "nowrap",
+                }}>
+                  {AXIS_LABELS.left}
+                </span>
+                <span style={{
+                  width: 9, height: 9, borderRadius: "50%", flex: "none",
+                  background: "#FFFCF7", border: "1px solid #9E6B5A",
+                }} />
+                <span style={{ flex: 1, minWidth: 0, height: 1, background: "#B8A898" }} />
+                <span style={{
+                  width: 0, height: 0, flex: "none",
+                  borderTop: "6px solid transparent",
+                  borderBottom: "6px solid transparent",
+                  borderLeft: "10px solid #6B7F47",
+                  marginLeft: -1,
+                }} />
+                <span style={{
+                  fontFamily: "'Cormorant Garamond', Georgia, serif",
+                  fontSize: 15, fontWeight: 700, color: "#6B7F47",
+                  letterSpacing: "1px", whiteSpace: "nowrap",
+                }}>
+                  {AXIS_LABELS.right}
+                </span>
+              </div>
               <div
                 onClick={toggleCenter}
                 style={{
@@ -498,6 +520,7 @@ export function ActMatrix() {
                     ? "0 2px 12px rgba(58, 46, 34, 0.1)"
                     : "0 2px 16px rgba(107, 127, 71, 0.3)",
                   cursor: "pointer", transition: "all 0.35s ease", userSelect: "none",
+                  position: "relative", zIndex: 2,
                   textTransform: centerLabel === "ME" ? "none" : "uppercase",
                   letterSpacing: centerLabel === "ME" ? "0" : "1px",
                 }}
@@ -564,7 +587,7 @@ export function ActMatrix() {
           </div>
           <div style={{ marginTop: 6, display: "flex", gap: 24, fontSize: 9, color: "#4a5568" }}>
             <span><strong>Vertical:</strong> Outer world (top) ↕ Inner world (bottom)</span>
-            <span><strong>Horizontal:</strong> Away (left) ↔ Toward (right)</span>
+            <span><strong>Horizontal:</strong> Suffering (left) ↔ Vital (right)</span>
           </div>
         </div>
 
@@ -577,28 +600,28 @@ export function ActMatrix() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 6 }}>
           <PrintQuadrant
             title={QUADRANT_INFO.topLeft.title}
-            subtitle="Away moves — outer behaviors"
+            subtitle="Suffering moves — outer behaviors"
             items={items.topLeft}
             color={away.color}
             borderColor={away.borderColor}
           />
           <PrintQuadrant
             title={QUADRANT_INFO.topRight.title}
-            subtitle="Toward moves — outer behaviors"
+            subtitle="Vital moves — outer behaviors"
             items={items.topRight}
             color={toward.color}
             borderColor={toward.borderColor}
           />
           <PrintQuadrant
             title={QUADRANT_INFO.bottomLeft.title}
-            subtitle="Away — inner world"
+            subtitle="Suffering — inner world"
             items={items.bottomLeft}
             color={away.color}
             borderColor={away.borderColor}
           />
           <PrintQuadrant
             title={QUADRANT_INFO.bottomRight.title}
-            subtitle="Toward — values & what matters"
+            subtitle="Vital — values & what matters"
             items={items.bottomRight}
             color={toward.color}
             borderColor={toward.borderColor}
@@ -607,8 +630,8 @@ export function ActMatrix() {
 
         {/* Horizontal axis labels */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", textAlign: "center", fontSize: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#8B7B68", marginBottom: 4 }}>
-          <div style={{ color: "#9E6B5A" }}>← Away</div>
-          <div style={{ color: "#6B7F47" }}>Toward →</div>
+          <div style={{ color: "#9E6B5A" }}>← Suffering</div>
+          <div style={{ color: "#6B7F47" }}>Vital →</div>
         </div>
 
         {/* Inner world label */}
