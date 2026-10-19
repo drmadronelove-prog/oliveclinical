@@ -108,9 +108,13 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/blobs1.png',
-        width: 842,
-        height: 806,
+        // New path rather than overwriting blobs1.png: mail clients, iMessage,
+        // Slack and the social scrapers cache preview images by URL, so
+        // replacing the file in place leaves people seeing the old picture.
+        // 1200x630 is the size they all crop to.
+        url: '/og-olive-clinical.png',
+        width: 1200,
+        height: 630,
         alt: 'Olive Clinical — neuroinclusive therapy and assessment',
       },
     ],
@@ -119,7 +123,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Olive Clinical',
     description: SITE_DESCRIPTION,
-    images: ['/blobs1.png'],
+    images: ['/og-olive-clinical.png'],
   },
 }
 
