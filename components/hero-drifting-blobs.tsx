@@ -25,11 +25,11 @@ const BLOBS = [
 ]
 
 /**
- * Quarter turn applied to every shape. The artwork's sheen sits upper-left at
- * ~127°; turning it clockwise brings it to ~37° — upper-right, matching where
- * the pimento sits in the Olive Clinical mark, so the shapes read as olives.
+ * No turn. The artwork is now cut from the Olive Clinical mark itself, so its
+ * pimento already sits upper-right; the quarter turn this used to apply — back
+ * when the sheen sat upper-left — would drop the hole to the bottom.
  */
-const ROTATION = 90
+const ROTATION = 0
 
 /** Seconds of stillness after load before they start moving. */
 const SETTLE_DELAY = 1.6
