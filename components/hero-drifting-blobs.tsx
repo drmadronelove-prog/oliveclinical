@@ -31,10 +31,33 @@ const BLOBS = [
  */
 const ROTATION = 0
 
+/**
+ * How much larger than the source arrangement the olives are drawn. Positions
+ * scale with them, about the cluster's centre, so the gaps grow too and none
+ * of them start life overlapping.
+ */
+const SIZE_SCALE = 1.3
+
+/** The cluster's centre in the source arrangement, used as the scale origin. */
+const CENTRE_X = BLOBS.reduce((a, b) => a + b.left + b.w / 2, 0) / BLOBS.length
+const CENTRE_Y = BLOBS.reduce((a, b) => a + b.top + b.h / 2, 0) / BLOBS.length
+
+const SCALED = BLOBS.map((b) => {
+  const w = b.w * SIZE_SCALE
+  const h = b.h * SIZE_SCALE
+  return {
+    ...b,
+    w,
+    h,
+    left: CENTRE_X + (b.left + b.w / 2 - CENTRE_X) * SIZE_SCALE - w / 2,
+    top: CENTRE_Y + (b.top + b.h / 2 - CENTRE_Y) * SIZE_SCALE - h / 2,
+  }
+})
+
 /** Seconds of stillness after load before they start moving. */
-const SETTLE_DELAY = 1.6
+const SETTLE_DELAY = 0
 /** Seconds spent easing from stationary up to full drift speed. */
-const SPIN_UP = 2.5
+const SPIN_UP = 0.8
 /** Target drift speed, px/sec — slow enough to read as floating. */
 const SPEED = 36.95
 
@@ -74,7 +97,7 @@ export function HeroDriftingBlobs({ homeSelector }: { homeSelector: string }) {
       const scaleW = hr.width
       const scaleH = (hr.width * ART_H) / ART_W
 
-      bodies = BLOBS.map((b, i) => {
+      bodies = SCALED.map((b, i) => {
         const el = elRefs.current[i]!
         const w = (b.w / 100) * scaleW
         const h = (b.h / 100) * scaleH
@@ -84,7 +107,7 @@ export function HeroDriftingBlobs({ homeSelector }: { homeSelector: string }) {
         const y = originY + (b.top / 100) * scaleH
         el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${ROTATION}deg)`
         // Give each a distinct heading so they fan out rather than travel as a pack.
-        const angle = (i / BLOBS.length) * Math.PI * 2 + Math.random() * 0.9
+        const angle = (i / SCALED.length) * Math.PI * 2 + Math.random() * 0.9
         return { x, y, r: Math.min(w, h) / 2, vx: Math.cos(angle), vy: Math.sin(angle), el }
       })
       return true
