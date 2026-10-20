@@ -73,19 +73,18 @@ export function HeroSection() {
             <div className="flex flex-wrap justify-center lg:justify-start gap-3">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center rounded-md px-6 py-3 text-[0.95rem] transition-opacity hover:opacity-90"
-                style={{ fontFamily: "var(--font-body)", fontWeight: 600, background: "var(--gold)", color: "var(--ink)" }}
+                className="btn-raised inline-flex items-center justify-center rounded-md px-6 py-3 text-[0.95rem]"
+                style={{ fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--ink)" }}
               >
                 Book a consultation
               </Link>
               <Link
                 href="#paths"
-                className="inline-flex items-center justify-center rounded-md px-6 py-3 text-[0.95rem] transition-colors hover:bg-[rgba(11,37,69,0.04)]"
+                className="btn-raised-ghost inline-flex items-center justify-center rounded-md px-6 py-3 text-[0.95rem]"
                 style={{
                   fontFamily: "var(--font-body)",
                   fontWeight: 600,
                   color: "var(--ink)",
-                  border: "1px solid var(--border)",
                 }}
               >
                 See how we help
