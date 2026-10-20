@@ -50,6 +50,10 @@ export function HeroPhotoBubbles() {
           initial={{ opacity: 0, scale: 0.82, y: 14 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.2 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+          // The drifting olives bounce off each photo individually. Marking
+          // the cluster's container instead would wall off the whole right
+          // half of the hero, which is where they used to get stuck.
+          data-blob-obstacle-circle
           className="absolute"
           style={{
             left: `${b.left}%`,

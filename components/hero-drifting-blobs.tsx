@@ -113,6 +113,19 @@ export function HeroDriftingBlobs({ homeSelector }: { homeSelector: string }) {
       return true
     }
 
+    /** Round page elements — the photo bubbles — as centre + radius. */
+    function circleObstacles() {
+      const rootRect = root!.getBoundingClientRect()
+      return Array.from(document.querySelectorAll("[data-blob-obstacle-circle]")).map((n) => {
+        const r = (n as HTMLElement).getBoundingClientRect()
+        return {
+          cx: r.left - rootRect.left + r.width / 2,
+          cy: r.top - rootRect.top + r.height / 2,
+          r: Math.min(r.width, r.height) / 2,
+        }
+      })
+    }
+
     function obstacles() {
       const rootRect = root!.getBoundingClientRect()
       return Array.from(document.querySelectorAll("[data-blob-obstacle]")).map((n) => {
@@ -140,6 +153,7 @@ export function HeroDriftingBlobs({ homeSelector }: { homeSelector: string }) {
 
       if (speed > 0) {
         const obs = obstacles()
+        const circles = circleObstacles()
         for (const b of bodies) {
           b.x += b.vx * speed * dt
           b.y += b.vy * speed * dt
@@ -174,6 +188,24 @@ export function HeroDriftingBlobs({ homeSelector }: { homeSelector: string }) {
             const ux = dx / d
             const uy = dy / d
             const push = b.r - d
+            b.x += ux * push
+            b.y += uy * push
+            const dot = b.vx * ux + b.vy * uy
+            if (dot < 0) { b.vx -= 2 * dot * ux; b.vy -= 2 * dot * uy }
+          }
+
+          // Photo bubbles — circle vs. circle, so an olive can pass through
+          // the gaps between them instead of being stopped by the cluster's
+          // bounding box.
+          for (const o of circles) {
+            const ox = (b.x + b.r) - o.cx
+            const oy = (b.y + b.r) - o.cy
+            const dist = Math.hypot(ox, oy)
+            const min = b.r + o.r
+            if (dist >= min) continue
+            const ux = dist === 0 ? 1 : ox / dist
+            const uy = dist === 0 ? 0 : oy / dist
+            const push = min - dist
             b.x += ux * push
             b.y += uy * push
             const dot = b.vx * ux + b.vy * uy
