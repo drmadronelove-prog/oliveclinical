@@ -263,11 +263,10 @@ export function SiteHeader() {
         <div className="flex items-center justify-end gap-2 sm:gap-3 ml-auto">
           <Link
             href="/contact"
-            className="inline-flex items-center rounded-md px-4 py-2.5 sm:px-5 text-[0.9rem] transition-opacity hover:opacity-90"
+            className="btn-raised inline-flex items-center rounded-md px-4 py-2.5 sm:px-5 text-[0.9rem]"
             style={{
               fontFamily: "var(--font-body)",
               fontWeight: 600,
-              background: "var(--gold)",
               color: "var(--ink)",
             }}
             onClick={closeAll}

@@ -124,10 +124,9 @@ export function NewsletterSection() {
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="px-8 py-3 rounded-full font-bold text-sm tracking-wider uppercase transition-transform duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
+                  className="btn-raised-ink px-8 py-3 rounded-full font-bold text-sm tracking-wider uppercase disabled:opacity-60"
                   style={{
                     fontFamily: "var(--font-display)",
-                    background: "var(--ink)",
                     color: "var(--paper)",
                   }}
                 >

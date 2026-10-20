@@ -370,6 +370,39 @@
     0 1px 2px rgba(11, 37, 69, 0.10);
 }
 
+/* Ink surface, for the newsletter's sign-up. */
+.btn-raised-ink {
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: linear-gradient(180deg, #17385f 0%, var(--ink) 55%, #061a33 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 2px 3px rgba(11, 37, 69, 0.18),
+    0 7px 16px -5px rgba(11, 37, 69, 0.4);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+.btn-raised-ink:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 3px 5px rgba(11, 37, 69, 0.2),
+    0 12px 22px -6px rgba(11, 37, 69, 0.44);
+}
+.btn-raised-ink:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    0 1px 2px rgba(11, 37, 69, 0.18);
+}
+.btn-raised-ink:disabled {
+  transform: none;
+  filter: none;
+}
+
 /* Same geometry on the paper surface, for the secondary action. */
 .btn-raised-ghost {
   position: relative;
@@ -400,13 +433,16 @@
 
 @media (prefers-reduced-motion: reduce) {
   .btn-raised,
-  .btn-raised-ghost {
+  .btn-raised-ghost,
+  .btn-raised-ink {
     transition: none;
   }
   .btn-raised:hover,
   .btn-raised-ghost:hover,
+  .btn-raised-ink:hover,
   .btn-raised:active,
-  .btn-raised-ghost:active {
+  .btn-raised-ghost:active,
+  .btn-raised-ink:active {
     transform: none;
   }
 }
