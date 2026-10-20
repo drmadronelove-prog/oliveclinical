@@ -58,8 +58,8 @@ const SCALED = BLOBS.map((b) => {
 const SETTLE_DELAY = 0
 /** Seconds spent easing from stationary up to full drift speed. */
 const SPIN_UP = 0.8
-/** Target drift speed, px/sec — slow enough to read as floating. */
-const SPEED = 36.95
+/** Target drift speed, px/sec — brisk enough to read as movement. */
+const SPEED = 58
 
 type Body = {
   x: number

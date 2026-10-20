@@ -106,9 +106,13 @@ export function HeroSection() {
         </div>
 
         {/* Photo bubbles — mirror the blob cluster's geometry so the two read as
-            a matched pair across the row. */}
+            a matched pair across the row.
+
+            Deliberately not a blob obstacle: its box spans the whole right
+            half, and with the heading below, it penned the olives into the
+            top-left corner. They pass behind the photos instead, which sit
+            above them in the stack. The type is still fenced off. */}
         <div
-          data-blob-obstacle
           className="w-full max-w-sm sm:max-w-md mx-auto lg:mr-0 lg:ml-auto lg:flex-1 lg:min-w-0 lg:max-w-[40rem] 2xl:max-w-[44rem]"
         >
           <HeroPhotoBubbles />
