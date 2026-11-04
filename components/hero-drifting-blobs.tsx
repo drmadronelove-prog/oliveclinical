@@ -106,11 +106,39 @@ export function HeroDriftingBlobs({ homeSelector }: { homeSelector: string }) {
         const x = originX + (b.left / 100) * scaleW
         const y = originY + (b.top / 100) * scaleH
         el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${ROTATION}deg)`
-        // Give each a distinct heading so they fan out rather than travel as a pack.
-        const angle = (i / SCALED.length) * Math.PI * 2 + Math.random() * 0.9
-        return { x, y, r: Math.min(w, h) / 2, vx: Math.cos(angle), vy: Math.sin(angle), el }
+        return { x, y, r: Math.min(w, h) / 2, vx: 0, vy: 0, el }
       })
+      assignHeadings()
       return true
+    }
+
+    /**
+     * One heading per olive, each in its own wedge of the circle, so on every
+     * load the six genuinely leave in six different directions.
+     *
+     * The wedges are shuffled before they're handed out and the whole fan is
+     * rotated by a random offset, so the arrangement differs from load to load
+     * without two olives ever sharing a heading. Jitter within a wedge is
+     * capped at half its width, which is what the previous version got wrong:
+     * it jittered by up to ~52deg across wedges only 60deg apart, so
+     * neighbours regularly collapsed onto the same bearing and the cluster
+     * read as drifting off as a pack.
+     */
+    function assignHeadings() {
+      const n = bodies.length
+      const wedge = (Math.PI * 2) / n
+      const offset = Math.random() * Math.PI * 2
+      const slots = bodies.map((_, i) => i)
+      for (let i = slots.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[slots[i], slots[j]] = [slots[j], slots[i]]
+      }
+      bodies.forEach((b, i) => {
+        const jitter = (Math.random() - 0.5) * wedge * 0.5
+        const angle = offset + slots[i] * wedge + jitter
+        b.vx = Math.cos(angle)
+        b.vy = Math.sin(angle)
+      })
     }
 
     /** Round page elements — the photo bubbles — as centre + radius. */
