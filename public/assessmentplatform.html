@@ -583,6 +583,19 @@ body::before{display:none;}
 }
 .chevron.open{transform:rotate(180deg);}
 .dlup-controls{display:inline-flex;align-items:center;gap:4px;}
+/* "Returned" tick in a measure header: the clinician marks that the client
+   has sent this questionnaire back and it is complete. Independent of the
+   score fields below, which are entered afterwards. */
+.recv-toggle{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--font-mono);font-size:11px;
+  padding:3px 10px 3px 7px;border-radius:50px;
+  background:var(--surface);color:var(--ink-muted);
+  box-shadow:var(--neu-in-sm);
+  white-space:nowrap;cursor:pointer;user-select:none;
+}
+.recv-toggle input{margin:0;cursor:pointer;accent-color:var(--success);}
+.recv-toggle.on{color:var(--success);font-weight:700;}
 .field-required{color:var(--danger);font-weight:700;}
 .btn-icon{
   width:26px;height:26px;padding:0;
@@ -2998,6 +3011,10 @@ function renderUniversal(){
 // ================================================================
 let selectedModules=[];
 let responses={};
+// Per-measure "the client returned this questionnaire and it is complete"
+// flags, keyed `mod_key`. Kept in state rather than read off the DOM because
+// renderMeasures() rebuilds every card from scratch.
+let measureReceived={};
 
 const intakeFormState={
   chiefComplaint:'',
@@ -3591,6 +3608,7 @@ function caseCapture(){
     intake:JSON.parse(JSON.stringify(intakeFormState)),
     selectedModules:selectedModules.slice(),
     responses:JSON.parse(JSON.stringify(responses)),
+    received:JSON.parse(JSON.stringify(measureReceived)),
     dom,
     notes
   };
@@ -3602,6 +3620,7 @@ function caseResetAll(){
   Object.keys(blank).forEach(k=>{ intakeFormState[k]=blank[k]; });
   selectedModules=[];
   responses={};
+  measureReceived={};
   caseEachDomField(el=>{
     if(el.type==='checkbox'||el.type==='radio')el.checked=false;
     else el.value='';
@@ -3673,6 +3692,7 @@ function caseLoadForActiveClient(){
       if(rec.intake)Object.keys(rec.intake).forEach(k=>{ intakeFormState[k]=rec.intake[k]; });
       if(Array.isArray(rec.selectedModules))selectedModules=rec.selectedModules.slice();
       if(rec.responses)responses=rec.responses;
+      if(rec.received)measureReceived=rec.received;
       if(rec.dom){
         Object.keys(rec.dom).forEach(id=>{
           const el=document.getElementById(id);
@@ -4123,6 +4143,33 @@ function tierTag(m){
   return '';
 }
 
+// Only measures the client or an informant fills in and sends back get the
+// tick. Reporter alone isn't enough: DIVA-5 and MIGDAS-2 are tagged "self"
+// but are clinician-conducted interviews, so the administered card types are
+// excluded explicitly.
+const ADMINISTERED_TYPES=['clinician','interview','diva5','answersheet'];
+function isSentToClient(m){
+  return (m.reporter==='self'||m.reporter==='other')&&!ADMINISTERED_TYPES.includes(m.type);
+}
+
+function receivedControl(mod,key,m){
+  if(!isSentToClient(m)) return '';
+  const mid=mod+'_'+key;
+  const on=!!measureReceived[mid];
+  return `<label class="recv-toggle${on?' on':''}" id="rcv_${mid}" title="Tick when the client has sent this questionnaire back and it is complete" onclick="event.stopPropagation()">
+    <input type="checkbox" id="rcb_${mid}"${on?' checked':''} onchange="toggleMeasureReceived('${mod}','${key}',this)">
+    Returned
+  </label>`;
+}
+
+function toggleMeasureReceived(mod,key,cb){
+  const mid=mod+'_'+key;
+  if(cb.checked) measureReceived[mid]=true; else delete measureReceived[mid];
+  const wrap=document.getElementById('rcv_'+mid);
+  if(wrap) wrap.classList.toggle('on',cb.checked);
+  caseScheduleSave();
+}
+
 function dlUploadControls(mod,key){
   const mid=mod+'_'+key;
   return `<span class="dlup-controls" onclick="event.stopPropagation()">
@@ -4161,6 +4208,7 @@ function buildMCard(mod,key,m){
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="score-badge" id="sb_${mid}">not started</span>
+        ${receivedControl(mod,key,m)}
         ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
@@ -4213,6 +4261,7 @@ function buildInterviewCard(mod,key,m){
         ${tierTag(m)}
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
+        ${receivedControl(mod,key,m)}
         ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
@@ -4291,6 +4340,7 @@ function buildAnswerSheetCard(mod,key,m){
         ${tierTag(m)}
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
+        ${receivedControl(mod,key,m)}
         ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
@@ -4489,6 +4539,7 @@ function buildDiva5Card(mod,key,m){
         ${tierTag(m)}
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
+        ${receivedControl(mod,key,m)}
         ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
@@ -4769,6 +4820,7 @@ function buildEntryCard(mod,key,m){
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         ${m.manualComplete?`<span class="score-badge" id="sb_${mid}">not started</span>`:''}
+        ${receivedControl(mod,key,m)}
         ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
@@ -4812,6 +4864,7 @@ function buildClinicianCard(mod,key,m){
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="score-badge" id="sb_${mid}">not started</span>
+        ${receivedControl(mod,key,m)}
         ${dlUploadControls(mod,key)}
         <span class="chevron" id="cv_${mid}">▼</span>
       </div>
