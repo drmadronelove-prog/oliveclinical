@@ -86,6 +86,7 @@ export function CouplesClassificationTool() {
 <input type="text" value={v.n2} onChange={v.setN2} placeholder="Sam" style={css("height: 44px; padding: 0 12px; border: 1px solid #e1e1e1; border-radius: 6px; background: #f3f3f3; color: #0b2545; font-size: 16px")} /></label>
 </div>
 <button type="button" onClick={v.start} style={css("align-self: flex-start; cursor: pointer; font-size: 15px; font-weight: 600; padding: 12px 22px; min-height: 44px; border-radius: 6px; border: 0; background: #c5a572; color: #0b2545")}>Start with {v.p1}</button>
+<button type="button" onClick={v.example} style={css("align-self: flex-start; cursor: pointer; font-size: 15px; font-weight: 500; padding: 12px 20px; min-height: 44px; border-radius: 6px; border: 1px solid rgba(11,37,69,.25); background: transparent; color: #0b2545")}>See an example first</button>
 <p style={css("margin: 0; font-size: 13px; color: #5b6e88")}>A conversation starter, not a diagnostic measure.</p>
 </div>
 </>)}
@@ -155,6 +156,12 @@ export function CouplesClassificationTool() {
 
 {v.s3 && (<>
 <div style={css("display: flex; flex-direction: column; gap: 64px")}>
+{v.isExample && (<>
+<div style={css("display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; padding: 18px 24px; border-radius: 16px; background: #0b2545; color: #f3f3f3")}>
+<p style={css("margin: 0; font-size: 16px; line-height: 1.5")}><strong style={css("font-weight: 600; color: #c5a572")}>Example results.</strong> This is a sample couple, Alex and Sam, so you can see what the results look like.</p>
+<button type="button" onClick={v.retake} style={css("cursor: pointer; font-size: 15px; font-weight: 600; padding: 12px 22px; min-height: 44px; border-radius: 6px; border: 0; background: #c5a572; color: #0b2545")}>Start your own</button>
+</div>
+</>)}
 
 <div style={css("display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; padding: 20px 24px; background: #ffffff; border: 1px solid rgba(11,37,69,.18); border-radius: 16px")}>
 <div style={css("display: flex; flex-wrap: wrap; gap: 12px 16px; flex: 1 1 480px")}>
