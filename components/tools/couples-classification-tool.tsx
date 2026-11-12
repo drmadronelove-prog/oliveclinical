@@ -63,7 +63,7 @@ export function CouplesClassificationTool() {
 
   return (
     <div id="couples-tool-top">
-<div style={css("position: relative; overflow: hidden; font-family: Geist, system-ui, sans-serif; color: #0b2545; background: #f3f3f3; padding: 72px 24px 80px; box-sizing: border-box; min-height: 100%")}>
+<div style={css("position: relative; overflow: hidden; font-family: Geist, system-ui, sans-serif; color: #0b2545; background-color: var(--paper); background-image: var(--bg-lines); padding: 72px 24px 80px; box-sizing: border-box; min-height: 100%")}>
 <div aria-hidden="true" style={css("position: absolute; top: -110px; right: -80px; width: 280px; height: 280px; border-radius: 9999px; background: #c5a572")}></div>
 <div aria-hidden="true" style={css("position: absolute; top: 120px; right: 150px; width: 72px; height: 72px; border-radius: 9999px; background: #c4877e")}></div>
 <div aria-hidden="true" style={css("position: absolute; top: 40px; right: 250px; width: 32px; height: 32px; border-radius: 9999px; background: #9fb3b0")}></div>
