@@ -417,6 +417,18 @@ const SCREENERS: FeatureCard[] = [
 
 // ── Page component ─────────────────────────────────────────────────────────────
 
+// ── Couples assessment ─────────────────────────────────────────────────────────
+
+const COUPLES: FeatureCard[] = [
+  {
+    kind: "link",
+    title: "Couples Classification Interactive Tool",
+    category: "50 questions per partner · Two primary partners",
+    footerLabel: "Start",
+    href: "/neurodiverse-relationships/couples-tool",
+  },
+]
+
 export function TestsCards() {
   return (
     <HoverProvider>
@@ -426,6 +438,12 @@ export function TestsCards() {
           subtitle="Interactive maps and matrices exploring the overlap of neurodivergent conditions and cognitive mechanisms."
           cards={TOOLS}
           color="#688E93"
+        />
+        <Section
+          title="Couples Assessment"
+          subtitle="How each partner moves under stress, where blame lands, how you react and recover, and how your two patterns fit together."
+          cards={COUPLES}
+          color="#7a4f6e"
         />
         <Section
           title="Questionnaires & Screeners"

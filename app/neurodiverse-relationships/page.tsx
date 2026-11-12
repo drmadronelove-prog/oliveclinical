@@ -10,6 +10,13 @@ export const metadata: Metadata = {
 const CARDS: FeatureCard[] = [
   {
     kind: "link",
+    title: "Couples Classification Interactive Tool",
+    category: "Interactive Tool · Couples",
+    footerLabel: "Start",
+    href: "/neurodiverse-relationships/couples-tool",
+  },
+  {
+    kind: "link",
     title: "Loving Across the Wiring",
     category: "Relationships & Neurodivergence",
     footerLabel: "Read",
