@@ -33,7 +33,7 @@ function css(str: string | undefined): CSSProperties {
 
 export function CouplesClassificationTool() {
   const [state, setFull] = useState<ToolState>(initialState)
-  const [toolUrl, setToolUrl] = useState("https://oliveclinical.com/couples-tool")
+  const [toolUrl, setToolUrl] = useState("https://oliveclinical.com/neurodiverse-relationships/couples-tool")
 
   const set = useCallback((patch: Partial<ToolState>) => {
     setFull((prev) => ({ ...prev, ...patch }))

@@ -13,7 +13,7 @@ const CARDS: FeatureCard[] = [
     title: "Couples Classification Interactive Tool",
     category: "Interactive Tool · Couples",
     footerLabel: "Start",
-    href: "/couples-tool",
+    href: "/neurodiverse-relationships/couples-tool",
   },
   {
     kind: "link",
