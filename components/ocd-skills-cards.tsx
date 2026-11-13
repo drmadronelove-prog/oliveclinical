@@ -63,10 +63,10 @@ const CARDS: FeatureCard[] = [
   },
   {
     kind: "link",
-    title: "Incoming Game",
-    category: "I-CBT · Thought Catching",
+    title: "Thought, Emotion, or Sensation? Game",
+    category: "ACT · Defusion",
     footerLabel: "Play",
-    href: "/games/moment-one-incoming.html",
+    href: "/games/thought-emotion-sensation.html",
   },
   {
     kind: "link",
@@ -77,10 +77,10 @@ const CARDS: FeatureCard[] = [
   },
   {
     kind: "link",
-    title: "Real News or Fake News? Game",
-    category: "I-CBT · Reality Testing",
+    title: "The Case of the Golden Owl",
+    category: "I-CBT · Evidence vs Imagination",
     footerLabel: "Play",
-    href: "/games/fake-news.html",
+    href: "/games/the-case-of-the-golden-owl.html",
   },
   {
     kind: "link",
