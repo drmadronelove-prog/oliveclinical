@@ -4,35 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Thought, Emotion, or Sensation?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f7f5f2;
-      --card: #ffffff;
-      --border: #e4e0da;
-      --shadow: 0 2px 20px rgba(0,0,0,0.07), 0 1px 5px rgba(0,0,0,0.04);
-      --text: #1c1814;
-      --text-soft: #6b6458;
-      --text-muted: #a09488;
-      --thought: #2563eb;
-      --thought-bg: #dbeafe;
-      --thought-border: #bfdbfe;
-      --emotion: #dc2626;
-      --emotion-bg: #fee2e2;
-      --emotion-border: #fecaca;
-      --sensation: #059669;
-      --sensation-bg: #d1fae5;
-      --sensation-border: #99f6e4;
-      --correct: #16a34a;
-      --correct-bg: #dcfce7;
-      --incorrect: #dc2626;
-      --incorrect-bg: #fee2e2;
-      --timer-normal: #3b82f6;
-      --timer-warn: #f59e0b;
-      --timer-crit: #ef4444;
-      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      --radius: 18px;
+      --bg: #0d0a18;
+      --card: #1a1330;
+      --border: #2c2148;
+      --shadow: 0 10px 34px rgba(0,0,0,0.45);
+      --text: #f3eefc;
+      --text-soft: #c3b7e0;
+      --text-muted: #8a7aad;
+      --thought: #ff2e88;
+      --thought-bg: rgba(255,46,136,0.12);
+      --thought-border: rgba(255,46,136,0.55);
+      --emotion: #00e5ff;
+      --emotion-bg: rgba(0,229,255,0.12);
+      --emotion-border: rgba(0,229,255,0.55);
+      --sensation: #ffe14d;
+      --sensation-bg: rgba(255,225,77,0.12);
+      --sensation-border: rgba(255,225,77,0.55);
+      --correct: #3cff9a;
+      --correct-bg: rgba(60,255,154,0.12);
+      --incorrect: #ff4d6a;
+      --incorrect-bg: rgba(255,77,106,0.12);
+      --timer-normal: #00e5ff;
+      --timer-warn: #ffe14d;
+      --timer-crit: #ff4d6a;
+      --font: 'Space Mono', 'Courier New', monospace;
+      --font-display: 'Silkscreen', 'Courier New', monospace;
+      --radius: 14px;
     }
 
     html, body {
@@ -41,6 +45,13 @@
       background: var(--bg);
       color: var(--text);
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-image:
+        radial-gradient(circle at 18% 12%, rgba(255,46,136,0.10), transparent 42%),
+        radial-gradient(circle at 84% 88%, rgba(0,229,255,0.10), transparent 42%);
     }
 
     #fx-canvas {
@@ -72,15 +83,15 @@
       html, body { overflow: auto; }
       #app { padding: 8px; align-items: flex-start; }
       .intro-card { padding: 22px 18px 20px !important; min-height: 0 !important; }
-      .slide-title { font-size: 19px !important; }
+      .slide-title { font-size: 17px !important; }
       .slide-prose { font-size: 13.5px !important; }
-      .game-title { font-size: 23px !important; }
+      .game-title { font-size: 21px !important; }
     }
 
     /* ─── INTRO ─── */
     .intro-card {
       background: var(--card);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 38px 34px 28px;
@@ -90,41 +101,45 @@
     }
     .slide-body { flex: 1; }
     .slide-tag {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.13em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 14px;
+      color: var(--sensation);
+      margin-bottom: 16px;
     }
     .slide-title {
-      font-size: 21px;
-      font-weight: 750;
-      line-height: 1.22;
-      margin-bottom: 14px;
-      letter-spacing: -0.3px;
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 18px;
+      letter-spacing: 0;
+      color: var(--text);
     }
     .slide-prose {
-      font-size: 14.5px;
-      line-height: 1.68;
-      color: #3d3830;
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--text-soft);
     }
-    .slide-prose p { margin-bottom: 11px; }
+    .slide-prose p { margin-bottom: 12px; }
     .slide-prose p:last-child { margin-bottom: 0; }
     .slide-prose em { font-style: italic; color: var(--text); }
-    .slide-prose strong { font-weight: 680; color: var(--text); }
+    .slide-prose strong { font-weight: 700; color: var(--text); }
 
-    .cat-defs { margin-top: 16px; display: flex; flex-direction: column; gap: 13px; }
-    .cat-def { display: flex; align-items: flex-start; gap: 11px; }
+    .cat-defs { margin-top: 18px; display: flex; flex-direction: column; gap: 14px; }
+    .cat-def { display: flex; align-items: flex-start; gap: 12px; }
     .cat-pill {
       width: 30px; height: 30px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800; flex-shrink: 0; margin-top: 1px;
+      font-family: var(--font-display);
+      font-size: 13px; flex-shrink: 0; margin-top: 1px;
+      border: 1.5px solid;
     }
-    .cat-pill.T { background: var(--thought-bg); color: var(--thought); }
-    .cat-pill.E { background: var(--emotion-bg); color: var(--emotion); }
-    .cat-pill.S { background: var(--sensation-bg); color: var(--sensation); }
-    .cat-def-body { font-size: 13.5px; line-height: 1.5; color: #3d3830; }
+    .cat-pill.T { background: var(--thought-bg); color: var(--thought); border-color: var(--thought-border); }
+    .cat-pill.E { background: var(--emotion-bg); color: var(--emotion); border-color: var(--emotion-border); }
+    .cat-pill.S { background: var(--sensation-bg); color: var(--sensation); border-color: var(--sensation-border); }
+    .cat-def-body { font-size: 13.5px; line-height: 1.55; color: var(--text-soft); }
     .cat-def-body strong { font-weight: 700; color: var(--text); }
 
     .intro-footer {
@@ -139,28 +154,31 @@
       background: var(--border);
       transition: all 0.22s ease;
     }
-    .dot.on { width: 18px; background: var(--text); }
+    .dot.on { width: 18px; background: var(--thought); box-shadow: 0 0 8px rgba(255,46,136,0.7); }
 
     .btn-row { display: flex; gap: 8px; }
     .btn-ghost {
       padding: 9px 16px; border-radius: 10px;
       border: 1.5px solid var(--border);
       background: transparent;
-      font-size: 13.5px; font-weight: 600;
+      font-size: 12.5px; font-weight: 700;
+      letter-spacing: 0.04em;
       color: var(--text-soft); cursor: pointer;
       font-family: var(--font);
       transition: border-color 0.12s, color 0.12s;
     }
-    .btn-ghost:hover { border-color: #c8c4be; color: var(--text); }
+    .btn-ghost:hover { border-color: var(--text-soft); color: var(--text); }
     .btn-solid {
       padding: 9px 20px; border-radius: 10px;
-      border: none; background: var(--text);
-      color: #fff;
-      font-size: 13.5px; font-weight: 600;
+      border: 2px solid var(--thought); background: var(--thought);
+      color: #1a0a12;
+      font-size: 12.5px; font-weight: 700;
+      letter-spacing: 0.04em;
       cursor: pointer; font-family: var(--font);
-      transition: background 0.12s, transform 0.1s;
+      box-shadow: 0 0 16px rgba(255,46,136,0.35);
+      transition: background 0.12s, transform 0.1s, box-shadow 0.12s;
     }
-    .btn-solid:hover { background: #2a2520; transform: translateY(-1px); }
+    .btn-solid:hover { transform: translateY(-1px); box-shadow: 0 0 22px rgba(255,46,136,0.55); }
 
     /* ─── START ─── */
     .start-wrap {
@@ -168,50 +186,62 @@
       align-items: center; gap: 22px; text-align: center;
     }
     .game-title {
-      font-size: 27px; font-weight: 800;
-      line-height: 1.15; letter-spacing: -0.5px;
+      font-family: var(--font-display);
+      font-size: 25px; font-weight: 400;
+      line-height: 1.55; letter-spacing: 0;
     }
+    .title-t { color: var(--thought); }
+    .title-e { color: var(--emotion); }
+    .title-s { color: var(--sensation); }
     .game-sub {
-      font-size: 13px; color: var(--text-soft);
-      margin-top: 5px; font-weight: 400;
+      font-size: 12px; color: var(--text-muted);
+      margin-top: 8px; font-weight: 400;
+      letter-spacing: 0.02em;
     }
     .cat-tiles { display: flex; gap: 9px; width: 100%; }
     .cat-tile {
       flex: 1; padding: 18px 10px 14px;
-      border-radius: 14px; border: 1.5px solid;
+      border-radius: var(--radius); border: 2px solid;
+      background: var(--card);
       display: flex; flex-direction: column;
-      align-items: center; gap: 5px;
+      align-items: center; gap: 6px;
     }
-    .cat-tile.T { background: var(--thought-bg); border-color: var(--thought-border); }
-    .cat-tile.E { background: var(--emotion-bg); border-color: var(--emotion-border); }
-    .cat-tile.S { background: var(--sensation-bg); border-color: var(--sensation-border); }
+    .cat-tile.T { border-color: var(--thought-border); box-shadow: 0 0 18px rgba(255,46,136,0.12); }
+    .cat-tile.E { border-color: var(--emotion-border); box-shadow: 0 0 18px rgba(0,229,255,0.12); }
+    .cat-tile.S { border-color: var(--sensation-border); box-shadow: 0 0 18px rgba(255,225,77,0.12); }
     .tile-key {
-      font-size: 27px; font-weight: 900; line-height: 1;
+      font-family: var(--font-display);
+      font-size: 24px; line-height: 1;
     }
-    .cat-tile.T .tile-key { color: var(--thought); }
-    .cat-tile.E .tile-key { color: var(--emotion); }
-    .cat-tile.S .tile-key { color: var(--sensation); }
-    .tile-name { font-size: 11px; font-weight: 600; color: var(--text-soft); }
-    .kb-hint { font-size: 12.5px; color: var(--text-muted); }
+    .cat-tile.T .tile-key { color: var(--thought); text-shadow: 0 0 12px rgba(255,46,136,0.6); }
+    .cat-tile.E .tile-key { color: var(--emotion); text-shadow: 0 0 12px rgba(0,229,255,0.6); }
+    .cat-tile.S .tile-key { color: var(--sensation); text-shadow: 0 0 12px rgba(255,225,77,0.6); }
+    .tile-name {
+      font-size: 10.5px; font-weight: 700; color: var(--text-soft);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .kb-hint { font-size: 12px; color: var(--text-muted); }
     kbd {
-      background: #e6e2dd; border-radius: 4px;
-      padding: 2px 5px; font-size: 11.5px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px; font-size: 11px;
       font-weight: 700; color: var(--text);
       font-family: var(--font);
     }
     .btn-start {
-      width: 100%; padding: 15px;
-      border-radius: 13px; border: none;
-      background: var(--text); color: #fff;
-      font-size: 16px; font-weight: 700;
-      cursor: pointer; font-family: var(--font);
-      letter-spacing: 0.01em;
+      width: 100%; padding: 16px;
+      border-radius: var(--radius); border: none;
+      background: var(--thought); color: #1a0a12;
+      font-family: var(--font-display);
+      font-size: 15px; font-weight: 400;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 24px rgba(255,46,136,0.4);
       transition: background 0.12s, transform 0.1s, box-shadow 0.12s;
     }
     .btn-start:hover {
-      background: #2a2520;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+      transform: translateY(-2px);
+      box-shadow: 0 0 32px rgba(255,46,136,0.6);
     }
 
     /* ─── GAME ─── */
@@ -219,43 +249,50 @@
       display: flex; justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
-      font-size: 13px; font-weight: 600;
+      padding-right: 44px;
+      font-size: 12.5px; font-weight: 700;
+      letter-spacing: 0.03em;
     }
-    .q-counter { color: var(--text-soft); }
+    .q-counter { color: var(--text-muted); }
     .score-row {
-      display: flex; align-items: center; gap: 7px;
+      display: flex; align-items: center; gap: 8px;
     }
     .score-pts { color: var(--text); }
     .streak-chip {
-      background: #fff3cd;
-      color: #92400e;
-      padding: 2px 8px; border-radius: 20px;
-      font-size: 12px; font-weight: 700;
+      background: rgba(255,225,77,0.14);
+      border: 1px solid rgba(255,225,77,0.4);
+      color: var(--sensation);
+      padding: 2px 9px; border-radius: 20px;
+      font-size: 11.5px; font-weight: 700;
     }
 
     .timer-track {
-      height: 4px; background: #e8e3dd;
-      border-radius: 2px; margin-bottom: 16px; overflow: hidden;
+      height: 5px; background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px; margin-bottom: 16px; overflow: hidden;
     }
     .timer-fill {
       height: 100%; border-radius: 2px;
       background: var(--timer-normal);
-      transition: width 0.1s linear, background 0.25s;
+      box-shadow: 0 0 10px var(--timer-normal);
+      transition: width 0.1s linear, background 0.25s, box-shadow 0.25s;
       width: 100%;
     }
-    .timer-fill.warn { background: var(--timer-warn); }
+    .timer-fill.warn { background: var(--timer-warn); box-shadow: 0 0 10px var(--timer-warn); }
     @keyframes critPulse {
       0%,100% { opacity: 1; }
       50% { opacity: 0.35; }
     }
     .timer-fill.crit {
       background: var(--timer-crit);
+      box-shadow: 0 0 12px var(--timer-crit);
       animation: critPulse 0.32s ease-in-out infinite;
     }
 
     .phrase-card {
+      position: relative;
       background: var(--card);
-      border: 1.5px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 32px 24px;
@@ -264,27 +301,51 @@
       min-height: 130px;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      transition: border-color 0.18s, box-shadow 0.18s;
+      transition: border-color 0.18s, box-shadow 0.18s, opacity 0.3s ease;
     }
     .phrase-card.border-crit {
-      border-color: #fca5a5;
-      box-shadow: 0 0 0 3px rgba(239,68,68,0.1), var(--shadow);
+      border-color: var(--incorrect);
+      box-shadow: 0 0 0 3px rgba(255,77,106,0.15), var(--shadow);
     }
     .phrase-card.border-correct {
-      border-color: #86efac;
-      box-shadow: 0 0 0 3px rgba(34,197,94,0.12), var(--shadow);
+      border-color: var(--correct);
+      box-shadow: 0 0 0 3px rgba(60,255,154,0.18), var(--shadow);
     }
     .phrase-card.border-wrong {
-      border-color: #fca5a5;
+      border-color: var(--incorrect);
+    }
+    /* The "hero card" actually vanishes the instant it shatters -- the
+       flying shard pieces are all that's left on screen -- then fades
+       back in once the debris has finished flying. */
+    .phrase-card.card-hidden {
+      opacity: 0;
+      transition: opacity 0.08s ease-out;
+      pointer-events: none;
+    }
+    /* Shard debris flying off the card on a correct answer */
+    .shatter-layer {
+      position: fixed;
+      pointer-events: none;
+      z-index: 30;
+    }
+    .shatter-piece {
+      position: absolute;
+      box-sizing: border-box;
+      will-change: transform, opacity;
+      animation: shardFly 0.75s cubic-bezier(.15,.6,.3,1) forwards;
+    }
+    @keyframes shardFly {
+      0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
     }
     .phrase-text {
-      font-size: 21px; font-weight: 650;
-      line-height: 1.32; letter-spacing: -0.15px;
+      font-size: 20px; font-weight: 700;
+      line-height: 1.4; letter-spacing: -0.1px;
       color: var(--text);
     }
     .feedback-line {
-      margin-top: 10px;
-      font-size: 13px; line-height: 1.55;
+      margin-top: 12px;
+      font-size: 13px; line-height: 1.6;
       color: var(--text-soft);
       max-width: 330px;
       display: none;
@@ -293,48 +354,49 @@
     .ans-row { display: flex; gap: 9px; }
     .ans-btn {
       flex: 1; padding: 14px 8px 11px;
-      border-radius: 13px; border: 1.5px solid;
+      border-radius: var(--radius); border: 2px solid;
       background: var(--card); cursor: pointer;
       font-family: var(--font);
       display: flex; flex-direction: column;
-      align-items: center; gap: 3px;
+      align-items: center; gap: 4px;
       transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
     }
     .ans-btn:not(:disabled):hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.09);
     }
     .ans-btn:not(:disabled):active { transform: translateY(0); }
     .ans-btn:disabled { cursor: default; }
 
     .ans-btn.T { border-color: var(--thought-border); color: var(--thought); }
-    .ans-btn.T:not(:disabled):hover { background: var(--thought-bg); }
+    .ans-btn.T:not(:disabled):hover { background: var(--thought-bg); box-shadow: 0 0 18px rgba(255,46,136,0.3); }
     .ans-btn.E { border-color: var(--emotion-border); color: var(--emotion); }
-    .ans-btn.E:not(:disabled):hover { background: var(--emotion-bg); }
+    .ans-btn.E:not(:disabled):hover { background: var(--emotion-bg); box-shadow: 0 0 18px rgba(0,229,255,0.3); }
     .ans-btn.S { border-color: var(--sensation-border); color: var(--sensation); }
-    .ans-btn.S:not(:disabled):hover { background: var(--sensation-bg); }
+    .ans-btn.S:not(:disabled):hover { background: var(--sensation-bg); box-shadow: 0 0 18px rgba(255,225,77,0.3); }
 
     .ans-btn.state-correct {
       background: var(--correct-bg) !important;
-      border-color: #4ade80 !important;
+      border-color: var(--correct) !important;
       color: var(--correct) !important;
+      box-shadow: 0 0 20px rgba(60,255,154,0.35) !important;
     }
     .ans-btn.state-wrong {
       background: var(--incorrect-bg) !important;
-      border-color: #f87171 !important;
+      border-color: var(--incorrect) !important;
       color: var(--incorrect) !important;
+      box-shadow: 0 0 20px rgba(255,77,106,0.35) !important;
     }
 
-    .btn-letter { font-size: 22px; font-weight: 900; line-height: 1; }
+    .btn-letter { font-family: var(--font-display); font-size: 20px; line-height: 1; }
     .btn-word {
-      font-size: 10.5px; font-weight: 600;
-      letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.8;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.85;
     }
 
     /* ─── END ─── */
     .end-card {
       background: var(--card);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 44px 34px 36px;
@@ -343,51 +405,55 @@
       align-items: center; gap: 14px;
     }
     .end-label {
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.13em; text-transform: uppercase;
-      color: var(--text-muted);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--sensation);
     }
     .final-score {
-      font-size: 68px; font-weight: 900;
-      line-height: 1; letter-spacing: -3px;
+      font-family: var(--font-display);
+      font-size: 56px; font-weight: 400;
+      line-height: 1; letter-spacing: -1px;
       color: var(--text);
+      text-shadow: 0 0 28px rgba(255,46,136,0.5);
     }
     .end-chips { display: flex; gap: 14px; }
     .end-chip {
-      background: var(--bg); border-radius: 10px;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
       padding: 10px 18px; text-align: center;
     }
     .chip-num {
       display: block;
-      font-size: 20px; font-weight: 800;
-      color: var(--text); line-height: 1; margin-bottom: 3px;
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--emotion); line-height: 1; margin-bottom: 5px;
     }
-    .chip-lbl { font-size: 11.5px; color: var(--text-muted); font-weight: 500; }
+    .chip-lbl { font-size: 11px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.03em; }
     .end-msg {
-      font-size: 15px; line-height: 1.58;
+      font-size: 14.5px; line-height: 1.6;
       color: var(--text-soft); max-width: 300px;
     }
     .btn-again {
-      width: 100%; padding: 15px;
-      border-radius: 13px; border: none;
-      background: var(--text); color: #fff;
-      font-size: 15.5px; font-weight: 700;
-      cursor: pointer; font-family: var(--font);
+      width: 100%; padding: 16px;
+      border-radius: var(--radius); border: none;
+      background: var(--thought); color: #1a0a12;
+      font-family: var(--font-display);
+      font-size: 14.5px; font-weight: 400;
+      cursor: pointer;
       margin-top: 6px;
+      box-shadow: 0 0 24px rgba(255,46,136,0.4);
       transition: background 0.12s, transform 0.1s, box-shadow 0.12s;
     }
     .btn-again:hover {
-      background: #2a2520;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+      transform: translateY(-2px);
+      box-shadow: 0 0 32px rgba(255,46,136,0.6);
     }
 
     @media (max-width: 400px) {
       .intro-card { padding: 26px 20px 22px; }
-      .slide-title { font-size: 19px; }
-      .phrase-text { font-size: 18px; }
-      .game-title { font-size: 23px; }
-      .final-score { font-size: 52px; }
+      .slide-title { font-size: 16px; }
+      .phrase-text { font-size: 17px; }
+      .game-title { font-size: 20px; }
+      .final-score { font-size: 44px; }
     }
     @media (max-height: 620px) {
       .intro-card { min-height: unset; padding: 22px 24px 20px; }
@@ -403,27 +469,207 @@
       top: 14px; right: 14px;
       width: 36px; height: 36px;
       border-radius: 50%;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.9);
+      border: 1.5px solid var(--border);
+      background: rgba(26,19,48,0.85);
       backdrop-filter: blur(8px);
       cursor: pointer;
       font-size: 15px;
       display: flex; align-items: center; justify-content: center;
       z-index: 500;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.3);
       color: var(--text-soft);
-      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.15s;
       padding: 0;
       line-height: 1;
     }
-    #music-btn:hover { background: #fff; border-color: #c8c4be; transform: scale(1.05); }
+    #music-btn:hover { border-color: var(--thought); color: var(--thought); transform: scale(1.05); box-shadow: 0 0 14px rgba(255,46,136,0.4); }
     #music-btn.muted { color: var(--text-muted); }
     #music-btn title { display: none; }
+
+    /* ─── ROUND 2 BANNER (on the round-1 recap screen) ─── */
+    .round2-banner {
+      width: 100%;
+      margin: 6px 0 4px;
+      padding: 16px 18px;
+      border: 1.5px dashed var(--emotion-border);
+      border-radius: 12px;
+      background: var(--emotion-bg);
+      text-align: left;
+    }
+    .round2-tag {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--emotion); margin-bottom: 5px;
+    }
+    .round2-title {
+      font-family: var(--font-display);
+      font-size: 17px; color: var(--text);
+      margin-bottom: 9px;
+    }
+    .round2-desc {
+      font-size: 12.5px; line-height: 1.65;
+      color: var(--text-soft);
+    }
+    .round2-desc kbd { margin: 0 1px; }
+
+    /* ─── DUCK HUNT ─── */
+    .duck-sky {
+      position: relative;
+      height: 360px;
+      overflow: hidden;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      background: #5c94fc;
+      cursor: crosshair;
+    }
+    .duck-scenery {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      display: block;
+      pointer-events: none;
+    }
+
+    .duck {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      /* Declared here (not just on .hit/.wrong) so the fall actually
+         animates -- a transition introduced in the same class toggle
+         that also changes the value never gets a "before" frame to
+         interpolate from. */
+      transition: top 0.55s cubic-bezier(.4,0,1,1), opacity 0.4s ease 0.3s;
+    }
+    /* Bob and flip live on separate wrappers so the on-body sign bobs
+       together with the artwork instead of drifting apart from it. */
+    .duck-bob {
+      position: relative;
+      animation: duckBob 0.55s steps(2) infinite alternate;
+    }
+    .duck-flip {
+      transform: scaleX(1);
+      filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.25));
+    }
+    .duck.facing-left .duck-flip { transform: scaleX(-1); }
+    .duck-art { width: 108px; height: auto; display: block; }
+    @keyframes duckBob {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-7px); }
+    }
+
+    /* Classic comic thought bubble, floating above the duck's head */
+    .duck-thought {
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      margin-bottom: 8px;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+    }
+    .duck-thought-bubble {
+      background: rgba(255,255,255,0.97);
+      border: 2px solid rgba(13,10,24,0.4);
+      border-radius: 14px;
+      padding: 5px 8px;
+      font-size: 10px; font-weight: 700;
+      line-height: 1.28;
+      color: #1a1330;
+      width: 92px;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.32);
+    }
+    .duck-thought-dots {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      margin-top: 3px;
+    }
+    .duck-thought-dots span {
+      display: block;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.97);
+      border: 1.5px solid rgba(13,10,24,0.4);
+    }
+    .duck-thought-dots span:nth-child(1) { width: 9px; height: 9px; }
+    .duck-thought-dots span:nth-child(2) { width: 5px; height: 5px; }
+
+    /* Both a correct hit and a wrong-category hit knock the duck down --
+       every shot clearly connects. Only the flash color differs. */
+    .duck.hit, .duck.wrong {
+      opacity: 0;
+    }
+    .duck.hit .duck-bob, .duck.wrong .duck-bob { animation: none; }
+    .duck.hit .duck-flip, .duck.wrong .duck-flip {
+      transform: rotate(30deg);
+    }
+    .duck.facing-left.hit .duck-flip, .duck.facing-left.wrong .duck-flip {
+      transform: scaleX(-1) rotate(-30deg);
+    }
+    .duck.hit .duck-thought, .duck.wrong .duck-thought { opacity: 0; transition: opacity 0.15s; }
+    .duck.hit::after, .duck.wrong::after {
+      content: '';
+      position: absolute; inset: -16px;
+      border-radius: 50%;
+      animation: hitFlash 0.4s ease-out forwards;
+    }
+    .duck.hit::after { background: radial-gradient(circle, rgba(60,255,154,0.55), transparent 70%); }
+    .duck.wrong::after { background: radial-gradient(circle, rgba(255,77,106,0.55), transparent 70%); }
+    @keyframes hitFlash {
+      0%   { opacity: 1; transform: scale(0.6); }
+      100% { opacity: 0; transform: scale(1.6); }
+    }
+
+    /* Reticle flash marking exactly where a shot landed */
+    .shot-crosshair {
+      position: absolute;
+      width: 44px; height: 44px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 6;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255,255,255,0.7);
+      animation: crosshairPop 0.35s ease-out forwards;
+    }
+    .shot-crosshair::before, .shot-crosshair::after {
+      content: '';
+      position: absolute;
+      background: #fff;
+      box-shadow: 0 0 6px rgba(255,255,255,0.8);
+    }
+    .shot-crosshair::before { left: 50%; top: -6px; bottom: -6px; width: 2px; transform: translateX(-50%); }
+    .shot-crosshair::after { top: 50%; left: -6px; right: -6px; height: 2px; transform: translateY(-50%); }
+    .shot-crosshair.wrong { border-color: var(--incorrect); box-shadow: 0 0 10px rgba(255,77,106,0.7); }
+    .shot-crosshair.wrong::before, .shot-crosshair.wrong::after {
+      background: var(--incorrect); box-shadow: 0 0 6px rgba(255,77,106,0.8);
+    }
+    @keyframes crosshairPop {
+      0%   { transform: translate(-50%, -50%) scale(1.9); opacity: 0; }
+      35%  { opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(0.75); opacity: 0; }
+    }
+
+    @media (max-width: 400px) {
+      .duck-sky { height: 300px; }
+      .duck-art { width: 84px; }
+      .duck-thought-bubble { font-size: 9px; width: 78px; }
+    }
+    @media (max-height: 620px) {
+      .duck-sky { height: 240px; margin-bottom: 12px; }
+      .duck-art { width: 78px; }
+    }
   </style>
 </head>
 <body>
 
 <canvas id="fx-canvas"></canvas>
+<audio id="music-quiz" src="monume-retro-arcade-game-music-2-498031.mp3" loop preload="auto"></audio>
+<audio id="music-duckhunt" src="monume-american-western-country-576992.mp3" loop preload="auto"></audio>
+<audio id="sfx-explosion" src="freesound_community-my-first-recorded-explosion-103816.mp3" preload="auto"></audio>
+<audio id="sfx-quack" src="freesound_community-075176_duck-quack-40345.mp3" preload="auto"></audio>
 <button id="music-btn" onclick="AudioEngine.toggle()" title="Toggle music" aria-label="Toggle music">♪</button>
 
 <div id="app">
@@ -450,7 +696,7 @@
   <div id="screen-start" class="screen">
     <div class="start-wrap">
       <div>
-        <div class="game-title">Thought, Emotion,<br>or Sensation?</div>
+        <div class="game-title"><span class="title-t">Thought</span>, <span class="title-e">Emotion</span>,<br>or <span class="title-s">Sensation</span>?</div>
         <div class="game-sub">12 rounds &nbsp;·&nbsp; identify the prompt &nbsp;·&nbsp; beat the clock</div>
       </div>
       <div class="cat-tiles">
@@ -521,6 +767,73 @@
       </div>
       <div class="end-msg" id="end-msg"></div>
       <button class="btn-again" onclick="restartGame()">Play Again</button>
+    </div>
+  </div>
+
+  <!-- ── ROUND 2 INTRO ── -->
+  <div id="screen-round2-intro" class="screen">
+    <div class="end-card">
+      <div class="end-label">Round 1 Complete</div>
+      <div class="final-score" id="r1-score">0</div>
+      <div class="end-chips">
+        <div class="end-chip">
+          <span class="chip-num" id="r1-correct">0</span>
+          <span class="chip-lbl">correct</span>
+        </div>
+        <div class="end-chip">
+          <span class="chip-num" id="r1-streak">0</span>
+          <span class="chip-lbl">best streak</span>
+        </div>
+      </div>
+      <div class="round2-banner">
+        <div class="round2-tag">Round 2</div>
+        <div class="round2-title">Duck Hunt</div>
+        <div class="round2-desc">
+          A thought, emotion, or sensation flies by on a sign. Read it, then
+          shoot <kbd>T</kbd> <kbd>E</kbd> <kbd>S</kbd> before it gets away.
+        </div>
+      </div>
+      <button class="btn-again" onclick="startRound2()">Start Round 2</button>
+    </div>
+  </div>
+
+  <!-- ── DUCK HUNT ── -->
+  <div id="screen-duckhunt" class="screen">
+    <div class="game-header">
+      <span class="q-counter" id="duck-counter">Duck 1 / 10</span>
+      <div class="score-row">
+        <span class="score-pts" id="duck-score-pts">0 pts</span>
+        <span class="streak-chip" id="duck-streak-chip" style="display:none">🔥 ×2</span>
+      </div>
+    </div>
+    <div class="duck-sky" id="duck-sky">
+      <svg class="duck-scenery" viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <rect x="0" y="0" width="400" height="300" fill="#5c94fc"/>
+        <rect x="55" y="140" width="14" height="90" fill="#7a3b1e"/>
+        <circle cx="62" cy="110" r="34" fill="#8bc24a"/>
+        <circle cx="34" cy="150" r="26" fill="#7cb63f"/>
+        <circle cx="92" cy="165" r="26" fill="#7cb63f"/>
+        <circle cx="62" cy="180" r="24" fill="#6ba934"/>
+        <circle cx="330" cy="235" r="22" fill="#7cb63f"/>
+        <circle cx="352" cy="240" r="16" fill="#6ba934"/>
+        <rect x="0" y="248" width="400" height="30" fill="#9ed14f"/>
+        <rect x="0" y="248" width="400" height="6" fill="#c8ea8a"/>
+        <rect x="0" y="278" width="400" height="22" fill="#8a5a2e"/>
+      </svg>
+    </div>
+    <div class="ans-row">
+      <button class="ans-btn T" id="duck-btn-T" onclick="handleDuckShot('T')">
+        <span class="btn-letter">T</span>
+        <span class="btn-word">Thought</span>
+      </button>
+      <button class="ans-btn E" id="duck-btn-E" onclick="handleDuckShot('E')">
+        <span class="btn-letter">E</span>
+        <span class="btn-word">Emotion</span>
+      </button>
+      <button class="ans-btn S" id="duck-btn-S" onclick="handleDuckShot('S')">
+        <span class="btn-letter">S</span>
+        <span class="btn-word">Sensation</span>
+      </button>
     </div>
   </div>
 
@@ -704,10 +1017,12 @@ function shuffle(arr) {
 
 function startGame() {
   AudioEngine.init();
+  AudioEngine.setTrack('quiz');
   AudioEngine.startMusic();
   AudioEngine.sfxStart();
   round = shuffle(POOL).slice(0, 12);
   qIndex = 0; score = 0; streak = 0; maxStreak = 0; correctCount = 0;
+  ducks = []; duckIndex = 0; duckActive = false; duckEl = null;
   showScreen('screen-game');
   loadQuestion();
 }
@@ -855,9 +1170,14 @@ function handleAnswer(choice) {
 
     syncStreakChip();
 
-    // Fire explosion using pre-cached coords
+    // Fire explosion using pre-cached coords -- the hero card blows apart in sync
     runExplosion(cachedCoords.x, cachedCoords.y);
-    AudioEngine.sfxCorrect();
+    shatterCard(card); // spawn the flying debris first, while the card is still visible to copy
+    card.classList.add('card-hidden'); // the card vanishes and stays gone -- loadQuestion() resets
+                                        // this class when the next phrase is ready, so the old
+                                        // (already-answered) card never reappears in the meantime
+    AudioEngine.sfxExplosion();
+    AudioEngine.sfxCorrect(streak);
 
     advTimer = setTimeout(nextQuestion, 3500);
 
@@ -889,21 +1209,214 @@ function syncStreakChip() {
 
 function nextQuestion() {
   qIndex++;
-  if (qIndex >= 12) endGame();
+  if (qIndex >= 12) endRound1();
   else loadQuestion();
 }
 
-function endGame() {
+function endRound1() {
+  showScreen('screen-round2-intro');
+  document.getElementById('r1-score').textContent = score;
+  document.getElementById('r1-correct').textContent = correctCount;
+  document.getElementById('r1-streak').textContent = maxStreak;
+  AudioEngine.sfxEnd();
+}
+
+// ──────────────────────────────────────
+//  ROUND 2: DUCK HUNT
+//  Same three categories, but each phrase flies across the
+//  sky on a sign and has to be shot down before it escapes.
+// ──────────────────────────────────────
+const DUCK_COUNT = 16; // 2 more than the 14-duck round
+// Pixel-art duck, wings swept back mid-flight -- drawn facing right by default.
+const DUCK_SVG = `<svg class="duck-art" viewBox="0 0 40 22" shape-rendering="crispEdges">
+  <rect x="1" y="12" width="4" height="3" fill="#161616"/>
+  <rect x="4" y="10" width="3" height="3" fill="#161616"/>
+
+  <rect x="10" y="10" width="15" height="8" fill="#fdfdfd"/>
+  <rect x="7" y="12" width="4" height="5" fill="#fdfdfd"/>
+  <rect x="23" y="8" width="4" height="6" fill="#fdfdfd"/>
+  <rect x="12" y="8" width="9" height="3" fill="#fdfdfd"/>
+  <rect x="10" y="17" width="11" height="2" fill="#fdfdfd"/>
+
+  <rect x="9" y="7" width="11" height="4" fill="#161616"/>
+  <rect x="7" y="10" width="6" height="3" fill="#161616"/>
+  <rect x="18" y="6" width="4" height="3" fill="#161616"/>
+  <rect x="6" y="12" width="2" height="2" fill="#161616"/>
+
+  <rect x="25" y="4" width="8" height="8" fill="#2e8b3d"/>
+  <rect x="27" y="2" width="4" height="3" fill="#2e8b3d"/>
+  <rect x="25" y="12" width="5" height="2" fill="#2e8b3d"/>
+
+  <rect x="29" y="6" width="2" height="2" fill="#fdfdfd"/>
+  <rect x="30" y="6" width="1" height="1" fill="#161616"/>
+
+  <rect x="33" y="6" width="4" height="3" fill="#e8791a"/>
+
+  <rect x="15" y="18" width="2" height="2" fill="#e8791a"/>
+  <rect x="18" y="18" width="2" height="2" fill="#e8791a"/>
+</svg>`;
+
+let ducks = [];
+let duckIndex = 0;
+let duckActive = false;
+let duckEl = null;
+let duckSpawnTime = 0;
+let duckEscapeTimer = null;
+let duckAdvanceTimer = null;
+
+function clearDucks() {
+  document.getElementById('duck-sky').querySelectorAll('.duck, .shot-crosshair').forEach(n => n.remove());
+}
+
+function startRound2() {
+  AudioEngine.init();
+  AudioEngine.setTrack('duckhunt');
+  AudioEngine.sfxStart();
+  ducks = shuffle(POOL).slice(0, DUCK_COUNT);
+  duckIndex = 0;
+  clearDucks();
+  showScreen('screen-duckhunt');
+  spawnNextDuck();
+}
+
+function updateDuckHUD() {
+  document.getElementById('duck-counter').textContent = `Duck ${Math.min(duckIndex + 1, DUCK_COUNT)} / ${DUCK_COUNT}`;
+  document.getElementById('duck-score-pts').textContent = `${score} pts`;
+  const chip = document.getElementById('duck-streak-chip');
+  chip.style.display = streak >= 2 ? '' : 'none';
+  if (streak >= 2) chip.textContent = `🔥 ×${streak}`;
+}
+
+function spawnNextDuck() {
+  if (duckEscapeTimer) clearTimeout(duckEscapeTimer);
+  if (duckAdvanceTimer) clearTimeout(duckAdvanceTimer);
+  clearDucks();
+
+  if (duckIndex >= DUCK_COUNT) { endRound2(); return; }
+  updateDuckHUD();
+
+  const q = ducks[duckIndex];
+  const sky = document.getElementById('duck-sky');
+  const fromLeft = Math.random() < 0.5;
+  const topPct = 30 + Math.random() * 42; // leaves headroom for the thought bubble above
+  let duration = Math.max(4500, 6500 - duckIndex * 120); // slow and steady, gentle ramp
+  const extensionStart = DUCK_COUNT - Math.round(DUCK_COUNT * 0.2); // last 20% of the round
+  if (duckIndex >= extensionStart) duration *= 0.8; // 20% faster through the extension
+
+  const el = document.createElement('div');
+  el.className = 'duck' + (fromLeft ? '' : ' facing-left');
+  el.innerHTML = `<div class="duck-bob"><div class="duck-thought"><div class="duck-thought-bubble"></div><div class="duck-thought-dots"><span></span><span></span></div></div><div class="duck-flip">${DUCK_SVG}</div></div>`;
+  el.querySelector('.duck-thought-bubble').textContent = q.text;
+  el.style.top = topPct + '%';
+  el.style.left = fromLeft ? '-15%' : '115%';
+  sky.appendChild(el);
+
+  // Force layout so the flight transition starts from the spawn edge
+  void el.offsetWidth;
+  el.style.transition = `left ${duration}ms linear`;
+  requestAnimationFrame(() => {
+    el.style.left = fromLeft ? '115%' : '-15%';
+  });
+
+  duckEl = el;
+  duckActive = true;
+  duckSpawnTime = performance.now();
+  AudioEngine.sfxWhoosh();
+
+  duckEscapeTimer = setTimeout(() => {
+    if (duckActive) duckEscape();
+  }, duration + 80);
+}
+
+function freezeDuck(el) {
+  const sky = document.getElementById('duck-sky');
+  const skyRect = sky.getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+  const centerX = r.left + r.width / 2 - skyRect.left;
+  const pct = Math.max(-20, Math.min(120, (centerX / skyRect.width) * 100));
+  el.style.transition = 'none';
+  el.style.left = pct + '%';
+  void el.offsetWidth;
+  el.style.transition = ''; // release the override -- the fall (top/opacity) still needs to animate
+  return pct;
+}
+
+function showCrosshair(sky, leftPct, topPct, wrong) {
+  const c = document.createElement('div');
+  c.className = 'shot-crosshair' + (wrong ? ' wrong' : '');
+  c.style.left = leftPct + '%';
+  c.style.top = topPct + '%';
+  sky.appendChild(c);
+  setTimeout(() => c.remove(), 400);
+}
+
+function duckEscape() {
+  if (!duckActive) return;
+  duckActive = false;
+  streak = 0;
+  updateDuckHUD();
+  AudioEngine.sfxWrong();
+  // Let the duck's own flight finish carrying it off-screen -- it got away.
+  duckAdvanceTimer = setTimeout(() => { duckIndex++; spawnNextDuck(); }, 350);
+}
+
+function handleDuckShot(choice) {
+  if (!duckActive || !duckEl) return;
+
+  const q = ducks[duckIndex];
+  const correct = choice === q.cat;
+  duckActive = false;
+  if (duckEscapeTimer) clearTimeout(duckEscapeTimer);
+
+  const target = duckEl;
+  const shotLeftPct = freezeDuck(target);
+  const shotTopPct = parseFloat(target.style.top);
+  showCrosshair(document.getElementById('duck-sky'), shotLeftPct, shotTopPct, !correct);
+  AudioEngine.sfxQuack(); // it got hit either way -- right or wrong category
+
+  if (correct) {
+    streak++;
+    if (streak > maxStreak) maxStreak = streak;
+    correctCount++;
+
+    const elapsed = performance.now() - duckSpawnTime;
+    const speedBonus = Math.max(0, 1 - elapsed / 2600);
+    const base = Math.round(60 + 80 * speedBonus);
+    const bonus = streak >= 2 ? Math.min(4, streak - 1) * 10 : 0;
+    score += base + bonus;
+
+    target.classList.add('hit');
+    void target.offsetWidth; // establish the pre-fall frame so the transition actually animates
+    const r = target.getBoundingClientRect();
+    target.style.top = 'calc(100% + 50px)';
+
+    runFeathers(r.left + r.width / 2, r.top + r.height / 2);
+    AudioEngine.sfxCorrect(streak);
+  } else {
+    // Still a hit -- you fired and connected -- just the wrong category.
+    streak = 0;
+    target.classList.add('wrong');
+    void target.offsetWidth; // same fix -- otherwise the fall jumps straight to its end state
+    target.style.top = 'calc(100% + 50px)';
+    AudioEngine.sfxWrong();
+  }
+
+  updateDuckHUD();
+  duckAdvanceTimer = setTimeout(() => { duckIndex++; spawnNextDuck(); }, 700);
+}
+
+function endRound2() {
   showScreen('screen-end');
   document.getElementById('final-score').textContent = score;
   document.getElementById('chip-correct').textContent = correctCount;
   document.getElementById('chip-streak').textContent = maxStreak;
 
+  const total = 12 + DUCK_COUNT;
   let msg;
-  if (correctCount >= 10) msg = "Excellent work. These distinctions are starting to feel second nature -- that's exactly the goal.";
-  else if (correctCount >= 7) msg = "Solid work. You're building a strong foundation. A little more practice and these will click right away.";
-  else if (correctCount >= 4) msg = "Good effort. This is genuinely tricky at first -- the categories get clearer each time you play.";
-  else msg = "Keep going. Learning to separate thoughts, emotions, and sensations takes real practice. You're just getting started.";
+  if (correctCount >= total * 0.83) msg = "Outstanding. You're spotting thoughts, emotions, and sensations on sight -- sitting still or flying by.";
+  else if (correctCount >= total * 0.58) msg = "Solid work across both rounds. These distinctions are clearly starting to click.";
+  else if (correctCount >= total * 0.33) msg = "Good effort. Two very different challenges, and you're building real skill in both.";
+  else msg = "Keep going. Naming it on a card is one thing -- catching it on the wing is another. Nice work sticking with it.";
 
   document.getElementById('end-msg').textContent = msg;
   AudioEngine.sfxEnd();
@@ -922,11 +1435,17 @@ document.addEventListener('keydown', e => {
   if (['T','E','S'].includes(k) && document.getElementById('screen-game').classList.contains('active')) {
     handleAnswer(k);
   }
+  if (['T','E','S'].includes(k) && document.getElementById('screen-duckhunt').classList.contains('active')) {
+    handleDuckShot(k);
+  }
   if ((e.key === 'Enter' || e.key === ' ') && document.getElementById('screen-intro').classList.contains('active')) {
     e.preventDefault(); slideNext();
   }
   if ((e.key === 'Enter' || e.key === ' ') && document.getElementById('screen-start').classList.contains('active')) {
     e.preventDefault(); startGame();
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && document.getElementById('screen-round2-intro').classList.contains('active')) {
+    e.preventDefault(); startRound2();
   }
 });
 
@@ -1093,7 +1612,7 @@ function runExplosion(cx, cy) {
 function runConfetti(ox, oy) {
   canvas.style.display = 'block';
   const pieces = [];
-  const palette = ['#ff6b6b','#ffd43b','#69db7c','#74c0fc','#f783ac','#da77ff','#ff922b','#ffffff','#a9e34b','#63e6be'];
+  const palette = ['#ff2e88','#00e5ff','#ffe14d','#3cff9a','#ffffff','#ff6bb3','#5ff0ff'];
 
   for (let i = 0; i < 150; i++) {
     const a = Math.random() * Math.PI * 2;
@@ -1176,19 +1695,132 @@ function drawStar(cx, cy, spikes, outer, inner) {
 }
 
 // ──────────────────────────────────────
+//  CARD SHATTER -- the hero card breaks into bits that fly outward
+// ──────────────────────────────────────
+function shatterCard(el) {
+  const rect = el.getBoundingClientRect();
+  const style = getComputedStyle(el);
+  const cols = 6, rows = 4;
+  const shardW = rect.width / cols;
+  const shardH = rect.height / rows;
+
+  const layer = document.createElement('div');
+  layer.className = 'shatter-layer';
+  layer.style.left = rect.left + 'px';
+  layer.style.top = rect.top + 'px';
+  layer.style.width = rect.width + 'px';
+  layer.style.height = rect.height + 'px';
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const piece = document.createElement('div');
+      piece.className = 'shatter-piece';
+      piece.style.left = (c * shardW) + 'px';
+      piece.style.top = (r * shardH) + 'px';
+      piece.style.width = Math.ceil(shardW) + 'px';
+      piece.style.height = Math.ceil(shardH) + 'px';
+      piece.style.background = style.backgroundColor;
+      piece.style.borderRadius = '2px';
+      if (r === 0) piece.style.borderTop = `2px solid ${style.borderColor}`;
+      if (r === rows - 1) piece.style.borderBottom = `2px solid ${style.borderColor}`;
+      if (c === 0) piece.style.borderLeft = `2px solid ${style.borderColor}`;
+      if (c === cols - 1) piece.style.borderRight = `2px solid ${style.borderColor}`;
+
+      // Outward burst, scaled by how far this piece sits from the card's center
+      const nx = (c + 0.5) / cols - 0.5; // -0.5 .. 0.5
+      const ny = (r + 0.5) / rows - 0.5;
+      const dx = nx * (260 + Math.random() * 180);
+      const dy = ny * (220 + Math.random() * 160) - 40; // slight upward bias
+      const rot = (Math.random() - 0.5) * 640;
+      piece.style.setProperty('--dx', dx.toFixed(1) + 'px');
+      piece.style.setProperty('--dy', dy.toFixed(1) + 'px');
+      piece.style.setProperty('--rot', rot.toFixed(0) + 'deg');
+      piece.style.animationDelay = (Math.random() * 0.06).toFixed(2) + 's';
+
+      layer.appendChild(piece);
+    }
+  }
+
+  document.body.appendChild(layer);
+  setTimeout(() => layer.remove(), 900);
+}
+
+// ──────────────────────────────────────
+//  FEATHER BURST -- Duck Hunt hit effect
+// ──────────────────────────────────────
+function runFeathers(cx, cy) {
+  canvas.style.display = 'block';
+  const parts = [];
+  const colors = ['#ffffff', '#e8e4f0', '#2c2148', '#8a7aad'];
+
+  for (let i = 0; i < 22; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const spd = 2 + Math.random() * 6;
+    parts.push({
+      x: cx, y: cy,
+      vx: Math.cos(a) * spd,
+      vy: Math.sin(a) * spd - Math.random() * 2.5,
+      rot: Math.random() * Math.PI * 2,
+      rotspd: (Math.random() - 0.5) * 0.3,
+      w: 4 + Math.random() * 6,
+      h: 7 + Math.random() * 8,
+      life: 1, decay: 0.014 + Math.random() * 0.01,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    });
+  }
+
+  const DUR = 800;
+  const t0 = performance.now();
+
+  function tick(now) {
+    const elapsed = now - t0;
+    if (elapsed >= DUR) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.style.display = 'none';
+      return;
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (const p of parts) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.22;
+      p.vx *= 0.98;
+      p.rot += p.rotspd;
+      p.life -= p.decay;
+      if (p.life <= 0) continue;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.w / 2, p.h / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+}
+
+// ──────────────────────────────────────
 //  AUDIO ENGINE  (Web Audio API, no deps)
 // ──────────────────────────────────────
 const AudioEngine = (() => {
   let ctx = null;
   let master = null;
+  let reverb = null;      // shared convolver bus -- gives SFX and pad a sense of space
+  let reverbSend = null;
+  let delayNode = null;   // shared feedback delay -- retro echo on the lead line
+  let delaySend = null;
   let muted = false;
   let musicOn = false;
   let melodyTO = null;
-  let padOscs = [];   // refs so we can stop them on restart
-
-  // A minor pentatonic: A3 C4 D4 E4 G4 A4 C5
-  const PENTA = [220, 261.63, 293.66, 329.63, 392, 440, 523.25];
-  let lastNoteIdx = -1;
 
   // ── internals ──
   function ramp(param, val, t, dur = 0.02) {
@@ -1214,6 +1846,47 @@ const AudioEngine = (() => {
     return o;
   }
 
+  // Routes a node through a stereo panner when available, else passes it through unchanged
+  function pan(node, amount) {
+    if (!ctx.createStereoPanner) return node;
+    const p = ctx.createStereoPanner();
+    p.pan.value = amount;
+    node.connect(p);
+    return p;
+  }
+
+  // One-shot filtered noise burst, feeding an already-enveloped destination gain
+  function noiseBurst(dest, t, dur, filterType, filterFreq, filterQ) {
+    const size = Math.max(1, Math.floor(ctx.sampleRate * dur));
+    const buffer = ctx.createBuffer(1, size, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < size; i++) data[i] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const filt = ctx.createBiquadFilter();
+    filt.type = filterType;
+    filt.frequency.value = filterFreq;
+    if (filterQ != null) filt.Q.value = filterQ;
+    src.connect(filt);
+    filt.connect(dest);
+    src.start(t);
+    return src;
+  }
+
+  // Procedural exponential-decay noise impulse -- no external IR file needed
+  function makeImpulse(seconds, decay) {
+    const rate = ctx.sampleRate;
+    const length = Math.max(1, Math.floor(rate * seconds));
+    const impulse = ctx.createBuffer(2, length, rate);
+    for (let ch = 0; ch < 2; ch++) {
+      const data = impulse.getChannelData(ch);
+      for (let i = 0; i < length; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+      }
+    }
+    return impulse;
+  }
+
   // ── public API ──
   function init() {
     if (ctx) return;
@@ -1221,171 +1894,301 @@ const AudioEngine = (() => {
     master = ctx.createGain();
     master.gain.value = 0.82;
     master.connect(ctx.destination);
+
+    reverb = ctx.createConvolver();
+    reverb.buffer = makeImpulse(2.2, 2.6);
+    const reverbReturn = ctx.createGain();
+    reverbReturn.gain.value = 0.5;
+    reverb.connect(reverbReturn);
+    reverbReturn.connect(master);
+    reverbSend = ctx.createGain();
+    reverbSend.gain.value = 1;
+    reverbSend.connect(reverb);
+
+    delayNode = ctx.createDelay(1.0);
+    delayNode.delayTime.value = 0.27;
+    const delayFilter = ctx.createBiquadFilter();
+    delayFilter.type = 'lowpass';
+    delayFilter.frequency.value = 2400;
+    const delayFeedback = ctx.createGain();
+    delayFeedback.gain.value = 0.34;
+    delayNode.connect(delayFilter);
+    delayFilter.connect(delayFeedback);
+    delayFeedback.connect(delayNode);
+    const delayReturn = ctx.createGain();
+    delayReturn.gain.value = 0.55;
+    delayNode.connect(delayReturn);
+    delayReturn.connect(master);
+    delayReturn.connect(reverbSend); // echoes bloom softly into the reverb tail
+    delaySend = ctx.createGain();
+    delaySend.gain.value = 1;
+    delaySend.connect(delayNode);
+  }
+
+  // Two bouncy 8-bit backing loops, both "oom-pah" bass under a bright
+  // arpeggiated lead, two bars of eighth notes rescheduled every loop --
+  // one for the quiz, a distinct faster/brighter one for Duck Hunt.
+  // Background music is two real tracks (<audio> elements in the page),
+  // one per round -- everything else (SFX, reverb, delay) stays procedural.
+  let musicEls = null;
+  let activeTrack = 'quiz';
+
+  function getMusicEls() {
+    if (!musicEls) {
+      musicEls = {
+        quiz: document.getElementById('music-quiz'),
+        duckhunt: document.getElementById('music-duckhunt'),
+      };
+      Object.values(musicEls).forEach(el => { if (el) el.volume = 0.55; });
+    }
+    return musicEls;
+  }
+
+  // One-shot recorded samples (explosion, quack). Each play clones the
+  // element so rapid re-triggers don't cut a previous instance off.
+  let sampleEls = null;
+  function getSampleEls() {
+    if (!sampleEls) {
+      sampleEls = {
+        explosion: document.getElementById('sfx-explosion'),
+        quack: document.getElementById('sfx-quack'),
+      };
+    }
+    return sampleEls;
+  }
+
+  function playSample(name, volume) {
+    const el = getSampleEls()[name];
+    if (!el) return;
+    const node = el.cloneNode(true);
+    node.volume = volume;
+    node.muted = muted;
+    node.play().catch(() => {});
   }
 
   function startMusic() {
-    if (!ctx || musicOn) return;
+    if (musicOn) return;
     musicOn = true;
-    buildPad();
-    setTimeout(playMelodyNote, 1400);
+    const els = getMusicEls();
+    const el = els[activeTrack];
+    if (el) {
+      el.muted = muted;
+      el.currentTime = 0;
+      el.play().catch(() => {});
+    }
   }
 
-  function buildPad() {
-    // Three detuned sine drones: A1, A2, E3
-    const freqs = [55, 110, 164.81];
-    const vols  = [0.028, 0.042, 0.032];
-
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 320;
-    filter.Q.value = 0.6;
-
-    // Slow LFO on filter cutoff -- gives the pad subtle life
-    const lfo = ctx.createOscillator();
-    const lfoG = ctx.createGain();
-    lfo.type = 'sine';
-    lfo.frequency.value = 0.055;
-    lfoG.gain.value = 90;
-    lfo.connect(lfoG);
-    lfoG.connect(filter.frequency);
-    lfo.start();
-    padOscs.push(lfo);
-
-    const padGain = ctx.createGain();
-    padGain.gain.value = 0;
-    filter.connect(padGain);
-    padGain.connect(master);
-
-    freqs.forEach((f, i) => {
-      const g = ctx.createGain();
-      g.gain.value = vols[i];
-      const o = ctx.createOscillator();
-      o.type = 'sine';
-      o.frequency.value = f + i * 0.18; // micro-detune for warmth
-      o.connect(g);
-      g.connect(filter);
-      o.start();
-      padOscs.push(o);
+  function setTrack(name) {
+    const els = getMusicEls();
+    if (!els[name]) return;
+    if (name === activeTrack && musicOn) return;
+    activeTrack = name;
+    Object.entries(els).forEach(([key, el]) => {
+      if (!el) return;
+      if (key === name) {
+        if (musicOn) {
+          el.muted = muted;
+          el.currentTime = 0;
+          el.play().catch(() => {});
+        }
+      } else {
+        el.pause();
+      }
     });
-
-    // Gentle fade-in over 3s
-    padGain.gain.setValueAtTime(0, ctx.currentTime);
-    padGain.gain.linearRampToValueAtTime(1, ctx.currentTime + 3);
-  }
-
-  function playMelodyNote() {
-    if (!ctx || !musicOn || muted) {
-      if (musicOn) melodyTO = setTimeout(playMelodyNote, 800);
-      return;
-    }
-
-    // Pick a note, avoid immediate repeat, slight gravity toward root (A)
-    const weights = [3, 1, 2, 2, 1, 3, 1];
-    let total = weights.reduce((a,b) => a+b, 0), r = Math.random() * total, idx = 0;
-    for (let i = 0; i < weights.length; i++) { r -= weights[i]; if (r <= 0) { idx = i; break; } }
-    if (idx === lastNoteIdx) idx = (idx + 1 + Math.floor(Math.random() * 3)) % PENTA.length;
-    lastNoteIdx = idx;
-
-    const freq = PENTA[idx];
-    const dur  = 0.75 + Math.random() * 0.9;
-    const vol  = 0.07 + Math.random() * 0.028;
-    const t    = ctx.currentTime;
-
-    const g = ctx.createGain();
-    g.gain.value = 0;
-    env(g, t, 0.1, vol, dur * 0.25, dur * 0.6);
-    osc(freq, 'triangle', g, t, t + dur + 1.2);
-    g.connect(master);
-
-    // Occasional soft harmony a fifth up
-    if (Math.random() < 0.28) {
-      const hg = ctx.createGain();
-      hg.gain.value = 0;
-      env(hg, t + 0.06, 0.12, vol * 0.38, dur * 0.2, dur * 0.5);
-      osc(freq * 1.5, 'sine', hg, t + 0.06, t + dur + 1);
-      hg.connect(master);
-    }
-
-    const next = 1600 + Math.random() * 3000;
-    melodyTO = setTimeout(playMelodyNote, next);
   }
 
   // ── sound effects ──
-  function sfxCorrect() {
+  function sfxCorrect(streak = 1) {
     if (!ctx) return;
-    // Bell-like ascending three-note chime: C5 E5 G5
+    const t0 = ctx.currentTime;
+
+    // Punchy arcade blip -- two quick square notes up front for snap
+    [880, 1318.51].forEach((f, i) => {
+      const t = t0 + i * 0.055;
+      const g = ctx.createGain();
+      g.gain.value = 0;
+      env(g, t, 0.004, 0.14, 0.02, 0.11);
+      osc(f, 'square', g, t, t + 0.2);
+      g.connect(master);
+    });
+
+    // Bell-like ascending three-note chime: C5 E5 G5, shimmer sent to reverb
     [523.25, 659.25, 783.99].forEach((f, i) => {
-      const t = ctx.currentTime + i * 0.11;
+      const t = t0 + 0.05 + i * 0.11;
       const g = ctx.createGain();
       g.gain.value = 0;
       g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.26, t + 0.008);
+      g.gain.linearRampToValueAtTime(0.24, t + 0.008);
       g.gain.exponentialRampToValueAtTime(0.0001, t + 0.85);
       osc(f, 'sine', g, t, t + 1);
+      g.connect(master);
+
+      const gr = ctx.createGain();
+      gr.gain.value = 0.2;
+      g.connect(gr);
+      gr.connect(reverbSend);
+
       // Inharmonic partial for bell shimmer
       const g2 = ctx.createGain();
       g2.gain.value = 0;
       g2.gain.setValueAtTime(0, t);
-      g2.gain.linearRampToValueAtTime(0.06, t + 0.005);
+      g2.gain.linearRampToValueAtTime(0.055, t + 0.005);
       g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
       osc(f * 2.78, 'sine', g2, t, t + 0.4);
-      g.connect(master);
       g2.connect(master);
     });
+
+    // Combo layer -- pitch rises with streak length, rewards chains
+    if (streak >= 2) {
+      const step = Math.min(streak - 1, 5);
+      const f = 1046.5 * Math.pow(2, step / 12);
+      const t = t0 + 0.24;
+      const g = ctx.createGain();
+      g.gain.value = 0;
+      env(g, t, 0.006, 0.16 + step * 0.01, 0.02, 0.4);
+      osc(f, 'triangle', g, t, t + 0.55);
+      pan(g, 0.25).connect(master);
+      const gr = ctx.createGain();
+      gr.gain.value = 0.3;
+      g.connect(gr);
+      gr.connect(reverbSend);
+    }
   }
 
   function sfxWrong() {
     if (!ctx) return;
-    // Low descending tone -- dull, not harsh
     const t = ctx.currentTime;
+
+    // Detuned square buzz -- short, dissonant, immediate (dry -- no reverb)
+    [140, 148].forEach((f) => {
+      const g = ctx.createGain();
+      g.gain.value = 0;
+      env(g, t, 0.006, 0.15, 0.03, 0.22);
+      osc(f, 'square', g, t, t + 0.3);
+      g.connect(master);
+    });
+
+    // Low thud for weight
     const g = ctx.createGain();
     g.gain.value = 0;
-    env(g, t, 0.012, 0.18, 0.05, 0.38);
+    env(g, t, 0.008, 0.2, 0.02, 0.3);
     const o = ctx.createOscillator();
     o.type = 'sine';
-    o.frequency.setValueAtTime(210, t);
-    o.frequency.exponentialRampToValueAtTime(88, t + 0.45);
+    o.frequency.setValueAtTime(150, t);
+    o.frequency.exponentialRampToValueAtTime(62, t + 0.32);
     o.connect(g);
     g.connect(master);
     o.start(t);
-    o.stop(t + 0.6);
+    o.stop(t + 0.4);
   }
 
   function sfxTick() {
     if (!ctx) return;
-    // Soft high click -- urgency without stress
+    const t = ctx.currentTime;
+
+    const g = ctx.createGain();
+    g.gain.value = 0;
+    env(g, t, 0.002, 0.11, 0, 0.045);
+    osc(1400, 'square', g, t, t + 0.06);
+    g.connect(master);
+
+    // Crisp noise burst layered under the tone for a mechanical click
+    const ng = ctx.createGain();
+    ng.gain.value = 0;
+    env(ng, t, 0.001, 0.05, 0, 0.02);
+    noiseBurst(ng, t, 0.03, 'highpass', 4000);
+    ng.connect(master);
+  }
+
+  function sfxWhoosh() {
+    if (!ctx) return;
+    // Soft filtered noise sweep -- a duck entering the sky
     const t = ctx.currentTime;
     const g = ctx.createGain();
     g.gain.value = 0;
-    env(g, t, 0.003, 0.09, 0, 0.055);
-    osc(1100, 'sine', g, t, t + 0.1);
+    env(g, t, 0.06, 0.05, 0.08, 0.3);
+    noiseBurst(g, t, 0.5, 'bandpass', 700, 1.1);
     g.connect(master);
+    const gr = ctx.createGain();
+    gr.gain.value = 0.15;
+    g.connect(gr);
+    gr.connect(reverbSend);
+  }
+
+  function sfxQuack() {
+    playSample('quack', 0.85);
+  }
+
+  function sfxExplosion() {
+    // This sample peaks lower and is less compressed than the old one, so it
+    // needs more gain to land at the same level. 0.8 keeps the decoded peak
+    // (1.19) just under clipping.
+    playSample('explosion', 0.8);
   }
 
   function sfxStart() {
     if (!ctx) return;
-    // Warm welcoming chord: A C E stagger
+    const t = ctx.currentTime;
+
+    // Power-up sweep: rising sawtooth through a rising filter cutoff
+    const sweepGain = ctx.createGain();
+    sweepGain.gain.value = 0;
+    env(sweepGain, t, 0.02, 0.16, 0.02, 0.28);
+    const sweepFilter = ctx.createBiquadFilter();
+    sweepFilter.type = 'lowpass';
+    sweepFilter.Q.value = 4;
+    sweepFilter.frequency.setValueAtTime(300, t);
+    sweepFilter.frequency.exponentialRampToValueAtTime(4200, t + 0.38);
+    const sweepOsc = ctx.createOscillator();
+    sweepOsc.type = 'sawtooth';
+    sweepOsc.frequency.setValueAtTime(110, t);
+    sweepOsc.frequency.exponentialRampToValueAtTime(440, t + 0.38);
+    sweepOsc.connect(sweepFilter);
+    sweepFilter.connect(sweepGain);
+    sweepGain.connect(master);
+    sweepOsc.start(t);
+    sweepOsc.stop(t + 0.42);
+
+    // Soft chord stack underneath: A C E
     [220, 261.63, 329.63].forEach((f, i) => {
-      const t = ctx.currentTime + i * 0.07;
+      const ct = t + i * 0.06;
       const g = ctx.createGain();
       g.gain.value = 0;
-      env(g, t, 0.12, 0.1, 0.2, 0.9);
-      osc(f * 2, 'sine', g, t, t + 1.5); // up an octave
+      env(g, ct, 0.12, 0.08, 0.16, 0.7);
+      osc(f * 2, 'triangle', g, ct, ct + 1.2);
       g.connect(master);
+      const gr = ctx.createGain();
+      gr.gain.value = 0.18;
+      g.connect(gr);
+      gr.connect(reverbSend);
     });
   }
 
   function sfxEnd() {
     if (!ctx) return;
-    // Rising arpeggio A C E A (octave), last note rings
-    [440, 523.25, 659.25, 880].forEach((f, i) => {
-      const t = ctx.currentTime + i * 0.13;
-      const isLast = i === 3;
+    const t0 = ctx.currentTime;
+
+    // Impact hit for weight before the fanfare
+    const thudG = ctx.createGain();
+    thudG.gain.value = 0;
+    env(thudG, t0, 0.004, 0.3, 0, 0.2);
+    noiseBurst(thudG, t0, 0.12, 'lowpass', 900);
+    thudG.connect(master);
+
+    // Rising victory arpeggio across two octaves, last note rings out in reverb
+    const notes = [440, 523.25, 659.25, 880, 1046.5, 1318.51];
+    notes.forEach((f, i) => {
+      const t = t0 + 0.05 + i * 0.1;
+      const isLast = i === notes.length - 1;
       const g = ctx.createGain();
       g.gain.value = 0;
-      env(g, t, 0.015, isLast ? 0.22 : 0.17, isLast ? 0.5 : 0.05, isLast ? 1.1 : 0.3);
-      osc(f, 'sine', g, t, t + (isLast ? 2.2 : 0.55));
+      env(g, t, 0.012, isLast ? 0.24 : 0.16, isLast ? 0.5 : 0.04, isLast ? 1.3 : 0.28);
+      osc(f, i % 2 === 0 ? 'triangle' : 'sine', g, t, t + (isLast ? 2.4 : 0.5));
       g.connect(master);
+      const gr = ctx.createGain();
+      gr.gain.value = isLast ? 0.4 : 0.16;
+      g.connect(gr);
+      gr.connect(reverbSend);
     });
   }
 
@@ -1401,12 +2204,13 @@ const AudioEngine = (() => {
     btn.textContent = muted ? '♪̶' : '♪';
     btn.classList.toggle('muted', muted);
     btn.title = muted ? 'Unmute music' : 'Mute music';
+    Object.values(getMusicEls()).forEach(el => { if (el) el.muted = muted; });
     // If unmuting and music hasn't started, kick it off
     if (!muted && !musicOn) startMusic();
     return muted;
   }
 
-  return { init, startMusic, sfxCorrect, sfxWrong, sfxTick, sfxStart, sfxEnd, toggle };
+  return { init, startMusic, setTrack, sfxCorrect, sfxWrong, sfxTick, sfxStart, sfxEnd, sfxWhoosh, sfxQuack, sfxExplosion, toggle };
 })();
 
 // ──────────────────────────────────────

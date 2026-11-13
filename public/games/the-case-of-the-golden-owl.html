@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Case of the Golden Owl — A Detective Game About Evidence</title>
+<meta name="description" content="A detective game about evidence: telling what your senses actually show from what your mind fills in.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink-900:#0c0e17; --ink-800:#141728; --ink-700:#1a1e33; --ink-600:#212640;
+  --line:#2b3050; --line-soft:#232842;
+  --paper:#f4ece0; --paper-2:#e9dfcd; --paper-edge:#cdbfa5; --paper-ink:#1c1a26; --paper-muted:#5d5670;
+  --text:#e9e3d7; --muted:#8e93b4; --muted-2:#6d7295;
+  --brass:#e6b53f; --brass-2:#f3cf78; --brass-dk:#8f6a14;
+  --ev:#3ed6a5; --ev-dk:#15855f; --ev-glow:rgba(62,214,165,.14);
+  --im:#ac88ff; --im-dk:#6c3fd0; --im-glow:rgba(172,136,255,.14);
+  --err:#ff6f91; --err-dk:#b32b52;
+  --disp:'Archivo Black','Arial Black',sans-serif;
+  --ui:'Archivo',system-ui,-apple-system,sans-serif;
+  --type:'Courier Prime','Courier New',monospace;
+  --r-sm:8px; --r-md:12px; --r-lg:16px;
+  --sh-1:0 1px 2px rgba(0,0,0,.4);
+  --sh-2:0 4px 14px rgba(0,0,0,.35);
+  --sh-3:0 14px 40px rgba(0,0,0,.45);
+  --ease:cubic-bezier(.2,.7,.3,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden}
+body{
+  background:var(--ink-900);
+  color:var(--text);
+  font-family:var(--ui);
+  font-size:16px;
+  line-height:1.5;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(900px 500px at 15% -10%, rgba(230,181,63,.07), transparent 60%),
+    radial-gradient(700px 500px at 100% 0%, rgba(172,136,255,.06), transparent 55%);
+  background-attachment:fixed;
+}
+.app{max-width:1120px;margin:0 auto;padding:0 20px 72px}
+@media (max-width:600px){.app{padding:0 14px 56px}}
+
+/* ---------- header ---------- */
+.top{position:sticky;top:0;z-index:40;background:rgba(12,14,23,.92);backdrop-filter:blur(10px);
+  margin:0 -20px;padding:14px 20px 0;border-bottom:1px solid var(--line-soft)}
+@media (max-width:600px){.top{margin:0 -14px;padding:12px 14px 0}}
+.top__row{display:flex;align-items:center;gap:14px;max-width:1080px;margin:0 auto}
+.crest{width:40px;height:40px;border-radius:50%;border:2px solid var(--brass);color:var(--brass);
+  display:grid;place-items:center;flex:0 0 auto;background:radial-gradient(circle at 35% 25%,rgba(230,181,63,.22),transparent 70%)}
+@media (max-width:600px){.crest{display:none}}
+.wordmark{min-width:0}
+.wordmark .name{font-family:var(--disp);font-size:clamp(13px,2.4vw,15px);letter-spacing:.06em;color:var(--brass);
+  line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wordmark .sub{font-family:var(--type);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin-top:2px}
+.top__right{margin-left:auto;display:flex;align-items:center;gap:14px;flex:0 0 auto}
+.counter{font-family:var(--type);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+@media (max-width:520px){.counter{font-size:11px;letter-spacing:.04em}}
+.iconbtn{background:var(--ink-700);border:1px solid var(--line);color:var(--text);width:40px;height:40px;
+  border-radius:10px;display:grid;place-items:center;cursor:pointer;transition:border-color .15s,color .15s,background .15s}
+.iconbtn:hover{border-color:var(--brass);color:var(--brass)}
+.iconbtn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.iconbtn svg{display:block}
+.track{display:flex;gap:4px;margin-top:13px;padding-bottom:1px}
+.track i{flex:1 1 0;height:4px;border-radius:2px;background:var(--line-soft);transition:background .45s var(--ease)}
+.track i.on{background:linear-gradient(90deg,var(--brass-dk),var(--brass))}
+
+/* ---------- surfaces ---------- */
+.panel{background:linear-gradient(180deg,var(--ink-800),var(--ink-700));border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:clamp(22px,4vw,40px);margin-top:26px;box-shadow:var(--sh-2)}
+.filestrip{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-family:var(--type);font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);padding-bottom:16px;margin-bottom:22px;
+  border-bottom:1px solid var(--line-soft)}
+.filestrip b{color:var(--brass);font-weight:400}
+.filestrip .open{color:var(--err)}
+
+h1{font-family:var(--disp);font-size:clamp(28px,5.2vw,48px);line-height:1.05;letter-spacing:-.01em;margin:0 0 16px;max-width:19ch}
+h1 em{font-style:normal;color:var(--brass)}
+h2{font-family:var(--disp);font-size:clamp(18px,2.6vw,24px);line-height:1.2;margin:0 0 12px;letter-spacing:.01em}
+p{font-family:var(--type);font-size:15.5px;line-height:1.7;color:#ded6c6;margin:0 0 14px;max-width:68ch}
+p b{color:var(--paper)}
+.small{font-size:12.5px;color:var(--muted);letter-spacing:.02em}
+
+.btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(180deg,var(--brass-2),var(--brass));
+  color:#241a04;border:none;font-family:var(--disp);font-size:15px;letter-spacing:.02em;padding:15px 26px;
+  border-radius:var(--r-md);cursor:pointer;box-shadow:0 2px 0 var(--brass-dk),var(--sh-2);
+  transition:transform .12s var(--ease),box-shadow .12s var(--ease),filter .12s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.04);box-shadow:0 3px 0 var(--brass-dk),var(--sh-3)}
+.btn:active{transform:translateY(1px);box-shadow:0 1px 0 var(--brass-dk)}
+.btn:focus-visible{outline:2px solid var(--paper);outline-offset:3px}
+.btn svg{opacity:.8}
+
+/* ---------- legend ---------- */
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0}
+@media (max-width:720px){.legend{grid-template-columns:1fr}}
+.legend > div{border:1px solid;border-radius:var(--r-md);padding:18px;background:var(--ink-900)}
+.legend .ev{border-color:rgba(62,214,165,.45);box-shadow:inset 0 0 0 1px rgba(62,214,165,.08),0 0 28px -18px var(--ev)}
+.legend .im{border-color:rgba(172,136,255,.45);box-shadow:inset 0 0 0 1px rgba(172,136,255,.08),0 0 28px -18px var(--im)}
+.legend>div>b{font-family:var(--disp);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.legend p b{color:var(--paper);font-weight:700}
+.legend .ev>b{color:var(--ev)} .legend .im>b{color:var(--im)}
+.legend p{font-size:14px;line-height:1.6;margin:0;color:var(--muted)}
+
+/* ---------- story artwork ---------- */
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+.art{display:block}
+.art--hero{width:100%;height:auto;border-radius:var(--r-md);background:linear-gradient(180deg,#0a0c16,#131629);
+  border:1px solid var(--line);margin:0 0 26px}
+.art--reveal{width:100%;max-width:420px;height:auto;border-radius:var(--r-md);
+  background:linear-gradient(180deg,#0a0c16,#131629);border:1px solid var(--line);margin:0 0 22px}
+.art--owl{width:74px;height:92px;flex:0 0 auto;--a1:#3a2a05;--a2:var(--brass);--a3:#fbf3dd}
+.figure{display:flex;align-items:center;gap:18px;margin:0 0 18px}
+
+/* ---------- atmosphere ---------- */
+@keyframes drift{0%,100%{transform:translateX(-26px)}50%{transform:translateX(26px)}}
+@keyframes twinkle{0%,100%{opacity:.18}50%{opacity:.8}}
+@keyframes flicker{0%,100%{opacity:1}42%{opacity:.86}46%{opacity:1}72%{opacity:.92}}
+@keyframes rise{0%{transform:translateY(6px);opacity:0}30%{opacity:.6}100%{transform:translateY(-22px);opacity:0}}
+@keyframes halo{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.85;transform:scale(1.07)}}
+.vignette{position:fixed;inset:0;pointer-events:none;z-index:2;
+  background:radial-gradient(130% 100% at 50% 12%,transparent 46%,rgba(0,0,0,.42) 100%)}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:3;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- thought banner ---------- */
+.thought::after{content:"";position:absolute;left:30px;bottom:-13px;width:17px;height:17px;border-radius:50%;
+  background:var(--paper-2);box-shadow:-19px 17px 0 -4.5px var(--paper-2)}
+
+/* ---------- scene vignettes ---------- */
+.art--spot{width:116px;height:134px;flex:0 0 auto;transform:rotate(1.6deg);
+  filter:drop-shadow(0 6px 12px rgba(0,0,0,.35))}
+@media (max-width:760px){.art--spot{width:92px;height:106px}}
+@media (max-width:480px){.art--spot{width:74px;height:85px}}
+
+/* ---------- bins ---------- */
+.bin__head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+/* Grid items default to min-width:auto, so the bin artwork would set a floor
+   on each column and push the board wider than the screen. */
+.board>*{min-width:0}
+.bin__head>div{min-width:0}
+.bin h3{flex-wrap:wrap}
+.art--bin{width:74px;height:56px;flex:0 0 auto;opacity:.9}
+.bin.ev .art--bin{--a1:var(--ev);--a2:var(--ev)}
+.bin.im .art--bin{--a1:var(--im);--a2:var(--im)}
+@media (max-width:860px){.art--bin{width:48px;height:36px}}
+@media (max-width:540px){.art--bin{display:none}}
+
+/* ---------- sense badge on a filed clue ---------- */
+.sense{display:inline-flex;align-items:center;gap:6px;font-family:var(--disp);font-size:9px;
+  letter-spacing:.13em;padding:4px 9px;border-radius:999px;margin-top:11px}
+.sense svg{width:13px;height:13px}
+.sense--ev{color:var(--ev-dk);background:rgba(21,133,95,.13)}
+.sense--im{color:var(--im-dk);background:rgba(108,63,208,.13)}
+
+/* ---------- case board ---------- */
+.art--board{width:100%;height:auto;border-radius:var(--r-md);margin:6px 0 22px;box-shadow:var(--sh-3)}
+
+/* ---------- thought banner ---------- */
+.thought{position:relative;display:flex;align-items:center;gap:22px;
+  background:linear-gradient(180deg,var(--paper),var(--paper-2));color:var(--paper-ink);
+  border-radius:var(--r-md);padding:22px 26px 24px;margin-top:24px;box-shadow:var(--sh-3);
+  border-left:6px solid var(--brass);animation:slide .35s var(--ease)}
+.thought__text{flex:1 1 auto;min-width:0}
+.thought .lbl{font-family:var(--type);font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--paper-muted);margin-bottom:8px}
+.thought .q{font-family:var(--disp);font-size:clamp(19px,3.2vw,29px);line-height:1.22;letter-spacing:-.005em;max-width:30ch}
+@keyframes slide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* ---------- board ---------- */
+.board{display:grid;gap:16px;margin-top:30px;align-items:start;
+  grid-template-columns:1fr 1.1fr 1fr;grid-template-areas:"ev pile im"}
+@media (max-width:860px){
+  .board{grid-template-columns:1fr 1fr;grid-template-areas:"pile pile" "ev im";gap:12px}
+}
+.col-pile{grid-area:pile}
+.bin{border:1.5px solid;border-radius:var(--r-md);padding:16px;min-height:170px;background:var(--ink-800);
+  cursor:pointer;transition:background .18s,box-shadow .18s,border-color .18s,transform .18s}
+.bin.ev{border-color:rgba(62,214,165,.4);grid-area:ev}
+.bin.im{border-color:rgba(172,136,255,.4);grid-area:im}
+@media (max-width:860px){.bin{min-height:auto;padding:13px}}
+.bin.armed.ev{border-color:var(--ev);box-shadow:0 0 0 3px var(--ev-glow)}
+.bin.armed.im{border-color:var(--im);box-shadow:0 0 0 3px var(--im-glow)}
+.bin.over{background:var(--ink-600);transform:translateY(-2px)}
+.bin.over.ev{box-shadow:0 0 0 4px var(--ev-glow),0 0 32px -12px var(--ev)}
+.bin.over.im{box-shadow:0 0 0 4px var(--im-glow),0 0 32px -12px var(--im)}
+.bin h3{font-family:var(--disp);font-size:13px;letter-spacing:.12em;margin:0 0 6px;display:flex;gap:8px;align-items:center}
+.bin.ev h3{color:var(--ev)} .bin.im h3{color:var(--im)}
+.bin .def{font-family:var(--type);font-size:12px;line-height:1.5;color:var(--muted-2);margin:0 0 12px}
+@media (max-width:860px){.bin .def{display:none}}
+.stack{display:flex;flex-direction:column;gap:10px}
+.pilelabel{font-family:var(--type);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);
+  text-align:center;margin:0 0 10px}
+.ph{border:1.5px dashed var(--line);border-radius:var(--r-sm);background:rgba(255,255,255,.025)}
+.hint{font-family:var(--type);font-size:12px;line-height:1.6;color:var(--muted-2);text-align:center;margin:14px 0 0}
+
+/* ---------- clue cards ---------- */
+.card{position:relative;color:var(--paper-ink);
+  background:
+    repeating-linear-gradient(94deg,rgba(120,105,80,.035) 0 2px,transparent 2px 7px),
+    linear-gradient(180deg,var(--paper),var(--paper-2));
+  border-radius:var(--r-sm);border-top:3px solid var(--paper-edge);padding:14px 16px;font-family:var(--type);
+  font-size:14.5px;line-height:1.55;cursor:grab;box-shadow:var(--sh-2);touch-action:none;user-select:none;
+  transition:transform .14s var(--ease),box-shadow .14s var(--ease)}
+.card:hover{transform:translateY(-2px);box-shadow:var(--sh-3)}
+.card:focus-visible,.card.sel{outline:3px solid var(--brass);outline-offset:3px}
+.card.sel{transform:translateY(-2px) rotate(-.6deg)}
+.card.dragging{position:fixed;z-index:999;pointer-events:none;cursor:grabbing;
+  transform:rotate(-2.5deg) scale(1.03);box-shadow:0 24px 44px rgba(0,0,0,.55);width:min(300px,76vw)}
+.card.filed{cursor:default;font-size:13.5px;padding-top:40px;animation:land .3s var(--ease)}
+.card.filed:hover{transform:none;box-shadow:var(--sh-2)}
+@keyframes land{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.card .mark{position:absolute;top:10px;left:16px;font-family:var(--disp);font-size:10px;letter-spacing:.14em;
+  border:2px solid;border-radius:4px;padding:3px 8px;transform:rotate(-2deg);animation:stampin .3s var(--ease)}
+.card.ok{border-top-color:var(--ev-dk)}
+.card.bad{border-top-color:var(--err-dk)}
+.card.ok .mark{color:var(--ev-dk);border-color:var(--ev-dk);background:rgba(21,133,95,.08)}
+.card.bad .mark{color:var(--err-dk);border-color:var(--err-dk);background:rgba(179,43,82,.07)}
+.card .why{display:block;margin-top:10px;padding-top:10px;border-top:1px dashed rgba(0,0,0,.22);
+  font-size:12.5px;line-height:1.55;color:var(--paper-muted)}
+@keyframes stampin{0%{transform:rotate(-2deg) scale(1.7);opacity:0}60%{opacity:1}100%{transform:rotate(-2deg) scale(1);opacity:1}}
+
+/* ---------- ruled out ---------- */
+.ruled{margin-top:20px;border:1px solid rgba(62,214,165,.45);border-radius:var(--r-lg);padding:24px;
+  background:linear-gradient(180deg,#132a24,#101f1c);animation:slide .4s var(--ease);box-shadow:var(--sh-2)}
+.ruled .tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--disp);color:var(--ev);font-size:12px;
+  letter-spacing:.18em;margin-bottom:12px}
+.ruled ul{margin:12px 0 20px;padding-left:20px}
+.ruled li{font-family:var(--type);font-size:14.5px;line-height:1.65;margin-bottom:6px;color:#dbe8e2}
+.ruled li::marker{color:var(--ev)}
+
+/* ---------- closing ---------- */
+.stamp{display:inline-block;font-family:var(--disp);font-size:clamp(20px,4vw,34px);letter-spacing:.06em;
+  color:var(--ev);border:4px double var(--ev);border-radius:6px;padding:8px 20px;transform:rotate(-3deg);
+  animation:stampin .45s var(--ease);margin:0 0 22px}
+.notebook{background-color:var(--paper);color:var(--paper-ink);border-radius:var(--r-md);
+  padding:20px 26px 20px 40px;margin:14px 0 20px;box-shadow:var(--sh-2);
+  background-image:repeating-linear-gradient(transparent 0 27px,rgba(120,105,80,.22) 27px 28px)}
+.notebook li{font-family:var(--type);font-size:13.5px;line-height:28px}
+.notebook li::marker{color:var(--paper-muted);font-size:12px}
+.scorecard{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:baseline;margin:20px 0 6px}
+.scorecard .n{font-family:var(--disp);font-size:34px;color:var(--brass);line-height:1}
+.meter{height:8px;background:var(--ink-900);border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:10px 0 18px;max-width:520px}
+.meter i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--brass),var(--ev));transition:width 1s var(--ease)}
+.rule{height:1px;background:var(--line-soft);margin:28px 0 24px;border:0}
+
+.footnote{margin-top:30px;padding-top:18px;border-top:1px solid var(--line-soft)}
+.footnote h3{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted-2);margin:0 0 10px}
+.footnote p{font-size:13px;line-height:1.65;color:var(--muted);max-width:74ch;margin:0 0 9px}
+.footnote b{color:var(--text)}
+
+.footer{margin-top:34px;text-align:center}
+.footer a{display:inline-flex;align-items:center;gap:8px;color:var(--muted-2);font-family:var(--type);font-size:13px;
+  letter-spacing:.06em;text-decoration:none;padding:8px 14px;border-radius:8px;transition:color .15s,background .15s}
+.footer a:hover{color:var(--brass);background:var(--ink-800)}
+.footer a:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:1000}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+
+<!-- ===== The Golden Owl: the stolen statue ===== -->
+<symbol id="a-owl" viewBox="0 0 160 200">
+  <rect x="30" y="184" width="100" height="12" rx="2.5" fill="var(--a2)"/>
+  <rect x="40" y="170" width="80" height="14" rx="2" fill="var(--a2)" opacity=".82"/>
+  <rect x="46" y="166" width="68" height="5" rx="2" fill="var(--a1)" opacity=".22"/>
+  <path d="M53 46 43 24l23 13z" fill="var(--a2)"/>
+  <path d="M107 46 117 24 94 37z" fill="var(--a2)"/>
+  <path d="M80 32c-26 0-43 28-43 63 0 41 19 68 43 68s43-27 43-68c0-35-17-63-43-63z" fill="var(--a2)"/>
+  <path d="M80 32c-26 0-43 28-43 63 0 41 19 68 43 68V32z" fill="var(--a1)" opacity=".1"/>
+  <path d="M104 52c9 13 14 29 14 45 0 27-8 48-21 59 17-9 26-32 26-61 0-17-7-33-19-43z" fill="#fff3d2" opacity=".5"/>
+  <circle cx="62" cy="74" r="16.5" fill="var(--a3)"/>
+  <circle cx="98" cy="74" r="16.5" fill="var(--a3)"/>
+  <circle cx="62" cy="74" r="7.5" fill="var(--a1)"/>
+  <circle cx="98" cy="74" r="7.5" fill="var(--a1)"/>
+  <circle cx="59.5" cy="71" r="2.4" fill="var(--a3)"/>
+  <circle cx="95.5" cy="71" r="2.4" fill="var(--a3)"/>
+  <path d="M80 88 72.5 102h15z" fill="var(--a1)"/>
+  <g stroke="var(--a1)" stroke-width="3" fill="none" stroke-linecap="round" opacity=".38">
+    <path d="M49 116q31 16 62 0"/><path d="M52 132q28 15 56 0"/><path d="M57 147q23 12 46 0"/>
+  </g>
+  <g stroke="var(--a1)" stroke-width="3.6" stroke-linecap="round" opacity=".5">
+    <path d="M67 161v8"/><path d="M80 162v8"/><path d="M93 161v8"/>
+  </g>
+</symbol>
+
+<!-- ===== The detective ===== -->
+<symbol id="a-detective" viewBox="0 0 140 200">
+  <path d="M22 134c0-27 20-42 48-42s48 15 48 42l4 64H18z" fill="var(--a2)"/>
+  <path d="M52 97 43 128l11 2z" fill="var(--a1)" opacity=".3"/>
+  <path d="M88 97l9 31-11 2z" fill="var(--a1)" opacity=".3"/>
+  <path d="M70 92 51 122l19 14 19-14z" fill="var(--a1)" opacity=".45"/>
+  <rect x="20" y="156" width="100" height="9" rx="1" fill="var(--a1)" opacity=".4"/>
+  <rect x="62" y="156" width="15" height="9" fill="var(--a3)" opacity=".5"/>
+  <path d="M106 134c0-27-20-42-36-42v106h32z" fill="#aeb6dd" opacity=".12"/>
+  <circle cx="70" cy="64" r="16" fill="#8f96b8"/>
+  <path d="M70 48a16 16 0 0 0 0 32z" fill="#0c0e17" opacity=".2"/>
+  <path d="M84 56a16 16 0 0 1-2 18" fill="none" stroke="#dfe4f7" stroke-width="2" opacity=".5"/>
+  <path d="M54 50c0-19 32-19 32 0z" fill="var(--a1)"/>
+  <rect x="53" y="44" width="34" height="7" rx="1" fill="#8f96b8" opacity=".28"/>
+  <ellipse cx="70" cy="50" rx="33" ry="7.5" fill="var(--a1)"/>
+  <circle cx="114" cy="150" r="13" fill="none" stroke="var(--a3)" stroke-width="4.5"/>
+  <circle cx="114" cy="150" r="13" fill="var(--a3)" opacity=".1"/>
+  <path d="M123 159l10 11" stroke="var(--a3)" stroke-width="5" stroke-linecap="round"/>
+</symbol>
+
+<!-- ===== The groundskeeper ===== -->
+<symbol id="a-keeper" viewBox="0 0 140 200">
+  <path d="M44 110c0-21 12-33 26-33s26 12 26 33v46H44z" fill="var(--a2)"/>
+  <g stroke="var(--a1)" stroke-width="3.4" opacity=".35" fill="none" stroke-linecap="round">
+    <path d="M56 80v28"/><path d="M84 80v28"/>
+  </g>
+  <rect x="53" y="108" width="34" height="22" rx="3" fill="var(--a1)" opacity=".18"/>
+  <path d="M96 110c0-21-12-33-26-33v79h26z" fill="#e3e7f2" opacity=".1"/>
+  <circle cx="70" cy="60" r="17" fill="var(--a2)"/>
+  <path d="M83 50a17 17 0 0 1 1 18" fill="none" stroke="#e3e7f2" stroke-width="2" opacity=".35"/>
+  <path d="M52 47c1-15 36-15 37 0z" fill="var(--a1)"/>
+  <path d="M88 44h19a4.5 4.5 0 0 1 0 9H88z" fill="var(--a1)"/>
+  <rect x="49" y="156" width="17" height="22" fill="var(--a2)"/>
+  <rect x="74" y="156" width="17" height="22" fill="var(--a2)"/>
+  <rect x="45" y="176" width="24" height="12" rx="2.5" fill="var(--a1)"/>
+  <rect x="71" y="176" width="24" height="12" rx="2.5" fill="var(--a1)"/>
+  <path d="M46 190l4-5 4 5 4-5 4 5 4-5 4 5M72 190l4-5 4 5 4-5 4 5 4-5 4 5"
+        stroke="var(--a3)" stroke-width="2" fill="none" stroke-linejoin="round"/>
+  <path d="M90 108l16 24-9 6-16-24z" fill="var(--a2)"/>
+  <g fill="var(--a3)" opacity=".9">
+    <path d="M103 142 86 128l-7 9 17 13z"/>
+    <path d="M81 123l11 6-6 9-10-6z"/>
+    <rect x="99" y="136" width="28" height="27" rx="4"/>
+  </g>
+  <path d="M105 136c0-10 17-10 17 0" fill="none" stroke="var(--a3)" stroke-width="3.6" opacity=".9"/>
+</symbol>
+
+<defs>
+  <linearGradient id="ph-bg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#171d3a"/><stop offset="1" stop-color="#0a0d1c"/>
+  </linearGradient>
+  <linearGradient id="ph-floor" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#1b2140"/><stop offset="1" stop-color="#0d1124"/>
+  </linearGradient>
+  <linearGradient id="ph-shaft" x1="0" y1="0" x2="0.4" y2="1">
+    <stop offset="0" stop-color="#cfe0ff" stop-opacity=".30"/>
+    <stop offset="1" stop-color="#cfe0ff" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="ph-warm" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffd98a" stop-opacity=".42"/>
+    <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+  </linearGradient>
+  <radialGradient id="ph-glow"><stop offset="0" stop-color="#ffe9b8" stop-opacity=".55"/><stop offset="1" stop-color="#ffe9b8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="ph-cool"><stop offset="0" stop-color="#bcd4ff" stop-opacity=".5"/><stop offset="1" stop-color="#bcd4ff" stop-opacity="0"/></radialGradient>
+  <clipPath id="ph-clip"><rect x="0" y="0" width="120" height="108" rx="2"/></clipPath>
+</defs>
+
+<!-- 1. the latched window -->
+<symbol id="a-window" viewBox="0 0 120 108">
+  <rect width="120" height="108" fill="url(#ph-bg)"/>
+  <circle cx="60" cy="40" r="42" fill="url(#ph-cool)" opacity=".5"/>
+  <path d="M34 16h52v60H34z" fill="#26325c"/>
+  <g fill="#3d4d84">
+    <rect x="37" y="19" width="21" height="25"/><rect x="62" y="19" width="21" height="25"/>
+    <rect x="37" y="48" width="21" height="25"/><rect x="62" y="48" width="21" height="25"/>
+  </g>
+  <circle cx="72" cy="28" r="7" fill="#f2f0dd" opacity=".9"/>
+  <path d="M30 12h60v6H30zM30 12h5v66h-5zM85 12h5v66h-5zM57 18h6v58h-6zM34 43h52v6H34z" fill="#080b18"/>
+  <path d="M86 76 116 108H60z" fill="url(#ph-shaft)"/>
+  <path d="M34 76 4 108h56z" fill="url(#ph-shaft)" opacity=".55"/>
+  <rect x="22" y="76" width="76" height="7" rx="1.5" fill="#0b0e1e"/>
+  <rect x="22" y="76" width="76" height="2" fill="#7f8bb8" opacity=".55"/>
+  <rect x="0" y="83" width="120" height="25" fill="url(#ph-floor)"/>
+  <g fill="#cfd8f5" opacity=".5">
+    <circle cx="33" cy="80" r=".9"/><circle cx="45" cy="79.5" r=".7"/><circle cx="58" cy="80" r="1"/>
+    <circle cx="70" cy="79.5" r=".8"/><circle cx="84" cy="80" r=".9"/><circle cx="92" cy="79.5" r=".6"/>
+  </g>
+  <circle cx="60" cy="46" r="9" fill="url(#ph-glow)"/>
+  <rect x="55" y="42" width="10" height="7" rx="1.5" fill="#e6b53f"/>
+  <rect x="58.5" y="35" width="3" height="8" rx="1.5" fill="#e6b53f"/>
+  <rect x="55" y="42" width="10" height="2" fill="#ffe9b8"/>
+</symbol>
+
+<!-- 2. the skylight in the rain -->
+<symbol id="a-skylight" viewBox="0 0 120 108">
+  <rect width="120" height="108" fill="url(#ph-bg)"/>
+  <path d="M0 0h120v46H0z" fill="#0a0d1c"/>
+  <path d="M34 10h56l10 34H26z" fill="#28345f"/>
+  <path d="M37 13h50l8 28H30z" fill="#4a5f9e"/>
+  <circle cx="74" cy="24" r="6" fill="#f2f0dd" opacity=".85"/>
+  <g fill="#7f97d8" opacity=".55">
+    <circle cx="44" cy="20" r="1"/><circle cx="56" cy="32" r=".8"/><circle cx="84" cy="34" r="1"/>
+  </g>
+  <g stroke="#bcd4ff" stroke-width="1.4" stroke-linecap="round" opacity=".5">
+    <path d="M40 14l-3 26M52 12l-3 28M64 12l-3 28M76 13l-3 26M88 15l-2 24"/>
+  </g>
+  <path d="M34 10h56l10 34H26z" fill="none" stroke="#080b18" stroke-width="4"/>
+  <path d="M60 10v34M26 30h84" stroke="#080b18" stroke-width="3"/>
+  <path d="M26 44h68l16 50H10z" fill="url(#ph-shaft)"/>
+  <rect x="0" y="82" width="120" height="26" fill="url(#ph-floor)"/>
+  <ellipse cx="60" cy="92" rx="42" ry="9" fill="#bcd4ff" opacity=".12"/>
+  <g stroke="#9fb4e8" stroke-width="1.2" stroke-linecap="round" opacity=".35">
+    <path d="M14 88h16M90 96h18M40 100h22"/>
+  </g>
+</symbol>
+
+<!-- 3. the alarm panel -->
+<symbol id="a-alarm" viewBox="0 0 120 108">
+  <rect width="120" height="108" fill="url(#ph-bg)"/>
+  <circle cx="60" cy="50" r="44" fill="url(#ph-glow)" opacity=".35"/>
+  <rect x="36" y="12" width="48" height="84" rx="5" fill="#161c34"/>
+  <rect x="36" y="12" width="48" height="84" rx="5" fill="none" stroke="#39457a" stroke-width="2"/>
+  <rect x="38.5" y="14.5" width="43" height="79" rx="4" fill="none" stroke="#5d6ba8" stroke-width="1" opacity=".5"/>
+  <rect x="43" y="20" width="34" height="17" rx="2" fill="#0a1a16"/>
+  <rect x="43" y="20" width="34" height="17" rx="2" fill="#2ed3a0" opacity=".22"/>
+  <g stroke="#7ff0cc" stroke-width="2" stroke-linecap="round" opacity=".9">
+    <path d="M47 27h10M60 27h5M68 27h4M47 32h16"/>
+  </g>
+  <g fill="#39457a">
+    <rect x="45" y="45" width="9" height="8" rx="1.5"/><rect x="56" y="45" width="9" height="8" rx="1.5"/>
+    <rect x="67" y="45" width="9" height="8" rx="1.5"/><rect x="45" y="57" width="9" height="8" rx="1.5"/>
+    <rect x="56" y="57" width="9" height="8" rx="1.5"/><rect x="67" y="57" width="9" height="8" rx="1.5"/>
+    <rect x="45" y="69" width="9" height="8" rx="1.5"/><rect x="56" y="69" width="9" height="8" rx="1.5"/>
+    <rect x="67" y="69" width="9" height="8" rx="1.5"/>
+  </g>
+  <g fill="#8e9bd4" opacity=".6">
+    <rect x="45" y="45" width="9" height="2" rx="1"/><rect x="56" y="45" width="9" height="2" rx="1"/>
+    <rect x="67" y="45" width="9" height="2" rx="1"/>
+  </g>
+  <circle cx="60" cy="87" r="4.5" fill="#e6b53f"/>
+  <circle cx="60" cy="87" r="8" fill="url(#ph-glow)"/>
+  <g fill="#6d7ab5">
+    <circle cx="40" cy="16" r="1.4"/><circle cx="80" cy="16" r="1.4"/>
+    <circle cx="40" cy="92" r="1.4"/><circle cx="80" cy="92" r="1.4"/>
+  </g>
+</symbol>
+
+<!-- 4. the empty display case -->
+<symbol id="a-case" viewBox="0 0 120 108">
+  <rect width="120" height="108" fill="url(#ph-bg)"/>
+  <rect x="0" y="84" width="120" height="24" fill="url(#ph-floor)"/>
+  <path d="M28 20h48v64H28z" fill="#ffd98a" opacity=".10"/>
+  <rect x="24" y="84" width="56" height="8" rx="1.5" fill="#0b0e1e"/>
+  <rect x="30" y="62" width="44" height="22" fill="#141a33"/>
+  <rect x="30" y="62" width="44" height="3" fill="#5f6ea8" opacity=".6"/>
+  <rect x="44" y="68" width="16" height="16" rx="1" fill="#0a0d1c"/>
+  <rect x="28" y="18" width="48" height="46" rx="2" fill="#2a3560" opacity=".35"/>
+  <rect x="28" y="18" width="48" height="46" rx="2" fill="none" stroke="#7d8cc8" stroke-width="2"/>
+  <path d="M33 60 60 22M44 62 71 24" stroke="#cfe0ff" stroke-width="2" opacity=".2"/>
+  <path d="M76 18l22 12v46L76 64z" fill="#2a3560" opacity=".3"/>
+  <path d="M76 18l22 12v46L76 64z" fill="none" stroke="#e6b53f" stroke-width="2"/>
+  <path d="M80 24l14 9" stroke="#ffe9b8" stroke-width="1.6" opacity=".4"/>
+  <circle cx="73" cy="42" r="2.6" fill="#e6b53f"/>
+  <circle cx="73" cy="42" r="7" fill="url(#ph-glow)"/>
+  <ellipse cx="52" cy="92" rx="30" ry="5" fill="#000" opacity=".3"/>
+</symbol>
+
+<!-- 5. the basement door, painted shut -->
+<symbol id="a-floor" viewBox="0 0 120 108">
+  <rect width="120" height="108" fill="url(#ph-bg)"/>
+  <rect x="0" y="88" width="120" height="20" fill="url(#ph-floor)"/>
+  <rect x="34" y="14" width="52" height="78" rx="2" fill="#141a33"/>
+  <rect x="34" y="14" width="52" height="78" rx="2" fill="none" stroke="#39457a" stroke-width="2.5"/>
+  <rect x="40" y="22" width="40" height="28" rx="1.5" fill="#1b2240" stroke="#2f3a68" stroke-width="1.5"/>
+  <rect x="40" y="56" width="40" height="28" rx="1.5" fill="#1b2240" stroke="#2f3a68" stroke-width="1.5"/>
+  <path d="M34 14h52v78" fill="none" stroke="#ffd98a" stroke-width="2" opacity=".5"/>
+  <path d="M86 92H34V14" fill="none" stroke="#ffd98a" stroke-width="1.2" opacity=".22"/>
+  <circle cx="60" cy="53" r="24" fill="url(#ph-glow)" opacity=".3"/>
+  <circle cx="79" cy="54" r="2.6" fill="#8e9bd4"/>
+  <g stroke="#e6b53f" stroke-width="2" stroke-linecap="round" opacity=".85">
+    <path d="M30 92h60"/>
+  </g>
+  <g fill="#e6b53f" opacity=".35">
+    <circle cx="36" cy="88" r="1.6"/><circle cx="60" cy="89" r="1.3"/><circle cx="84" cy="88" r="1.6"/>
+  </g>
+  <path d="M0 0h120v10H0z" fill="#080b18"/>
+</symbol>
+
+<!-- 6. the boot prints -->
+<symbol id="a-prints" viewBox="0 0 120 108">
+  <rect width="120" height="108" fill="url(#ph-bg)"/>
+  <rect x="0" y="22" width="120" height="86" fill="url(#ph-floor)"/>
+  <path d="M0 22h120v3H0z" fill="#39457a" opacity=".5"/>
+  <path d="M-10 22 30 108M40 22l10 86M80 22l-4 86M118 22l-30 86" stroke="#2a3560" stroke-width="1.2" opacity=".5"/>
+  <path d="M0 24 60 12l60 12v6L60 20 0 30z" fill="#ffd98a" opacity=".07"/>
+  <g fill="#0a0d1c">
+    <ellipse cx="34" cy="44" rx="8" ry="10"/><ellipse cx="34" cy="57" rx="6" ry="5"/>
+    <ellipse cx="62" cy="64" rx="9" ry="11.5"/><ellipse cx="62" cy="79" rx="7" ry="5.5"/>
+    <ellipse cx="36" cy="86" rx="10" ry="12.5"/><ellipse cx="36" cy="102" rx="8" ry="6"/>
+  </g>
+  <g stroke="#5f6ea8" stroke-width="1.1" fill="none" stroke-linejoin="round" opacity=".85">
+    <path d="M29 40l5-3 5 3M29 45l5-3 5 3M29 50l5-3 5 3"/>
+    <path d="M56 59l6-3.4 6 3.4M56 65l6-3.4 6 3.4M56 71l6-3.4 6 3.4"/>
+    <path d="M29 80l7-4 7 4M29 87l7-4 7 4M29 94l7-4 7 4"/>
+  </g>
+  <g fill="#cfd8f5" opacity=".22">
+    <ellipse cx="42" cy="44" rx="3" ry="10"/><ellipse cx="71" cy="64" rx="3" ry="11"/><ellipse cx="46" cy="86" rx="3" ry="12"/>
+  </g>
+  <g transform="rotate(-6 96 74)">
+    <path d="M88 60h18v22H88z" fill="#f2efe2"/>
+    <path d="M88 60h18v6H88z" fill="#c0304e"/>
+    <path d="M94 70h6v8h-6z" fill="#2b2636"/>
+  </g>
+</symbol>
+
+<!-- 7. one figure in the doorway -->
+<symbol id="a-crowd" viewBox="0 0 120 108">
+  <rect width="120" height="108" fill="url(#ph-bg)"/>
+  <rect x="0" y="84" width="120" height="24" fill="url(#ph-floor)"/>
+  <rect x="38" y="8" width="44" height="78" fill="#ffe9b8" opacity=".16"/>
+  <rect x="38" y="8" width="44" height="78" fill="none" stroke="#e6b53f" stroke-width="2" opacity=".55"/>
+  <path d="M38 86 14 108h92L82 86z" fill="url(#ph-warm)" opacity=".5"/>
+  <g fill="#070a16" opacity=".3">
+    <circle cx="26" cy="56" r="7"/><path d="M26 65c-8 0-13 8-13 17v10h26V82c0-9-5-17-13-17z"/>
+    <circle cx="96" cy="56" r="7"/><path d="M96 65c-8 0-13 8-13 17v10h26V82c0-9-5-17-13-17z"/>
+  </g>
+  <g stroke="#e6b53f" stroke-width="2" stroke-linecap="round" opacity=".5">
+    <path d="M18 44l14 14M32 44 18 58M88 44l14 14M102 44 88 58"/>
+  </g>
+  <path d="M60 86 44 108h32z" fill="#070a16" opacity=".55"/>
+  <g fill="#070a16">
+    <circle cx="60" cy="38" r="10"/>
+    <path d="M60 51c-11 0-18 11-18 24v11h36V75c0-13-7-24-18-24z"/>
+  </g>
+  <path d="M50 51c-5 4-8 13-8 24v11h6V75c0-10 1-19 2-24z" fill="#8e9bd4" opacity=".35"/>
+  <circle cx="60" cy="38" r="10" fill="none" stroke="#8e9bd4" stroke-width="1.4" opacity=".3"/>
+</symbol>
+
+<!-- 8. the key cabinet, one hook empty -->
+<symbol id="a-keys" viewBox="0 0 120 108">
+  <rect width="120" height="108" fill="url(#ph-bg)"/>
+  <rect x="16" y="10" width="88" height="88" rx="3" fill="#121831"/>
+  <rect x="16" y="10" width="88" height="88" rx="3" fill="none" stroke="#39457a" stroke-width="2.5"/>
+  <rect x="21" y="15" width="78" height="78" rx="2" fill="#0c1024"/>
+  <rect x="21" y="15" width="78" height="10" fill="#1d2542"/>
+  <path d="M27 20h34" stroke="#e6b53f" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>
+  <g stroke="#4c5896" stroke-width="2" stroke-linecap="round">
+    <path d="M32 34v4M52 34v4M72 34v4M92 34v4M32 64v4M72 64v4M92 64v4"/>
+  </g>
+  <g stroke="#2a3560" stroke-width="1.5"><path d="M24 38h72M24 68h72"/></g>
+  <g fill="#8e9bd4">
+    <g><circle cx="32" cy="45" r="4"/><rect x="30.5" y="48" width="3" height="9"/><rect x="33.5" y="51" width="4" height="2"/><rect x="33.5" y="55" width="4" height="2"/></g>
+    <g><circle cx="52" cy="45" r="4"/><rect x="50.5" y="48" width="3" height="9"/><rect x="53.5" y="51" width="4" height="2"/><rect x="53.5" y="55" width="4" height="2"/></g>
+    <g><circle cx="92" cy="45" r="4"/><rect x="90.5" y="48" width="3" height="9"/><rect x="93.5" y="51" width="4" height="2"/><rect x="93.5" y="55" width="4" height="2"/></g>
+    <g><circle cx="32" cy="75" r="4"/><rect x="30.5" y="78" width="3" height="9"/><rect x="33.5" y="81" width="4" height="2"/></g>
+    <g><circle cx="92" cy="75" r="4"/><rect x="90.5" y="78" width="3" height="9"/><rect x="93.5" y="81" width="4" height="2"/></g>
+  </g>
+  <circle cx="72" cy="48" r="17" fill="url(#ph-glow)"/>
+  <circle cx="72" cy="37" r="4.5" fill="none" stroke="#e6b53f" stroke-width="2.5"/>
+  <g transform="rotate(-4 72 56)">
+    <rect x="62" y="50" width="21" height="11" rx="1.5" fill="#f2efe2"/>
+    <path d="M66 54h13M66 57.5h9" stroke="#8a8199" stroke-width="1.6" stroke-linecap="round"/>
+  </g>
+</symbol>
+
+
+
+<!-- ===== Reveal: the potting shed ===== -->
+<symbol id="a-reveal" viewBox="0 0 420 230">
+  <rect x="0" y="196" width="420" height="34" fill="#141728"/>
+  <path d="M0 196h420" stroke="#2b3050" stroke-width="2"/>
+  <g fill="#1a1e33">
+    <path d="M28 62 130 20l102 42z"/>
+    <rect x="36" y="62" width="188" height="134"/>
+  </g>
+  <g fill="#2b3050">
+    <rect x="54" y="86" width="42" height="38" rx="2"/><rect x="164" y="86" width="42" height="38" rx="2"/>
+  </g>
+  <path d="M54 105h42M75 86v38" stroke="#141728" stroke-width="3"/>
+  <rect x="112" y="122" width="38" height="74" rx="2" fill="#212640"/>
+  <circle cx="142" cy="160" r="3" fill="#e6b53f"/>
+  <g fill="#2b3050">
+    <rect x="236" y="158" width="56" height="38" rx="7"/>
+    <rect x="226" y="174" width="56" height="22" rx="7"/>
+  </g>
+  <path d="M244 168h40M234 184h36" stroke="#1a1e33" stroke-width="3" stroke-linecap="round"/>
+  <g style="--a1:#3a2a05;--a2:#e6b53f;--a3:#fbf3dd">
+    <use href="#a-owl" x="0" y="0" width="160" height="200" transform="translate(262 106) scale(.46)"/>
+  </g>
+  <g style="--a1:#0c0e17;--a2:#7d895d;--a3:#e3e7f2">
+    <use href="#a-keeper" x="0" y="0" width="140" height="200" transform="translate(336 82) scale(.6)"/>
+  </g>
+</symbol>
+
+<!-- ===== Sense marks: how a piece of evidence reached you ===== -->
+<symbol id="s-saw" viewBox="0 0 24 24">
+  <path d="M2 12s3.8-6.5 10-6.5S22 12 22 12s-3.8 6.5-10 6.5S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="2"/>
+  <circle cx="12" cy="12" r="3.2" fill="currentColor"/>
+</symbol>
+<symbol id="s-heard" viewBox="0 0 24 24">
+  <path d="M7 10a5.5 5.5 0 0 1 11 0c0 4-3.5 4.5-3.5 7.5a2.6 2.6 0 0 1-5 .6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M10.5 10a1.8 1.8 0 0 1 3.5.6c0 1.4-1.6 1.8-1.6 3.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</symbol>
+<symbol id="s-touched" viewBox="0 0 24 24">
+  <path d="M9 12V5.2a1.7 1.7 0 0 1 3.4 0V11m0-1.2a1.7 1.7 0 0 1 3.4 0V12m0-1a1.7 1.7 0 0 1 3.3 0v5.2c0 3.1-2.4 5.4-5.6 5.4-2.6 0-4.3-1-5.6-3L5 14.4a1.75 1.75 0 0 1 2.8-2z"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+</symbol>
+<symbol id="s-record" viewBox="0 0 24 24">
+  <path d="M6 2.5h8l4.5 4.5v14.5H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M14 2.5V7h4.5M9 12h6M9 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+</symbol>
+<symbol id="s-mind" viewBox="0 0 24 24">
+  <path d="M6.5 16.5a4 4 0 0 1 .4-8 5 5 0 0 1 9.3.8 3.6 3.6 0 0 1 .4 7.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="6" cy="20" r="1.5" fill="currentColor"/><circle cx="2.6" cy="22.2" r="1" fill="currentColor"/>
+</symbol>
+
+<!-- ===== Bin marks ===== -->
+<symbol id="a-bin-ev" viewBox="0 0 120 90">
+  <rect x="14" y="34" width="62" height="44" rx="4" fill="var(--a1)" opacity=".28"/>
+  <path d="M14 44h62" stroke="var(--a1)" stroke-width="2.5" opacity=".5"/>
+  <path d="M34 34V26a11 11 0 0 1 22 0v8" fill="none" stroke="var(--a1)" stroke-width="3"/>
+  <path d="M26 58h14M26 66h22" stroke="var(--a1)" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
+  <circle cx="84" cy="40" r="17" fill="none" stroke="var(--a2)" stroke-width="5"/>
+  <circle cx="84" cy="40" r="17" fill="var(--a2)" opacity=".12"/>
+  <path d="M96 52l13 14" stroke="var(--a2)" stroke-width="5.5" stroke-linecap="round"/>
+</symbol>
+<symbol id="a-bin-im" viewBox="0 0 120 90">
+  <path d="M34 62a15 15 0 0 1 1.4-30 19 19 0 0 1 35.6 3 14 14 0 0 1 1.5 27z" fill="var(--a1)" opacity=".26"/>
+  <path d="M34 62a15 15 0 0 1 1.4-30 19 19 0 0 1 35.6 3 14 14 0 0 1 1.5 27z" fill="none" stroke="var(--a2)" stroke-width="3"/>
+  <circle cx="30" cy="72" r="4.5" fill="var(--a2)" opacity=".7"/>
+  <circle cx="22" cy="80" r="2.6" fill="var(--a2)" opacity=".5"/>
+  <path d="M92 26l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="var(--a2)" opacity=".8"/>
+  <path d="M104 54l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="var(--a2)" opacity=".55"/>
+</symbol>
+
+<!-- ===== Hero: the gallery, the morning after ===== -->
+<symbol id="a-heist" viewBox="0 0 660 270">
+  <defs>
+    <linearGradient id="g-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#151a33"/><stop offset="1" stop-color="#0c0e1b"/>
+    </linearGradient>
+    <linearGradient id="g-cone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffdc8a" stop-opacity=".30"/>
+      <stop offset="1" stop-color="#ffdc8a" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="g-torch" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffe9b0" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#ffe9b0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="g-fog" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3050" stop-opacity="0"/>
+      <stop offset="1" stop-color="#2b3050" stop-opacity=".5"/>
+    </linearGradient>
+    <radialGradient id="g-moon2"><stop offset="0" stop-color="#fff7e0"/><stop offset="1" stop-color="#e6d5a4"/></radialGradient>
+  </defs>
+
+  <rect width="660" height="270" fill="url(#g-sky)"/>
+
+  <!-- arched windows onto the night, clear of the plinth -->
+  <g>
+    <path d="M46 60a34 34 0 0 1 68 0v92H46z" fill="#0a0d1c"/>
+    <path d="M556 60a34 34 0 0 1 68 0v92h-68z" fill="#0a0d1c"/>
+    <circle cx="80" cy="58" r="26" fill="#ffe9b0" opacity=".12" style="animation:halo 9s ease-in-out infinite"/>
+    <circle cx="80" cy="58" r="16" fill="url(#g-moon2)"/>
+    <circle cx="86" cy="51" r="3.2" fill="#cdbd8c" opacity=".6"/>
+    <circle cx="74" cy="65" r="2" fill="#cdbd8c" opacity=".5"/>
+    <g fill="#f4ece0">
+      <circle cx="62" cy="96" r="1.3" style="animation:twinkle 4s ease-in-out infinite"/>
+      <circle cx="104" cy="112" r="1" style="animation:twinkle 5.5s ease-in-out infinite 1.1s"/>
+      <circle cx="572" cy="80" r="1.3" style="animation:twinkle 4.8s ease-in-out infinite .6s"/>
+      <circle cx="604" cy="104" r="1.1" style="animation:twinkle 6s ease-in-out infinite 2.2s"/>
+      <circle cx="590" cy="130" r="1" style="animation:twinkle 5s ease-in-out infinite 3s"/>
+    </g>
+    <path d="M46 60a34 34 0 0 1 68 0v92H46zM556 60a34 34 0 0 1 68 0v92h-68z"
+          fill="none" stroke="#2b3050" stroke-width="5"/>
+    <path d="M80 26v126M46 106h68M590 26v126M556 106h68" stroke="#2b3050" stroke-width="4"/>
+  </g>
+
+  <!-- gallery wall, columns, cornice -->
+  <rect x="0" y="152" width="660" height="10" fill="#2b3050"/>
+  <g fill="#1a1e33">
+    <rect x="160" y="30" width="26" height="122"/><rect x="208" y="30" width="26" height="122"/>
+    <rect x="380" y="30" width="26" height="122"/><rect x="428" y="30" width="26" height="122"/>
+    <rect x="0" y="18" width="660" height="14"/>
+  </g>
+  <g fill="#212640">
+    <rect x="156" y="30" width="34" height="8"/><rect x="204" y="30" width="34" height="8"/>
+    <rect x="376" y="30" width="34" height="8"/><rect x="424" y="30" width="34" height="8"/>
+  </g>
+
+  <!-- floor -->
+  <rect x="0" y="162" width="660" height="108" fill="#11142a"/>
+  <g stroke="#1e2440" stroke-width="2">
+    <path d="M0 196h660M0 226h660"/>
+    <path d="M120 162 60 270M300 162l-40 108M420 162l60 108M560 162l70 108"/>
+  </g>
+
+  <rect x="250" y="40" width="100" height="112" rx="3" fill="#161a30"/>
+  <rect x="250" y="40" width="100" height="112" rx="3" fill="none" stroke="#242a48" stroke-width="3"/>
+
+  <!-- spotlight on an empty plinth -->
+  <path d="M258 18h84l64 190H194z" fill="url(#g-cone)" style="animation:flicker 5.5s ease-in-out infinite"/>
+  <ellipse cx="300" cy="248" rx="70" ry="12" fill="#ffdc8a" opacity=".05"/>
+  <ellipse cx="300" cy="212" rx="86" ry="16" fill="#ffdc8a" opacity=".07"/>
+  <rect x="252" y="200" width="96" height="12" rx="2" fill="#2b3050"/>
+  <rect x="266" y="166" width="68" height="34" rx="2" fill="#212640"/>
+  <rect x="266" y="166" width="68" height="5" fill="#2b3050"/>
+
+  <!-- the owl that should be standing there -->
+  <g opacity=".55">
+    <path d="M300 96c-19 0-31 20-31 45 0 29 14 49 31 49s31-20 31-49c0-25-12-45-31-45z"
+          fill="none" stroke="#e6b53f" stroke-width="3" stroke-dasharray="7 7"/>
+    <path d="M281 104l-7-15 16 9M319 104l7-15-16 9" fill="none" stroke="#e6b53f" stroke-width="3" stroke-dasharray="6 6"/>
+    <circle cx="289" cy="128" r="9" fill="none" stroke="#e6b53f" stroke-width="3" stroke-dasharray="5 5"/>
+    <circle cx="311" cy="128" r="9" fill="none" stroke="#e6b53f" stroke-width="3" stroke-dasharray="5 5"/>
+  </g>
+  <g transform="rotate(-7 300 224)">
+    <rect x="266" y="216" width="68" height="17" rx="2" fill="#f4ece0"/>
+    <path d="M274 222h52M274 228h34" stroke="#8a8199" stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+
+  <!-- police tape -->
+  <g transform="rotate(-5 330 244)">
+    <rect x="-20" y="236" width="700" height="20" fill="#e6b53f"/>
+    <g fill="#1a1400" opacity=".85">
+      <path d="M10 236h10l-14 20H-4zM70 236h10l-14 20H56zM130 236h10l-14 20h-10zM190 236h10l-14 20h-10zM250 236h10l-14 20h-10zM310 236h10l-14 20h-10zM370 236h10l-14 20h-10zM430 236h10l-14 20h-10zM490 236h10l-14 20h-10zM550 236h10l-14 20h-10zM610 236h10l-14 20h-10z"/>
+    </g>
+  </g>
+
+  <!-- the detective, torch out -->
+  <path d="M470 176l-120 52 120 26z" fill="url(#g-torch)"/>
+  <g style="--a1:#080a14;--a2:#333a5e;--a3:#e6b53f">
+    <use href="#a-detective" x="0" y="0" width="140" height="200" transform="translate(462 94) scale(.72)"/>
+  </g>
+
+  <rect x="0" y="206" width="660" height="64" fill="url(#g-fog)"/>
+  <g fill="#ffe9b0">
+    <circle cx="246" cy="120" r="1.6" style="animation:rise 7s ease-in-out infinite"/>
+    <circle cx="352" cy="150" r="1.3" style="animation:rise 9s ease-in-out infinite 1.4s"/>
+    <circle cx="286" cy="104" r="1.1" style="animation:rise 8s ease-in-out infinite 2.6s"/>
+    <circle cx="330" cy="186" r="1.5" style="animation:rise 10s ease-in-out infinite .7s"/>
+    <circle cx="262" cy="166" r="1.2" style="animation:rise 8.5s ease-in-out infinite 3.4s"/>
+  </g>
+  <!-- drifting haze, and a barrier close to the lens for depth -->
+  <g opacity=".5" style="animation:drift 26s ease-in-out infinite">
+    <ellipse cx="200" cy="228" rx="190" ry="26" fill="#2b3050" opacity=".55"/>
+    <ellipse cx="470" cy="238" rx="200" ry="22" fill="#2b3050" opacity=".4"/>
+  </g>
+  <g fill="#05070f">
+    <rect x="86" y="196" width="13" height="74" rx="5"/><ellipse cx="92" cy="196" rx="11" ry="5"/>
+    <rect x="556" y="190" width="14" height="80" rx="5"/><ellipse cx="563" cy="190" rx="12" ry="5"/>
+  </g>
+  <path d="M97 206q170 42 460 8" fill="none" stroke="#05070f" stroke-width="7" stroke-linecap="round"/>
+  <path d="M97 204q170 42 460 8" fill="none" stroke="#3a4066" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+</symbol>
+
+<!-- ===== The case board ===== -->
+<symbol id="a-board" viewBox="0 0 660 300">
+  <defs>
+    <linearGradient id="g-cork" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a3a28"/><stop offset="1" stop-color="#372b1e"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="644" height="284" rx="6" fill="url(#g-cork)"/>
+  <rect x="8" y="8" width="644" height="284" rx="6" fill="none" stroke="#231b12" stroke-width="10"/>
+  <g fill="#5c4830" opacity=".5">
+    <circle cx="70" cy="60" r="2"/><circle cx="210" cy="40" r="1.6"/><circle cx="420" cy="70" r="2.2"/>
+    <circle cx="560" cy="45" r="1.6"/><circle cx="150" cy="250" r="2"/><circle cx="500" cy="255" r="1.7"/>
+    <circle cx="330" cy="30" r="1.5"/><circle cx="620" cy="180" r="2"/>
+  </g>
+
+  <!-- red string -->
+  <path d="M104 98 300 74 496 108 300 206 104 98" fill="none" stroke="#c0304e" stroke-width="2.6" opacity=".9"/>
+
+  <!-- the owl, recovered -->
+  <g transform="rotate(-3 300 74)">
+    <rect x="248" y="26" width="104" height="96" fill="#f4ece0"/>
+    <rect x="254" y="32" width="92" height="72" fill="#171a2e"/>
+    <g style="--a1:#3a2a05;--a2:#e6b53f;--a3:#fbf3dd">
+      <use href="#a-owl" x="0" y="0" width="160" height="200" transform="translate(272 34) scale(.34)"/>
+    </g>
+    <path d="M262 112h48" stroke="#8a8199" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- the suspect -->
+  <g transform="rotate(4 496 130)">
+    <rect x="450" y="66" width="92" height="98" fill="#f4ece0"/>
+    <rect x="456" y="72" width="80" height="72" fill="#171a2e"/>
+    <g style="--a1:#0c0e17;--a2:#7d895d;--a3:#e3e7f2">
+      <use href="#a-keeper" x="0" y="0" width="140" height="200" transform="translate(468 64) scale(.38)"/>
+    </g>
+    <path d="M464 154h46" stroke="#8a8199" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- evidence notes -->
+  <g transform="rotate(-6 104 122)">
+    <rect x="54" y="70" width="100" height="104" fill="#f8f4e8"/>
+    <g transform="translate(60 76)"><g clip-path="url(#ph-clip)">
+      <use href="#a-prints" x="0" y="0" width="88" height="79"/>
+      <rect width="88" height="79" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="2"/>
+    </g></g>
+    <path d="M64 162h44" stroke="#bdb3a0" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g transform="rotate(6 300 218)">
+    <rect x="252" y="182" width="96" height="62" fill="#f6efdf"/>
+    <path d="M262 198h76M262 208h56M262 218h70" stroke="#9a9184" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g transform="rotate(5 566 218)">
+    <rect x="516" y="176" width="100" height="104" fill="#f8f4e8"/>
+    <g transform="translate(522 182)"><g clip-path="url(#ph-clip)">
+      <use href="#a-keys" x="0" y="0" width="88" height="79"/>
+      <rect width="88" height="79" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="2"/>
+    </g></g>
+    <path d="M526 268h44" stroke="#bdb3a0" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g transform="rotate(7 110 232)">
+    <rect x="66" y="200" width="84" height="56" fill="#f6efdf"/>
+    <path d="M76 216h62M76 226h44M76 236h56" stroke="#9a9184" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- pins -->
+  <g>
+    <circle cx="300" cy="30" r="7" fill="#c0304e"/><circle cx="298" cy="28" r="2.4" fill="#f4a0b2"/>
+    <circle cx="496" cy="70" r="7" fill="#e6b53f"/><circle cx="494" cy="68" r="2.4" fill="#fff0c2"/>
+    <circle cx="104" cy="74" r="7" fill="#3ed6a5"/><circle cx="102" cy="72" r="2.4" fill="#c8f7e8"/>
+    <circle cx="300" cy="186" r="7" fill="#ac88ff"/><circle cx="298" cy="184" r="2.4" fill="#e4d6ff"/>
+    <circle cx="566" cy="180" r="7" fill="#c0304e"/><circle cx="564" cy="178" r="2.4" fill="#f4a0b2"/>
+    <circle cx="110" cy="204" r="7" fill="#e6b53f"/><circle cx="108" cy="202" r="2.4" fill="#fff0c2"/>
+  </g>
+
+  <!-- solved -->
+  <g transform="rotate(-8 400 250)">
+    <rect x="336" y="232" width="128" height="34" rx="3" fill="none" stroke="#3ed6a5" stroke-width="4"/>
+    <path d="M352 249l9 9 18-18" fill="none" stroke="#3ed6a5" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M390 243h60M390 255h40" stroke="#3ed6a5" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</symbol>
+
+</svg>
+
+<div class="vignette" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<audio id="bgm" src="openmindaudio-mystery-clueprints-and-crooked-footsteps-529280.mp3" loop preload="auto"></audio>
+
+<div class="app">
+  <header class="top">
+    <div class="top__row">
+      <div class="crest" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M4 9.5c0-3.6 3.6-6.5 8-6.5s8 2.9 8 6.5c0 5.4-3.6 11.5-8 11.5S4 14.9 4 9.5Z" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="9" cy="9.5" r="2.2" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="15" cy="9.5" r="2.2" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M12 12.2 10.9 14h2.2L12 12.2Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="wordmark">
+        <div class="name">THE CASE OF THE GOLDEN OWL</div>
+        <div class="sub">Real vs imagined</div>
+      </div>
+      <div class="top__right">
+        <div class="counter" id="counter"></div>
+        <button class="iconbtn" id="mute" aria-label="Mute sound" aria-pressed="false"></button>
+      </div>
+    </div>
+    <div class="track" id="track" aria-hidden="true"></div>
+  </header>
+
+  <main id="stage"></main>
+  <p class="sr" id="live" role="status" aria-live="polite"></p>
+
+  <div class="footer">
+    <a href="/ocd-skills">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to CBT Games
+    </a>
+  </div>
+</div>
+
+<script>
+/* E = evidence: what the senses and the facts at the scene show.
+   I = imagination: what could have, might have, usually does happen. */
+const THOUGHTS = [
+{
+  thought:"The robber could have escaped through the window.",
+  cards:[
+    {t:"I can see the window latch is locked from the inside.", s:"E", sense:"saw", why:"You're looking right at it."},
+    {t:"There's a layer of dust on the windowsill with no marks in it.", s:"E", sense:"saw", why:"Undisturbed dust is something you can see."},
+    {t:"The back door was standing open when we arrived.", s:"E", sense:"saw", why:"You walked in and saw it."},
+    {t:"A skilled thief could relock a window from the outside.", s:"I", sense:"mind", why:"“Could” is imagination. Nothing here shows it happened."},
+    {t:"Windows are the classic escape route in every heist movie.", s:"I", sense:"mind", why:"Movies aren't this museum."},
+    {t:"Maybe someone inside locked it behind them.", s:"I", sense:"mind", why:"“Maybe” invents a second person nobody has seen."}
+  ],
+  fact:"The thief used the back door, not the window.",
+  art:"window"
+},
+{
+  thought:"They might have come in through the skylight.",
+  cards:[
+    {t:"The skylight glass is whole. No cracks, no cuts.", s:"E", sense:"saw", why:"You can see the glass."},
+    {t:"It rained last night, and the floor under the skylight is bone dry.", s:"E", sense:"touched", why:"Rain and a dry floor are both facts at the scene."},
+    {t:"The only ladder is still chained up in the supply closet.", s:"E", sense:"saw", why:"You checked the closet and saw the chain."},
+    {t:"A pro could cut the glass and put it back perfectly.", s:"I", sense:"mind", why:"A story about what a pro might do. The glass says nothing of the kind."},
+    {t:"Someone could have been lowered in by a drone.", s:"I", sense:"mind", why:"Exciting. Also completely unsupported."},
+    {t:"I've seen this exact move in a spy movie.", s:"I", sense:"mind", why:"A memory of a movie is not a clue in this room."}
+  ],
+  fact:"Nobody came through the roof.",
+  art:"skylight"
+},
+{
+  thought:"The alarm might have been hacked.",
+  cards:[
+    {t:"The alarm log shows it was turned off at 11:52 pm with a staff code.", s:"E", sense:"record", why:"It's printed right on the log."},
+    {t:"The alarm panel cover is closed and the screws are untouched.", s:"E", sense:"saw", why:"You can see the screws."},
+    {t:"The staff list shows only four people have alarm codes.", s:"E", sense:"record", why:"A fact about this museum, on paper."},
+    {t:"Good hackers can fake a log so it looks normal.", s:"I", sense:"mind", why:"“Can” is about what's possible, not what happened here."},
+    {t:"This could be the work of an international cyber gang.", s:"I", sense:"mind", why:"No part of the scene mentions a gang."},
+    {t:"If they hacked this, they could hack anything.", s:"I", sense:"mind", why:"That's the doubt growing, not a new clue."}
+  ],
+  fact:"The alarm was turned off with a real staff code.",
+  art:"alarm"
+},
+{
+  thought:"Maybe they smashed the glass case and swept up the pieces.",
+  cards:[
+    {t:"The display case door swings open on its hinges. The lock isn't damaged.", s:"E", sense:"touched", why:"You can see and touch the lock."},
+    {t:"There's no glass in the trash or the vacuum bag.", s:"E", sense:"saw", why:"You looked. None there."},
+    {t:"The key cabinet has one empty hook, labeled “Owl Case.”", s:"E", sense:"saw", why:"An empty hook is something you can see."},
+    {t:"They could have brought a new pane of glass to replace it.", s:"I", sense:"mind", why:"“Could have” again. The case shows no replacement."},
+    {t:"A real pro always takes the broken glass with them.", s:"I", sense:"mind", why:"A rule about pros in general, not a fact about this case."},
+    {t:"Maybe they ground the glass into powder.", s:"I", sense:"mind", why:"Imagination working overtime."}
+  ],
+  fact:"The case was opened with its own key, and that key is missing.",
+  art:"case"
+},
+{
+  thought:"There could be a secret tunnel under the museum.",
+  cards:[
+    {t:"The building plans show a solid concrete floor.", s:"E", sense:"record", why:"The plans are a fact about this building."},
+    {t:"The basement door is painted shut, and the paint isn't cracked.", s:"E", sense:"saw", why:"You can see the paint seal."},
+    {t:"There's one trail of muddy footprints, from the back door to the owl case.", s:"E", sense:"saw", why:"The footprints are right there on the floor."},
+    {t:"Old buildings always have secret tunnels.", s:"I", sense:"mind", why:"“Always” is a story about buildings in general."},
+    {t:"Building plans can be faked.", s:"I", sense:"mind", why:"Possible in theory, but nothing here shows it."},
+    {t:"The really smart thieves use tunnels.", s:"I", sense:"mind", why:"A guess about smart thieves, not a clue."}
+  ],
+  fact:"The thief walked in the back door and straight to the case.",
+  art:"floor"
+},
+{
+  thought:"The footprints could be a fake trail to fool us.",
+  cards:[
+    {t:"The prints are size 9 work boots with a zigzag sole.", s:"E", sense:"saw", why:"You measured them."},
+    {t:"The mud matches the garden bed by the back door, which was freshly watered.", s:"E", sense:"touched", why:"You can see and touch the mud."},
+    {t:"The trail goes in and back out once. No second set of prints.", s:"E", sense:"saw", why:"You followed the trail yourself."},
+    {t:"A clever thief would wear someone else's boots.", s:"I", sense:"mind", why:"“Would” is a story about a clever thief. Not a clue."},
+    {t:"They might have walked backwards to trick us.", s:"I", sense:"mind", why:"Nothing about the prints suggests it."},
+    {t:"A fake trail is exactly what a mastermind would leave.", s:"I", sense:"mind", why:"This turns every clue into a trick. That's how doubt keeps itself going."}
+  ],
+  fact:"One person in size 9 zigzag work boots, with mud from the garden bed.",
+  art:"prints"
+},
+{
+  thought:"Maybe it was a whole gang, not one person.",
+  cards:[
+    {t:"There's only one set of footprints.", s:"E", sense:"saw", why:"You counted."},
+    {t:"The night guard heard one car door close around midnight.", s:"E", sense:"heard", why:"A witness heard it at the scene."},
+    {t:"The sign by the case says the owl weighs 6 pounds.", s:"E", sense:"record", why:"Easy for one person to carry. It's written right there."},
+    {t:"A heist this good needs a whole team.", s:"I", sense:"mind", why:"A theory about heists, not a fact about this one."},
+    {t:"Gangs split up so they leave fewer clues.", s:"I", sense:"mind", why:"A general rule, brought in from outside the scene."},
+    {t:"Whoever did this is probably part of something bigger.", s:"I", sense:"mind", why:"“Probably” is doing all the work here."}
+  ],
+  fact:"One person, carrying a 6-pound owl, one car.",
+  art:"crowd"
+},
+{
+  thought:"It could have been anyone in the whole city.",
+  cards:[
+    {t:"The alarm was turned off with a staff code.", s:"E", sense:"record", why:"From the alarm log."},
+    {t:"The key cabinet sign-out sheet shows the groundskeeper took the owl case key yesterday.", s:"E", sense:"record", why:"His name is on the sheet."},
+    {t:"The groundskeeper wears size 9 zigzag work boots and watered the garden at 11 pm.", s:"E", sense:"saw", why:"You can see his boots. The watering schedule is posted."},
+    {t:"Someone could have copied a key years ago.", s:"I", sense:"mind", why:"Anything could have happened years ago. Nothing here shows it."},
+    {t:"Anyone could have seen a code over someone's shoulder.", s:"I", sense:"mind", why:"Possible. Not shown by anything at the scene."},
+    {t:"Until I rule out every single person, I can't know.", s:"I", sense:"mind", why:"That's the doubt asking for certainty. The evidence already points one way."}
+  ],
+  fact:"Every clue points to the groundskeeper.",
+  art:"keys"
+}
+];
+
+const SENSE={saw:'SAW IT',heard:'HEARD IT',touched:'TOUCHED IT',record:'ON RECORD',mind:'IMAGINED'};
+
+/* Each scene is an evidence photograph, printed and clipped into the file. */
+function photo(name){
+  return '<svg class="art art--spot" viewBox="0 0 132 152" aria-hidden="true">'+
+    '<rect x="1.5" y="1.5" width="129" height="149" rx="3" fill="#f8f4e8"/>'+
+    '<rect x="1.5" y="1.5" width="129" height="149" rx="3" fill="none" stroke="rgba(43,38,54,.22)" stroke-width="1.5"/>'+
+    '<g transform="translate(6 6)"><g clip-path="url(#ph-clip)">'+
+      '<use href="#a-'+name+'" x="0" y="0" width="120" height="108"/>'+
+      '<rect x="0" y="0" width="120" height="108" rx="2" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="2"/>'+
+    '</g></g>'+
+    '<g stroke="#bdb3a0" stroke-width="3" stroke-linecap="round"><path d="M14 128h60M14 138h38"/></g>'+
+    '<circle cx="114" cy="133" r="6" fill="#c0304e"/><circle cx="112" cy="131" r="2" fill="#f2a6b6"/>'+
+  '</svg>';
+}
+
+/* ---------- icons ---------- */
+const ICON = {
+  lens:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2" stroke="currentColor" stroke-width="2"/><path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  cloud:'<svg width="19" height="17" viewBox="0 0 26 22" fill="none" aria-hidden="true"><path d="M7.5 14.5a4.6 4.6 0 0 1 .3-9.2 5.7 5.7 0 0 1 10.6.9 4.2 4.2 0 0 1 .6 8.3H7.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="6" cy="18.4" r="1.7" fill="currentColor"/><circle cx="2.6" cy="20.8" r="1" fill="currentColor"/></svg>',
+  check:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  arrow:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5.5-6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  on:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9.5h3.2L12 5.2v13.6L7.2 14.5H4V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15.6 9.2a4 4 0 0 1 0 5.6M18.2 6.6a7.6 7.6 0 0 1 0 10.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  off:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9.5h3.2L12 5.2v13.6L7.2 14.5H4V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m16.2 9.8 5 4.4m0-4.4-5 4.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
+};
+
+/* Inline animations live on the sprite originals, which <use> clones. Document
+   CSS cannot select into that shadow content, so honour the setting here. */
+if(matchMedia('(prefers-reduced-motion: reduce)').matches)
+  document.querySelectorAll('.sprite [style*="animation"]').forEach(n=>n.style.animation='none');
+
+/* ---------- audio ---------- */
+let AC=null, muted=false;
+const bgm=document.getElementById('bgm');
+bgm.volume=0;
+function ac(){ if(!AC){ try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return AC; }
+function tone(f,d,type,v,delay){
+  if(muted)return; const c=ac(); if(!c)return; const t=c.currentTime+(delay||0);
+  const o=c.createOscillator(), g=c.createGain();
+  o.type=type||'sine'; o.frequency.setValueAtTime(f,t);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v||.08,t+.014);
+  g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+d+.05);
+}
+const S={
+  click:()=>tone(560,.05,'triangle',.035),
+  lift:()=>tone(420,.06,'sine',.03),
+  good:()=>[659,880,1175].forEach((f,i)=>tone(f,.22,'triangle',.055,i*.05)),
+  bad:()=>{tone(180,.18,'sine',.06);tone(120,.24,'sine',.045,.05);},
+  whoosh:()=>[320,440,580,720].forEach((f,i)=>tone(f,.12,'sine',.028,i*.028)),
+  solved:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.28,'triangle',.055,i*.075)),
+  fanfare:()=>{[392,523,659,784,1047,1319].forEach((f,i)=>tone(f,.42,'triangle',.06,i*.1));tone(196,.9,'sine',.04,.08);}
+};
+/* Fade the soundtrack in so it never jumps on the first note. */
+function startMusic(){
+  if(muted)return;
+  const target=.28;
+  bgm.play().then(()=>{
+    const step=()=>{ if(muted||bgm.volume>=target-.005){bgm.volume=muted?0:target;return;}
+      bgm.volume=Math.min(target,bgm.volume+.012); setTimeout(step,45); };
+    step();
+  }).catch(()=>{});
+}
+const muteBtn=document.getElementById('mute');
+muteBtn.innerHTML=ICON.on;
+muteBtn.addEventListener('click',()=>{
+  muted=!muted;
+  muteBtn.innerHTML=muted?ICON.off:ICON.on;
+  muteBtn.setAttribute('aria-pressed',String(muted));
+  muteBtn.setAttribute('aria-label',muted?'Unmute sound':'Mute sound');
+  bgm.muted=muted;
+  if(!muted){ ac(); S.click(); if(bgm.paused) startMusic(); else if(bgm.volume<.05) startMusic(); }
+});
+
+/* ---------- confetti ---------- */
+const cv=document.getElementById('confetti'), cx=cv.getContext('2d');
+let bits=[], raf=null;
+function confetti(n){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  cv.width=innerWidth; cv.height=innerHeight;
+  const cols=['#e6b53f','#f3cf78','#3ed6a5','#ac88ff','#f4ece0'];
+  for(let i=0;i<n;i++) bits.push({
+    x:innerWidth/2+(Math.random()-.5)*240, y:innerHeight*.36,
+    vx:(Math.random()-.5)*13, vy:-Math.random()*13-4,
+    r:Math.random()*5+3, c:cols[i%cols.length],
+    a:Math.random()*6, va:(Math.random()-.5)*.35, life:110+Math.random()*60
+  });
+  if(!raf) loop();
+}
+function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  bits=bits.filter(b=>b.life-->0);
+  bits.forEach(b=>{
+    b.vy+=.32; b.x+=b.vx; b.y+=b.vy; b.a+=b.va;
+    cx.save(); cx.translate(b.x,b.y); cx.rotate(b.a);
+    cx.globalAlpha=Math.min(1,b.life/40); cx.fillStyle=b.c;
+    cx.fillRect(-b.r/2,-b.r/4,b.r,b.r/2); cx.restore();
+  });
+  raf = bits.length ? requestAnimationFrame(loop) : (cx.clearRect(0,0,cv.width,cv.height), null);
+}
+
+/* ---------- state ---------- */
+const stage=document.getElementById('stage');
+const counter=document.getElementById('counter');
+const track=document.getElementById('track');
+const live=document.getElementById('live');
+const st={i:0,right:0,total:0};
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function setProgress(done){
+  if(!track.children.length)
+    track.innerHTML=THOUGHTS.map(()=>'<i></i>').join('');
+  [...track.children].forEach((n,i)=>n.classList.toggle('on',i<done));
+}
+function say(msg){ live.textContent=msg; }
+
+function intro(){
+  st.i=0; st.right=0; st.total=0;
+  counter.textContent='Case open';
+  setProgress(0);
+  stage.innerHTML=
+  '<section class="panel">'+
+    '<div class="filestrip">'+
+      '<span>Case file <b>No. 47-B</b></span>'+
+      '<span>Halloway Municipal Museum</span>'+
+      '<span>Status: <span class="open">Unsolved</span></span>'+
+    '</div>'+
+    '<svg class="art art--hero" viewBox="0 0 640 250" role="img" aria-label="The museum at night: the Golden Owl on its plinth under a spotlight, a detective arriving."><use href="#a-heist"/></svg>'+
+    '<h1>Last night, the <em>Golden Owl</em> was stolen.</h1>'+
+    '<p>The Halloway Museum’s most famous treasure is gone. You’re the detective on the case.</p>'+'<p>As you work, <b>thoughts will keep arriving</b> about what might have happened. Every one of them turns up sounding equally certain.</p>'+
+    '<p>Your job is not to believe every thought, or to argue with it. Your job is to <b>sort it</b> — to separate what you actually know from what your mind has filled in.</p>'+
+    '<div class="legend">'+
+      '<div class="ev"><b>'+ICON.lens+' Evidence</b><p>Information you <b>gathered through your senses</b> \u2014 saw it, heard it, touched it \u2014 or read in the record. It is out there in the world.</p></div>'+
+      '<div class="im"><b>'+ICON.cloud+' Imagination</b><p>Information your mind <b>created</b> — could have, might have, usually does. Guesses, movie scenes, and “what if.” It is in here.</p></div>'+
+    '</div>'+
+    '<p>For each thought, sort every clue into <b>Evidence</b> or <b>Imagination</b>. Drag it, or tap it and then tap a bin.</p>'+
+    '<p style="margin-top:24px;margin-bottom:0"><button class="btn" id="go">Start the investigation '+ICON.arrow+'</button></p>'+
+  '</section>';
+  document.getElementById('go').onclick=()=>{ ac(); startMusic(); S.whoosh(); round(); };
+}
+
+function round(){
+  const d=THOUGHTS[st.i];
+  counter.textContent='Thought '+(st.i+1)+' of '+THOUGHTS.length;
+  setProgress(st.i);
+  stage.innerHTML=
+  '<div class="thought">'+
+    '<div class="thought__text">'+
+      '<div class="lbl">Thought No. '+(st.i+1)+'</div>'+
+      '<div class="q">“'+esc(d.thought)+'”</div></div>'+
+    photo(d.art)+
+  '</div>'+
+  '<div class="board">'+
+    '<div class="bin ev" data-s="E" id="binE">'+
+      '<div class="bin__head"><div><h3>'+ICON.lens+' EVIDENCE</h3>'+
+        '<p class="def">Gathered through your senses, or on the record.</p></div>'+
+        '<svg class="art art--bin" viewBox="0 0 120 90" aria-hidden="true"><use href="#a-bin-ev"/></svg></div>'+
+      '<div class="stack" id="stackE"></div></div>'+
+    '<div class="col-pile"><p class="pilelabel">Clues to sort</p><div class="stack" id="pile"></div>'+
+      '<p class="hint" id="hint">'+HINT+'</p></div>'+
+    '<div class="bin im" data-s="I" id="binI">'+
+      '<div class="bin__head"><div><h3>'+ICON.cloud+' IMAGINATION</h3>'+
+        '<p class="def">Created in your mind. Could, might, usually.</p></div>'+
+        '<svg class="art art--bin" viewBox="0 0 120 90" aria-hidden="true"><use href="#a-bin-im"/></svg></div>'+
+      '<div class="stack" id="stackI"></div></div>'+
+  '</div>'+
+  '<div id="after"></div>';
+  const pile=document.getElementById('pile');
+  shuffle(d.cards.map((c,i)=>i)).forEach(idx=>{
+    const el=document.createElement('div');
+    el.className='card'; el.tabIndex=0; el.setAttribute('role','button'); el.dataset.idx=idx;
+    el.textContent=d.cards[idx].t;
+    el.setAttribute('aria-label',d.cards[idx].t+'. Left arrow for evidence, right arrow for imagination.');
+    wire(el); pile.appendChild(el);
+  });
+  ['binE','binI'].forEach(id=>document.getElementById(id).addEventListener('click',()=>{
+    const sel=document.querySelector('.card.sel'); if(sel) file(sel,document.getElementById(id).dataset.s);
+  }));
+  const first=pile.querySelector('.card'); if(first) first.focus({preventScroll:true});
+}
+
+function clearArm(){document.querySelectorAll('.bin').forEach(b=>b.classList.remove('armed','over'));}
+function binAt(x,y){const n=document.elementFromPoint(x,y);return n?n.closest('.bin'):null;}
+
+const HINT='Drag a clue into a bin, or tap the clue and then tap a bin.<br>Keyboard: \u2190 evidence, \u2192 imagination.';
+function setHint(html){const h=document.getElementById('hint'); if(h) h.innerHTML=html;}
+
+/* On narrow screens the bins sit below the clue list and can be off-screen.
+   Scroll just far enough to expose them, keeping their top clear of the
+   sticky header. A dragged card is fixed to the pointer, so moving the page
+   underneath it is safe. */
+function revealBins(smooth){
+  if(!matchMedia('(max-width:860px)').matches) return;
+  const bin=document.getElementById('binE'); if(!bin) return;
+  const r=bin.getBoundingClientRect();
+  const by=Math.min(r.bottom-(innerHeight-16), Math.max(0,r.top-76));
+  if(by>1) scrollBy({top:by,behavior:smooth?'smooth':'auto'});
+}
+
+function select(el){
+  document.querySelectorAll('.card.sel').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.querySelectorAll('.bin').forEach(b=>b.classList.add('armed'));
+}
+
+/* Restore a card that was mid-drag to its resting state in the pile. */
+function undrag(el){
+  el.classList.remove('dragging');
+  el.style.left=''; el.style.top=''; el.style.width='';
+}
+
+function wire(el){
+  let sx=0,sy=0,pid=null,drag=false,hover=null,ox=0,oy=0,ph=null;
+
+  function stop(){
+    pid=null; drag=false;
+    if(ph){ph.remove(); ph=null;}
+    if(hover){hover.classList.remove('over'); hover=null;}
+    undrag(el); clearArm();
+  }
+
+  el.addEventListener('pointerdown',e=>{
+    /* Ignore a second finger: without this the shared drag state gets
+       crossed and an out-of-order release can strand the card mid-drag. */
+    if(el.classList.contains('filed')||pid!==null)return;
+    pid=e.pointerId; sx=e.clientX; sy=e.clientY;
+    try{el.setPointerCapture(e.pointerId);}catch(_){}
+  });
+
+  el.addEventListener('pointermove',e=>{
+    if(e.pointerId!==pid)return;
+    if(!drag && Math.hypot(e.clientX-sx,e.clientY-sy)>7){
+      drag=true;
+      const r=el.getBoundingClientRect(); ox=e.clientX-r.left; oy=e.clientY-r.top;
+      /* Hold the card's slot open. Lifting it out of the flow would otherwise
+         collapse the pile and slide the bins up out from under the pointer,
+         so the drop lands where the bin used to be and nothing happens. */
+      ph=document.createElement('div');
+      ph.className='ph'; ph.style.height=r.height+'px';
+      el.parentNode.insertBefore(ph,el);
+      el.style.width=r.width+'px';
+      el.classList.add('dragging');
+      document.querySelectorAll('.bin').forEach(b=>b.classList.add('armed'));
+      S.lift(); revealBins(false);
+    }
+    if(drag){
+      el.style.left=(e.clientX-ox)+'px'; el.style.top=(e.clientY-oy)+'px';
+      const b=binAt(e.clientX,e.clientY);
+      if(b!==hover){ if(hover)hover.classList.remove('over'); hover=b; if(hover)hover.classList.add('over'); }
+    }
+  });
+
+  el.addEventListener('pointerup',e=>{
+    if(e.pointerId!==pid)return;
+    const wasDrag=drag;
+    const bin=wasDrag?binAt(e.clientX,e.clientY):null;
+    stop();
+    if(wasDrag){
+      if(bin) file(el,bin.dataset.s);
+      else {
+        /* Released short of a bin. Keep the clue in hand -- selected, with
+           both bins lit -- so the next tap files it. */
+        select(el); S.click();
+        setHint('Not quite in a bin. Tap <b>Evidence</b> or <b>Imagination</b> to file it.');
+        revealBins(true);
+      }
+    } else {
+      const was=el.classList.contains('sel');
+      document.querySelectorAll('.card.sel').forEach(c=>c.classList.remove('sel'));
+      if(!was){ select(el); S.click(); revealBins(true); }
+      else clearArm();
+    }
+  });
+
+  el.addEventListener('pointercancel',e=>{ if(e.pointerId===pid) stop(); });
+  /* Safari can revoke capture mid-gesture without sending pointercancel. */
+  el.addEventListener('lostpointercapture',e=>{ if(e.pointerId===pid) stop(); });
+
+  el.addEventListener('keydown',e=>{
+    if(el.classList.contains('filed'))return;
+    if(e.key==='ArrowLeft'||e.key==='1'){e.preventDefault();file(el,'E');}
+    else if(e.key==='ArrowRight'||e.key==='2'){e.preventDefault();file(el,'I');}
+  });
+}
+
+/* Last-resort sweep: if a pointer ends anywhere and a card is still flagged
+   as dragging, it was stranded by an event the card never received. Put it
+   back rather than leave it pinned to the screen with the round unfinishable. */
+['pointerup','pointercancel','touchend','touchcancel'].forEach(t=>
+  window.addEventListener(t,()=>setTimeout(()=>{
+    const stray=document.querySelectorAll('.card.dragging');
+    if(!stray.length)return;
+    stray.forEach(undrag);
+    document.querySelectorAll('.ph').forEach(n=>n.remove());
+    if(!document.querySelector('.card.sel')) clearArm();
+  },0)));
+
+function file(el,side){
+  if(el.classList.contains('filed'))return;
+  const d=THOUGHTS[st.i], c=d.cards[+el.dataset.idx], ok=c.s===side;
+  st.total++; if(ok) st.right++;
+  el.classList.remove('sel'); clearArm();
+  el.classList.add('filed', ok?'ok':'bad');
+  const label = c.s==='E' ? 'EVIDENCE' : 'IMAGINATION';
+  el.removeAttribute('role'); el.removeAttribute('aria-label'); el.tabIndex=-1;
+  el.innerHTML='<span class="mark">'+(ok?'CORRECT':'ACTUALLY '+label)+'</span>'+esc(c.t)+
+               '<span class="why">'+esc(c.why)+'</span>'+
+               '<span class="sense sense--'+(c.s==='E'?'ev':'im')+'">'+
+                 '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#s-'+c.sense+'"/></svg>'+
+                 SENSE[c.sense]+'</span>';
+  document.getElementById(c.s==='E'?'stackE':'stackI').appendChild(el);
+  setHint(HINT);
+  ok?S.good():S.bad();
+  say((ok?'Correct. ':'Not quite. That one is '+label.toLowerCase()+'. ')+c.why);
+  const next=document.querySelector('#pile .card');
+  if(next) next.focus({preventScroll:true});
+  else ruledOut();
+}
+
+function ruledOut(){
+  const d=THOUGHTS[st.i];
+  document.getElementById('hint').textContent='';
+  const ev=d.cards.filter(c=>c.s==='E').map(c=>'<li>'+esc(c.t)+'</li>').join('');
+  const last = st.i===THOUGHTS.length-1;
+  setProgress(st.i+1);
+  document.getElementById('after').innerHTML=
+    '<div class="ruled">'+
+      '<div class="tag">'+ICON.check+' THOUGHT CHECKED</div>'+
+      '<p style="margin-bottom:0"><b>What the evidence shows:</b> '+esc(d.fact)+'</p>'+
+      '<ul>'+ev+'</ul>'+
+      '<button class="btn" id="next">'+(last?'Solve the case':'Next thought')+' '+ICON.arrow+'</button>'+
+    '</div>';
+  S.solved(); confetti(40);
+  say('Thought checked. '+d.fact);
+  const btn=document.getElementById('next');
+  btn.focus({preventScroll:true});
+  document.getElementById('after').scrollIntoView({behavior:'smooth',block:'nearest'});
+  btn.onclick=()=>{ S.whoosh(); if(last) final(); else { st.i++; round(); window.scrollTo({top:0,behavior:'smooth'}); } };
+}
+
+function final(){
+  counter.textContent='Case closed';
+  setProgress(THOUGHTS.length);
+  const pct=Math.round(100*st.right/st.total);
+  const msg = pct>=90 ? 'Sharp work. You didn’t let a single “what if” run the investigation.'
+           : pct>=70 ? 'Solid detective work. A few “what ifs” sounded convincing. That’s how they work.'
+           : 'Case solved. Imagination is persuasive on purpose. Play again and watch for “could,” “might,” and “usually.”';
+  stage.innerHTML=
+  '<section class="panel">'+
+    '<div class="filestrip">'+
+      '<span>Case file <b>No. 47-B</b></span>'+
+      '<span>Halloway Municipal Museum</span>'+
+      '<span>Status: <b>Closed</b></span>'+
+    '</div>'+
+    '<div class="stamp">CASE SOLVED</div>'+
+    '<svg class="art art--reveal" viewBox="0 0 420 230" role="img" aria-label="The potting shed: the groundskeeper beside the recovered Golden Owl and a bag of mulch."><use href="#a-reveal"/></svg>'+
+    '<h1>The groundskeeper took the <em>Golden Owl</em>.</h1>'+
+    '<p>He signed out the key, turned off the alarm with his code, walked in the back door in his muddy size 9 boots, and carried the owl out to his car. It was found this morning in the potting shed, under a bag of mulch.</p>'+
+    '<p><b>Your case notes:</b></p>'+
+    '<ol class="notebook">'+THOUGHTS.map(d=>'<li>'+esc(d.fact)+'</li>').join('')+'</ol>'+
+    '<p><b>The case board:</b></p>'+
+    '<svg class="art art--board" viewBox="0 0 660 300" role="img" aria-label="The case board: the recovered owl and the groundskeeper pinned up, linked by red string to the evidence notes."><use href="#a-board"/></svg>'+
+    '<p>No secret tunnel. No drone. No hacker. No gang. Every one of those thoughts was <i>possible</i>. Not one of them was ever in the evidence.</p>'+
+    '<hr class="rule">'+
+    '<div class="scorecard">'+
+      '<div><div class="n">'+pct+'%</div><div class="small">Sorting accuracy</div></div>'+
+      '<div><div class="n">'+st.right+'/'+st.total+'</div><div class="small">Clues filed correctly</div></div>'+
+    '</div>'+
+    '<div class="meter"><i id="bar"></i></div>'+
+    '<p>'+msg+'</p>'+
+    '<h2 style="margin-top:28px">What counts as evidence</h2>'+
+    '<p><b>Evidence is what your senses pick up.</b> What you saw, heard, touched, smelled, or tasted — plus the plain facts of the situation. The locked latch. The dry floor. The name on the sign-out sheet. You can point at it.</p>'+
+    '<p><b>Imagination is everything your mind adds.</b> What could have happened, what usually happens, what it would mean if. Every thought in this case was imagination, and every one of them was <i>possible</i>. Possible is not the same as real.</p>'+
+    '<p>Your mind does this all day, and it hands you the invented parts in the same confident voice it uses for the facts. A feeling can arrive so strongly that it seems like proof on its own. It isn’t. Feeling certain and having evidence are two different things.</p>'+
+    '<p>So when a thought insists something is true, ask the detective’s question: <b>what did I actually observe?</b> If the honest answer is “nothing — I pictured it,” then you are holding a story, not a clue. That is how you tell what is real from what is imagined.</p>'+
+    '<p style="margin-top:26px"><button class="btn" id="again">Play again</button></p>'+
+    '<div class="footnote">'+
+      '<h3>A note on \u201cevidence\u201d</h3>'+
+      '<p>The distinction this game teaches \u2014 <b>evidence is information gathered through the senses; imagination is information created in the mind</b> \u2014 comes from <b>inference-based CBT (I-CBT)</b>, the model developed for OCD. It holds that obsessional doubt is generated by imagination rather than by anything in the here and now, so the remedy is to trust what the senses actually report.</p>'+
+      '<p>That is narrower than <b>classic (Beckian) CBT</b>, which asks \u201cwhat is the evidence for and against this thought?\u201d and counts past experience, base rates and other people\u2019s reports as evidence too. Both separate fact from interpretation; only I-CBT draws the line at the senses and frames the question as real versus imagined.</p>'+
+      '<p>The game deliberately teaches the I-CBT version without naming the model, so the idea stays about evidence rather than about a treatment.</p>'+
+    '</div>'+
+  '</section>';
+  window.scrollTo({top:0,behavior:'smooth'});
+  requestAnimationFrame(()=>{ const b=document.getElementById('bar'); if(b) b.style.width=pct+'%'; });
+  S.fanfare(); confetti(130);
+  say('Case solved. Sorting accuracy '+pct+' percent.');
+  document.getElementById('again').onclick=()=>{ S.whoosh(); intro(); };
+}
+
+intro();
+</script>
+</body>
+</html>
