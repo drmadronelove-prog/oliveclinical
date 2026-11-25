@@ -95,10 +95,6 @@ const ASSESS_FOR = [
     title: "PTSD and trauma",
     body: "Assessment for post-traumatic stress in adults, including the long-running presentations that were never named as trauma at the time. Trauma and neurodivergence are routinely mistaken for each other, so this is assessed alongside the rest rather than in isolation.",
   },
-  {
-    title: "PDA and demand sensitivity",
-    body: "Many autistic adults describe an overwhelming resistance to demands, including demands they set for themselves. It is not laziness and it is not defiance. If this is part of why you are here, I assess for it and I address it directly in the report.",
-  },
 ]
 
 const PROCESS_STEPS = [
