@@ -69,15 +69,6 @@ const HERO_STRIP = [
   "Full written report included",
 ]
 
-const RECOGNITION_ITEMS = [
-  "You have felt different in ways you could never quite name.",
-  "Someone told you that you are too articulate, too successful, or too social to be autistic or ADHD.",
-  "You have been treated for anxiety or depression and it helped, but it never explained the whole thing.",
-  "You mask your way through work and social life and it costs you more than anyone sees.",
-  "You have put this off because you were afraid of being dismissed, or of being told what you already suspect but in a way that makes you feel small.",
-  "You want an answer you can actually do something with, not a label.",
-]
-
 const ASSESS_FOR = [
   {
     title: "Autism spectrum",
@@ -294,43 +285,6 @@ export default function AssessmentsPage() {
                 </li>
               ))}
             </ul>
-          </motion.div>
-
-          {/* 1. You might recognize some of this */}
-          <motion.div {...fadeUp} className="w-full max-w-xl">
-            <SectionHeading>You might recognize some of this</SectionHeading>
-            <BodyText className="text-center !mb-7">
-              Most of the adults I assess arrive after years of sensing something did not fit.
-            </BodyText>
-            <ul className="flex flex-col gap-3 mt-7">
-              {RECOGNITION_ITEMS.map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <Bullet />
-                  <span
-                    style={{
-                      fontFamily: "var(--font-body)",
-                      fontSize: "0.98rem",
-                      lineHeight: 1.6,
-                      color: "rgba(11,37,69,0.82)",
-                    }}
-                  >
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <p
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "1rem",
-                lineHeight: 1.6,
-                color: "var(--ink)",
-                textAlign: "center",
-                marginTop: "1.75rem",
-              }}
-            >
-              If any of that lands, you are in the right place.
-            </p>
           </motion.div>
 
           {/* 2. What I assess for */}
