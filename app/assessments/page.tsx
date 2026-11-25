@@ -65,7 +65,7 @@ function BodyText({ children, className = "" }: { children: React.ReactNode; cla
 
 const HERO_STRIP = [
   "Telehealth across California",
-  "Three-week wait",
+  "No wait list, usually within two weeks",
   "Full written report included",
 ]
 
@@ -108,11 +108,11 @@ const PROCESS_STEPS = [
   },
   {
     title: "Intake and questionnaires",
-    body: "Before we meet, you complete background forms and standardized questionnaires at your own pace. If you would like, someone who knows you well can complete a brief observer questionnaire too. That outside perspective is genuinely useful for adults who mask, and it is optional.",
+    body: "Before we meet, you complete background forms and standardized questionnaires at your own pace. For autism and ADHD assessment I also speak with two people who know you: someone who knew you as a child, usually a parent or older sibling, and someone who knows you now, such as a partner, close friend, or roommate. Both diagnoses require evidence that the traits were present early and that they still affect daily life, so these conversations are part of the assessment rather than an optional extra. If nobody from your childhood is available, tell me on the consult and we will work out what else can stand in.",
   },
   {
     title: "The clinical interview",
-    body: "Two to three hours over telehealth, usually split across two sessions. Breaks whenever you want them, stimming welcome, camera off is fine, and you can have notes in front of you. Nothing about this is a test you can fail or perform your way through.",
+    body: "For autism and ADHD assessment this is two separate two-hour meetings over telehealth, roughly a week apart. Four hours is what it takes to cover a whole life history properly, and splitting it means you are not doing the hardest part of it exhausted. Breaks whenever you want them, stimming welcome, camera off is fine, and you can have notes in front of you. Nothing about this is a test you can fail or perform your way through.",
   },
   {
     title: "Findings and report",
@@ -159,7 +159,7 @@ const PRICING = [
 const FAQS = [
   {
     q: "How long does the whole thing take?",
-    a: "About six weeks from first contact to final report. The current wait for a first appointment is roughly three weeks.",
+    a: "About five weeks from first contact to final report. I do not keep a wait list, so I can usually get you in for a first appointment within two weeks.",
   },
   {
     q: "Do I need a referral?",
@@ -409,7 +409,8 @@ export default function AssessmentsPage() {
           <motion.div {...fadeUp} className="w-full max-w-3xl">
             <SectionHeading>How it works</SectionHeading>
             <BodyText className="text-center !mb-8">
-              About six weeks from first contact to final report, though much of that is scheduling rather than work.
+              About five weeks from first contact to final report. I do not keep a wait list, so a first appointment is usually
+              within two weeks.
             </BodyText>
             <div className="flex flex-col gap-7 mt-8">
               {PROCESS_STEPS.map((step, i) => (
