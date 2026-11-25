@@ -186,10 +186,6 @@ const FAQS = [
     a: "Your report is yours. I do not send it anywhere without your written consent. If you want it sent to a doctor or an employer, you tell me and I send it; otherwise nobody sees it but you.",
   },
   {
-    q: "I am worried I am making it up or exaggerating.",
-    a: "Almost everyone says some version of this, including people with unambiguous findings. It is worth saying out loud during the assessment rather than managing quietly, because it is itself clinically interesting.",
-  },
-  {
     q: "Do you assess children?",
     a: "No, adults only. I can refer you to colleagues who assess children and teens.",
   },
