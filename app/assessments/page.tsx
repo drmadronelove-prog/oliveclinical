@@ -116,7 +116,7 @@ const PROCESS_STEPS = [
   },
   {
     title: "Findings and report",
-    body: "We meet again to go through what I found, in conversation, with room for your questions and your disagreement. You receive the full written report within one week of that session.",
+    body: "A final meeting where I share the written report and we go through what I found, in conversation, with room for your questions and your disagreement. You leave with the report itself, not a summary of it.",
   },
   {
     title: "What comes next",
@@ -409,8 +409,9 @@ export default function AssessmentsPage() {
           <motion.div {...fadeUp} className="w-full max-w-3xl">
             <SectionHeading>How it works</SectionHeading>
             <BodyText className="text-center !mb-8">
-              About five weeks from first contact to final report. I do not keep a wait list, so a first appointment is usually
-              within two weeks.
+              Five meetings in all: two two-hour assessment sessions with you, two shorter conversations with people who know
+              you, and a feedback session where I share the report. About five weeks from first contact to final report, and I
+              do not keep a wait list, so a first appointment is usually within two weeks.
             </BodyText>
             <div className="flex flex-col gap-7 mt-8">
               {PROCESS_STEPS.map((step, i) => (
