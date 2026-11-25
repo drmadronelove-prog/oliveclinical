@@ -544,7 +544,7 @@ export default function AssessmentsPage() {
                 {
                   label: "Payment",
                   value:
-                    "Half at booking, half before the feedback session. We are private pay. A superbill is available on request if you would like to submit for out-of-network reimbursement.",
+                    "Half at the first session, half at the feedback session. We are private pay. A superbill is available on request if you would like to submit for out-of-network reimbursement.",
                 },
                 {
                   label: "Sliding scale",
