@@ -159,7 +159,7 @@ const PRICING = [
 const FAQS = [
   {
     q: "How long does the whole thing take?",
-    a: "About five weeks from first contact to final report. I do not keep a wait list, so I can usually get you in for a first appointment within two weeks.",
+    a: "Four to six weeks from first contact to final report. Where it lands in that range depends mostly on how quickly I can get the two collateral conversations scheduled. I do not keep a wait list, so I can usually get you in for a first appointment within two weeks.",
   },
   {
     q: "Do I need a referral?",
@@ -410,8 +410,9 @@ export default function AssessmentsPage() {
             <SectionHeading>How it works</SectionHeading>
             <BodyText className="text-center !mb-8">
               Five meetings in all: two two-hour assessment sessions with you, two shorter conversations with people who know
-              you, and a feedback session where I share the report. About five weeks from first contact to final report, and I
-              do not keep a wait list, so a first appointment is usually within two weeks.
+              you, and a feedback session where I share the report. Four to six weeks from first contact to final report,
+              depending mostly on how quickly the collateral conversations can be scheduled. I do not keep a wait list, so a
+              first appointment is usually within two weeks.
             </BodyText>
             <div className="flex flex-col gap-7 mt-8">
               {PROCESS_STEPS.map((step, i) => (
