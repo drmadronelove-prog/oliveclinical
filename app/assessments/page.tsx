@@ -433,10 +433,6 @@ export default function AssessmentsPage() {
                 all, so you can hand it over without disclosing anything you would rather keep private. There is no
                 extra fee for it.
               </BodyText>
-              <BodyText>
-                Reports typically run 12 to 20 pages. They are written for you first and for clinicians second, which
-                is the opposite of how most evaluation reports are written.
-              </BodyText>
             </div>
           </motion.div>
 
