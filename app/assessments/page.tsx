@@ -287,9 +287,9 @@ export default function AssessmentsPage() {
             </ul>
           </motion.div>
 
-          {/* 2. What I assess for */}
+          {/* 2. What we assess for */}
           <motion.div {...fadeUp} className="w-full max-w-4xl">
-            <SectionHeading>What I assess for</SectionHeading>
+            <SectionHeading>What we assess for</SectionHeading>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
               {ASSESS_FOR.map((a) => (
                 <div key={a.title} className="flex flex-col p-6 rounded-xl" style={CARD_STYLE}>
@@ -615,6 +615,21 @@ export default function AssessmentsPage() {
               <BookingEmbed />
             </motion.div>
           )}
+
+          {/* Assessing clinician */}
+          <motion.div {...fadeUp} className="w-full max-w-2xl">
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "0.9rem",
+                lineHeight: 1.6,
+                color: "rgba(11,37,69,0.65)",
+                textAlign: "center",
+              }}
+            >
+              Assessing clinician: Madrone Love, PsyD, licensed clinical psychologist (PSY35899).
+            </p>
+          </motion.div>
 
         </div>
       </section>
